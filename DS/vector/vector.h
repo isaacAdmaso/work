@@ -1,7 +1,8 @@
 #ifndef VECTOR_H
 #define VECTOR_H
-#include<stddef.h>
 #include "ADTDefs.h"
+#include<stddef.h>
+
 typedef struct Vector Vector;
 
 Vector* VectorCreate(size_t _initialSize, size_t _extensionBblockSize);

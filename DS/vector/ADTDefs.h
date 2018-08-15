@@ -1,7 +1,6 @@
 #ifndef ADTDefs_H
 #define ADTDefs_H
-#include<stddef.h>
-#include "vector.h"
+
 typedef enum
 {
     /* General ADT Errors */
