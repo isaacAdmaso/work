@@ -53,7 +53,7 @@ ADTErr  VectorGet(const Vector* _vector, size_t _index, int *_item)
 	{
 		return ERR_NOT_INITIALIZED;
 	}
-	if(_index<0 || _index > _vector->m_nItems)
+	if(_index > _vector->m_nItems)
 	{
 		return ERR_WRONG_INDEX;
 	}
@@ -102,7 +102,7 @@ void    VectorPrint(const Vector *_vector)
 ADTErr  VectorAdd(Vector *_vector,  int  _item)
 {	
 	int* reAllocItems= NULL;
-	if(_vector == NULL ||_vector->m_items == NULL ) 
+	if(_vector == NULL) 
 	{
 		return ERR_NOT_INITIALIZED;
 	}
