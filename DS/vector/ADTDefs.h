@@ -1,5 +1,5 @@
-#ifndef ADTDefs_H
-#define ADTDefs_H
+#ifndef __ADTDefs_H__
+#define __ADTDefs_H__
 
 typedef enum
 {
