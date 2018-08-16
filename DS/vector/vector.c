@@ -68,11 +68,12 @@ ADTErr  VectorSet(Vector *_vector, size_t _index, int  _item)
 	{
 		return ERR_NOT_INITIALIZED;
 	}
-	if(_index<0 || _index > _vector->m_nItems)
+	if(_index >= _vector->m_nItems)
 	{
 		return ERR_WRONG_INDEX;
 	}
 	 _vector->m_items[_index]=_item;
+	 return ERR_OK;
 }
 
 ADTErr  VectorItemsNum(const Vector *_vector, size_t* _numOfItems)
