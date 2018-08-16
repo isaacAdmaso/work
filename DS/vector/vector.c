@@ -132,12 +132,15 @@ ADTErr  VectorDelete(Vector *_vector,  int* _item)
 	{
 		return ERR_NOT_INITIALIZED;
 	}
-	*_item=_vector->m_items[_vector->m_nItems];
-	_vector->m_nItems-=1;
-	
-	if(_vector->m_allocatedSize>(_vector->m_originalSize + _vector->m_blockSize))
+	if(_vector->m_nItems == 0)
 	{
-		if(_vector->m_allocatedSize > (_vector->m_nItems + _vector->m_blockSize))
+		return ERR_UNDERFLOW;
+	}
+	*_item=_vector->m_items[--_vector->m_nItems];
+	
+	if(_vector->m_allocatedSize > _vector->m_originalSize)
+	{
+		if(_vector->m_allocatedSize == (_vector->m_nItems + 2*_vector->m_blockSize))
 		{
 			_vector->m_items=(Vector *)realloc(_vector->m_items,(_vector->m_allocatedSize - _vector->m_blockSize)*sizeof(int));
 		}

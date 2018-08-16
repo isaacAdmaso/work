@@ -27,7 +27,7 @@ int main(){
 	error1=VectorGet(v,0,&item1);
 	printf("5-%d\n",error1);
 	error1=VectorItemsNum(v,&item4);
-	printf("4-%d\n",item4);
+	printf("4-%ld\n",item4);
 	printf("3-%d\n",VectorSet(v,1,error1));
 	error1=VectorAdd(v,item1);
 	VectorPrint(v);
