@@ -122,8 +122,7 @@ ADTErr  VectorAdd(Vector *_vector,  int  _item)
 		_vector->m_allocatedSize+=_vector->m_blockSize;
 		
 	}
-	_vector->m_items[_vector->m_nItems]=_item;
-	++_vector->m_nItems;
+	_vector->m_items[_vector->m_nItems++]=_item;
 	return ERR_OK;
 }
 
