@@ -5,7 +5,7 @@
 #include<stddef.h>
 
 #define MAGIC 3567978
-#define IS_INVALID(v) (((v) == NULL) || (v)->m_magic != 3567978)
+#define IS_INVALID(v) (((v) == NULL) || (v)->m_magic != MAGIC)
 
 
 struct Vector
@@ -41,13 +41,15 @@ Vector* VectorCreate(size_t _initialSize, size_t _extensionBblockSize)
 	newVector ->m_originalSize = _initialSize;
 	newVector ->m_blockSize=_extensionBblockSize;
 	newVector ->m_nItems=0;
+	newVector ->m_magic = MAGIC;
 	return newVector;
 }
 	
 void  VectorDestroy(Vector* _vector)
 {
-	if(_vector!=NULL)
+	if(!IS_INVALID(_vector))
 	{
+		_vector->m_magic = 0;
 	 	free(_vector->m_items);
 		free(_vector);	
 	}
@@ -55,7 +57,7 @@ void  VectorDestroy(Vector* _vector)
 
 ADTErr  VectorGet(const Vector* _vector, size_t _index, int *_item)
 {
-	if(_vector == NULL ) 
+	if(IS_INVALID(_vector) || _item == NULL) 
 	{
 		return ERR_NOT_INITIALIZED;
 	}
@@ -70,7 +72,7 @@ ADTErr  VectorGet(const Vector* _vector, size_t _index, int *_item)
 
 ADTErr  VectorSet(Vector *_vector, size_t _index, int  _item)
 {
-	if(_vector == NULL )
+	if(IS_INVALID(_vector))
 	{
 		return ERR_NOT_INITIALIZED;
 	}
@@ -84,7 +86,7 @@ ADTErr  VectorSet(Vector *_vector, size_t _index, int  _item)
 
 ADTErr  VectorItemsNum(const Vector *_vector, size_t* _numOfItems)
 {
-	if(_vector == NULL || _numOfItems == NULL ) 
+	if(IS_INVALID(_vector) || _numOfItems == NULL ) 
 	{
 		return ERR_NOT_INITIALIZED;
 	}
@@ -95,7 +97,7 @@ ADTErr  VectorItemsNum(const Vector *_vector, size_t* _numOfItems)
 void    VectorPrint(const Vector *_vector)
 {	
 	int i;
-	if(_vector == NULL ||NULL == _vector->m_items) 
+	if(IS_INVALID(_vector) ||NULL == _vector->m_items) 
 	{
 		return ;
 	}
@@ -110,7 +112,7 @@ void    VectorPrint(const Vector *_vector)
 ADTErr  VectorAdd(Vector *_vector,  int  _item)
 {	
 	int* reAllocItems= NULL;
-	if(_vector == NULL) 
+	if(IS_INVALID(_vector)) 
 	{
 		return ERR_NOT_INITIALIZED;
 	}
@@ -136,7 +138,7 @@ ADTErr  VectorAdd(Vector *_vector,  int  _item)
 
 ADTErr  VectorDelete(Vector *_vector,  int* _item)
 {	
-	if(_vector == NULL ) 
+	if(IS_INVALID(_vector) || _item==NULL ) 
 	{
 		return ERR_NOT_INITIALIZED;
 	}
