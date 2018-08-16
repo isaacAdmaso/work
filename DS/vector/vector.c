@@ -83,6 +83,7 @@ ADTErr  VectorItemsNum(const Vector *_vector, size_t* _numOfItems)
 		return ERR_NOT_INITIALIZED;
 	}
 	*_numOfItems = _vector->m_nItems;
+	return ERR_OK;
 }
 
 void    VectorPrint(const Vector *_vector)
