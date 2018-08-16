@@ -3,8 +3,14 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<stddef.h>
+
+#define MAGIC 3567978
+#define IS_INVALID(v) (((v) == NULL) || (v)->m_magic != 3567978)
+
+
 struct Vector
 {
+	size_t	m_magic;		  /**< Protector*/
     int*    m_items;          /**< The items */	
     size_t  m_originalSize;   /**< original allocated space for items */
     size_t  m_allocatedSize;  /**< actual allocated space for items	*/
