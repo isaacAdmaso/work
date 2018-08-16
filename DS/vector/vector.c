@@ -25,7 +25,7 @@ Vector* VectorCreate(size_t _initialSize, size_t _extensionBblockSize)
 		return NULL;
 	}
 	newVector ->m_items = (int*)malloc(_initialSize*sizeof(int));
-	if (newVector ->m_items == 0)
+	if (newVector ->m_items == NULL)
 	{
 		free(newVector);
 		return NULL;
@@ -42,17 +42,14 @@ void  VectorDestroy(Vector* _vector)
 {
 	if(_vector!=NULL)
 	{
-		if(_vector->m_items!=NULL)
-		{
-		 	free(_vector->m_items);
-		}
+	 	free(_vector->m_items);
 		free(_vector);	
 	}
 }	 
 
 ADTErr  VectorGet(const Vector* _vector, size_t _index, int *_item)
 {
-	if(_vector == 0 ) 
+	if(_vector == NULL ) 
 	{
 		return ERR_NOT_INITIALIZED;
 	}
@@ -67,7 +64,7 @@ ADTErr  VectorGet(const Vector* _vector, size_t _index, int *_item)
 
 ADTErr  VectorSet(Vector *_vector, size_t _index, int  _item)
 {
-	if(_vector == 0 )
+	if(_vector == NULL )
 	{
 		return ERR_NOT_INITIALIZED;
 	}
@@ -80,7 +77,7 @@ ADTErr  VectorSet(Vector *_vector, size_t _index, int  _item)
 
 ADTErr  VectorItemsNum(const Vector *_vector, size_t* _numOfItems)
 {
-	if(_vector == 0 || _numOfItems == 0 ) 
+	if(_vector == NULL || _numOfItems == NULL ) 
 	{
 		return ERR_NOT_INITIALIZED;
 	}
@@ -90,7 +87,7 @@ ADTErr  VectorItemsNum(const Vector *_vector, size_t* _numOfItems)
 void    VectorPrint(const Vector *_vector)
 {	
 	int i;
-	if(_vector == 0 ) 
+	if(_vector == NULL ) 
 	{
 		return ;
 	}
@@ -105,7 +102,7 @@ void    VectorPrint(const Vector *_vector)
 ADTErr  VectorAdd(Vector *_vector,  int  _item)
 {	
 	int* temp;
-	if(_vector == 0 ||_vector->m_items == 0 ) 
+	if(_vector == NULL ||_vector->m_items == NULL ) 
 	{
 		return ERR_NOT_INITIALIZED;
 	}
@@ -117,7 +114,7 @@ ADTErr  VectorAdd(Vector *_vector,  int  _item)
 		}
 		temp = (int*)realloc(_vector->m_items,(_vector->m_allocatedSize + _vector->m_blockSize)*sizeof(int));
 	
-		if(temp==0)
+		if(temp==NULL)
 		{
 			return ERR_REALLOCATION_FAILED;
 		}else
@@ -133,7 +130,7 @@ ADTErr  VectorAdd(Vector *_vector,  int  _item)
 
 ADTErr  VectorDelete(Vector *_vector,  int* _item)
 {	
-	if(_vector == 0 ) 
+	if(_vector == NULL ) 
 	{
 		return ERR_NOT_INITIALIZED;
 	}

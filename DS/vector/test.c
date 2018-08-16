@@ -9,6 +9,10 @@ int main(){
 	int error1=-1,item1=3,item2=9;
 	size_t item3=0,item4=0,item5=0;
 	Vector* v = VectorCreate(2,2);
+	if (v==NULL)
+	{
+		return 1;
+	}
 	error1=VectorAdd(v,item1);
 	printf("8-%d",error1);
 	printf("\n");
