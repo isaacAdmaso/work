@@ -101,7 +101,7 @@ void    VectorPrint(const Vector *_vector)
 	
 ADTErr  VectorAdd(Vector *_vector,  int  _item)
 {	
-	int* temp;
+	int* reAllocItems= NULL;
 	if(_vector == NULL ||_vector->m_items == NULL ) 
 	{
 		return ERR_NOT_INITIALIZED;
@@ -112,19 +112,18 @@ ADTErr  VectorAdd(Vector *_vector,  int  _item)
 		{
 			return ERR_OVERFLOW;
 		}
-		temp = (int*)realloc(_vector->m_items,(_vector->m_allocatedSize + _vector->m_blockSize)*sizeof(int));
+		reAllocItems = (int*)realloc(_vector->m_items,(_vector->m_allocatedSize + _vector->m_blockSize)*sizeof(int));
 	
-		if(temp==NULL)
+		if(reAllocItems==NULL)
 		{
 			return ERR_REALLOCATION_FAILED;
-		}else
-		{
-			_vector->m_items=temp;
-			_vector->m_allocatedSize+=_vector->m_blockSize;
 		}
+		_vector->m_items=reAllocItems;
+		_vector->m_allocatedSize+=_vector->m_blockSize;
+		
 	}
 	_vector->m_items[_vector->m_nItems]=_item;
-	_vector->m_nItems+=1;
+	++_vector->m_nItems;
 	return ERR_OK;
 }
 
