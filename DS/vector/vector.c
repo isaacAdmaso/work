@@ -89,7 +89,7 @@ ADTErr  VectorItemsNum(const Vector *_vector, size_t* _numOfItems)
 void    VectorPrint(const Vector *_vector)
 {	
 	int i;
-	if(_vector == NULL ) 
+	if(_vector == NULL ||NULL == _vector->m_items) 
 	{
 		return ;
 	}
@@ -144,7 +144,7 @@ ADTErr  VectorDelete(Vector *_vector,  int* _item)
 	{
 		if(_vector->m_allocatedSize == (_vector->m_nItems + 2*_vector->m_blockSize))
 		{
-			_vector->m_items=(Vector *)realloc(_vector->m_items,(_vector->m_allocatedSize - _vector->m_blockSize)*sizeof(int));
+			_vector->m_items=(int *)realloc(_vector->m_items,(_vector->m_allocatedSize - _vector->m_blockSize)*sizeof(int));
 		}
 	}
 	return ERR_OK;
