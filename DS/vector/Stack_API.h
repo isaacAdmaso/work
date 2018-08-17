@@ -1,3 +1,11 @@
+#ifndef __STACK_H__
+#define __STACK_H__
+#include "ADTDefs.h"
+#include "vector.h"
+#include<stddef.h>
+
+
+
 Stack*  StackCreate( size_t _size, size_t _blockSize);
 void    StackDestroy(Stack* _stack);
 ADTErr  StackPush(   Stack* _stack, int  _item);

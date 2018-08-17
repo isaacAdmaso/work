@@ -275,7 +275,6 @@ int CheckDelUnFl()
 
 int main()
 {	
-	int a=-1;
 	CheckCreateNormal();
 	printf("\n");
 	CheckCreateZeIn();
