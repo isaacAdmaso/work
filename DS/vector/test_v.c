@@ -236,6 +236,22 @@ int CheckSetBadInx()
 }
 
 
+void CheckDelNrml()
+{
+	int i,_item;
+	Vector* _v = VectorCreate(1,1);
+	for(i=0;i<7;++i) VectorAdd(_v,i);
+	VectorPrint(_v);
+	for(i=0;i<7;++i)
+	{
+	VectorDelete(_v,&_item);
+	printf("%d ",_item); 
+	}
+	VectorPrint(_v);
+	VectorDestroy(_v);
+}
+
+
 int CheckDelNUllVec()
 {
 	int _item;
@@ -298,6 +314,6 @@ int main()
 	printf("%d\n",CheckDelNUllVec());
 	printf("%d\n",CheckDelNUllItm());
 	printf("%d\n",CheckDelUnFl());
-
+	CheckDelNrml();
 	return 0;
 }

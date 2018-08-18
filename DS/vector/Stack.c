@@ -1,29 +1,25 @@
 #include "Stack_API.h"
+#include "vector.h"
 #include<stdlib.h>
 #include<stdio.h>
 
 
 /*
-Stack*  StackCreate( size_t _size, size_t _blockSize);
-void    StackDestroy(Stack* _stack);
-ADTErr  StackPush(   Stack* _stack, int  _item);
-ADTErr  StackPop(    Stack* _stack, int* _item);
-ADTErr  StackTop(    Stack* _stack, int* _item);
-int     StackIsEmpty(Stack* _stack);
+
 
   Unit-Test functions  
-void    StackPrint(  Stack *_stack);
 */
-struct 
+struct Stack
 {
-    Vector *m_vector;
-}Stack;
+	size_t	m_magic;	/**< Protector*/
+    Vector *m_vector;   /**< The ADT */
+};
 
 Stack*  StackCreate( size_t _size, size_t _blockSize)
 {
 	Stack* newStack = NULL;
 	newStack = (Stack*)malloc(sizeof(Stack));
-	if (newStrack == NULL)
+	if (newStack == NULL)
 	{
 		return NULL;
 	}
@@ -44,7 +40,55 @@ void StackDestroy(Stack* _stack)
 	}
 }
 	
+ADTErr  StackPush(   Stack* _stack, int  _item)
+{
+	if(_stack == NULL)
+	{
+		return	ERR_NOT_INITIALIZED;
+	}
+	return VectorAdd(_stack->m_vector,_item);
+}
+
+ADTErr  StackPop(    Stack* _stack, int* _item)
+{
+	if(_stack == NULL || _item == NULL)
+	{
+		return	ERR_NOT_INITIALIZED;
+	}
+	return VectorDelete(_stack->m_vector,_item);
+}
 	
+ADTErr  StackTop(    Stack* _stack, int* _item)
+{
+	size_t _numOfItems;
+	if(_stack == NULL || _item == NULL)
+	{
+		return	ERR_NOT_INITIALIZED;
+	}
+		VectorItemsNum(_stack->m_vector,&_numOfItems);
+		VectorGet(_stack->m_vector,_numOfItems-1,_item);
+		return ERR_OK;
+}
+
+int StackIsEmpty(Stack* _stack)
+{
+	if(_stack == NULL)
+	{
+		return	ERR_NOT_INITIALIZED;
+	}
+
+	size_t _numOfItems;	
+	VectorItemsNum(_stack->m_vector,&_numOfItems);	
+	return (_numOfItems == 0);
+}	
+void   StackPrint(  Stack *_stack)
+{
+	if(_stack == NULL)
+	{
+		return;
+	}
+	VectorPrint(_stack->m_vector);
+}
 	
 	
 	

@@ -1,85 +1,105 @@
 #include "Stack_API.h"
 #include<stdlib.h>
 #include<stdio.h>
-#include<stddef.h>
 
 
 
-void CheckCreateNormal()
+
+void CheckCreateStackNormal()
 {
 	Stack* s;
 	s=StackCreate(1,1);
 	if(s != NULL)
 	{
-		printf("pass Create Normal ");
+		printf("pass Create Normal \n");
 	}else
 	{
 		
-		printf("faild create Normal ");
+		printf("faild create Normal \n");
 	}
 	StackDestroy(s);
 }
-/*		
-	
-void CheckCreateNormal()
+void CheckCreateStackZeIn()
 {
-	Vector* v = NULL;
-	v = VectorCreate(1,1);
-	if(v!= NULL)
+	Stack* s = NULL;
+	s = StackCreate(0,1);
+	if(s!= NULL)
 	{
-		printf("pass Create Normal ");
+		printf("pass Create ze-in \n");
 	}else
 	{
 		
-		printf("faild create Normal ");
+		printf("faild create ze-in \n");
 	}
-	VectorDestroy(v);
+	StackDestroy(s);
 }
 
-void CheckCreateZeIn()
+void CheckCreateStackZeBk()
 {
-	Vector* v = NULL;
-	v = VectorCreate(0,1);
-	if(v!= NULL)
+	Stack* s = NULL;
+	s = StackCreate(1,0);
+	if(s!= NULL)
 	{
-		printf("pass Create ze-in ");
+		printf("pass Create ze-bk\n");
 	}else
 	{
 		
-		printf("faild create ze-in ");
+		printf("faild create ze-bk \n");
 	}
-	VectorDestroy(v);
+	StackDestroy(s);
 }
 
-void CheckCreateZeBk()
+void CheckCreateStackZeBoth()
 {
-	Vector* v = NULL;
-	v = VectorCreate(1,0);
-	if(v!= NULL)
+	Stack* s = NULL;
+	s = StackCreate(0,0);
+	if(s== NULL)
 	{
-		printf("pass Create ze-bk ");
+		printf("pass Create ze-both\n");
 	}else
 	{
 		
-		printf("faild create ze-bk ");
+		printf("faild create ze-both \n");
 	}
-	VectorDestroy(v);
+	StackDestroy(s);
 }
-
-void CheckCreateZeBoth()
+Stack* StackHlpCreate(Stack* _s)
 {
-	Vector* v = NULL;
-	v = VectorCreate(0,0);
-	if(v== NULL)
+	int i;
+	for(i=0;i<7;i+=2)
 	{
-		printf("pass Create ze-both");
-	}else
-	{
-		
-		printf("faild create ze-both ");
+		StackPush(_s,i);
 	}
-	VectorDestroy(v);
+}
+void ChackStackPushNurmal()
+{
+	int i;
+	Stack* s=StackCreate(1,1);
+	StackHlpCreate(s);
+	StackPrint(s);
 }
 
+int CheckAddNullStack()
+{
+	Stack* s=NULL;
+	int _itemCheck = 421188;
+	if(StackPush(s,_itemCheck) == ERR_NOT_INITIALIZED)
+	{
+		return 0;
+	}
+	return 1;
+}
+
+
+/*
+		
 */
-
+int main(){
+	CheckCreateStackNormal();
+	CheckCreateStackZeIn();
+	CheckCreateStackZeBk();
+	CheckCreateStackZeBoth();
+	ChackStackPushNurmal();
+	printf("\n%d\n",CheckAddNullStack());
+	return 0;
+}

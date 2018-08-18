@@ -6,6 +6,7 @@
 typedef struct Vector Vector;
 
 Vector* VectorCreate(size_t _initialSize, size_t _extensionBblockSize);
+
 void    VectorDestroy(Vector* _vector);
  
 ADTErr  VectorAdd(Vector *_vector,  int  _item); /* Add item to end. */
