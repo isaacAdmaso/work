@@ -6,19 +6,92 @@
 
 
 
-
-char* Infix(char* _expression)
+int Priority(char x)
 {
+	switch(x)
+	{
+	case '(':
+		return 0;
+	case '+':
+	case '-':
+		return 1;
+	case '*':
+	case '/':
+		return 2;
+	case '^':
+		return 3;
+	default:
+		return -1;
+		break;
+	}
+}
+	
+	
+	
+char* Infix(char* _expression)
+{	
+	int i=0;
+	char val;
+	Stack* StIn;
+	Stack* StOut; 
+	
+	StIn= StackCreate(5,5);
+	StOut=StackCreate(5,5);
+	while(_expression[i]!='\0')
+	{
+		if(isdigit(_expression[i]))
+		{	
+			StackPush(StIn,_expression[i]);
+			StackPush(StIn,' ');
+		}else if(_expression[i]=='(')
+		{
+			StackPush(StOut,_expression[i]);
+		}else if(_expression[i]==')')
+		{
+			do
+			{
+				StackPop(StOut,&val);
+				StackPush(StIn,val);
+			}while(val != '(');
+		
+		}else
+		{
+			StackTop(StOut,&val);
+			while(Priority(val)>=Priority(_expression[i]))
+			{
+				StackPop(StOut,&val);
+				StackPush(StIn,_expression[i]);
+			}
+			StackPush(StOut,_expression[i]);
+		}
+		++i;
+	}
+	while(!StackIsEmpty(StOut))
+	{
+		StackPop(StOut,&val);
+		StackPush(StIn,val);
+
+	}
+	StackPrint(StIn);
+}
+
+
+
+
+
+/*
+
+
+
+
+
 	int i;
 	char *subExpression=malloc(2*sizeof(char));
 	char PExpression[32];
-	Stack* s; 
-	s= StackCreate(5,5);
 	for(i=0;_expression[i] != '\0';++i)
 	{
 		if(isdigit(_expression[i]))
 		{
-			StackPush(s,_expression[i]);
 		}else if(_expression[i] == '(')
 		{
 			StackPush(s,_expression[i]);
@@ -103,7 +176,7 @@ int main()
 		
 		
 		
-		
+*/		
 		
 		
 		
