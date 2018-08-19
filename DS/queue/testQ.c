@@ -32,7 +32,7 @@ END_UNIT
 
 UNIT(Queue_overflow)
 	Queue *_queue;
-	int i = 1;
+	int i;
 	int expected[] = { 0, 1, 2, 3, 4 };
 	_queue = QueueCreate(5);
 	ASSERT_THAT(_queue != NULL);

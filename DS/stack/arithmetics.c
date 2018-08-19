@@ -2,7 +2,7 @@
 #include <string.h>
 #include<stdlib.h>
 #include<stdio.h>
-
+#include<ctype.h>
 
 
 
@@ -10,7 +10,7 @@
 char* Infix(char* _expression)
 {
 	int i;
-	int subExpression;
+	char *subExpression=malloc(2*sizeof(char));
 	char PExpression[32];
 	Stack* s; 
 	s= StackCreate(5,5);
@@ -27,46 +27,46 @@ char* Infix(char* _expression)
 			do
 			{
 				StackPop(s,&subExpression);
-				strcpy(PExpression,(char)subExpression);
-			}while(subExpression != '('|| !StackIsEmpty(s));
+				strcpy(PExpression,subExpression);
+			}while(subExpression != "("|| !StackIsEmpty(s));
 		}else
 		{	
 			StackPop(s,&subExpression);
 			switch(_expression[i])
 			{
 				case '+':
-					while(subExpression != '-' || subExpression != '('||!StackIsEmpty(s))
+					while(subExpression != "-" || subExpression != "("||!StackIsEmpty(s))
 						{
-							strcpy(PExpression,(char)subExpression);
+							strcpy(PExpression,subExpression);
 							StackPop(s,&subExpression);
 						}
-						strcpy(PExpression,(char)subExpression);
+						strcpy(PExpression,subExpression);
 						StackPush(s,_expression[i]);
 						break;
 				case '-':
-					while(subExpression != '+' || subExpression != '('||!StackIsEmpty(s))
+					while(subExpression != "+" || subExpression != "("||!StackIsEmpty(s))
 						{
-							strcpy(PExpression,(char)subExpression);
+							strcpy(PExpression,subExpression);
 							StackPop(s,&subExpression);
 						}
-						strcpy(PExpression,(char)subExpression);
+						strcpy(PExpression,subExpression);
 						StackPush(s,_expression[i]);
 						break;
 						
 				case '/':
-					while(subExpression != '+' || subExpression != '-'|| subExpression != '('||!StackIsEmpty(s))
+					while(subExpression != "+" || subExpression != "-"|| subExpression != "("||!StackIsEmpty(s))
 						{
-							strcpy(PExpression,(char)subExpression);
+							strcpy(PExpression,subExpression);
 							StackPop(s,&subExpression);
 						}
-						strcpy(PExpression,(char)subExpression);
+						strcpy(PExpression,subExpression);
 						StackPush(s,_expression[i]);
 						break;
 						
 				case '*':
-					while(subExpression != '+' || subExpression != '-'|| subExpression != '('||!StackIsEmpty(s))
+					while(subExpression != "+" || subExpression != "-"|| subExpression != "("||!StackIsEmpty(s))
 						{
-							strcpy(PExpression,(char)subExpression);
+							strcpy(PExpression,subExpression);
 							StackPop(s,&subExpression);
 						}
 						strcpy(PExpression,(char)subExpression);
