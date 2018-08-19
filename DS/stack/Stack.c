@@ -1,9 +1,9 @@
-#include "Stack_API.h"
+#include "Stack.h"
 #include "vector.h"
 #include<stdlib.h>
 #include<stdio.h>
 
-
+#define MAGIC 25693478962
 
 /*
 
@@ -12,7 +12,7 @@
 */
 struct Stack
 {
-	//size_t	m_magic;	/**< Protector*/
+	size_t	m_magic;	/**< Protector*/
     Vector *m_vector;   /**< The ADT */
 };
 
@@ -30,11 +30,12 @@ Stack*  StackCreate( size_t _size, size_t _blockSize)
 		free(newStack);
 		return NULL;
 	}
+	newStack->m_magic = MAGIC;
 	return newStack;
 }
 void StackDestroy(Stack* _stack)
 {	
-	if(_stack != NULL )
+	if(_stack != NULL && _stack->m_magic == MAGIC)
 	{
 		VectorDestroy(_stack->m_vector);
 		free(_stack);
