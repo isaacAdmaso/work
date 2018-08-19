@@ -44,7 +44,7 @@ void StackDestroy(Stack* _stack)
 	
 ADTErr  StackPush(   Stack* _stack, int  _item)
 {
-	if(_stack == NULL)
+	if(_stack == NULL ||_stack->m_magic != MAGIC)
 	{
 		return	ERR_NOT_INITIALIZED;
 	}
@@ -53,7 +53,7 @@ ADTErr  StackPush(   Stack* _stack, int  _item)
 
 ADTErr  StackPop(    Stack* _stack, int* _item)
 {
-	if(_stack == NULL || _item == NULL)
+	if(_stack == NULL||_stack->m_magic != MAGIC || _item == NULL)
 	{
 		return	ERR_NOT_INITIALIZED;
 	}
@@ -62,34 +62,37 @@ ADTErr  StackPop(    Stack* _stack, int* _item)
 	
 ADTErr  StackTop(    Stack* _stack, int* _item)
 {	
-	int FlagLikeMagic;
-	if(_stack == NULL || _item == NULL)
+	size_t _numOfItems;
+	ADTErr eRR;
+ ;
+	if(_stack == NULL ||_stack->m_magic != MAGIC || _item == NULL)
 	{
 		return	ERR_NOT_INITIALIZED;
 	}
-		FlagLikeMagic=StackPop(_stack,_item);
-		StackPush(_stack,*_item);
-		return FlagLikeMagic;
+		VectorItemsNum(_stack->m_vector,&_numOfItems);
+		eRR=VectorGet(_stack->m_vector,_numOfItems-1,_item);
+		return eRR;
 }
 
-/*		
-		size_t _numOfItems;
-		VectorItemsNum(_stack->m_vector,&_numOfItems);
-		VectorGet(_stack->m_vector,_numOfItems-1,_item);
-*/
 int StackIsEmpty(Stack* _stack)
 {
 	size_t _numOfItems;	
-	if(_stack == NULL)
+	if(_stack == NULL||_stack->m_magic != MAGIC)
 	{
 		return	0;
 	}
-	VectorItemsNum(_stack->m_vector,&_numOfItems);	
-	return (_numOfItems == 0);
+	VectorItemsNum(_stack->m_vector,&_numOfItems);
+	if(_numOfItems == 0)
+	{	
+		return 0;
+	}else
+	{
+	return 1;
+	}
 }	
 void   StackPrint(  Stack *_stack)
 {
-	if(_stack == NULL)
+	if(_stack == NULL ||_stack->m_magic != MAGIC)
 	{
 		return;
 	}

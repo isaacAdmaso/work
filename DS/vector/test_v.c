@@ -135,6 +135,17 @@ int CheckVector(Vector* _v,int* ref,int _size)
 }
 
 
+void FillVector(Vector* _v,int* ref,int _size)
+{
+	int i;
+	
+	for(i=0;i<_size;++i)
+	{
+		VectorAdd(_v,ref[i]);		
+	}
+
+}
+
 int CheckAddNormal()
 {
 	int i;
@@ -245,7 +256,7 @@ void CheckDelNrml()
 	for(i=0;i<7;++i)
 	{
 	VectorDelete(_v,&_item);
-	printf("%d ",_item); 
+	printf("%d \n",_item); 
 	}
 	VectorPrint(_v);
 	VectorDestroy(_v);
@@ -286,7 +297,14 @@ int CheckDelUnFl()
 	return 1;
 }
 
-
+void CheckAddOF()
+{
+	int val[]={3,54,-77,55,634,356,648,10,-10};
+	Vector * vec = VectorCreate(4,0);
+	FillVector(vec,val,9);
+	VectorPrint(vec);
+	
+}
 
 
 int main()
@@ -314,6 +332,9 @@ int main()
 	printf("%d\n",CheckDelNUllVec());
 	printf("%d\n",CheckDelNUllItm());
 	printf("%d\n",CheckDelUnFl());
+	printf("9873289");
 	CheckDelNrml();
+	printf("\n");
+	CheckAddOF();
 	return 0;
 }
