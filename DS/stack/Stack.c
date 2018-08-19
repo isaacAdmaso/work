@@ -79,12 +79,11 @@ ADTErr  StackTop(    Stack* _stack, int* _item)
 */
 int StackIsEmpty(Stack* _stack)
 {
+	size_t _numOfItems;	
 	if(_stack == NULL)
 	{
-		return	ERR_NOT_INITIALIZED;
+		return	0;
 	}
-
-	size_t _numOfItems;	
 	VectorItemsNum(_stack->m_vector,&_numOfItems);	
 	return (_numOfItems == 0);
 }	
