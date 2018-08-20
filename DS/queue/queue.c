@@ -95,7 +95,7 @@ int    QueueIsEmpty(const Queue *_queue)
 }
 void   QueuePrint(const Queue *_queue)
 {	
-	int i,numItems=_queue->m_nItems;
+	size_t i,numItems=_queue->m_nItems;
 	if(IS_INVALID(_queue))
 	{
 		return ;
