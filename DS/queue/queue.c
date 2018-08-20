@@ -3,9 +3,13 @@
 #include<stdio.h>
 #include<stddef.h>
 
+#define MAGIC 3567978
+#define IS_INVALID(q) (((q) == NULL) || (q)->m_magic != MAGIC)
+
 struct Queue
 {
-	
+
+	size_t	m_magic;		  /**< Protector*/	
     int*    m_items;
     size_t  m_size;
     size_t  m_head;    /* Index of head */
@@ -31,7 +35,7 @@ Queue* QueueCreate(size_t _size)
 		free(newQueue);
 		return NULL;
 	}
-	
+	newQueue->m_magic=MAGIC;
 	newQueue->m_size=_size+1;
 	newQueue->m_head=0;
 	newQueue->m_tail=0;
@@ -41,8 +45,9 @@ Queue* QueueCreate(size_t _size)
 	
 void   QueueDestroy(Queue *_queue)
 {
-	if(NULL != _queue)
-	{
+	if(!IS_INVALID(_queue))
+	{	
+		_queue->m_magic=0;
 		free(_queue->m_items);
 		free(_queue);	
 	}
@@ -50,7 +55,7 @@ void   QueueDestroy(Queue *_queue)
 
 ADTErr QueueInsert(Queue *_queue, int  _item)
 {
-	if(NULL==_queue ||NULL == _queue->m_items) 
+	if(IS_INVALID(_queue) ||NULL == _queue->m_items) 
 	{
 		return ERR_NOT_INITIALIZED;
 	}
@@ -66,7 +71,7 @@ ADTErr QueueInsert(Queue *_queue, int  _item)
 
 ADTErr QueueRemove(Queue *_queue, int *_item)
 {
-	if(_queue==NULL ||NULL == _queue->m_items) 
+	if(IS_INVALID(_queue) ||NULL == _queue->m_items) 
 	{
 		return ERR_NOT_INITIALIZED;
 	}
@@ -82,7 +87,7 @@ ADTErr QueueRemove(Queue *_queue, int *_item)
 
 int    QueueIsEmpty(const Queue *_queue)
 {
-	if(_queue == NULL)
+	if(IS_INVALID(_queue))
 	{
 		return 1;
 	}
@@ -91,6 +96,11 @@ int    QueueIsEmpty(const Queue *_queue)
 void   QueuePrint(const Queue *_queue)
 {	
 	int i,numItems=_queue->m_nItems;
+	if(IS_INVALID(_queue))
+	{
+		return ;
+	}
+
 	for(i=0;i<numItems;++i)
 	{
 		printf("%d,",_queue->m_items[(_queue->m_head+i)%_queue->m_size]);
