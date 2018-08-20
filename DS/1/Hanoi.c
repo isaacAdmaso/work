@@ -9,15 +9,15 @@
  	{
  		return;
  	}
- 	hanoi(_n-1, _from, _via, _to);
+ 	hanoi(_n-1, _from, _to, _via);
  	printf("Move disc %d from %c to %c via %c\n",_n,_from,_to,_via);
- 	hanoi(_n-1, _via, _to, _from);
+
  }
  
  
 int main()
 {
-	hanoi(3,'a','c','b');
+	hanoi(5,'a','c','b');
 	return 0;
 	
 }

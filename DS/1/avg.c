@@ -19,6 +19,6 @@ double Avg(double* _arr,/*double* _temp,*/int _size)
 
 int main()
 {
-	double a[]={1,2,3,6,5,3};
+	double a[]={6,6,6,6,6,6,6};
 	printf("%f",Avg(a,6));
 }
