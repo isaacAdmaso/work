@@ -28,7 +28,7 @@ int Priority(char x)
 	
 	
 	
-char* Infix(char* _expression)
+void Infix(char* _expression)
 {	
 	int i=0;
 	char val;
@@ -76,6 +76,13 @@ char* Infix(char* _expression)
 }
 
 
+
+int main()
+{
+	char *c="12+12*3*4^4";
+	Infix(c);
+
+}
 
 
 
