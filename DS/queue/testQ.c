@@ -47,10 +47,38 @@ UNIT(Queue_overflow)
 	QueueDestroy(_queue);
 END_UNIT
 
+UNIT(Queue_underflow)
+	Queue *_queue;
+	int i;
+	int expected[] = { 0, 1, 2, 3, 4 };
+	_queue = QueueCreate(5);
+	ASSERT_THAT(_queue != NULL);
+	for (i = 0; i < 5; ++i)
+	{
+		ASSERT_THAT( QueueInsert(_queue, i) == ERR_OK);
+	}
+	ASSERT_THAT( QueueInsert(_queue, i) == ERR_OVERFLOW);
+	
+	ASSERT_THAT( CheckQueueContent(_queue, expected,5) == PASS);
+	for (i = 0; i < 5; ++i)
+	{
+		ASSERT_THAT( QueueRemove(_queue, &i) == ERR_OK);
+	}
+
+	ASSERT_THAT(QueueRemove(_queue, &i)==ERR_NOT_INITIALIZED);
+
+	QueueDestroy(_queue);
+END_UNIT
+
+
+
+
+
 TEST_SUITE(Queue test)
 	TEST(create_normal)
 	TEST(create_with_zero_size)
 	TEST(Queue_overflow)
+//	TEST(Queue_underflow)
 END_SUITE
 
 
