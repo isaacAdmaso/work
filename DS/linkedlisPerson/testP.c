@@ -5,21 +5,26 @@
 #include "mu_test.h"
 
 
-
-int i;
-char s[]="yitshak";
-char c[32];
-Person* p_test=NULL;
-Person** _p/*=malloc(20*sizeof(Person*))*/;
-for(i=0;i<20;++i)
+Person** CreatPeersonList()
 {
-	_p[i]->m_id=i+500;
-	_p[i]->m_name=strcat(s,itoa(i,c,10));
-	_p[i]->m_age=30+i;
-	_p[i]->m_next=NULL;
+	int i;
+	char s[]="yitshak";
+	char c[32];
+	Person* p_test=NULL;
+	Person** _p/*=malloc(20*sizeof(Person*))*/;
+	for(i=0;i<20;++i)
+	{
+		_p[i]->m_id=i+500;
+		_p[i]->m_name=strcat(s,itoa(i,c,10));
+		_p[i]->m_age=30+i;
+		_p[i]->m_next=NULL;
+	}
+	return _p;
 }
 
+
 UNIT(Insert_Head_Null)
+	Person** _p=CreatPeersonList();
 	p_test=ListInsertHead(_p[2],_p[1]);/*_p[2] is head point to Null */
 	ASSERT_THAT(p_test==_p[1]);
 	ASSERT_THAT(_p[1]->m_next != NULL);

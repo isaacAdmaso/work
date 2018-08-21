@@ -43,7 +43,7 @@ Person* ListInsertByKey(Person* _head,int _key, Person* _p)
 	cur=_head;
 	while(cur != NULL)
 	{
-		if(cur->m_next->m_id > _key/*&& cur->m_id < _key */)
+		if(cur->m_id > _key/*&& cur->m_id < _key */)
 		{
 			_p->m_next=cur->m_next;
 			cur->m_next=_p;
