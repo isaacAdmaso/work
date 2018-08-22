@@ -1,8 +1,5 @@
 #ifndef __PERSON_H__
 #define __PERSON_H__
-#include<stdlib.h>
-#include<stddef.h>
-#include "mu_test.h"
 
 
 struct Person

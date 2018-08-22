@@ -25,25 +25,29 @@ Person* ListInsertHead(Person* _head, Person* _p)
 
 Person* ListRemovedHead(Person* _head, Person** _item)
 {
+	Person* new_head;
 	if(_head == NULL || _item == NULL)
 	{
 		return _head;
 	}
-	_item = &_head;
-	return _head->m_next;
+	*_item = _head;
+	new_head=_head->m_next;
+	_head->m_next=NULL;
+	return new_head; 
 }
 
 Person* ListInsertByKey(Person* _head,int _key, Person* _p)
 {
 	Person* cur;
-	if(_head == NULL)
-	{
-		return _p;
-	}
 	cur=_head;
-	while(cur != NULL)
+	if(_head == NULL ||_key < _head->m_id)
 	{
-		if(cur->m_id > _key/*&& cur->m_id < _key */)
+		_p->m_next = _head;
+		return _p;
+	}	
+	while(cur->m_next != NULL)
+	{
+		if(cur->m_next->m_id > _key/*&& cur->m_id < _key */)
 		{
 			_p->m_next=cur->m_next;
 			cur->m_next=_p;
@@ -53,16 +57,34 @@ Person* ListInsertByKey(Person* _head,int _key, Person* _p)
 	}
 	return _head;
 }
+/*
+Person* ListInsertByKeyRec(Person* _head,int _key, Person* _p)
+{
+	if()
+*/
+
+
 		
 Person* ListRemoveByKey(Person* _head,int _key, Person** _p)
 {
 	Person* cur;
 	cur=_head;
-	while(cur != NULL)
+	if(_head == NULL || _p ==NULL)
+	{
+		return _head;
+	}	
+
+	if (_key == _head->m_id)
+	{
+		_p* = _head;
+		return _head->m_next;
+	}
+	
+	while(cur->m_next != NULL)
 	{
 		if(cur->m_next->m_id == _key)
 		{
-			_p=&cur->m_next;
+			_p*=cur->m_next;
 			cur->m_next=cur->m_next->m_next;
 			break;
 		}
