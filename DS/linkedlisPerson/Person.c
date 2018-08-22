@@ -23,10 +23,10 @@ Person* ListInsertHead(Person* _head, Person* _p)
 	return _p;
 }
 
-Person* ListRemovedHead(Person* _head, Person** _item)
+Person* ListRemoveHead(Person* _head, Person** _item)
 {
 	Person* new_head;
-	if(_head == NULL || _item == NULL)
+	if(_head == NULL || *_item == NULL)
 	{
 		return _head;
 	}
@@ -45,9 +45,9 @@ Person* ListInsertByKey(Person* _head,int _key, Person* _p)
 		_p->m_next = _head;
 		return _p;
 	}	
-	while(cur->m_next != NULL)
+	while(cur)
 	{
-		if(cur->m_next->m_id > _key/*&& cur->m_id < _key */)
+		if(cur->m_next==NULL || cur->m_next->m_id > _key)
 		{
 			_p->m_next=cur->m_next;
 			cur->m_next=_p;
@@ -76,7 +76,7 @@ Person* ListRemoveByKey(Person* _head,int _key, Person** _p)
 
 	if (_key == _head->m_id)
 	{
-		_p* = _head;
+		*_p = _head;
 		return _head->m_next;
 	}
 	
@@ -84,7 +84,7 @@ Person* ListRemoveByKey(Person* _head,int _key, Person** _p)
 	{
 		if(cur->m_next->m_id == _key)
 		{
-			_p*=cur->m_next;
+			*_p=cur->m_next;
 			cur->m_next=cur->m_next->m_next;
 			break;
 		}
@@ -112,7 +112,6 @@ void  PrintList(Person* _head)
 		cur=cur->m_next;
 	}
 }
-
 
 		
 

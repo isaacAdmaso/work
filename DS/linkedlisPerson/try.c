@@ -32,10 +32,10 @@ Person* ListInsertHead(Person* _head, Person* _p)
 	return _p;
 }
 
-Person* ListRemovedHead(Person* _head, Person** _item)
+Person* ListRemoveHead(Person* _head, Person** _item)
 {
 	Person* new_head;
-	if(_head == NULL || _item == NULL)
+	if(_head == NULL || *_item == NULL)
 	{
 		return _head;
 	}
@@ -54,9 +54,9 @@ Person* ListInsertByKey(Person* _head,int _key, Person* _p)
 		_p->m_next = _head;
 		return _p;
 	}	
-	while(cur->m_next != NULL)
+	while(cur)
 	{
-		if(cur->m_next->m_id > _key/*&& cur->m_id < _key */)
+		if(cur->m_next==NULL || cur->m_next->m_id > _key)
 		{
 			_p->m_next=cur->m_next;
 			cur->m_next=_p;
@@ -125,13 +125,17 @@ void  PrintList(Person* _head)
 
 int main()
 {
-
-	//int i;
-	//char c[32];
-	char s[]="yitshak";
-	char s2[]="yitshak";
-	Person** item=malloc(sizeof(Person*));
+	Person** item=(Person**)malloc(sizeof(Person*));
+	* item=(Person*)malloc(sizeof(Person));
 	Person* p_test=malloc(sizeof(Person));
+/*
+	Person* p[]={{1,"yit30 1",30},
+				 {2,"yit31 2",31},
+				 {3,"yit32 3",32},
+				 {4,"yit32 4",33},
+				 {5,"yit32 5",34},
+				 {0,"yit32 0",29}
+				}*/
 	Person* p1=malloc(sizeof(Person));
 	Person* p2=malloc(sizeof(Person));
 	Person* p3=malloc(sizeof(Person));
@@ -172,15 +176,19 @@ int main()
 		_p[i]->m_age=30+i;
 		_p[i]->m_next=NULL;
 */	
+	p_test=ListInsertHead(p5,p1);
 	p_test=ListInsertHead(p2,p1);
-	p_test=ListInsertHead(p1,p5);
-	p_test=ListInsertHead(p5,p0);
-	//p_test=ListRemoveHead(p5,item);
+	p_test=ListInsertHead(p1,p0);
+	PrintList(p_test);
+	p_test=ListInsertByKey(p0,4,p4);
+	p_test=ListInsertByKey(p0,3,p3);
+	p_test=ListRemoveByKey(p0,0,item);
 	//ListInsertByKey(p_test,p0->m_id,p0);
 	//ListInsertByKey(p_test,p5->m_id,p5);
 	//ListInsertByKey(p_test,p4->m_id,p4);
-	//PrintList(*item);
-	//printf("\n");
+	printf("\n");	
+	PrintList(*item);
+	printf("\n");
 	//p_test=ListInsert~~Head(p0,NULL);
 
 	//printf("%d\n%d",p_test==p1,p_test==p2);
