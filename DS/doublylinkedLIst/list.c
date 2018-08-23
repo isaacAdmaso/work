@@ -93,9 +93,9 @@ ADTErr NodeCreate(int _data,Node *_node)
 		return ERR_REALLOCATION_FAILED;
 	}
 	newNode->m_item=_data;
-	newNode->m_next->m_prev=newNode;
 	newNode->m_next=_node->m_next;
 	newNode->m_prev=_node;
+	newNode->m_next->m_prev=newNode;
 	_node->m_next=newNode;
 	return ERR_OK;
 }
@@ -204,7 +204,7 @@ int    ListIsEmpty(const List_t *_list)
 	return _list->m_head.m_next==&(_list->m_tail);
 }
 
-void List_tPrint(const List_t *_list)
+void ListPrint(const List_t *_list)
 {
 	Node *cur;
 	if(IS_INVALID(_list))
@@ -305,23 +305,22 @@ int  List_tIsEmpty(const List_t *_List_t)
 	printf(")");
 }
 	
-*/
+
 
 int main(){
 
 	List_t *_List_t;
 	int i,val;
-	/*int expected[] = { 0, 1, 2, 3, 4 };*/
+	int expected[] = { 0, 1, 2, 3, 4 };
 	_List_t = ListCreate();
 	for (i = 0; i < 5; ++i)
 	{
 		ListPushHead(_List_t, i);
-		
+		ListPopTail(_List_t, &val);
+		printf("%d\n",val);
 	}
-	ListPopTail(_List_t, &val);
-	printf("%d\n",val);
 	ListDestroy(_List_t);
 	return 0;
 }
-
+*/
 
