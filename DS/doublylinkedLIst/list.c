@@ -102,7 +102,7 @@ ADTErr NodeCreate(int _data,Node *_node)
 	
 
 
-ADTErr ListPushhead(List_t *_list, int  _item)
+ADTErr ListPushHead(List_t *_list, int  _item)
 {
 	if(IS_INVALID(_list))
 	{
@@ -129,14 +129,15 @@ ADTErr NodeDestroy(Node *_node,int *_item)
 		return ERR_NOT_INITIALIZED;
 	}
 	*_item=_node->m_item;
-	dataHelder=_node->m_next;
-	_node->m_next = dataHelder->m_next;
+	dataHelder=_node;
+	_node->m_next->m_prev=_node->m_prev;
+	_node->m_prev->m_next=_node->m_next;
 	free(dataHelder);
 	return ERR_OK;
 }
 
 
-ADTErr ListPophead(List_t *_list, int *_item)
+ADTErr ListPopHead(List_t *_list, int *_item)
 {
 
 	if(IS_INVALID(_list) || _item == NULL)
@@ -171,11 +172,11 @@ ADTErr ListPopTail(List_t *_list, int *_item)
 	{
 		return ERR_NOT_INITIALIZED;
 	}
-	if(_list->m_head.m_next==&(_list->m_tail))
+	if(_list->m_tail.m_prev==&(_list->m_head))
 	{
 		return ERR_UNDERFLOW;
 	}
-	return NodeDestroy(_list->m_head.m_next,_item);
+	return NodeDestroy(_list->m_tail.m_prev,_item);
 }
 
 		

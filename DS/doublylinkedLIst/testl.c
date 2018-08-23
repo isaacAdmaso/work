@@ -3,81 +3,113 @@
 #include "LIST.h"
 #include "mu_test.h"
 #define MAGIC 3567978
-/*
 
-int CheckList_tContent(List_t* _List_t, int* _arr, int _size)
+
+int CheckListContent(List_t* _list, int* _arr, int _size)
 {
 	size_t  i;
 	int val;
 	for (i = 0; i < _size; ++i)
 	{
-		ASSERT_THAT( ListRemove(_List_t, &val) == ERR_OK );
+		ASSERT_THAT( ListPopTail(_list, &val) == ERR_OK );
 		ASSERT_THAT( val == _arr[i] );
 	}
 	return PASS;
 }
 
-*/
+
 UNIT(create_normal)
 	List_t* l = ListCreate();
 	ASSERT_THAT(l != NULL);
 	ListDestroy(l);
 END_UNIT
-/*
-UNIT(List_t_insert_null_List_t)
-    ASSERT_THAT( List_tInsert(NULL, 0) == ERR_NOT_INITIALIZED );
+
+UNIT(List_push_head_null_List)
+    ASSERT_THAT( ListPushHead(NULL, 0) == ERR_NOT_INITIALIZED );
 END_UNIT
 
-UNIT(List_t_insert_normal)
-    List_t *q = List_tCreate();
-    ASSERT_THAT( List_tInsert(q, 45) == ERR_OK );
-    List_tDestroy(q);
+UNIT(List_push_tail_null_List)
+    ASSERT_THAT( ListPushTail(NULL, 0) == ERR_NOT_INITIALIZED );
 END_UNIT
 
-UNIT(List_t_remove_normal)
+
+UNIT(List_push_head_normal)
+    List_t *l = ListCreate();
+    ASSERT_THAT( ListPushHead(l, 45) == ERR_OK );
+    ListDestroy(l);
+END_UNIT
+
+UNIT(List_push_tail_normal)
+    List_t *l = ListCreate();
+    ASSERT_THAT( ListPushTail(l, 45) == ERR_OK );
+    ListDestroy(l);
+END_UNIT
+
+UNIT(List_pop_head_normal)
     int item;
-    List_t *q = List_tCreate(2);
-    ASSERT_THAT( List_tInsert(q, 45) == ERR_OK );
-    ASSERT_THAT( List_tInsert(q, 12) == ERR_OK );
-    ASSERT_THAT( List_tRemove(q, &item) == ERR_OK && item == 45 );
-    List_tDestroy(q);
+    List_t *l = ListCreate();
+    ASSERT_THAT( ListPushHead(l, 45) == ERR_OK );
+    ASSERT_THAT( ListPushHead(l, 12) == ERR_OK );
+    ASSERT_THAT( ListPopHead(l, &item) == ERR_OK && item == 12 );
+    ListDestroy(l);
 END_UNIT
 
-UNIT(List_t_remove_null_List_t)
+UNIT(List_pop_tail_normal)
     int item;
-    ASSERT_THAT( List_tRemove(NULL, &item) == ERR_NOT_INITIALIZED );
+    List_t *l = ListCreate();
+    ASSERT_THAT( ListPushHead(l, 45) == ERR_OK );
+    ASSERT_THAT( ListPushHead(l, 12) == ERR_OK );
+    
+    //ASSERT_THAT( ListPopTail(l, &item) == ERR_OK && item == 12 );
+    ListDestroy(l);
 END_UNIT
 
-UNIT(List_t_underflow)
+
+UNIT(List_pop_head_null_List)
+    int item;
+    ASSERT_THAT( ListPopHead(NULL, &item) == ERR_NOT_INITIALIZED );
+END_UNIT
+
+
+UNIT(List_pop_tail_null_List)
+    int item;
+    ASSERT_THAT( ListPopTail(NULL, &item) == ERR_NOT_INITIALIZED );
+END_UNIT
+
+UNIT(List_underflow)
 	List_t *_List_t;
 	int i,val;
 	int expected[] = { 0, 1, 2, 3, 4 };
-	_List_t = List_tCreate();
+	_List_t = ListCreate();
 	ASSERT_THAT(_List_t != NULL);
 	for (i = 0; i < 5; ++i)
 	{
-		ASSERT_THAT( List_tInsert(_List_t, i) == ERR_OK);
+		ASSERT_THAT( ListPushHead(_List_t, i) == ERR_OK);
 	}
-	ASSERT_THAT( CheckList_tContent(_List_t, expected,5) == PASS);
-	ASSERT_THAT(List_tRemove(_List_t, &val)==ERR_UNDERFLOW);
-	List_tDestroy(_List_t);
+	ASSERT_THAT( CheckListContent(_List_t, expected,5) == PASS);
+	ASSERT_THAT(ListPopTail(_List_t, &val)==ERR_UNDERFLOW);
+	ListDestroy(_List_t);
 END_UNIT
 
-UNIT(List_t_remove_null_item)
-    List_t *q = List_tCreate();
-    ASSERT_THAT( List_tRemove(q, NULL) == ERR_NOT_INITIALIZED );
-    List_tDestroy(q);
+
+UNIT(List_pop_null_item)
+    List_t *l = ListCreate();
+    ASSERT_THAT( ListPopHead(l, NULL) == ERR_NOT_INITIALIZED );
+    ASSERT_THAT( ListPopTail(l, NULL) == ERR_NOT_INITIALIZED );
+    ListDestroy(l);
 END_UNIT
 
-UNIT(List_t_remove_underflow)
+UNIT(List_pop_underflow)
     int item;
-    List_t *q = List_tCreate();
-    ASSERT_THAT( List_tInsert(q, 45) == ERR_OK );
-    ASSERT_THAT( List_tRemove(q, &item) == ERR_OK );
-    ASSERT_THAT( List_tRemove(q, &item) == ERR_UNDERFLOW );
-    List_tDestroy(q);
+    List_t *q = ListCreate();
+    ASSERT_THAT( ListPushHead(q, 45) == ERR_OK );
+    ASSERT_THAT( ListPopTail(q, &item) == ERR_OK );
+    ASSERT_THAT( ListPopHead(q, &item) == ERR_UNDERFLOW );
+    ASSERT_THAT( ListPopTail(q, &item) == ERR_UNDERFLOW );
+    ListDestroy(q);
 END_UNIT
 
+/*
 UNIT(List_t_is_empty_normal)
     List_t *q = List_tCreate();
     ASSERT_THAT( List_tIsEmpty(q) != 0);
@@ -124,16 +156,21 @@ END_UNIT
 */
 TEST_SUITE(List_t test)
 	TEST(create_normal)
-/*	TEST(List_t_insert_null_List_t)
-	TEST(List_t_insert_normal)
-	TEST(List_t_remove_null_List_t)	
-	TEST(List_t_underflow)
-	TEST(List_t_remove_null_item)
-	TEST(List_t_remove_normal)	
-	TEST(List_t_remove_underflow)
-	TEST(List_t_is_empty_normal)
-	TEST(List_t_is_empty_after_remove)
-	TEST(List_t_full_remove_one_add_one)
+	TEST(List_push_head_null_List)
+	TEST(List_push_tail_null_List)
+	TEST(List_pop_head_null_List)	
+	TEST(List_pop_tail_null_List)
+	//TEST(List_underflow)
+	TEST(List_push_head_normal)	
+	TEST(List_push_tail_normal)
+	TEST(List_pop_head_normal)
+	TEST(List_pop_tail_normal)
+	TEST(List_pop_null_item)
+	TEST(List_pop_underflow)
+/*
+	TEST(List_t_print_after_insert_and_remove)
+	TEST(List_t_print_after_insert_and_remove)
+	TEST(List_t_print_after_insert_and_remove)
 	TEST(List_t_print_after_insert_and_remove)
 */	
 END_SUITE
