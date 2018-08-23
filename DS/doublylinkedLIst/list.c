@@ -28,7 +28,7 @@ List_t* ListCreate()
 	}
 	l->m_head.m_next=&(l->m_tail);
 	l->m_head.m_prev=NULL;
-	l->m_head.m_item;
+	l->m_head.m_item=MAGIC;
 	l->m_tail.m_item=MAGIC;
 	l->m_tail.m_prev=&(l->m_head);
 	l->m_tail.m_next=NULL;
@@ -93,6 +93,7 @@ ADTErr NodeCreate(int _data,Node *_node)
 		return ERR_REALLOCATION_FAILED;
 	}
 	newNode->m_item=_data;
+	newNode->m_next->m_prev=newNode;
 	newNode->m_next=_node->m_next;
 	newNode->m_prev=_node;
 	_node->m_next=newNode;
@@ -154,7 +155,7 @@ ADTErr ListPopHead(List_t *_list, int *_item)
 
 /*	
 	
-	Node* data_free;
+	Node* p = data_free;
 	if(IS_INVALID(_list) || _item == NULL)
 	{
 		return ERR_NOT_INITIALIZED;
@@ -180,8 +181,48 @@ ADTErr ListPopTail(List_t *_list, int *_item)
 }
 
 		
+size_t ListCountItems(List_t *_list)
+{
+	Node *p;
+	size_t count;
+	if(ListIsEmpty(_list))
+	{
+		return 0;
+	}
+	for (p =_list->m_head.m_next,count=0;p->m_next != NULL;p=p->m_next,++count)
+	{}
+	return count;
+}
 
 
+int    ListIsEmpty(const List_t *_list)
+{
+	if(IS_INVALID(_list))
+	{
+		return 1;
+	}
+	return _list->m_head.m_next==&(_list->m_tail);
+}
+
+void List_tPrint(const List_t *_list)
+{
+	Node *cur;
+	if(IS_INVALID(_list))
+	{
+		return;
+	}
+	printf("(");
+	cur = _list->m_head.m_next;
+	while(cur != &(_list->m_tail))
+	{
+		printf("%d ,",_list->m_head.m_next->m_item);
+		cur=cur->m_next;
+	}
+	printf(")");
+}
+		
+	
+	
 
 /*
 
@@ -199,8 +240,6 @@ ADTErr ListPopTail(List_t *_list, int *_item)
 
 
 /*
-size_t ListCountItems(List_t *_list);
-int    ListIsEmpty(const List_t *_list);
 
 ADTErr List_tRemove(List_t *_List_t, int *_item)
 {
@@ -248,7 +287,6 @@ int  List_tIsEmpty(const List_t *_List_t)
 	}
 	return _List_t->m_m_head==_List_t->m_tail;
 }
-void List_tPrint(const List_t *_List_t)
 {
 	Node *cur,*nxt;
 	if(IS_INVALID(_List_t))
@@ -268,3 +306,22 @@ void List_tPrint(const List_t *_List_t)
 }
 	
 */
+
+int main(){
+
+	List_t *_List_t;
+	int i,val;
+	/*int expected[] = { 0, 1, 2, 3, 4 };*/
+	_List_t = ListCreate();
+	for (i = 0; i < 5; ++i)
+	{
+		ListPushHead(_List_t, i);
+		
+	}
+	ListPopTail(_List_t, &val);
+	printf("%d\n",val);
+	ListDestroy(_List_t);
+	return 0;
+}
+
+

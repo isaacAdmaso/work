@@ -12,8 +12,10 @@ int CheckListContent(List_t* _list, int* _arr, int _size)
 	for (i = 0; i < _size; ++i)
 	{
 		ASSERT_THAT( ListPopTail(_list, &val) == ERR_OK );
+		printf("%d ", val);
 		ASSERT_THAT( val == _arr[i] );
 	}
+	printf(" -----------------\n");
 	return PASS;
 }
 
@@ -59,14 +61,14 @@ UNIT(List_pop_tail_normal)
     List_t *l = ListCreate();
     ASSERT_THAT( ListPushHead(l, 45) == ERR_OK );
     ASSERT_THAT( ListPushHead(l, 12) == ERR_OK );
-    
-    //ASSERT_THAT( ListPopTail(l, &item) == ERR_OK && item == 12 );
+    ASSERT_THAT( ListPopTail(l, &item) == ERR_OK/* && item == 12 */);
     ListDestroy(l);
 END_UNIT
 
 
 UNIT(List_pop_head_null_List)
     int item;
+    
     ASSERT_THAT( ListPopHead(NULL, &item) == ERR_NOT_INITIALIZED );
 END_UNIT
 
@@ -160,11 +162,11 @@ TEST_SUITE(List_t test)
 	TEST(List_push_tail_null_List)
 	TEST(List_pop_head_null_List)	
 	TEST(List_pop_tail_null_List)
-	//TEST(List_underflow)
+	TEST(List_underflow)
 	TEST(List_push_head_normal)	
 	TEST(List_push_tail_normal)
 	TEST(List_pop_head_normal)
-	TEST(List_pop_tail_normal)
+	/*TEST(List_pop_tail_normal)*/
 	TEST(List_pop_null_item)
 	TEST(List_pop_underflow)
 /*
