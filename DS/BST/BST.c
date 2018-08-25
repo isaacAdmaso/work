@@ -169,15 +169,43 @@ void  TreeDestroy(Tree* _tree)
 		return ;
 	}
 	NodeDestroyHelpr(_tree->m_root);
+	free(_tree);
 }
 
 /*
-typedef enum
+int main()
 {
-    PRE_ORDER,
-    IN_ORDER,
-    POST_ORDER
-} TreeTraverse;
-#endif
+	Tree* t = TreeCreate();
+	int data[] = {1,2,3,4,5, 6,7,8,9};
+	for(int i=0;i<9;++i)
+	{
+		TreeInsert(t,i);
+	}
+	for(int i=0;i<20;++i)
+	{
+		TreeIsDataFound(if(t,i))
+		{
+			TreeInsert(t,i);
+		}
+	}
+	TreePrint(t,PRE_ORDER);
+	printf("\n\n");
+	
+	TreePrint(t,IN_ORDER);
+	printf("\n\n");
+	
+	TreePrint(t,POST_ORDER);
+}
 */
+	
+
+
+
+
+
+
+
+
+
+
 
