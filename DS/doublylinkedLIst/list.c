@@ -34,8 +34,6 @@ List_t* ListCreate()
 	l->m_tail.m_next=NULL;
 	return l;
 }
-/*
-*/
 
 void   ListDestroy(List_t *_list)
 {	
@@ -54,32 +52,6 @@ void   ListDestroy(List_t *_list)
 	free(_list);
 }
 
-/*
-	
-	
-	Node *cur,*lst_node,*nxt;
-	if(IS_INVALID(_list))
-	{
-		return;
-	}
-	if(_list->m_m_head.m_next==&_list->m_tail)
-	{
-		free(_list);
-		return;
-	}
-	cur = _list->m_m_head.m_next;
-	nxt = cur;
-	lst_node=&_list->m_tail;
-	while(cur!=lst_node)
-	{
-		nxt=nxt->m_next;
-		free(cur);
-		cur=nxt;
-	}
-	free(_list);
-}
-	
-*/
 ADTErr NodeCreate(int _data,Node *_node)
 {
 	Node *newNode;
@@ -101,8 +73,6 @@ ADTErr NodeCreate(int _data,Node *_node)
 }
 	
 	
-
-
 ADTErr ListPushHead(List_t *_list, int  _item)
 {
 	if(IS_INVALID(_list))
@@ -152,20 +122,6 @@ ADTErr ListPopHead(List_t *_list, int *_item)
 	return NodeDestroy(_list->m_head.m_next,_item);
 }
 
-
-/*	
-	
-	Node* p = data_free;
-	if(IS_INVALID(_list) || _item == NULL)
-	{
-		return ERR_NOT_INITIALIZED;
-	}
-	*_item = _list->m_m_head.m_next->m_item;
-	data_free=_list->m_m_head.m_next->m.next;
-	_list->m_m_head.m_next=_list->m_m_head.m_next->m_next;
-	free(data_free);
-}
-*/
 ADTErr ListPopTail(List_t *_list, int *_item)
 {
 
@@ -195,7 +151,7 @@ size_t ListCountItems(List_t *_list)
 }
 
 
-int    ListIsEmpty(const List_t *_list)
+int	ListIsEmpty(const List_t *_list)
 {
 	if(IS_INVALID(_list))
 	{
@@ -215,112 +171,57 @@ void ListPrint(const List_t *_list)
 	cur = _list->m_head.m_next;
 	while(cur != &(_list->m_tail))
 	{
-		printf("%d ,",_list->m_head.m_next->m_item);
+		printf("%d ,",cur->m_item);
 		cur=cur->m_next;
 	}
 	printf(")");
 }
-		
+/*		
 	
-	
-
-/*
-
-	Node* data_free;
-	if(IS_INVALID(_list) || _item == NULL)
-	{
-		return ERR_NOT_INITIALIZED;
-	}
-	*_item = _list->m_m_head.m_next->m_item;
-	data_free=_list->m_m_head.m_next;
-	_list->m_m_head.m_next=_list->m_m_head.m_next->next;
-	free(data_free);
-*/	
-	
-
-
-/*
-
-ADTErr List_tRemove(List_t *_List_t, int *_item)
+int main()
 {
-	Node *m_head_helder=(Node*)malloc(sizeof(Node));
-	if(IS_INVALID(_List_t) || _item == NULL)
+	List_t *l,*m;
+	int val,i,arr[]={1,2,3,3,4,5,56,7,6,3,4,2,34,45,56,0,577,3,8,53};
+	l=ListCreate();
+	m=ListCreate();
+	for(i=0;i<sizeof(arr)/sizeof(arr[0]);++i)
 	{
-		return ERR_NOT_INITIALIZED;
+		ListPushHead(l,i);
+		ListPushTail(l,-i);
+		printf("%lu\n",ListCountItems(l));
 	}
-	if(_List_t->m_m_head == NULL)
+	for(i=0;i<sizeof(arr)/sizeof(arr[0]);++i)
 	{
-		return ERR_UNDERFLOW;
+		ListPushHead(m,arr[i]);
+		ListPushTail(m,arr[i]);
+		printf("%lu\n",ListCountItems(m));
 	}
-	m_head_helder = _List_t->m_m_head;
-	_List_/t->m_m_head = _List_t->m_m_head.m_next;
-	*_item =m_head_helder->m_item;
-	NodeDestroy(m_head_helder);
-	return ERR_OK;
-} 
-	
-ADTErr List_tInsert(List_t *_List_t, int  _item)
-{
-	Node *tail_helder,*newNode;
-	newNode=NodeCreate(_item);
-	if(IS_INVALID(_List_t) || newNode == NULL)
+	for(i=0;i<2*sizeof(arr)/sizeof(arr[0]);++i)
 	{
-		return ERR_NOT_INITIALIZED;
-	}
-	if(_List_t->m_m_head == NULL)
-	{
-		_List_t->m_m_head=newNode;
-		_List_t->m_tail=newNode;
-		return ERR_OK;
-	}
-	tail_helder=_List_t->m_tail;
-	_List_t->m_tail=newNode;
-	tail_helder->m_next=_List_t->m_tail;
-	return ERR_OK;
-}
-
-int  List_tIsEmpty(const List_t *_List_t)
-{
-	if(IS_INVALID(_List_t))
-	{
-		return 1;
-	}
-	return _List_t->m_m_head==_List_t->m_tail;
-}
-{
-	Node *cur,*nxt;
-	if(IS_INVALID(_List_t))
-	{
-		return;
-	}
-	cur=_List_t->m_m_head;
-	nxt=_List_t->m_m_head;
-	printf("(");
-	while(cur!=NULL)
-	{
-		nxt = cur->m_next;
-		printf(" %d,",cur->m_item);
-		cur=nxt;
-	}
-	printf(")");
-}
-	
-
-
-int main(){
-
-	List_t *_List_t;
-	int i,val;
-	int expected[] = { 0, 1, 2, 3, 4 };
-	_List_t = ListCreate();
-	for (i = 0; i < 5; ++i)
-	{
-		ListPushHead(_List_t, i);
-		ListPopTail(_List_t, &val);
+		ListPopHead(l,&val);
 		printf("%d\n",val);
+
+		ListPopTail(m,&val);
+		printf("%d\n",val);
+
 	}
-	ListDestroy(_List_t);
+	ListPrint(l);
+	if(ListIsEmpty)
+	{
+	printf("\n");
+	}
+	ListPrint(m);
 	return 0;
 }
 */
+	
+
+
+
+
+
+
+
+
+
 

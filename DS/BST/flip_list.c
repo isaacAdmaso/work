@@ -33,18 +33,69 @@ void ListPrint(Node* _lst)
 }
 
 Node* ListFlip(Node* _node)
-{
-	return _node;
+{	
+	if(_node == NULL)
+	{
+		return _node;
+	}
+	Node *cur,*nxt,*prv;
+	prv = NULL;
+	cur = _node;
+	nxt = NULL;
+	while(cur!=NULL)
+	{
+		nxt = cur->m_next;
+		cur->m_next = prv;
+		prv = cur;
+		cur = nxt;
+	}
+	return prv;
 }
+
+Node* ListFlipRec(Node* _node)
+{	
+	if(_node->m_next == NULL)
+	{
+		return _node;
+	}
+	Node* newH;
+	newH = ListFlipRec(_node->m_next);
+	_node->m_next->m_next=_node;
+	_node->m_next = NULL;
+	return newH;
+}
+	
+
+
+
+
 
 int main()
 {
-	int data[] = { 2,3,4,5, 6,7,8,9};
+	int data[] = {1,2,3,4,5, 6,7,8,9};
 	Node* flipped;
 	Node* list = ListCreate(data, sizeof(data)/sizeof(int));
 	ListPrint(list);
 	flipped = ListFlip(list);
 	ListPrint(flipped);
+	ListPrint(list);
+	flipped = ListFlipRec(flipped);
+	//ListPrint(flipped);
+	ListPrint(list);
+	flipped = ListFlipRec(flipped);
+	ListPrint(flipped);
 	return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
