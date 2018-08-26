@@ -11,7 +11,7 @@ void last(char* _fileName,int n)
 {	
 	int i,count=0;
 	int* arr=(int*)calloc(NOR+1,sizeof(int));
-	char sent[NOC];
+	char line[NOC];
 	FILE* fp = fopen(_fileName,"r");
 	if(fp == NULL)
 	{	
@@ -20,7 +20,7 @@ void last(char* _fileName,int n)
 	}
 	while(!feof(fp))
 	{		
-		fgets(sent,NOC,fp);
+		fgets(line,NOC,fp);
 		if(feof(fp))
 		{
 			break;
@@ -31,11 +31,13 @@ void last(char* _fileName,int n)
 	fseek(fp,arr[(count+1)%(n+1)],0);
 	for(i=0;i<n;++i)
 	{	
-		fgets(sent,NOC,fp);
-		printf("%s\n",sent);
+		fgets(line,NOC,fp);
+		printf("%s\n",line);
 	}
+	free(arr);
+	fclose(fp);
 }
-/*	
+	
 void freq(char* _fileName)
 {	
 	char ch;
@@ -64,11 +66,11 @@ void freq(char* _fileName)
 	}
 	fclose(fp);
 }
-*/
+
 int main()
 {	
 	last("testl.c",NOR);
-	/*freq("last");*/
+	freq("last");
 	return 0;
 }
 	
