@@ -172,22 +172,23 @@ void  TreeDestroy(Tree* _tree)
 	free(_tree);
 }
 
-/*
+
 int main()
 {
 	Tree* t = TreeCreate();
-	int data[] = {1,2,3,4,5, 6,7,8,9};
-	for(int i=0;i<9;++i)
+	int data[] = {41,53,758,234,6,254,7,2,35,8,4,2,745,2346};
+	int size = sizeof(data)/sizeof(data[0]);
+	for(int i=0;i<size;++i)
 	{
-		TreeInsert(t,i);
+		TreeInsert(t,data[i]);
 	}
-	for(int i=0;i<20;++i)
+/*	for(int i=0;i<20;++i)
 	{
 		TreeIsDataFound(if(t,i))
 		{
 			TreeInsert(t,i);
 		}
-	}
+	}*/
 	TreePrint(t,PRE_ORDER);
 	printf("\n\n");
 	
@@ -196,7 +197,7 @@ int main()
 	
 	TreePrint(t,POST_ORDER);
 }
-*/
+
 	
 
 

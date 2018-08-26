@@ -5,23 +5,26 @@
 
 
 
-int InserTree(Tree* _tree, int _size)
+int InserTree(Tree* _tree)
 {
-	int  i;
-	for (i = 0; i < _size; ++i)
+	int  i,arr[]={1,2,3,4,5,36,77,81,29,120};
+	for (i = 0; i < sizeof(arr)/sizeof(arr[0]); ++i)
 	{
-		ASSERT_THAT( TreeInsert(_tree,i) == ERR_OK );
-		ASSERT_THAT( TreeIsDataFound(_tree,i) == ERR_OK );
+		ASSERT_THAT(TreeInsert(_tree,arr[i]) == ERR_OK);
+		ASSERT_THAT(TreeIsDataFound(_tree,arr[i]) == ERR_OK);
 	}
 	return PASS;
 }
 
 UNIT(print_tree)
 	Tree *t = TreeCreate();
-	InserTree(t,10);
+	InserTree(t);
 	TreePrint(t,PRE_ORDER);
+	printf("\n");
 	TreePrint(t,IN_ORDER);
+	printf("\n");
 	TreePrint(t,POST_ORDER);
+	printf("\n");
 END_UNIT
 	
 UNIT(create_normal)
@@ -44,7 +47,7 @@ END_UNIT
 
 UNIT(tree_insert_item_twice)
     Tree *t = TreeCreate();
-    InserTree(t,7);
+    InserTree(t);
     ASSERT_THAT( TreeInsert(t,3) == ERR_ALREADY_EXISTS );
     ASSERT_THAT( TreeInsert(t,4) == ERR_ALREADY_EXISTS );
     TreeDestroy(t);
@@ -61,6 +64,7 @@ END_UNIT
 
 
 TEST_SUITE(Tree test)
+	TEST(print_tree)
 	TEST(create_normal)
 	TEST(insert_null_tree)
 	TEST(tree_insert_normal)
