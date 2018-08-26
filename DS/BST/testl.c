@@ -71,5 +71,3 @@ TEST_SUITE(Tree test)
 	TEST(tree_insert_item_twice)	
 	TEST(tree_serch_not_exists)
 END_SUITE
-
-
