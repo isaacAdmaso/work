@@ -6,13 +6,12 @@ enum status_e {on_e = 0,off_e,error_e};
 
 typedef struct BitMap_t
 {
-	int *m_bit;
+	unsigned int *m_bit;
 	unsigned int m_nf;
-};
+}BitMap_t;
 
-typedef struct BitMap BitMap_t;
-typedef int(*bitF)(BitMap_t*,int);
 
+typedef enum status_e(*bitF)(BitMap_t*,int);
 
 
 
