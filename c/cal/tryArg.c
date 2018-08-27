@@ -1,12 +1,17 @@
 #include "appointment_diary.h"
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 
-const char FILE_IO_NAME[] = "diary.txt" ;
 
-int main()
-{
+int main(int argc,char* argv[]){
 	float begin,end;
+	char FILE_IO_NAME[128];
+	*FILE_IO_NAME = NULL;
+	if(argc > 1)
+	{
+		strcpy(FILE_IO_NAME , argv[1]);
+	}
 	enum status_e temp_enum;
 	int temp,option,cont =1;
 	unsigned int capacity,room;
