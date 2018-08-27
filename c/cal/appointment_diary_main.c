@@ -1,11 +1,20 @@
-#include "appointment_dairy.h"
+#include "appointment_diary.h"
 #include<stdio.h>
 #include<stdlib.h>
 
+const char FILE_IO_NAME[] = "diary.txt" ;
 
-
-int main(){
+int main(/*int argc,char* argv[]*/){
 	float begin,end;
+/*  if(argc > 1)
+	{
+		const char FILE_IO_NAME[] = argv[1];
+	}
+	else
+	{
+		const char FILE_IO_NAME[] = NULL;
+	} 
+*/
 	enum status_e temp_enum;
 	int temp,option,cont =1;
 	unsigned int capacity,room;
@@ -14,11 +23,11 @@ int main(){
 	do
 	{
 	printf("Enter capacity: ");
-	scanf("%d",&capacity);
+	scanf("%u",&capacity);
 	} while(capacity <=0);
 	
 	d_dairy = creatAD(capacity);
-	
+	temp_enum=insertFromFile(FILE_IO_NAME,d_dairy);
 	while(cont) {
 		printf("	Choose option: \n");
 		printf("	1: Insert meeting into dairy \n");
@@ -34,7 +43,7 @@ int main(){
 				printf("enter start and end time,and room number: \n");
 				scanf("%f\n",&begin);
 				scanf("%f\n",&end);
-				scanf("%d",&room);
+				scanf("%u",&room);
 				meet = creatMeet(begin,end,room);
 				if(meet == NULL) {
 					printf("failed to creat meeting!!!\n");
@@ -78,6 +87,7 @@ int main(){
 			/*default: cont = 0;	break;*/
 		}
 	}
+	temp_enum = writeToFile(d_dairy,FILE_IO_NAME);
 	destroycal(d_dairy);
 	
 

@@ -1,8 +1,8 @@
 #include<stdlib.h>
 #include<stdio.h>
-#include "appointment_dairy.h"
+#include "appointment_diary.h"
 
-const NOC = 1024;
+const int NOC = 1024;
 
 
 meetptr creatMeet(float begin_t,float end_t,unsigned int room_n) 
@@ -118,6 +118,10 @@ enum status_e  Insert(Calendar_t* _dairy,meetptr _meet) {
 		
 int find(Calendar_t* _dairy,float a_begin_time) {
 	int i,found = -1;
+	if(_dairy == NULL || _dairy->day == NULL)
+	{
+		return found;
+	}
 		for(i=0;i<_dairy->NOM;++i) {
 			if(_dairy->day[i]->begin_time == a_begin_time) {
 				found=i;
@@ -128,11 +132,9 @@ int find(Calendar_t* _dairy,float a_begin_time) {
 }
 
 
-
 	 
 enum status_e  remove_meet(Calendar_t* _dairy,float a_begin_time) {
 	int index_meet=find(_dairy,a_begin_time);
-	meetptr temp=_dairy->day[index_meet];
 	if (index_meet==-1) return bad_parameter_e;
 	free(_dairy->day[index_meet]);
 	left_S(_dairy,index_meet);
@@ -159,25 +161,25 @@ void destroycal(Calendar_t* _dairy) {
 void print_Cal(Calendar_t* _dairy) {
 	int i;
 	for(i=0;i<_dairy->NOM;++i) {
-		printf("Meeting %d)\n  Start in %f\n  End in %f\n  Room #no: %d\n ",i+1,_dairy->day[i]->begin_time,_dairy->day[i]->end_time,_dairy->day[i]->room_num);
+		printf("Meeting %d)\n  Start in %f\n  End in %f\n  Room #no: %d\n",i+1,_dairy->day[i]->begin_time,_dairy->day[i]->end_time,_dairy->day[i]->room_num);
 	}
 }
 		
-enum status_e insertFromFile(char* _fileName,Calendar_t* _dairy)
+enum status_e insertFromFile(const char* _fileName,Calendar_t* _dairy)
 {
-	FILE* fp;
 	meetptr newMeet=NULL;
+	FILE* fp = NULL;
 	float begin,end;
 	unsigned int room;
 	enum status_e insertErr;
 	fp = fopen(_fileName,"r");
-	if(fp == NULL)
+	if(fp == NULL || _dairy == NULL || _dairy->day == NULL)
 	{
 		return bad_parameter_e;
 	}
-	while(fscanf (fp, "%f", &begin) != EOF)
+	fscanf (fp, "%f", &begin);
+	while( fscanf (fp, "%f", &end) != EOF)
 	{	
-		fscanf (fp, "%f", &end);
 		fscanf (fp, "%u", &room);
 		newMeet=creatMeet(begin,end,room);
 		if(newMeet == NULL) 
@@ -189,13 +191,34 @@ enum status_e insertFromFile(char* _fileName,Calendar_t* _dairy)
 		{
 			return insertErr;
 		}
+		fscanf (fp, "%f", &begin);
 	}
+	fclose(fp);
 	return ok_e;
 }
 
 
 
-enum status_e writeToFile
+enum status_e writeToFile(Calendar_t* _dairy,const char* _fileName)
+{
+	int i;
+	FILE* fp=NULL;
+	if(_dairy == NULL || _dairy->day == NULL || _fileName == NULL)
+	{
+		return bad_parameter_e;
+	}
+	fp = fopen(_fileName,"w");
+	if(fp == NULL)
+	{
+		return bad_parameter_e;
+	}
+	for(i=0;i<_dairy->NOM;++i)
+	{
+		fprintf(fp,"%f %f %d\n",_dairy->day[i]->begin_time,_dairy->day[i]->end_time,_dairy->day[i]->room_num);
+	}
+	fclose(fp);
+	return ok_e;
+}	
 
 
 

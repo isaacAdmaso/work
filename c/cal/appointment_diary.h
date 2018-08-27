@@ -1,5 +1,5 @@
-#ifndef Appointment_dairy_h
-#define Appointment_dairy_h
+#ifndef Appointment_diary_h
+#define Appointment_diary_h
 #include<stdlib.h>
 #include<stdio.h>
 
@@ -8,7 +8,7 @@ enum status_e {ok_e, memory_error_e, bad_parameter_e};
 typedef struct {
 	float begin_time;
 	float end_time;
-	int room_num;
+	unsigned int room_num;
 } Meeting_t;
 
 typedef Meeting_t* meetptr;
@@ -19,6 +19,8 @@ typedef struct {
 	unsigned int NOM;
 }Calendar_t;
 
+enum status_e insertFromFile(const char* _fileName,Calendar_t* _dairy);
+enum status_e writeToFile(Calendar_t* _dairy,const char* _fileName);
 meetptr creatMeet(float begin_t,float end_t,unsigned int room_n) ;
 Calendar_t* creatAD(unsigned int _capacity);
 void left_S(Calendar_t* _day_mtng,int mtng_index);
