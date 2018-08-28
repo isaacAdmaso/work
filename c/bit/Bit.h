@@ -22,6 +22,6 @@ enum status_e offBit(BitMap_t* _bM,unsigned int _bitNum);
 enum status_e isBitOn(BitMap_t* _bM,unsigned int _bitNum);
 void destroyMap(BitMap_t* _bM);
  
-void printMap(BitMap_t* _bM);
+//void printMap(BitMap_t* _bM);
 
 #endif
