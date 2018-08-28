@@ -89,30 +89,24 @@ void printMap(BitMap_t* _bM)
 {
 	unsigned int i;
 	unsigned int nof;
-	char *p;
+	char p[NOF+2];
 	if(NULL == _bM )
 	{ 
 		return;
 	}
-	nof = _bM->m_nf; 
-	p = (char*)malloc(2*(nof+1)*sizeof(char));
-	if(p == NULL)
-	{
-		return;
-	}
-	for(i = nof;i > 0; ++i)
+	for(i = NOF;i > 0; --i)
 	{
 		if(isBitOn(_bM,i-1) == off_e)
 		{
-			*(p+i) = '0';
+			p[i]='0';
 		}
 		else
 		{
-			*(p+i) = '1';
+			p[i]='1';
 		}
 	}
-	*(p+nof+1)= '\0';
-	printf("%s",p);
+	p[NOF+1] = '\0';
+	printf("%s\n",p);
 }
 
 

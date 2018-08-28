@@ -18,7 +18,6 @@ int main()
 	}
 	while(1)
 	{
-		/*printMap(b_m);*/
 		printf("enter: 1 to select feature,\n       2 to unselect feature,\n       3 to check if feature is selected(bigger number to quit): \n");
 		scanf("%d",&option);
 		if(option>3 || option == 0)
@@ -31,10 +30,11 @@ int main()
 		if(check_valid != error_e)
 		{
 			printf("0 is ON ,1 is OFF) %d\n",check_valid);
+			printMap(b_m);
 		}
 		else
 		{
-			break;
+			printf("try again\n");
 		}
 	}
 	destroyMap(b_m);
