@@ -1,29 +1,34 @@
 #include<stdio.h>
+#include<string.h>
 #include "HmEx.h"
-void packOne(char *_str,int _size)
+
+
+
+int packOne(char *_str,int _size)
 {
 	int i;
-	Packing_u ch;
+	union Packing_u ch;
 	if(_str == NULL)
 	{
-		return;
+		return -1;
 	}
 	for(i = 0;i < _size/2;++i)
 	{
-		ch.side1=(str[i]-'a');
-		ch.side2=(str[i+1]-'a');
-		str[i] = ch;
+		ch.pack.side1=(_str[i]-'a');
+		ch.pack.side2=(_str[i+1]-'a');
+		_str[i] = ch.pack;
 	}
 	if(_size % 2 == 1)
 	{
-		ch.side1 =str[_size]; 
-		str[i+1] = ch.side1;
+		ch.pack.side1 =_str[_size]; 
+		_str[i+1] = ch.pack.side1;
 	}
+	return i;
 }
 /*
-void packTwo(char *_str,int _size)
+void packTwo(char *__str,int _size)
 {
-	if(_str == NULL)
+	if(__str == NULL)
 	{
 		return;
 	}

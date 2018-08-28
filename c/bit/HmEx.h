@@ -11,9 +11,9 @@ union  Packing_u
 {
 	PackC pack;
 	char ch;
-} 
+};
 
 
-void packOne(char *_str,int _size);
+int packOne(char *_str,int _size);
 void packTwo(char *_str,int _size);
 #endif
