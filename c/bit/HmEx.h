@@ -1,13 +1,19 @@
 #ifndef __HMEX_H__
 #define __HMEX_H__
 
-typedef struct pack
+typedef struct PackC
 {
 	char side1 :4;
 	char side2 :4;
 }PackC;
 
-union ch
+union  Packing_u
 {
-	PackC 
+	PackC pack;
+	char ch;
+} 
 
+
+void packOne(char *_str,int _size);
+void packTwo(char *_str,int _size);
+#endif
