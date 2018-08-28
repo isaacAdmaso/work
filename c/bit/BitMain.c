@@ -1,13 +1,13 @@
 #include "Bit.h"
 #include<stdio.h>
 
-const int NOF = 44;
+const unsigned int NOF = 44;
 
 
 int main()
 {	
 	BitMap_t* b_m;
-	unsigned int option;
+	int option;
 	unsigned int nof;
 	enum status_e check_valid;
 	bitF bitFunc[3] = {onBit,offBit,isBitOn};

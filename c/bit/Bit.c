@@ -84,33 +84,41 @@ enum status_e isBitOn(BitMap_t* _bM,unsigned int _bitNum)
 	return off_e;
 }
 
-/*
+	
 void printMap(BitMap_t* _bM)
 {
-	unsigned int i,k;
-	char str_bin[32];
-	unsigned int arrSize = NOF/(sizeof(unsigned int)*8)+1;
-	if(IS_INVALID(_bM))
+	unsigned int i;
+	unsigned int nof;
+	char *p;
+	if(NULL == _bM )
+	{ 
+		return;
+	}
+	nof = _bM->m_nf; 
+	p = (char*)malloc(2*(nof+1)*sizeof(char));
+	if(p == NULL)
 	{
 		return;
 	}
-	for(i=0;i<arrSize;++i)
+	for(i = nof;i > 0; ++i)
 	{
-		while(_bM->m_bit[i] != 0)
+		if(isBitOn(_bM,i-1) == off_e)
 		{
-			if(_bM->m_bit[i]%2)
-			{
-				strcpy(str_bin,"0");
-			}
-			else
-			{
-				strcpy(str_bin,"1");
-			}
+			*(p+i) = '0';
+		}
+		else
+		{
+			*(p+i) = '1';
 		}
 	}
-	printf("%s",str_bin);		
+	*(p+nof+1)= '\0';
+	printf("%s",p);
 }
-*/
+
+
+
+
+
 
 
 
