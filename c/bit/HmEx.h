@@ -14,6 +14,6 @@ union  Packing_u
 };
 
 
-int packOne(char *_str,int _size);
-void packTwo(char *_str,int _size);
+int packOne(char *_str);
+int packTwo(char *_str,int _size);
 #endif
