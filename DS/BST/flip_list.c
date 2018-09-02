@@ -54,11 +54,11 @@ Node* ListFlip(Node* _node)
 
 Node* ListFlipRec(Node* _node)
 {	
+	static Node* newH;
 	if(_node->m_next == NULL)
 	{
 		return _node;
 	}
-	Node* newH;
 	newH = ListFlipRec(_node->m_next);
 	_node->m_next->m_next=_node;
 	_node->m_next = NULL;

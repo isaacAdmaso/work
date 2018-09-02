@@ -176,7 +176,7 @@ void  TreeDestroy(Tree* _tree)
 int main()
 {
 	Tree* t = TreeCreate();
-	int data[] = {41,53,758,234,6,254,7,2,35,8,4,2,745,2346};
+	int data[] = {41,53,758,234,6,254,7,2,35,8,4,2,745,26};
 	int size = sizeof(data)/sizeof(data[0]);
 	for(int i=0;i<size;++i)
 	{
