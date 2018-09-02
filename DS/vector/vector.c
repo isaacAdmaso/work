@@ -20,11 +20,11 @@ struct Vector
 
 Vector* VectorCreate(size_t _initialSize, size_t _extensionBblockSize)
 {	
+	Vector* newVector = 0;
 	if(_initialSize ==0 && _extensionBblockSize==0)
 	{
 		return NULL;
 	}
-	Vector* newVector = 0;
 	newVector = (Vector*)malloc(sizeof(Vector));
 	if (newVector == NULL) 
 	{

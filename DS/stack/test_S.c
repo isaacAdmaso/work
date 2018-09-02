@@ -1,4 +1,5 @@
 #include "Stack.h"
+
 #include<stdlib.h>
 #include<stdio.h>
 
@@ -187,7 +188,7 @@ int CheckStackPopAftrDstry()
 void CheckStackIsEmptyNormal()
 {
 	Stack* _s = StackCreate(1,0);
-	if (StackIsEmpty(_s))
+	if (StackIsEmpty(_s)==0)
 	{
 		printf("Stack is empty ok\n");
 	}else
@@ -199,7 +200,7 @@ void CheckStackIsEmptyNormal()
 void ChackStackIsEmptyNullStack()
 {
 	Stack* _s = StackCreate(0,0);/**same as _s==NULL*/
-	if(StackIsEmpty(_s) == ERR_NOT_INITIALIZED)
+	if(StackIsEmpty(_s) == 0)
 	{
 		printf("Stack is empty ok\n");
 	}else

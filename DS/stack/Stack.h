@@ -1,7 +1,7 @@
 #ifndef __STACK_H__
 #define __STACK_H__
-#include "ADTDefs.h"
 #include "vector.h"
+#include "ADTDefs.h"
 #include<stddef.h>
 
 typedef struct Stack Stack;

@@ -1,7 +1,7 @@
-#ifndef __BST__
-#define __BST__
+#ifndef __BST_H__
+#define __BST_H__
 #include "ADTDefs.h"
-#include<stddef.h>
+
 
 typedef struct Tree Tree;
 
@@ -19,5 +19,5 @@ int     TreeIsDataFound(const Tree* _tree, int _data);
 
 void    TreePrint(const Tree* _tree, TreeTraverse _traverseMode);
 
-#endif
+#endif/*__BST_H__*/
 

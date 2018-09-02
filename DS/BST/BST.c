@@ -2,7 +2,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #define MAGIC 29384502
-#define IS_INVALID(q) (((q) == NULL) || (q)->m_magic != MAGIC)
+#define IS_INVALID(T) (((T) == NULL) || (T)->m_magic != MAGIC)
 
 
 
@@ -23,8 +23,9 @@ struct Tree
 Tree*   TreeCreate()
 {
 	Tree* t;
+	
 	t = (Tree*)malloc(sizeof(Tree));
-	if(t == NULL)
+	if(NULL == t)
 	{
 		return NULL;
 	}
@@ -35,7 +36,7 @@ Tree*   TreeCreate()
 
 int NodeIsDataFoundHElper(Node* _node,int _data)
 {
-	if(_node == NULL)
+	if(NULL == _node)
 	{
 		return ERR_NOT_EXISTS;
 	}
@@ -50,18 +51,18 @@ int NodeIsDataFoundHElper(Node* _node,int _data)
 
 int TreeIsDataFound(const Tree* _tree, int _data)
 {
-	if(IS_INVALID(_tree) || _tree->m_root == NULL)
+	if(IS_INVALID(_tree) || NULL == _tree->m_root)
 	{
 		return ERR_NOT_INITIALIZED;
 	}
 	return NodeIsDataFoundHElper(_tree->m_root, _data);
 }
 
-Node* NodeCreate(int _data)
+static Node* NodeCreate(int _data)
 {
 	Node* newNode;
 	newNode = (Node*)malloc(sizeof(Node));
-	if(newNode == NULL)
+	if(NULL == newNode)
 	{
 		return NULL;
 	}
@@ -70,9 +71,9 @@ Node* NodeCreate(int _data)
     return newNode;
 }	
 
-Node* NodeInsertHelper(Node* _nodeRoot,Node* _dataN,ADTErr* _errAlrdiExist)
+static Node* NodeInsertHelper(Node* _nodeRoot,Node* _dataN,ADTErr* _errAlrdiExist)
 {
-	if(_nodeRoot == NULL)
+	if(NULL == _nodeRoot)
 	{
 		return _dataN;
 	}
@@ -102,7 +103,7 @@ ADTErr  TreeInsert(Tree* _tree, int _data)
 		return ERR_NOT_INITIALIZED;
 	}
 	newNode = NodeCreate(_data);
-	if(newNode == NULL)
+	if(NULL == newNode)
 	{
 		return ERR_ALLOCATION_FAILED;
 	}
@@ -111,9 +112,9 @@ ADTErr  TreeInsert(Tree* _tree, int _data)
 	return ErrAlrdiExist;
 }
 
-void NodePrint(Node* _node,TreeTraverse _mode)
+static void NodePrint(Node* _node,TreeTraverse _mode)
 {
-	if(_node == NULL)
+	if(NULL == _node)
 	{
 		return;
 	}
@@ -141,7 +142,7 @@ void NodePrint(Node* _node,TreeTraverse _mode)
 		
 void  TreePrint(const Tree* _tree, TreeTraverse _traverseMode)
 {
-	if(_tree == NULL)
+	if(NULL == _tree)
 	{
 		return;
 	}
@@ -150,7 +151,7 @@ void  TreePrint(const Tree* _tree, TreeTraverse _traverseMode)
 	
 void NodeDestroyHelpr(Node* _node)
 {
-	if(_node == NULL)
+	if(NULL == _node)
 	{
 		return;
 	}
@@ -168,6 +169,7 @@ void  TreeDestroy(Tree* _tree)
 	{
 		return ;
 	}
+	_tree->m_magic = -1;
 	NodeDestroyHelpr(_tree->m_root);
 	free(_tree);
 }
