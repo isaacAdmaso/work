@@ -1,6 +1,6 @@
 # General compilation flags
 CC=gcc
-CFLAGS= -ansi -pedantic -Wall -Werror -g
+CFLAGS= -ansi -pedantic -Wall -Werror  -g
 LDFLAGS= -g
 
 # Include directory
@@ -29,10 +29,7 @@ depends:
 
 clean:
 	-rm $(TARGET) *.o depends
-
-run:  $(TARGET)
-	 ./$(TARGET)
-
-gdb:  $(TARGET)
-	 gdb -q ./$(TARGET)
 	
+run:
+	./$(TARGET)
+
