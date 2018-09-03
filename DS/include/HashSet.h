@@ -10,7 +10,7 @@
 
 #ifndef _HASHSET_H___
 #define _HASHSET_H___
-
+#include<stddef.h>
 #include "ADTDefs.h"
 
 typedef struct HashSet HashSet;
@@ -66,6 +66,6 @@ ADTErr HashSetStatistics(const HashSet* _set, size_t *_maxCollisionsEver, float 
 
 /** @brief iterate over all elements
  */
-void HashSetForEach(const HashSet* _set, void (*_userFunction)(size_t _data));
+void HashSetForEach(const HashSet* _set/*, void (*_userFunction)(size_t _data)*/);
 
 #endif /* _HASHSET_H___ */

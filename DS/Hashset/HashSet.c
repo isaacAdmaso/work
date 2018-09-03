@@ -11,17 +11,18 @@
 
 
 typedef size_t(*HashFunc)(size_t);
+
 struct HashSet 
 {
-	size_t m_magic;
-	int *m_items;
-	size_t m_size;
-	size_t m_noItems;
-	size_t m_capacity;
-	HashFunc m_hashF;
-	size_t m_maxReHashOps;
-	size_t m_insertCount;
-	size_t m_totalReHash;
+	size_t m_magic; 
+	int *m_items;			/*data hoder*/
+	size_t m_size;			/*actual DS size*/
+	size_t m_noItems;		/* number of inputs*/
+	size_t m_capacity;		/*client max inputs*/
+	HashFunc m_hashF;		/*Hash func given by client*/
+	size_t m_maxReHashOps;	/*			*/
+	size_t m_insertCount;	/*statistics*/
+	size_t m_totalReHash;	/*			*/
 };
 
 
@@ -48,11 +49,12 @@ static int GetNumber(int _number)
     return _number;
 }
 
-
+/*Create a HashSet ADT for managing a set of positive integers*/
 HashSet* HashSetCreate(size_t _capacity, float _loadFactor, HashFunc _func)
 {
 	HashSet *h;
-	int primeN;/*real capacity*/
+	int primeN; 
+	
 	/*parameter check*/
 	if(_capacity <= MININPUT || _loadFactor >= MININPUT)
 	{
@@ -63,6 +65,7 @@ HashSet* HashSetCreate(size_t _capacity, float _loadFactor, HashFunc _func)
 	{
 		return NULL;
 	}
+	/*real capacity*/
 	primeN = GetNumber((int)(_capacity/_loadFactor));
 	h->m_items = (int*)calloc(primeN,sizeof(int));
 	if(NULL == h->m_items)
@@ -80,7 +83,7 @@ HashSet* HashSetCreate(size_t _capacity, float _loadFactor, HashFunc _func)
 	h->m_magic = MAGIC;
 	return h;
 }
-	
+	/*free memory allocations */
 void HashSetDestroy(HashSet* _set)
 {
 	/*parameter check*/
@@ -93,7 +96,7 @@ void HashSetDestroy(HashSet* _set)
 }
 
 
-		
+	/* Add element to HashSet*/
 ADTErr HashSetInsert(HashSet* _set, size_t _data)
 {
 	size_t hashIndex,reHashC = 0;
@@ -122,7 +125,8 @@ ADTErr HashSetInsert(HashSet* _set, size_t _data)
 	++_set->m_insertCount;
 	return ERR_OK;
 }
-		
+
+	/*Remove element from HashSet*/		
 ADTErr HashSetRemove(HashSet* _set, size_t _data)
 {
 	size_t hashIndex;
@@ -153,7 +157,7 @@ ADTErr HashSetRemove(HashSet* _set, size_t _data)
 	}while(_set->m_items[hashIndex] > FREE);
 	return ERR_NOT_FOUND;
 }
-
+	/*Does HashSet contains element*/
 int HashSetContains(const HashSet* _set, size_t _data)
 {
 	size_t hashIndex;
@@ -172,7 +176,7 @@ int HashSetContains(const HashSet* _set, size_t _data)
 	}
 	return 0;
 }
-	
+	/*number of elements in set*/
 size_t HashSetSize(const HashSet* _set)
 {
 	if(IS_INVALID(_set))	
@@ -181,7 +185,7 @@ size_t HashSetSize(const HashSet* _set)
 	}
 	return	_set->m_noItems;	
 }		
-		
+		/*Retrieve statistics*/
 ADTErr HashSetStatistics(const HashSet* _set, size_t *_maxCollisionsEver, float *_averageCollisions)
 {
 	if(IS_INVALID(_set) || NULL == _maxCollisionsEver || NULL ==_averageCollisions)	
@@ -189,15 +193,28 @@ ADTErr HashSetStatistics(const HashSet* _set, size_t *_maxCollisionsEver, float 
 		return ERR_NOT_INITIALIZED;
 	}
 	*_maxCollisionsEver = _set->m_maxReHashOps;
-	*_averageCollisions = (_set->m_insertCount != 0) ? _set->m_totalReHash/_set->m_insertCount : 0;
+	*_averageCollisions = (_set->m_insertCount != 0) ? (float)_set->m_totalReHash/_set->m_insertCount : 0;
 	return ERR_OK;
 }
 
-
+	/*iterate over all elements (and print?) */
+void HashSetForEach(const HashSet* _set/*, void (*_userFunction)(size_t _data)*/)
+{
+	int i;
+	if(IS_INVALID(_set))	
+	{
+		return;
+	}
+	for(i = 0; i < _set->m_size; ++i)
+	{
+		if(_set->m_items[i] > 0)
+		{
+			/*_userFunction(_set->m_items[i]);*/
+			printf("%u ",_set->m_items[i]);
+		}
+	}
 		
-		
-		
-		
+}		
 		
 		
 		

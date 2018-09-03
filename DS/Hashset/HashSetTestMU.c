@@ -4,19 +4,6 @@
 #include <stdlib.h>
 
 
-/*
-int CreatVector(Vector *v)
-{
-	int  i;
-	int arr[]={1,2,3,4,5,36,77,81,29,120};
-	for (i = 0; i < sizeof(arr)/sizeof(arr[0]); ++i)
-	{
-		ASSERT_THAT(VectorAdd(v,arr[i]) == ERR_OK);
-	}
-	return PASS;
-}
-*/
-
 
 static size_t mod(size_t _num)
 {
@@ -145,26 +132,22 @@ UNIT(HashSetStatisticsNoInsert)
 	ASSERT_THAT(averageCollisions == 0);
 END_UNIT
 
+UNIT(HashSetStatisticscheck)
+	HashSet *h;
+	size_t maxCollisionsEver;
+	float averageCollisions;
+	h = HashSetCreate(3,0.5,mod);
+	ASSERT_THAT(h != NULL);
+	ASSERT_THAT(HashSetInsert(h,21) == ERR_OK);
+	ASSERT_THAT(HashSetInsert(h,42) == ERR_OK);
+	ASSERT_THAT(HashSetInsert(h,63) == ERR_OK);
+	ASSERT_THAT(HashSetSize(h) == 3);
+	ASSERT_THAT(HashSetStatistics(h,&maxCollisionsEver,&averageCollisions) == ERR_OK);
+	ASSERT_THAT(maxCollisionsEver != 0);
+	ASSERT_THAT(averageCollisions != 0);
+	/*HashSetForEach(h);*/
+END_UNIT	
 
-/*
-
-UNIT(heapSize)
-	Heap *h;
-	Vector *v;
-	h = NULL;
-	ASSERT_THAT(HeapSize(h) == -1);
-	v=VectorCreate(2,2);
-	h = HeapBuild(v);
-	ASSERT_THAT(HeapSize(h) == 0);
-	CreatVector(v);
-	h = HeapBuild(v);
-	ASSERT_THAT(HeapSize(h) == 10);
-	HeapDestroy(h);
-	VectorDestroy(v);
-
-END_UNIT
-
-*/
 
 TEST_SUITE(HashSet test)
 	TEST(hashBuild)
@@ -179,5 +162,6 @@ TEST_SUITE(HashSet test)
 	TEST(HashSetNOTContains)
 	TEST(HashSetSizeCheck)
 	TEST(HashSetStatisticsNoInsert)
+	TEST(HashSetStatisticscheck)
 END_SUITE
 
