@@ -5,7 +5,7 @@
 
 int main ()
 {
-	char str[] = "abcdef"; 
+	char str[] = "abcdefghijmno"; 
 	printf("%d\n",packOne(str));
 	printf("%d\n",packTwo(str,strlen(str)));
 	return 0;

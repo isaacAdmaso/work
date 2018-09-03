@@ -21,8 +21,8 @@ struct familyTree {
 typedef struct person Person_t;
 typedef struct familyTree FamilyTree_t;
 
-int Refua(char* name)   { printf("I'm a doctor\n");		return 0; }
-int Handasa(char* name) { printf("I'm an engineer\n");  return 0; }
+int Refua(char* name)   { printf("%s is a doctor\n",name);		return 0; }
+int Handasa(char* name) { printf("%s is an engineer\n",name);  return 0; }
 FamilyTree_t Halakhmi = { 2, "Ilan", 28,Refua, "Gilad", 26, Handasa, 0};
 FamilyTree_t Buchler  = { 2, "Rita", 38,Handasa, "Brian", 30, Refua, 0 };
 
