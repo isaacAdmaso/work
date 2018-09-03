@@ -1,15 +1,15 @@
-#include "Heap.h"
 #include<stdlib.h>
 #include<stdio.h>
+#include "Heap.h"
 
 #define MAGIC 8952214
 #define IS_INVALID(H) ((NULL == (H)) /*|| NULL == (H)->m_vec */|| (H)->m_magic != MAGIC)
 
 struct Heap
 {
+	int m_magic;
 	Vector *m_vec;
 	size_t m_heap_size;
-	int m_magic;
 };
 
 static void MaxHeapify(Heap* _heap,size_t _index)
@@ -114,6 +114,11 @@ ADTErr HeapMax(const Heap* _heap, int *_element)
 	{
 		return ERR_NOT_INITIALIZED;
 	}
+	if(_heap->m_heap_size == 0)
+	{
+		return ERR_UNDERFLOW;
+	}
+
 	return VectorGet(_heap->m_vec,0,_element);
 }
 	
