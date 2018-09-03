@@ -65,6 +65,10 @@ ADTErr  VectorGet(const Vector* _vector, size_t _index, int *_item)
 	{
 		return ERR_WRONG_INDEX;
 	}
+	if(_vector->m_nItems == 0)
+	{
+		return ERR_UNDERFLOW;
+	}
 	*_item = _vector->m_items[_index];
 	return ERR_OK;
 		

@@ -2,14 +2,14 @@
 #include<stdlib.h>
 #include<stdio.h>
 
-#define MAGIC 8989852214
+#define MAGIC 8952214
 #define IS_INVALID(H) ((NULL == (H)) /*|| NULL == (H)->m_vec */|| (H)->m_magic != MAGIC)
 
 struct Heap
 {
 	Vector *m_vec;
 	size_t m_heap_size;
-	size_t m_magic;
+	int m_magic;
 };
 
 static void MaxHeapify(Heap* _heap,size_t _index)
@@ -124,6 +124,10 @@ ADTErr HeapExtractMax(Heap* _heap, int *_element)
 	if(IS_INVALID(_heap) || NULL == _element)
 	{
 		return ERR_NOT_INITIALIZED;
+	}
+	if(_heap->m_heap_size == 0)
+	{
+		return ERR_UNDERFLOW;
 	}
 	VectorGet(_heap->m_vec,_heap->m_heap_size-1,&temp_last);
 	VectorGet(_heap->m_vec,0,_element);
