@@ -1,0 +1,3 @@
+SortMUtest.o: SortMUtest.c ../include/Sort.h ../include/ADTDefs.h \
+ ../include/mu_test.h
+Sort.o: Sort.c ../include/Sort.h ../include/ADTDefs.h

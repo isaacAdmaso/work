@@ -1,3 +1,0 @@
-HashSet.o: HashSet.c ../include/HashSet.h ../include/ADTDefs.h
-HashSetTestMU.o: HashSetTestMU.c ../include/HashSet.h \
- ../include/ADTDefs.h ../include/mu_test.h
