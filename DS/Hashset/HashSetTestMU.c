@@ -188,11 +188,9 @@ UNIT(HashSetStatisticscheck2)
 	ASSERT_THAT(HashSetStatistics(h,&maxCollisionsEver,&averageCollisions) == ERR_OK);
 	ASSERT_THAT(maxCollisionsEver != 0);
 	ASSERT_THAT(averageCollisions != 0);
-	printf("%lu, %f",maxCollisionsEver,averageCollisions);
 	HashSetDestroy(h);
 END_UNIT	
-/*
-*/
+
 
 TEST_SUITE(HashSet test)
 	TEST(hashBuild)

@@ -1,6 +1,6 @@
-#include "HashSet.h"
 #include<stdlib.h>
 #include<stdio.h>
+#include "HashSet.h"
 
 #define MAGIC 1073741824
 #define MININPUT 1
@@ -110,7 +110,7 @@ ADTErr HashSetInsert(HashSet* _set, size_t _data)
 		return ERR_OVERFLOW;
 	}
 	/*hashing data*/
-	hashIndex = _set->m_hashF(_data);
+	hashIndex = REHASH(_set->m_hashF(_data),_set->m_size);
 	while(_set->m_items[hashIndex] > FREE)
 	{
 		if(_set->m_items[hashIndex] == _data)
@@ -137,7 +137,7 @@ ADTErr HashSetRemove(HashSet* _set, size_t _data)
 	}
 	/*hashing data*/
 	
-	hashIndex = _set->m_hashF(_data);
+	hashIndex =  REHASH(_set->m_hashF(_data),_set->m_size);
 	while(_set->m_items[hashIndex] != FREE)
 	{
 		if(_set->m_items[hashIndex] == _data)
@@ -158,7 +158,7 @@ int HashSetContains(const HashSet* _set, size_t _data)
 	{
 		return ERR_NOT_INITIALIZED;
 	}
-	hashIndex = _set->m_hashF(_data);
+	hashIndex =  REHASH(_set->m_hashF(_data),_set->m_size);
 	while(_set->m_items[hashIndex] > FREE)
 	{
 		if(_set->m_items[hashIndex] == _data)
@@ -172,11 +172,7 @@ int HashSetContains(const HashSet* _set, size_t _data)
 	/*number of elements in set*/
 size_t HashSetSize(const HashSet* _set)
 {
-	if(IS_INVALID(_set))	
-	{
-		return 0;
-	}
-	return	_set->m_noItems;	
+	return (IS_INVALID(_set))? 0:_set->m_noItems;	
 }		
 		/*Retrieve statistics*/
 ADTErr HashSetStatistics(const HashSet* _set, size_t *_maxCollisionsEver, float *_averageCollisions)
