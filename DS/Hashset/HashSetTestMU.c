@@ -3,12 +3,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define SIZE 11
-#define CAPA 5
+#define SIZE 23
+#define CAPA 10
 
 static size_t mod(size_t _num)
 {
-	return _num % SIZE;
+	return _num ;
 }
 
 
@@ -161,7 +161,7 @@ UNIT(HashSetStatisticscheck)
 	ASSERT_THAT(h != NULL);
 	for(i=0;i<CAPA;++i)
 	{
-		ASSERT_THAT(HashSetInsert(h,i) == ERR_OK);
+		ASSERT_THAT(HashSetInsert(h,i+1) == ERR_OK);
 		
 	}
 	ASSERT_THAT(HashSetSize(h) == CAPA);
@@ -188,6 +188,8 @@ UNIT(HashSetStatisticscheck2)
 	ASSERT_THAT(HashSetStatistics(h,&maxCollisionsEver,&averageCollisions) == ERR_OK);
 	ASSERT_THAT(maxCollisionsEver != 0);
 	ASSERT_THAT(averageCollisions != 0);
+	ASSERT_THAT(HashSetRemove(h,SIZE) == ERR_OK);
+	ASSERT_THAT(HashSetContains(h,2*SIZE) != 0);
 	HashSetDestroy(h);
 END_UNIT	
 

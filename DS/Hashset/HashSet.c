@@ -1,11 +1,12 @@
-#include<stdlib.h>
-#include<stdio.h>
 #include "HashSet.h"
+#include<stdlib.h>
+#include<unistd.h>
+#include<stdio.h>
 
 #define MAGIC 1073741824
 #define MININPUT 1
 #define IS_INVALID(H) ((NULL == (H)) || (H)->m_magic != MAGIC)
-#define REHASH(I,K) (((I)+1)%(K))
+#define REHASH(I,K) (((I)+5)%(K))
 #define FREE 0
 #define NOT_OCCUPIED -1
 
@@ -15,7 +16,7 @@ typedef size_t(*HashFunc)(size_t);
 struct HashSet 
 {
 	size_t m_magic; 
-	int *m_items;			/*data hoder*/
+	ssize_t *m_items;			/*data hoder*/
 	size_t m_size;			/*actual DS size*/
 	size_t m_noItems;		/* number of inputs*/
 	size_t m_capacity;		/*client max inputs*/
@@ -67,7 +68,7 @@ HashSet* HashSetCreate(size_t _capacity, float _loadFactor, HashFunc _func)
 	}
 	/*real capacity*/
 	primeN = GetNumber((int)(_capacity/_loadFactor));
-	h->m_items = (int*)calloc(primeN,sizeof(int));
+	h->m_items = (ssize_t*)calloc(primeN,sizeof(ssize_t));
 	if(NULL == h->m_items)
 	{
 		free(h);
@@ -159,7 +160,7 @@ int HashSetContains(const HashSet* _set, size_t _data)
 		return ERR_NOT_INITIALIZED;
 	}
 	hashIndex =  REHASH(_set->m_hashF(_data),_set->m_size);
-	while(_set->m_items[hashIndex] > FREE)
+	while(_set->m_items[hashIndex] != FREE)
 	{
 		if(_set->m_items[hashIndex] == _data)
 		{
@@ -199,7 +200,7 @@ void HashSetForEach(const HashSet* _set/*, void (*_userFunction)(size_t _data)*/
 		if(_set->m_items[i] > 0)
 		{
 			/*_userFunction(_set->m_items[i]);*/
-			printf("%u ",_set->m_items[i]);
+			printf("%lu ",_set->m_items[i]);
 		}
 	}
 		
