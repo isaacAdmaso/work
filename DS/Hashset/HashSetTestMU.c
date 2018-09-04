@@ -3,17 +3,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
+#define SIZE 11
+#define CAPA 5
 
 static size_t mod(size_t _num)
 {
-	return _num % 3;
+	return _num % SIZE;
 }
 
 
 UNIT(hashBuild)
 	HashSet *h;
-	h = HashSetCreate(5,0.7,mod);
+	h = HashSetCreate(CAPA,0.7,mod);
 	ASSERT_THAT(h != NULL);
 	HashSetDestroy(h);
 END_UNIT
@@ -32,7 +33,7 @@ END_UNIT
 
 UNIT(HashSetInsert_normal)
 	HashSet *h;
-	h = HashSetCreate(3,0.5,mod);
+	h = HashSetCreate(CAPA,0.5,mod);
 	ASSERT_THAT(NULL != h);
 	ASSERT_THAT(HashSetInsert(h,3) == ERR_OK);
 	ASSERT_THAT(HashSetInsert(h,6) == ERR_OK);
@@ -41,20 +42,29 @@ END_UNIT
 
 UNIT(HashSetInsertALREADY_EXISTS)
 	HashSet *h;
-	h = HashSetCreate(3,0.5,mod);
+	int i;
+	h = HashSetCreate(CAPA,0.5,mod);
 	ASSERT_THAT(h != NULL);
+	for(i=0;i<CAPA-2;++i)
+	{
+		ASSERT_THAT(HashSetInsert(h,i*7) == ERR_OK);
+	}	
 	ASSERT_THAT(HashSetInsert(h,6) == ERR_OK);
-	ASSERT_THAT(HashSetInsert(h,55) == ERR_OK);
 	ASSERT_THAT(HashSetInsert(h,6) == ERR_ALREADY_EXISTS);
+	ASSERT_THAT(HashSetInsert(h,14) == ERR_ALREADY_EXISTS);
+	ASSERT_THAT(HashSetRemove(h,6) == ERR_OK);
 	HashSetDestroy(h);
 END_UNIT
 
 UNIT(HashSetInsertOVERFLOW)
 	HashSet *h;
-	h = HashSetCreate(2,0.5,mod);
+	int i;
+	h = HashSetCreate(CAPA,0.5,mod);
 	ASSERT_THAT(h != NULL);
-	ASSERT_THAT(HashSetInsert(h,6) == ERR_OK);
-	ASSERT_THAT(HashSetInsert(h,55) == ERR_OK);
+	for(i=0;i<CAPA;++i)
+	{
+		ASSERT_THAT(HashSetInsert(h,i*3) == ERR_OK);
+	}	
 	ASSERT_THAT(HashSetInsert(h,7) == ERR_OVERFLOW);
 	HashSetDestroy(h);
 END_UNIT
@@ -62,7 +72,7 @@ END_UNIT
 
 UNIT(HashSetRemoveSuccessful)
 	HashSet *h;
-	h = HashSetCreate(2,0.5,mod);
+	h = HashSetCreate(CAPA,0.5,mod);
 	ASSERT_THAT(h != NULL);
 	ASSERT_THAT(HashSetInsert(h,6) == ERR_OK);
 	ASSERT_THAT(HashSetInsert(h,55) == ERR_OK);
@@ -73,7 +83,7 @@ END_UNIT
 
 UNIT(HashSetRemoveNOT_FOUND)
 	HashSet *h;
-	h = HashSetCreate(2,0.5,mod);
+	h = HashSetCreate(CAPA,0.5,mod);
 	ASSERT_THAT(h != NULL);
 	ASSERT_THAT(HashSetInsert(h,6) == ERR_OK);
 	ASSERT_THAT(HashSetInsert(h,55) == ERR_OK);
@@ -84,7 +94,7 @@ END_UNIT
 
 UNIT(HashSetdoesContains)
 	HashSet *h;
-	h = HashSetCreate(3,0.5,mod);
+	h = HashSetCreate(CAPA,0.5,mod);
 	ASSERT_THAT(h != NULL);
 	ASSERT_THAT(HashSetInsert(h,6) == ERR_OK);
 	ASSERT_THAT(HashSetInsert(h,55) == ERR_OK);
@@ -92,11 +102,12 @@ UNIT(HashSetdoesContains)
 	ASSERT_THAT(HashSetContains(h,6) != 0);
 	ASSERT_THAT(HashSetContains(h,102) != 0);
 	ASSERT_THAT(HashSetContains(h,55) != 0);
+	HashSetDestroy(h);	
 END_UNIT
 
 UNIT(HashSetNOTContains)
 	HashSet *h;
-	h = HashSetCreate(3,0.5,mod);
+	h = HashSetCreate(CAPA,0.5,mod);
 	ASSERT_THAT(h != NULL);
 	ASSERT_THAT(HashSetInsert(h,6) == ERR_OK);
 	ASSERT_THAT(HashSetInsert(h,55) == ERR_OK);
@@ -104,19 +115,27 @@ UNIT(HashSetNOTContains)
 	ASSERT_THAT(HashSetContains(h,15) == 0);
 	ASSERT_THAT(HashSetContains(h,12) == 0);
 	ASSERT_THAT(HashSetContains(h,6) != 0);
+	HashSetDestroy(h);
 END_UNIT
 
 UNIT(HashSetSizeCheck)
 	HashSet *h;
-	h = HashSetCreate(3,0.5,mod);
+	int i;
+	int arr[]={34,54,65,23,87,11,90,78,45,33,59};
+	h = HashSetCreate(CAPA,0.5,mod);
 	ASSERT_THAT(h != NULL);
-	ASSERT_THAT(HashSetInsert(h,6) == ERR_OK);
-	ASSERT_THAT(HashSetInsert(h,55) == ERR_OK);
-	ASSERT_THAT(HashSetInsert(h,102) == ERR_OK);
-	ASSERT_THAT(HashSetSize(h) == 3);
-	ASSERT_THAT(HashSetRemove(h,6) == ERR_OK);
-	ASSERT_THAT(HashSetRemove(h,55) == ERR_OK);
-	ASSERT_THAT(HashSetSize(h) == 1);
+	for(i=0;i<CAPA;++i)
+	{
+		ASSERT_THAT(HashSetInsert(h,arr[i]) == ERR_OK);
+		ASSERT_THAT(HashSetSize(h) == (i+1));
+		
+	}
+	for(i=0;i<CAPA;++i)
+	{
+		ASSERT_THAT(HashSetRemove(h,arr[i]) == ERR_OK);
+		ASSERT_THAT(HashSetSize(h) == (CAPA-1-i));
+	}
+	HashSetDestroy(h);
 END_UNIT
 
 
@@ -130,24 +149,50 @@ UNIT(HashSetStatisticsNoInsert)
 	ASSERT_THAT(HashSetStatistics(h,&maxCollisionsEver,&averageCollisions) == ERR_OK);
 	ASSERT_THAT(maxCollisionsEver == 0);
 	ASSERT_THAT(averageCollisions == 0);
+	HashSetDestroy(h);
 END_UNIT
 
 UNIT(HashSetStatisticscheck)
 	HashSet *h;
+	int i;
 	size_t maxCollisionsEver;
 	float averageCollisions;
-	h = HashSetCreate(3,0.5,mod);
+	h = HashSetCreate(CAPA,0.5,mod);
 	ASSERT_THAT(h != NULL);
-	ASSERT_THAT(HashSetInsert(h,21) == ERR_OK);
-	ASSERT_THAT(HashSetInsert(h,42) == ERR_OK);
-	ASSERT_THAT(HashSetInsert(h,63) == ERR_OK);
-	ASSERT_THAT(HashSetSize(h) == 3);
+	for(i=0;i<CAPA;++i)
+	{
+		ASSERT_THAT(HashSetInsert(h,i) == ERR_OK);
+		
+	}
+	ASSERT_THAT(HashSetSize(h) == CAPA);
+	ASSERT_THAT(HashSetInsert(h,134) == ERR_OVERFLOW);
+	ASSERT_THAT(HashSetStatistics(h,&maxCollisionsEver,&averageCollisions) == ERR_OK);
+	/*HashSetForEach(h);*/
+	HashSetDestroy(h);
+END_UNIT	
+
+UNIT(HashSetStatisticscheck2)
+	HashSet *h;
+	int i;
+	size_t maxCollisionsEver;
+	float averageCollisions;
+	h = HashSetCreate(CAPA,0.5,mod);
+	ASSERT_THAT(h != NULL);
+	for(i=0;i<CAPA;++i)
+	{
+		ASSERT_THAT(HashSetInsert(h,i*SIZE) == ERR_OK);
+		
+	}
+	ASSERT_THAT(HashSetSize(h) == CAPA);
+	ASSERT_THAT(HashSetInsert(h,4) == ERR_OVERFLOW);
 	ASSERT_THAT(HashSetStatistics(h,&maxCollisionsEver,&averageCollisions) == ERR_OK);
 	ASSERT_THAT(maxCollisionsEver != 0);
 	ASSERT_THAT(averageCollisions != 0);
-	/*HashSetForEach(h);*/
+	printf("%lu, %f",maxCollisionsEver,averageCollisions);
+	HashSetDestroy(h);
 END_UNIT	
-
+/*
+*/
 
 TEST_SUITE(HashSet test)
 	TEST(hashBuild)
@@ -163,5 +208,6 @@ TEST_SUITE(HashSet test)
 	TEST(HashSetSizeCheck)
 	TEST(HashSetStatisticsNoInsert)
 	TEST(HashSetStatisticscheck)
+	TEST(HashSetStatisticscheck2)
 END_SUITE
 

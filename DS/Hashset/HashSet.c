@@ -5,7 +5,7 @@
 #define MAGIC 1073741824
 #define MININPUT 1
 #define IS_INVALID(H) ((NULL == (H)) || (H)->m_magic != MAGIC)
-#define REHASH(I,K) (((I)+5)%(K))
+#define REHASH(I,K) (((I)+1)%(K))
 #define FREE 0
 #define NOT_OCCUPIED -1
 
@@ -138,23 +138,16 @@ ADTErr HashSetRemove(HashSet* _set, size_t _data)
 	/*hashing data*/
 	
 	hashIndex = _set->m_hashF(_data);
-	if(_set->m_items[hashIndex] == _data)
+	while(_set->m_items[hashIndex] != FREE)
 	{
-		_set->m_items[hashIndex] = NOT_OCCUPIED;
-		--(_set->m_noItems);
-		return ERR_OK;
-	}
-	/*rehashing data*/
-	do
-	{	
-		hashIndex = REHASH(hashIndex,_set->m_size);
 		if(_set->m_items[hashIndex] == _data)
 		{
 			_set->m_items[hashIndex] = NOT_OCCUPIED;
 			--(_set->m_noItems);
 			return ERR_OK;
 		}
-	}while(_set->m_items[hashIndex] > FREE);
+		hashIndex = REHASH(hashIndex,_set->m_size);
+	}
 	return ERR_NOT_FOUND;
 }
 	/*Does HashSet contains element*/
