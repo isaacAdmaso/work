@@ -8,8 +8,11 @@
 static void Pr(int* arr,unsigned int size)
 {
 	int i;
+	printf("\n");
+	printf("[");
 	for(i = 0;i<size;++i)
 		printf(" %d,", arr[i]);
+	printf("]");
 	printf("\n");
 }
 		

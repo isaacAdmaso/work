@@ -115,23 +115,3 @@ ADTErr InsertionSort (int *_arr,unsigned int _size)
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
