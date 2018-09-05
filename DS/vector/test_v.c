@@ -241,6 +241,7 @@ int CheckSetBadInx()
 	
 	if(VectorSet(v,3,_item)==ERR_WRONG_INDEX)
 	{
+		VectorPrint(v);
 		return 0;
 	}
 	return 1;
@@ -328,7 +329,8 @@ int main()
 	printf("%d\n",CheckAddIniSizZero());
 	printf("%d\n",CheckSetNUllVec());
 	printf("%d\n",CheckSetGdInx());
-	printf("%d\n",CheckSetBadInx());
+	printf("11111111%d\n",CheckSetBadInx());
+	
 	printf("%d\n",CheckDelNUllVec());
 	printf("%d\n",CheckDelNUllItm());
 	printf("%d\n",CheckDelUnFl());
