@@ -78,9 +78,9 @@ ADTErr QuickSort(Vector* _vec, KeyCompare _func);
  * @param[in]		_compFunc: key comparator
  * @return ERR_OK on success
  */
-/*
+
 ADTErr MergeSort (Vector* _vec, KeyCompare _func);
-*/
+
 /**
  * @brief Counting Sort
  *  Using the knowledge of the value range, count the number of

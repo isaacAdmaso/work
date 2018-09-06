@@ -173,38 +173,35 @@ static int PivFind(int _first,int _mid,int _last,int* _piv)
 
 static void QuickSortHlper(Vector* _vec ,int left,int right, KeyCompare _func)
 {
- 	int valPiv,idxPiv,i=left,j=right-1,leftVal,rightVal;
-	if(left < right)
+ 	int valPiv,i=left,j=right-1,leftVal,rightVal;
+	if(left < right && left >= 0 && right > 0)
 	{
-		idxPiv = right;
-		VectorGet(_vec,idxPiv,&valPiv);		
-		VectorGet(_vec,i,&leftVal);	
-		VectorGet(_vec,j,&rightVal);	
+		VectorGet(_vec,right,&valPiv);		
 		while(i < j)
 		{
-			while(_func(leftVal,valPiv) > 0)
+			VectorGet(_vec,i,&leftVal);	
+			VectorGet(_vec,j,&rightVal);	
+			while(_func(leftVal,valPiv) > 0 && j>i)
 			{
 				++i;
 				VectorGet(_vec,i,&leftVal);
-				if(i == j) return;	
 			}
-			while(_func(valPiv,rightVal) > 0)
+			while(_func(valPiv,rightVal) > 0 && j>i)
 			{
 				--j;
 				VectorGet(_vec,j,&rightVal);
-				if(i == j) return;		
+			}	
+			if(i<j)
+			{
+				VectorSet(_vec,i,rightVal);
+				VectorSet(_vec,j,leftVal);
+				++i;
+				--j;
 			}
-			
-			VectorSet(_vec,j,leftVal);
-			VectorSet(_vec,i,rightVal);
-			--j;
-			++i;
-			VectorGet(_vec,i,&leftVal);
-			VectorGet(_vec,j,&rightVal);
 		}
-		VectorGet(_vec,i+1,&leftVal);
+		VectorGet(_vec,i+1,&rightVal);	
+		VectorSet(_vec,right,rightVal);
 		VectorSet(_vec,i+1,valPiv);
-		VectorSet(_vec,idxPiv,leftVal);
 		QuickSortHlper(_vec,0,i,_func);
 		QuickSortHlper(_vec,i+2,right,_func);
 	}
@@ -230,7 +227,70 @@ ADTErr QuickSort(Vector* _vec, KeyCompare _func)
 	QuickSortHlper(_vec,0,size-1,_func);
 	return ERR_OK;
 }
-		 
+/*		
+static void merge(int _arr,int l,int m,int r)
+{
+	int i,j,k;
+	int n1=m-l+1;
+	int n2=r-m;
+	
+	
+static void MergS(int* _arr,int l,int r)
+{
+	int m;
+	if(l < r)
+	{
+		m = l+(r-l)/2;
+		MergS(_arr,l,m);
+		MergS(_arr,m+1,r);
+		Merge(_arr,l,m,r);
+	}
+}
+
+
+ADTErr MergeSort (Vector* _vec, KeyCompare _func)
+{
+	size_t size;
+	int error = ERR_OK;
+	if(IS_INVALID(_vec))
+	{
+		return ERR_NOT_INITIALIZED;
+	} 
+	error = VectorItemsNum(_vec ,&size);
+	if(size <= MINI)
+	{
+		return error;
+	}
+*/
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 
 
 

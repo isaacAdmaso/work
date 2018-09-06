@@ -52,7 +52,7 @@ UNIT(shakeSort)
 	FillVector(v,a,size);
 	VectorPrint(v);
 	printf("\n");
-	ShakeSort(v,KCmp);
+	ShakeSort(v,KCmp2);
 	VectorPrint(v);
 	printf("\n");
 	VectorDestroy(v);
@@ -74,7 +74,7 @@ UNIT(insertionSort)
 END_UNIT
 
 UNIT(quickSort)
-	int a[]={12,3,324,56,324,6,734,6,7,4,6,7,9,22,43};
+	int a[]={12,3323,324,56,324,6,734,6,7,4,6,7,9,22,43};
 	Vector* v = VectorCreate(SIZEARR(a),2);
 	unsigned int size;
 	size = SIZEARR(a);
