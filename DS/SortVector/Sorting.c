@@ -2,7 +2,7 @@
 										Insertion Sort
 										Shake Sort
 										(Quick Sort)			  **/
-#include "Sorting .h"
+#include "Sorting.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -14,7 +14,7 @@ ADTErr BubbleSort (Vector* _vec, KeyCompare _func)
 {
 	size_t size;
 	int i,j,swap,item,adjItem,error = ERR_OK;
-	if(IS_INVALID(_vec))
+	if(IS_INVALID(_vec) || IS_INVALID(_func))
 	{
 		return ERR_NOT_INITIALIZED;
 	} 
@@ -50,7 +50,7 @@ ADTErr ShakeSort(Vector* _vec, KeyCompare _func)
 {
 	size_t size;
 	int i,j,swap,item,adjItem,error = ERR_OK;
-	if(IS_INVALID(_vec))
+	if(IS_INVALID(_func))
 	{
 		return ERR_NOT_INITIALIZED;
 	} 
@@ -99,7 +99,7 @@ ADTErr InsertionSort (Vector* _vec, KeyCompare _func)
 {
 	size_t size;
 	int i,j,swapItem,item,error = ERR_OK;
-	if(IS_INVALID(_vec))
+	if(IS_INVALID(_func))
 	{
 		return ERR_NOT_INITIALIZED;
 	} 
@@ -124,98 +124,65 @@ ADTErr InsertionSort (Vector* _vec, KeyCompare _func)
 	}
 	return ERR_OK;
 }	
-/*	
-static int PivFind(int _first,int _mid,int _last,int* _piv)
+static size_t Qpart(Vector* _vec,size_t _start,size_t _end,KeyCompare _func)
 {
-	int index ;
-	*_piv = (first+last+mid)/3;
-	if((first - *_piv) > (last - *_piv))
+	int i,j,pivIdx = _end;
+	int pivVal = 0,smItm = 0,bgItm = 0;
+	
+	VectorGet(_vec,pivIdx,&pivVal);
+	
+	for(i = _start,j = _end-1;i < j; --j,++i)
 	{
-		if((last - *_piv) > (mid - *_piv))
+		VectorGet(_vec,i,&smItm);
+		while(_func(smItm,pivVal) > 0 && i<j)
 		{
-			*_piv = mid;
-			index = 0;
-		}else
-		{
-			*_piv = last;
-			index = 1;
+			VectorGet(_vec,++i,&smItm);
 		}
-	}else
-	{
-		if((first-*_piv) > (mid-*_piv))
+		VectorGet(_vec,j,&bgItm);
+		while(_func(bgItm,pivVal) < 0 && j>i)
 		{
-			*_piv = mid;
-			index = 0;
-		}else
+			VectorGet(_vec,--j,&bgItm);
+		}
+		if(j > i)
 		{
-			*_piv = first;
-			index = -1;
+			VectorSet(_vec,i,bgItm);
+			VectorSet(_vec,j,smItm);
 		}
 	}
-	return index;
+	VectorGet(_vec,i,&smItm);
+	VectorSet(_vec,pivIdx,smItm);
+	VectorSet(_vec,i,pivVal);
+	return i;
 }
-	switch(idxPiv){
-		case -1:
-			idxPiv = 0;
-			break;
-		case 0:
-		 	idxPiv = (size-1)/2;
-		 	break;
-		default:
-			idxPiv = size-1;
-			break;
-	}
-
-*/
 
 
-
-
-static void QuickSortHlper(Vector* _vec ,int left,int right, KeyCompare _func)
+static void Qsort(Vector* _vec,size_t _start,size_t _end,KeyCompare _func)
 {
- 	int valPiv,i=left,j=right-1,leftVal,rightVal;
-	if(left < right && left >= 0 && right > 0)
+	size_t midIdx;
+	if(_end - _start >MINI )
 	{
-		VectorGet(_vec,right,&valPiv);		
-		while(i < j)
+		midIdx = Qpart(_vec,_start,_end,_func);
+		if(midIdx == _start)
 		{
-			VectorGet(_vec,i,&leftVal);	
-			VectorGet(_vec,j,&rightVal);	
-			while(_func(leftVal,valPiv) > 0 && j>i)
-			{
-				++i;
-				VectorGet(_vec,i,&leftVal);
-			}
-			while(_func(valPiv,rightVal) > 0 && j>i)
-			{
-				--j;
-				VectorGet(_vec,j,&rightVal);
-			}	
-			if(i<j)
-			{
-				VectorSet(_vec,i,rightVal);
-				VectorSet(_vec,j,leftVal);
-				++i;
-				--j;
-			}
+			Qsort(_vec,midIdx+1,_end,_func);
+		}else if(midIdx == _end)
+		{
+			Qsort(_vec,_start,midIdx-1,_func);
+		}else
+		{
+			Qsort(_vec,_start,midIdx-1,_func);
+			Qsort(_vec,midIdx+1,_end,_func);
 		}
-		VectorGet(_vec,i+1,&rightVal);	
-		VectorSet(_vec,right,rightVal);
-		VectorSet(_vec,i+1,valPiv);
-		QuickSortHlper(_vec,0,i,_func);
-		QuickSortHlper(_vec,i+2,right,_func);
-	}
-}	
 		
-	
+	}
+}
 	
 
-/*Quick Sort recursively divides a large list into  smaller sub-lists and sorts the sub-lists*/
 ADTErr QuickSort(Vector* _vec, KeyCompare _func)
 {
-	size_t size;
-	int error = ERR_OK;
-	if(IS_INVALID(_vec))
+	size_t size = 0;
+	ADTErr error = ERR_OK;
+	if(IS_INVALID(_vec) || IS_INVALID(_func))
 	{
 		return ERR_NOT_INITIALIZED;
 	} 
@@ -224,50 +191,10 @@ ADTErr QuickSort(Vector* _vec, KeyCompare _func)
 	{
 		return error;
 	}
-	QuickSortHlper(_vec,0,size-1,_func);
+	Qsort(_vec,0,size - 1,_func);
 	return ERR_OK;
-}
-/*		
-static void merge(int _arr,int l,int m,int r)
-{
-	int i,j,k;
-	int n1=m-l+1;
-	int n2=r-m;
+}	
 	
-	
-static void MergS(int* _arr,int l,int r)
-{
-	int m;
-	if(l < r)
-	{
-		m = l+(r-l)/2;
-		MergS(_arr,l,m);
-		MergS(_arr,m+1,r);
-		Merge(_arr,l,m,r);
-	}
-}
-
-
-ADTErr MergeSort (Vector* _vec, KeyCompare _func)
-{
-	size_t size;
-	int error = ERR_OK;
-	if(IS_INVALID(_vec))
-	{
-		return ERR_NOT_INITIALIZED;
-	} 
-	error = VectorItemsNum(_vec ,&size);
-	if(size <= MINI)
-	{
-		return error;
-	}
-*/
-	
-	
-
-
-
-
 
 
 

@@ -1,4 +1,3 @@
-#include "ADTDefs.h"
 #include "vector.h"
 #include<stdlib.h>
 #include<stdio.h>
@@ -11,7 +10,7 @@
 struct Vector
 {
 	size_t	m_magic;		  /**< Protector*/
-    int*    m_items;          /**< The items */	
+    int*    m_items;          /**< The items start from 0 */	
     size_t  m_originalSize;   /**< original allocated space for items */
     size_t  m_allocatedSize;  /**< actual allocated space for items	*/
     size_t  m_nItems; 	      /**< actual number of items */
@@ -20,7 +19,7 @@ struct Vector
 
 Vector* VectorCreate(size_t _initialSize, size_t _extensionBblockSize)
 {	
-	Vector* newVector = 0;
+	Vector* newVector = NULL;
 	if(_initialSize ==0 && _extensionBblockSize==0)
 	{
 		return NULL;
@@ -61,7 +60,7 @@ ADTErr  VectorGet(const Vector* _vector, size_t _index, int *_item)
 	{
 		return ERR_NOT_INITIALIZED;
 	}
-	if(_index > _vector->m_nItems)
+	if(_index >= _vector->m_nItems)
 	{
 		return ERR_WRONG_INDEX;
 	}
@@ -105,7 +104,7 @@ void    VectorPrint(const Vector *_vector)
 	{
 		return ;
 	}
-	printf("[");
+	printf("\n[");
 	if(_vector->m_nItems>1)
 	{
 		for (i=0;i<_vector->m_nItems-1;++i)
@@ -120,7 +119,7 @@ void    VectorPrint(const Vector *_vector)
 			printf("%d",_vector->m_items[i]);
 		}
 	}
-	printf("]");
+	printf("]\n");
 }
 
 
@@ -166,7 +165,7 @@ ADTErr  VectorDelete(Vector *_vector,  int* _item)
 	
 	if(_vector->m_allocatedSize > _vector->m_originalSize)
 	{
-		if(_vector->m_allocatedSize == (_vector->m_nItems + 2*_vector->m_blockSize))
+		if(_vector->m_allocatedSize >= (_vector->m_nItems + 2*_vector->m_blockSize))
 		{
 			_vector->m_items=(int *)realloc(_vector->m_items,(_vector->m_allocatedSize - _vector->m_blockSize)*sizeof(int));
 		}

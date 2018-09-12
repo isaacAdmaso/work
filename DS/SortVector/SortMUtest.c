@@ -1,4 +1,4 @@
-#include "Sorting .h"
+#include "Sorting.h"
 #include "mu_test.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,30 +31,25 @@ static int	FillVector(Vector* v, int values[], size_t _size)
 
 UNIT(bubbleSort)
 	Vector* v = VectorCreate(1,2);
-	int a[]={12,3,324,56,324,6,734,6,7,4,6,7,9,22,43};
+	int a[]={12,33049,324,56,324,6,734,6,7,4,6,7,9,22,43};
 	unsigned int size;
 	size = SIZEARR(a);
 	FillVector(v,a,size);
-	printf("\n");
 	VectorPrint(v);
-	printf("\n");
-	BubbleSort(v,KCmp);
+	BubbleSort(v,KCmp2);
 	VectorPrint(v);
-	printf("\n");
 	VectorDestroy(v);
 END_UNIT
 
 UNIT(shakeSort)
 	Vector* v = VectorCreate(1,2);
-	int a[]={12,3,324,56,324,6,734,6,7,4,6,7,9,22,43};
+	int a[]={12,33049,324,56,324,6,734,6,7,4,6,7,9,22,43};
 	unsigned int size;
 	size = SIZEARR(a);
 	FillVector(v,a,size);
 	VectorPrint(v);
-	printf("\n");
 	ShakeSort(v,KCmp2);
 	VectorPrint(v);
-	printf("\n");
 	VectorDestroy(v);
 END_UNIT
 
@@ -66,24 +61,19 @@ UNIT(insertionSort)
 	size = SIZEARR(a);
 	FillVector(v,a,size);
 	VectorPrint(v);
-	printf("\n");
-	InsertionSort(v,KCmp);
+	InsertionSort(v,KCmp2);
 	VectorPrint(v);
-	printf("\n");
 	VectorDestroy(v);
 END_UNIT
 
 UNIT(quickSort)
-	int a[]={12,3323,324,56,324,6,734,6,7,4,6,7,9,22,43};
-	Vector* v = VectorCreate(SIZEARR(a),2);
-	unsigned int size;
-	size = SIZEARR(a);
-	FillVector(v,a,size);
+	int i;
+	Vector* v = VectorCreate(2,2);
+	for(i = 0; i<12;++i)
+		VectorAdd(v,i);
 	VectorPrint(v);
-	printf("\n");
-	QuickSort(v,KCmp);
+	QuickSort(v,KCmp2);
 	VectorPrint(v);
-	printf("\n");
 	VectorDestroy(v);
 END_UNIT
 
@@ -92,5 +82,6 @@ TEST_SUITE(sort test)
 	TEST(shakeSort)
 	TEST(insertionSort)
 	TEST(quickSort)
+
 END_SUITE
 

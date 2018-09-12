@@ -29,8 +29,8 @@ int	FillVector(Vector* v, int values[], size_t _size)
 	int i;
 	for(i = 0; i < _size; ++i)
 	{
-		if (VectorAdd(v, values[i]) != ERR_OK);
-		return 1;
+		if (VectorAdd(v, values[i]) != ERR_OK)
+			return 1;
 	}
 	return 0;
 }	
@@ -192,11 +192,11 @@ void CheakAddInitSize0()
 	
 	if (IsVectorContenOK(vec, values) == 0 )
 	{
-		printf("PASSED: CheakAddInitSize0");
+		printf("PASSED: CheakAddInitSize0\n");
 	}
 	else
 	{
-	printf("FAILED: CheakAddInitSize0");
+	printf("FAILED: CheakAddInitSize0\n");
 	}
 }
 
@@ -260,10 +260,12 @@ void CheakGetNullItem()
 
 void CheakGetGoodIndex()
 {
-	int* item;
+	int item;
 	
 	Vector* v = VectorCreate(2, 4);
-	ADTErr statusErrorGet = VectorGet(v, 1, item);
+	ADTErr statusErrorGet;
+	VectorAdd(v,4);
+	statusErrorGet = VectorGet(v, 0, &item);
 	
 	if (statusErrorGet != ERR_OK)
 	{
@@ -273,8 +275,7 @@ void CheakGetGoodIndex()
 	{
 		printf("PASSED: CheakGetGoodIndexError\n");
 	}
-	
-		if (*item != 4)
+	if (item != 4)
 	{
 		printf("FAILED: CheakGetGoodIndexItemReturn\n");
 	}
@@ -311,7 +312,7 @@ void CheakGetBadIndexNitems()
 	int values[]= {3, 54, -77, 55, 634, 356, 648, 10};
 	FillVector(v, values, sizeof(values)/sizeof(values[0]));
 	ADTErr statusErrorGet = VectorGet(v, 8, item);
-	
+	VectorPrint(v);
 	if (statusErrorGet != ERR_WRONG_INDEX)
 	{
 		printf("FAILED: CheakGetBedIndexNitemsError\n");
@@ -367,10 +368,11 @@ void CheakNOIItem()
 	size_t _numOfItems;
 	Vector* v = VectorCreate(4, 2);
 	int values[]= {3, 54, -77, 55, 634, 356, 648, 10};
-	FillVector(v, values, sizeof(values)/sizeof(values[0]));
-	ADTErr CheakNOIItem = VectorItemsNum(v, &_numOfItems);
-	
-	if ( _numOfItems == 8)
+	int num = sizeof(values)/sizeof(values[0]);
+	FillVector(v, values, num);
+	VectorItemsNum(v, &_numOfItems);
+	VectorPrint(v);
+	if ( _numOfItems == num)
 	{
 		printf("PASSED: CheakNOIItem\n");
 	}
@@ -408,8 +410,8 @@ void CheakSetDestroy()
 	int* item;
 	
 	Vector* v = VectorCreate(2, 4);
-	ADTErr statusErrorSet = VectorGet(v, 2, item);
 	VectorDestroy(v);
+	ADTErr statusErrorSet = VectorGet(v, 2, item);
 	
 	if (statusErrorSet == ERR_NOT_INITIALIZED)
 	{
@@ -429,6 +431,7 @@ void CheakSetGoodIndex()
 	VectorAdd(v, 10);
 	VectorAdd(v, 20);
 	ADTErr statusErrorSet = VectorSet(v, 1, item);
+	VectorGet(v,0,&item);
 	
 	if (statusErrorSet != ERR_OK)
 	{
@@ -439,7 +442,7 @@ void CheakSetGoodIndex()
 		printf("PASSED: CheakSetGoodIndexError\n");
 	}
 	
-		if (statusErrorSet != 20)
+	if (item != 10)
 	{
 		printf("FAILED: CheakSetGoodIndexItemReturn\n");
 	}
@@ -453,29 +456,29 @@ void CheakSetGoodIndex()
 
 void CheakSetBadIndexBig()
 {
-	int* item;
+	int item = 0;
 	
 	Vector* v = VectorCreate(2, 4);
 	VectorAdd(v, 10);
 	VectorAdd(v, 20);
-	ADTErr statusErrorSet = VectorGet(v, 150, item);
+	ADTErr statusErrorSet = VectorGet(v, 150, &item);
 	
-	if (statusErrorSet != ERR_WRONG_INDEX)
-	{
-		printf("FAILED: CheakSetBedIndexBigError\n");
-	}
-	else
+	if (statusErrorSet == ERR_WRONG_INDEX)
 	{
 		printf("PASSED: CheakSetBedIndexBigError\n");
 	}
-	
-		if (statusErrorSet != 20)
+	else
 	{
-		printf("FAILED: CheakSetBedIndexBigItemReturn\n");
+		printf("FAILED: CheakSetBedIndexBigError\n");
+	}
+	
+	if (item == 0)
+	{
+		printf("PASSED: CheakSetBedIndexBigItemReturn\n");
 	}
 	else
 	{
-		printf("PASSED: CheakSetBedIndexBigItemReturn\n");
+		printf("FAILED: CheakSetBedIndexBigItemReturn\n");
 	}
 	
 }
@@ -508,8 +511,8 @@ void CheakDeleteAfterDestroy()
 	int* item;
 	
 	Vector* v = VectorCreate(2, 4);
-	ADTErr statusErrorDelete = VectorGet(v, 2, item);
 	VectorDestroy(v);
+	ADTErr statusErrorDelete = VectorGet(v, 2, item);
 	
 	if (statusErrorDelete == ERR_NOT_INITIALIZED)
 	{
@@ -557,7 +560,7 @@ void CheakDeleteUnderfllow()
 
 void CheakDeleteNItems()
 {
-	int item;
+	int item=0;
 	int values[]= {3, 54, -77, 55, 634, 356, 648, 10};
 	size_t numOfItems;
 	Vector* v = VectorCreate(2, 4);
@@ -566,7 +569,7 @@ void CheakDeleteNItems()
 	VectorDelete(v, &item);
 	VectorItemsNum(v, &numOfItems);
 	
-	if (numOfItems == 8)
+	if (numOfItems == 7)
 	{
 		printf("PASSED: CheakDeleteNItems\n");
 	}
@@ -579,18 +582,18 @@ void CheakDeleteNItems()
 
 void CheakDeleteReallocNormal()
 {
-	int* item;
+	int item = 0;
 	int values[]= {3, 54, -77, 55, 634, 356, 648, 10}, i;
-	size_t* numOfItems;
+	size_t numOfItems = 0;
 	Vector* v = VectorCreate(4, 2);
 	FillVector(v, values, sizeof(values)/sizeof(values[0]));
 	
 	for(i=0; i<4; ++i)
 	{
-		VectorDelete(v, item);
+		VectorDelete(v, &item);
 	}
-	VectorItemsNum(v, numOfItems);
-	if(*numOfItems == 4)
+	VectorItemsNum(v, &numOfItems);
+	if(numOfItems == 4)
 	{
 		printf("PASSED: CheakDeleteReallocNormal\n");
 	}
@@ -604,18 +607,18 @@ void CheakDeleteReallocNormal()
 
 void CheakDeleteReallocUnderInitSize()
 {
-	int* item;
-	size_t* numOfItems;
+	int item = 0;
+	size_t numOfItems = 0;
 	Vector* v = VectorCreate(4, 2);
 	int values[]= {3, 54, -77, 55, 634, 356, 648, 10}, i;
 	FillVector(v, values, sizeof(values)/sizeof(values[0]));
 	
 	for(i=0; i<6; ++i)
 	{
-		VectorDelete(v, item);
+		VectorDelete(v, &item);
 	}
-	VectorItemsNum(v, numOfItems);
-	if(*numOfItems == 2)
+	VectorItemsNum(v, &numOfItems);
+	if(numOfItems == 2)
 	{
 		printf("PASSED: CheakDeleteReallocUnderInitSize\n");
 	}
