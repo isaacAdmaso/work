@@ -6,12 +6,12 @@
 
 typedef enum CHMODE{LEFT,RIGHT,NEXT,PREV}CHMODE;
 
-typedef struct GAME
+typedef struct Game
 {
 	Player m_playres[NOP]; /*players */
 	int m_score[NOP];     /* players score*/
 	CHMODE chmode;        /* passing 3 cards to*/
-}GAME;
+}Game;
 
 
 

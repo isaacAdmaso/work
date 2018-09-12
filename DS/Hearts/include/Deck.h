@@ -1,6 +1,7 @@
 #ifndef __DECK_H_
 #define __DECK_H_
 #include "Card.h"
+#include "vector.h"
 
 typedef struct Deck Deck;
 

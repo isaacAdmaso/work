@@ -11,8 +11,8 @@ typedef enum Rank {Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten,
 
 typedef struct Cards
 {
-	int Cards[DECKSZ]; /* the deck*/
-};
+	int cards[DECKSZ]; /* the deck*/
+}Cards;
  
 void CardPrint(Cards _card);
 
