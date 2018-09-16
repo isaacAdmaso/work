@@ -7,6 +7,8 @@
 #define MAGIC 285375465
 #define IS_VALID(P)  ( NULL != (P) && (P)->m_magic == MAGIC)
 
+
+
 struct Player
 {
 	char m_name[P_NAME];  /*player's name*/
@@ -16,9 +18,11 @@ struct Player
 	Vector* m_clubs;
 	Vector* m_hearts;
 	Vector* m_disTrick;/*losing round (trick) pile of cards*/
+	HeartPlayed m_heartPlayed;
 	int m_points;
 	size_t m_magic;
 };
+
 
 
 
@@ -47,20 +51,7 @@ int PlayerIsCardExs(Player*_p,Card _card)
 	return 0;
 }
 	
-/*
-void PlayerPutCard(Player*_p,Suit _s )
-{
-	int maxRaInSu;
-	Vector* suitVec;
-	
-	if(IS_VALID(_p))
-		{
-			suitVec = WiVecToUs(_p,_s);
-			if( )
-			
-		}
-}
-*/
+	 
 static Vector* WiVecToUs(Player*_p,Suit _s)
 {
 	switch(_s)
@@ -73,8 +64,9 @@ static Vector* WiVecToUs(Player*_p,Suit _s)
 					return _p->m_spades;
 				case HEARTS:
 					return _p->m_hearts;
+				default:
+					return NULL;
 			}
-	return NULL;
 }
 
 
@@ -82,9 +74,10 @@ void PlayerTakeCard(Player*_p,Card _card)
 {	
 	int card;
 	Vector *suitVec;
-	if(IS_VALID(_p))
+	if(IS_VALID(_p) && _card.m_suit != NONE_S )
 		{
 			suitVec = WiVecToUs(_p,_card.m_suit);
+			
 			card = GETID(_card.m_suit,_card.m_rank);
 			VectorAdd(suitVec,card);
 			InSortHlp(suitVec);
@@ -115,6 +108,7 @@ Player* PlayerCreate(char* _name,PlyT _modePlyr)
 	}
 	strncpy(ply->m_name,_name,sizeof(ply->m_name));
 	ply->m_roc = _modePlyr;
+	ply->m_heartPlayed = YES;
 	ply->m_points = 0;
 	ply->m_magic = MAGIC;
 	return ply;
@@ -195,33 +189,104 @@ void PlayerPrint(Player *_p)
 	printf("\n");
 }
 
-Card ChoseCard(Vector* _vec,CHOSE_CARD _mode)
+static Card ChoseCard(Vector* _vec,CHOSE_CARD _mode)
 {
 	int cardId,card_replace;
 	Card card_return;
+	size_t numOfCards;
 	
-	card_return.m_suit = 0;
-	card_return.m_rank = 0;
+	numOfCards = 0;
+	card_return.m_suit = NONE_S;
+	card_return.m_rank = NONE_R;
 	cardId = 0;
 	card_replace = 999;
-	if(_mode == HIGH)
+	if(NULL == _vec)
+		return card_return;
+	VectorItemsNum(_vec,&numOfCards);
+	if(numOfCards != 0 )
 	{
-		VectorDelete(_vec,&cardId);
+		if(_mode == HIGH)
+		{
+			VectorDelete(_vec,&cardId);
+		}
+		else 
+		{
+			VectorGet(_vec,0,&cardId);
+			VectorSet(_vec,0,card_replace);
+			InSortHlp(_vec);
+			VectorDelete(_vec,&card_replace);
+		}
+		card_return.m_suit = GETSUIT(cardId);
+		card_return.m_rank = GETRANK(cardId);
 	}
-	else 
-	{
-		VectorGet(_vec,0,&cardId);
-		VectorSet(_vec,0,card_replace);
-		InSortHlp(_vec);
-		VectorDelete(_vec,&card_replace);
-	}
-	card_return.m_suit = GETSUIT(cardId);
-	card_return.m_rank = GETRANK(cardId);
 	return card_return;
-}				 
+}
+
+
+
+static int IsEqCrs(Card card1,Card card2)
+{
+	return  card1.m_suit == card2.m_suit && card1.m_rank == card2.m_rank;
+}
+
+
+static void ChoseHiLoCr(Card _card[],int _size,Card *_Mcard,CHOSE_CARD _modeC )
+{
+	int i;
+	*_Mcard = _card[0];
+	for(i = 1; i < _size;++i )
+	{
+		if(_modeC == HIGH)
+		{
+			if(_Mcard->m_rank < _card[i].m_rank)
+				*_Mcard = _card[i];
+		}
+		else
+		{
+			if(_Mcard->m_rank > _card[i].m_rank)
+				*_Mcard = _card[i];
+		}
+	}
+}
+
+Card PlayerChoseCard(Player* _p,CHOSE_CARD _modeC)
+{
+	int i,j,suitAllowed;
+	Vector *suitToDr;
+	Card cardTM,card[SUITNUM];
 	
+	cardTM.m_suit = NONE_S;
+	cardTM.m_rank = NONE_R;	
+	suitToDr = NULL;
+	suitAllowed =SUITNUM; 
+	if(_p->m_heartPlayed == NO)
+		--suitAllowed;
+	for(i = 0,j = 0;i < suitAllowed;++i )
+	{
+		
+		suitToDr = WiVecToUs(_p,i);
+		cardTM = ChoseCard(suitToDr,_modeC);
+		if(cardTM.m_suit != NONE_S)
+		{
+			card[j] = cardTM;
+			++j;
+		}
+	}
+	ChoseHiLoCr( card,j,&cardTM,_modeC );
+	for(i = 0;i < j;++i)
+	{
+		if(IsEqCrs(cardTM,card[i])) 
+			continue;
+		PlayerTakeCard(_p,card[i]);
+	}
+	return cardTM;
+}
+
+
+
+		
+
 /* 
-void chose3ToPass()
 void takeTrick(player,trick)
 void updatePoints(player);
 int isHeartplayd()
@@ -229,7 +294,6 @@ int isvalid(Card,vector ,Heartplayd)
 void passCard( player,vector ,Heartplayd)
 
 	 
-*/
 
 	
 
@@ -238,7 +302,7 @@ int main()
 	Deal* deal;
 	int i;
 	Player* p[4];
-	Card twoClubs = {SPADES,QUEEN};
+	Card card = {SPADES,TWO};
 	char* n[4]={ "a","b","c","d"}; 
 	
 	deal = DealCreate();
@@ -251,18 +315,18 @@ int main()
 	printf("\n");
 	for(i = 0; i < 4;++i)
 	{
-		if(PlayerIsCardExs(p[i],twoClubs))
+		if(PlayerIsCardExs(p[i],card))
 		{
 			PlayerPrint(p[i]);
 		}
 	}
 	printf("\n");
-	CardPrint(ChoseCard(p[0]->m_diamond,HIGH));
-	CardPrint(ChoseCard(p[0]->m_diamond,LOW));
-	printf("\n");
-	
+	for(i=0;i<14;++i)
+		CardPrint(PlayerChoseCard(p[0],LOW));
+	PlayerPrint(p[0]);
 	return 0;
 }
+*/
 
 
 

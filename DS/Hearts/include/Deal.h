@@ -2,8 +2,9 @@
 #define __DEAL_H__
 #include "Player.h"
 #include "Deck.h"
+#include "Card.h"
 
-#define NOP 4
+
 
 typedef struct Deal Deal;
 
@@ -12,6 +13,9 @@ Deal* DealCreate();
 void DealDestroy(Deal* _deal);
 
 void DealCards(Deal* _deal,Player* _p[NOP],int _nOfCard );
+
+void DealPassNCard( Deal* _deal,Player* _p[],int _numOfCard,int _passOrder);
+
 
 /*
 void DealTakeTrCard(Player _p[NOP],int _mode)

@@ -31,7 +31,9 @@ void CardPrint(Card _card)
 			break;
 		case HEARTS:
 			printf("%s%s%s",WHITE_BG_ON,TXT_RED,CHR_HEART);
-			break;		
+			break;
+		default:
+			return;		
 	}
 	switch (_card.m_rank)
 	{

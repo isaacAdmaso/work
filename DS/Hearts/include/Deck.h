@@ -4,6 +4,7 @@
 #include "Card.h"
 #include<stddef.h>
 
+
 typedef struct Deck
 {
 	Vector* m_deck;
