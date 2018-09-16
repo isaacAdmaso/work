@@ -2,7 +2,7 @@
 										Insertion Sort
 										Shake Sort
 										(Quick Sort)			  **/
-#include "Sorting.h"
+#include "../include/Sorting.h"
 #include <stdio.h>
 #include <stdlib.h>
 

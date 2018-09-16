@@ -1,24 +1,28 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
-#include "Deck.h" 
+#include <stddef.h>
+#include "Card.h"
+#include "vector.h"
 
 typedef enum PlyT{REAL ,COMP} PlyT;
 
+typedef enum CHOSE_CARD{LOW,HIGH} CHOSE_CARD;
 
-typedef struct Player
-{
-	char name[512];  /*player's name*/
-	PlyT ROC;        /* human or computer */
-	Vector* spades;
-	Vector* diamond;
-	Vector* clubs;
-	Vector* hearts;
-}Player;
+typedef struct Player Player;
 
-void TakeCard(Player*_p,Cards _card);
+Player* PlayerCreate(char* _name,PlyT _modePlyr);
 
-void DisCard(Player*_p,Cards _card); 
+void PlayerDestroy(Player* _ply);
 
-int IsExs(Player*_p,Cards _card);
+void PlayerTakeCard(Player*_p,Card _card);
 
+int PlayerIsCardExs(Player*_p,Card _card);
+
+void PlayerPutCard(Player*_p,Vector* _trick); 
+
+void PlayerPrint(Player *_p);
+
+Card ChoseCard(Vector* _vec,CHOSE_CARD _mode);
+
+#include "Deal.h"
 #endif/*__PLAYER_H__*/

@@ -11,7 +11,6 @@ void    VectorDestroy(Vector* _vector);
  
 ADTErr  VectorAdd(Vector *_vector,  int  _item); /* Add item to end. */
 ADTErr  VectorDelete(Vector *_vector,  int* _item); /* Remove from end. */
-
 ADTErr  VectorGet(const Vector *_vector, size_t _index, int *_item);
 ADTErr  VectorSet(Vector *_vector, size_t _index, int  _item);
 ADTErr  VectorItemsNum(const Vector *_vector, size_t* _numOfItems);

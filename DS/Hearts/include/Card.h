@@ -1,20 +1,40 @@
+/*       card.h 
+*   include TTY.h for printing
+*
+*
+*/
 #ifndef __CARD_H__
 #define __CARD_H__
 #include <stddef.h>
+#include "TTY.h"
 
+#define HAND 13
 #define DECKSZ 52
+#define GETSUIT(ID) ((ID) % DECKSZ) / HAND                  /* suit of card   */
+#define GETRANK(ID) (ID) % HAND						  /* rank of card*/
+#define GETID(SUIT,RANK) ((SUIT) * HAND + (RANK))   /* the actual representation of a card */
 
-typedef enum Suit{Spades, Diamonds, Clubs, Hearts}Suit;
 
-typedef enum Rank {Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten,
-		    Jack, Queen, King, Ace}Rank;
+typedef enum Suit{CLUBS, DIAMONDS, SPADES, HEARTS}Suit;
 
-typedef struct Cards
+typedef enum Rank {TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN,
+		    JACK, QUEEN, KING, ACE}Rank;
+
+typedef struct Card
 {
-	int cards[DECKSZ]; /* the deck*/
-}Cards;
- 
-void CardPrint(Cards _card);
+	Suit m_suit;	 /*	                   */
+	Rank m_rank;	 /* card representation*/
+}Card;
+
+
+
+
+
+void CardInit();
+
+void CardPrint(Card _card);
+
+void CardSPrint();
 
 
 #endif  /*__CARD_H__*/

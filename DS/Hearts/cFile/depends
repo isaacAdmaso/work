@@ -1,5 +1,0 @@
-Deck.o: Deck.c ../include/Deck.h ../include/Card.h
-Player.o: Player.c ../include/Player.h ../include/Card.h
-Deal.o: Deal.c ../include/Deal.h ../include/Deck.h ../include/Card.h
-Game.o: Game.c ../include/Game.h ../include/Deck.h ../include/Card.h \
- ../include/Player.h

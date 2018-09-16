@@ -1,3 +1,0 @@
-SortMUtest.o: SortMUtest.c ../include/Sorting.h ../include/vector.h \
- ../include/ADTDefs.h ../include/mu_test.h
-vector.o: vector.c ../include/vector.h ../include/ADTDefs.h

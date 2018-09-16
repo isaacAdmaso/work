@@ -1,14 +1,13 @@
 # General compilation flags
 CC=gcc
 CFLAGS= -ansi -pedantic -Wall -Werror  -g
-LDFLAGS= -g -c
+LDFLAGS= -g
 
 # Include directory
 INC_DIR=../include
 
 CFLAGS += -I$(INC_DIR)
 
-# Build Heap
 # this is my target
 TARGET=Heartry
 
