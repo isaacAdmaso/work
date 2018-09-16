@@ -13,7 +13,7 @@
 #define SUITNUM 4
 #define HAND 13
 #define DECKSZ 52
-#define GETSUIT(ID) ((ID) % DECKSZ) / HAND                  /* suit of card   */
+#define GETSUIT(ID) ((ID) % DECKSZ) / HAND                 /* suit of card   */
 #define GETRANK(ID) (ID) % HAND						  /* rank of card*/
 #define GETID(SUIT,RANK) ((SUIT) * HAND + (RANK))   /* the actual representation of a card */
 
