@@ -16,6 +16,20 @@ void CardInit()
 }
 
 
+int IsEqCrs(Card card1,Card card2)
+{
+	return  card1.m_suit == card2.m_suit && card1.m_rank == card2.m_rank;
+}
+
+int IsBgCrs(Card card1,Card card2)
+{
+	if(card1.m_rank > card2.m_rank)
+		if(card1.m_suit == card2.m_suit || card2.m_suit == NONE_S)
+			return 1;
+	return 0;  
+}
+
+
 void CardPrint(Card _card)
 {
 	switch(_card.m_suit)

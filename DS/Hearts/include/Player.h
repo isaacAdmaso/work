@@ -18,7 +18,9 @@ Player* PlayerCreate(char* _name,PlyT _modePlyr);
 
 void PlayerDestroy(Player* _ply);
 
-Card PlayerChoseCard(Player* _p,CHOSE_CARD _modeC);
+Card PlayerCardToPass(Player* _p,CHOSE_CARD _modeC);
+
+Card PlayerChoseTrick(Player* _p,Suit _suit,CHOSE_CARD _modeC);
 
 void PlayerPrint(Player *_p);
 
@@ -26,8 +28,11 @@ void PlayerTakeCard(Player*_p,Card _card);
 
 int PlayerIsCardExs(Player*_p,Card _card);
 
+void PlayerHrtStatChg(Player* _p[]);
 
+void PlayerTakeTrick(Player* _p,Vector* _trick);
 
+void PlayerUpDtPt( Player* _p,Vector* _trick );
 
 #include "Deal.h"
 #endif/*__PLAYER_H__*/

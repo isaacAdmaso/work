@@ -16,7 +16,9 @@ void DealCards(Deal* _deal,Player* _p[NOP],int _nOfCard );
 
 void DealPassNCard( Deal* _deal,Player* _p[],int _numOfCard,int _passOrder);
 
+void DealWhoHasTwOClu( Deal* _deal,Player* _p[] );
 
+void DealTrick(Deal *_deal,Player* _p[] );
 /*
 void DealTakeTrCard(Player _p[NOP],int _mode)
 void DealDisTrCard(Player _p[NOP],int _mode);

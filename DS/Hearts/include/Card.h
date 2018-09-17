@@ -39,6 +39,10 @@ void CardPrint(Card _card);
 
 void CardSPrint();
 
+int IsEqCrs(Card card1,Card card2);
+
+int IsBgCrs(Card card1,Card card2);
+
 
 #endif  /*__CARD_H__*/
 

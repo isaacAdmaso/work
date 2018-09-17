@@ -12,6 +12,7 @@ struct Deal
 	Deck* m_dDeck;
 	Vector* m_trick;
 	int m_curStPly;
+	Suit m_suit;
 	size_t m_magic;
 	
 };
@@ -35,6 +36,7 @@ Deal* DealCreate()
 	for(i = 0;i < NOP;++i )
 		VectorAdd(deal->m_trick,-1);
 	deal->m_curStPly = 0;
+	deal->m_suit = CLUBS;
 	deal->m_magic = MAGIC;
 	return deal;
 }
@@ -94,7 +96,7 @@ static void DealGetNCards(Player* _p, Vector* _vec,int _numOfCard )
 	Card card; 
 	for(i = 0;i < _numOfCard;++i )
 	{
-		card = PlayerChoseCard(_p,HIGH);
+		card = PlayerCardToPass(_p,HIGH);
 		cardId = GETID(card.m_suit,card.m_rank);		
 		VectorAdd(_vec,cardId);
 	}
@@ -121,10 +123,56 @@ void DealPassNCard( Deal* _deal,Player* _p[],int _numOfCard,int _passOrder)
 		DealGetNCards(_p[i],_deal->m_trick,_numOfCard);
 	for(i = 0; i < NOP;++i )
 		DealSetNCards(_p[(i+_passOrder)%NOP],_deal->m_trick,_numOfCard);
-}		
+	PlayerHrtStatChg(_p);
+}
 
+		
+void DealWhoHasTwOClu( Deal* _deal,Player* _p[] )
+{
+	int i;
+	
+	Card card = {CLUBS,TWO};
+	for(i = 0;i < NOP; ++i )
+	{
+		if(PlayerIsCardExs(_p[i],card))
+			 _deal->m_curStPly = i;
+	}
+}
+
+void DealTrick(Deal *_deal,Player* _p[] )
+{
+	int i,cardId,plyTrn,winIdx;
+	Card card,maxCard;
+	Suit suit;
 
 	
+	if(IS_VALID(_deal))
+	{
+		plyTrn = _deal->m_curStPly;
+		suit = _deal->m_suit;
+
+		maxCard.m_suit = NONE_S;
+		maxCard.m_rank = NONE_R;
+
+		for(i = 0;i < NOP;++i )
+		{	
+			plyTrn = (i+plyTrn) % NOP;
+			card = PlayerChoseTrick(_p[plyTrn],suit,LOW);
+			cardId = GETID( card.m_suit,card.m_rank );
+			VectorSet(_deal->m_trick,i,cardId);
+			if(IsBgCrs(card,maxCard))
+			{
+				maxCard = card;
+				winIdx = plyTrn;
+			}
+		}
+		PlayerTakeTrick(_p[winIdx],_deal->m_trick);
+		PlayerUpDtPt(_p[winIdx]);
+	}
+}
+			
+/*
+*/ 	
 
 int main()
 {
@@ -133,6 +181,7 @@ int main()
 	Player* p[4];
 	Card card = {SPADES,TWO};
 	char* n[4]={ "a","b","c","d"}; 
+	size_t numOfTrk;
 	
 	deal = DealCreate();
 	for(i = 0; i < 4;++i)
@@ -145,6 +194,11 @@ int main()
 	DealPassNCard(deal,p,3,3);
 	for(i = 0; i < 4;++i)
 		PlayerPrint(p[i]);
+	DealPassNCard(deal,p,3,3);
+	for(i = 0; i < 4;++i)
+		PlayerPrint(p[i]);
+	VectorPrint(deal->m_trick);
+
 	return 0;
 }
 /*	

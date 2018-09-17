@@ -215,6 +215,8 @@ static Card ChoseCard(Vector* _vec,CHOSE_CARD _mode)
 			VectorSet(_vec,0,card_replace);
 			InSortHlp(_vec);
 			VectorDelete(_vec,&card_replace);
+			if(card_replace == 999)
+				printf("you'r ok");
 		}
 		card_return.m_suit = GETSUIT(cardId);
 		card_return.m_rank = GETRANK(cardId);
@@ -222,12 +224,6 @@ static Card ChoseCard(Vector* _vec,CHOSE_CARD _mode)
 	return card_return;
 }
 
-
-
-static int IsEqCrs(Card card1,Card card2)
-{
-	return  card1.m_suit == card2.m_suit && card1.m_rank == card2.m_rank;
-}
 
 
 static void ChoseHiLoCr(Card _card[],int _size,Card *_Mcard,CHOSE_CARD _modeC )
@@ -249,7 +245,7 @@ static void ChoseHiLoCr(Card _card[],int _size,Card *_Mcard,CHOSE_CARD _modeC )
 	}
 }
 
-Card PlayerChoseCard(Player* _p,CHOSE_CARD _modeC)
+Card PlayerCardToPass(Player* _p,CHOSE_CARD _modeC)
 {
 	int i,j,suitAllowed;
 	Vector *suitToDr;
@@ -283,11 +279,74 @@ Card PlayerChoseCard(Player* _p,CHOSE_CARD _modeC)
 }
 
 
+void PlayerHrtStatChg(Player* _p[])
+{
+	int i;
+	if(NULL == _p)
+		return;
+	for(i = 0; i < NOP;++i )
+	{
+		if(!IS_VALID(_p[i]))
+			return;
+		_p[i]->m_heartPlayed = (_p[i]->m_heartPlayed + 1) % 2;
+	}
+}	
 
-		
+void PlayerTakeTrick(Player* _p,Vector* _trick)
+{
+	int cardId,i;
+	
+	cardId = -1;
+	if( IS_VALID( _p ) && NULL != _trick )
+	{
+		for(i = 0; i < NOP;++i )
+		{
+			VectorGet(_trick,i,&cardId);
+				if(cardId < 0)
+					continue;
+			VectorAdd(_p->m_disTrick,cardId);
+		}
+	}
+}	
+
+
+Card PlayerChoseTrick(Player* _p,Suit _suit,CHOSE_CARD _modeC)
+{
+	Card card = {NONE_S,NONE_R},cardTest = {NONE_S,NONE_R};
+	int i;
+	Vector *suitToDr;
+
+	if(IS_VALID(_p))
+	{
+		for( i = 0;i < SUITNUM;++i )
+		{
+			suitToDr = WiVecToUs(_p,(_suit+i) % SUITNUM);
+			if(NULL == suitToDr);
+				return card;
+			card = ChoseCard(suitToDr,_modeC);
+			if(IsEqCrs(card,cardTest))
+				return card;
+		}
+	}
+	return card;
+}
 
 /* 
-void takeTrick(player,trick)
+void PlayerUpDtPt( Player* _p ,Vector* _trick)
+{
+	int i;
+	
+	if(IS_VALID(_p))
+	{
+		for(i = 0; i < NOP,++i )
+		{
+			VectorGet(_trick,i,&cardId);
+				if(cardId < 0)
+					continue;
+			VectorAdd(_p->m_disTrick,cardId);
+
+	
+		
 void updatePoints(player);
 int isHeartplayd()
 int isvalid(Card,vector ,Heartplayd)
@@ -322,7 +381,7 @@ int main()
 	}
 	printf("\n");
 	for(i=0;i<14;++i)
-		CardPrint(PlayerChoseCard(p[0],LOW));
+		CardPrint(ChoseCard(p[0],LOW));
 	PlayerPrint(p[0]);
 	return 0;
 }
