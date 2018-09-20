@@ -1,4 +1,4 @@
-#include "../include/Deal.h"
+#include "Deal.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -17,7 +17,12 @@ struct Deal
 	
 };
 
-Deal* DealCreate()
+/**
+ * @brief one round of hearts
+ * 
+ * @return Deal* 
+ */
+static Deal* DealCreate()
 {
 	Deal* deal;
 	int i;
@@ -35,13 +40,17 @@ Deal* DealCreate()
 	for(i = 0;i < NOP;++i )
 		VectorAdd(deal->m_trick,-1);
 	deal->m_curStPly = 0;
-	deal->m_suit = CLUBS;
+	deal->m_suit = CLUBS;/**starting suit is clubs */
 	deal->m_magic = MAGIC;
 	return deal;
 }
 
-
-void DealDestroy(Deal* _deal)
+/**
+ * @brief free alloceted memory
+ * 
+ * @param _deal 
+ */
+static void DealDestroy(Deal* _deal)
 {
 	if(IS_VALID(_deal))
 	{
@@ -51,8 +60,14 @@ void DealDestroy(Deal* _deal)
 		free(_deal);
 	}
 }
-
-void DealCards(Deal* _deal,Player* _p[],int _nOfCard )
+/**
+ * @brief dealing the 
+ * 
+ * @param _deal 
+ * @param _p 
+ * @param _nOfCard 
+ */
+static void DealCards(Deal* _deal,Player* _p[],int _nOfCard )
 {
 	int i,j,k,cardId=0;
 	Card card;
@@ -115,7 +130,7 @@ static void DealSetNCards(Player* _p, Vector* _vec,int _numOfCard)
 	}
 }
 	
-void DealPassNCard( Deal* _deal,Player* _p[],int _numOfCard,int _passOrder)
+static void DealPassNCard( Deal* _deal,Player* _p[],int _numOfCard,int _passOrder)
 {
 	int i;
 
@@ -127,7 +142,7 @@ void DealPassNCard( Deal* _deal,Player* _p[],int _numOfCard,int _passOrder)
 }
 
 		
-void DealWhoHasTwOClu( Deal* _deal,Player* _p[] )
+static void DealWhoHasTwOClu( Deal* _deal,Player* _p[] )
 {
 	int i;
 	
@@ -143,64 +158,10 @@ void DealWhoHasTwOClu( Deal* _deal,Player* _p[] )
 }
 
 
-static void DealUpPt(Player* _p[],Vector* _score);
-
-
-void DealPlay(Deal *_deal,Player* _p[], Vector* _score )
-{
-	int i,cardId = 0,plyTrn = 0,winIdx = 0,round;
-	Card card,maxCard;
-	Suit suit;
-	
-	if(IS_VALID(_deal))
-	{
-		DealWhoHasTwOClu(_deal,_p);
-		suit = _deal->m_suit;
-		for(round = 0;round < HAND;++round )
-		{
-			maxCard.m_suit = NONE_S;
-			maxCard.m_rank = NONE_R;
-			plyTrn = _deal->m_curStPly;
-			for(i = 0;i < NOP;++i )
-			{	
-				plyTrn = (i+_deal->m_curStPly) % NOP;
-				if(i == 0 )
-				{
-					card = PlayerCardToPass(_p[plyTrn],LOW);
-					suit = card.m_suit;
-					maxCard = card;
-				}
-				else
-				{
-					card = PlayerChoseTrick(_p[plyTrn],suit,LOW);
-				}
-				PlayerPrint(_p[plyTrn]);
-				if(card.m_suit == HEARTS)
-					PlayerHrtStatOn(_p);	
-				cardId = GETID( card.m_suit,card.m_rank );
-				VectorSet(_deal->m_trick,i,cardId);
-				if(IsBgCrs(card,maxCard))
-				{
-					maxCard = card;
-					winIdx = plyTrn;
-					CardPrint(card);
-				}
-			}
-			PlayerTakeTrick(_p[winIdx],_deal->m_trick);
-			PlayerUpDtPtTrk(_p[winIdx],_deal->m_trick);
-			_deal->m_curStPly = winIdx;
-		}
-		PlayerHrtStatOff(_p);	
-		DealUpPt(_p,_score);
-	}
-}	
-	
-	
-	
-static void DealUpPt(Player* _p[],Vector* _score)
+static void DealUpDPt(Player* _p[],int* _score)
 {
 	DIVIDE divide = DONOT;
-	int i,maxPtIdx = 0,plyScr = 0,plyrPt = 0;	
+	int i,maxPtIdx = 0,plyrPt = 0;	
 	
 	for(i = 0;i < NOP;++i )
 	{	
@@ -219,52 +180,81 @@ static void DealUpPt(Player* _p[],Vector* _score)
 		{
 			if( i == maxPtIdx)
 				continue;
-			VectorSet(_score,i,MAXPOINTS/(NOP-1));
+			_score[i] = MAXPOINTS/(NOP-1);
 		}
 		else
 		{
-			plyrPt = PlayerGetScore(_p[i]);
-			VectorGet(_score,i,&plyScr);	 
-			VectorSet(_score,i,plyrPt+plyScr);
+			_score[i] +=  PlayerGetScore(_p[i]);
 		}	
 		PlayerSetScore(_p[i],0);
 	}
 }		
 
-int main()
+static void DealPrint(Player* _p[],int _score[])
 {
-	Deal* deal;
 	int i;
-	Player* p[4];
-	Card card = {SPADES,TWO};
-	char* n[4]={ "a","b","c","d"}; 
-	size_t numOfTrk;
-	Vector* v;
-	
-	
-	v = VectorCreate(4,0); 
-	deal = DealCreate();
-	for(i = 0; i < 4;++i)
+	for(i = 0;i < NOP;++i)
 	{
-		p[i] = PlayerCreate(n[i],COMP);
-		VectorAdd(v,0);
+		printf("%s round score: %d \n",PlayerGetName(_p[i]),_score[i]);
 	}
-	DealCards(deal,p,13);
-	DealPassNCard(deal,p,3,3);
-	for(i = 0; i < 4;++i)
-		PlayerPrint(p[i]);
-	printf("\n");
-	DealPlay(deal,p,v);
-	
-	VectorPrint(deal->m_trick);
-	VectorPrint(v);
-	return 0;
 }
 
 
-/*
-*/ 	
-
+void DealPlay(Player* _p[], int _score[],int _heartInit[])
+{
+	int i,cardId = 0,plyTrn = 0,winIdx = 0,round;
+	Card card,maxCard;
+	Suit suit;
+	Deal* deal;
+	
+	deal = DealCreate();
+	if(IS_VALID(deal))
+	{
+		DealCards(deal,_p,_heartInit[0]);
+		DealPassNCard(deal,_p,_heartInit[1],_heartInit[2]);
+		DealWhoHasTwOClu(deal,_p);
+		suit = deal->m_suit;
+		DealPrint(_p,_score);
+		for(round = 0;round < HAND;++round )
+		{
+			maxCard.m_suit = NONE_S;
+			maxCard.m_rank = NONE_R;
+			plyTrn = deal->m_curStPly;
+			for(i = 0;i < NOP;++i )
+			{	
+				plyTrn = (i+deal->m_curStPly) % NOP;
+				if(i == 0 )
+				{
+					card = PlayerCardToPass(_p[plyTrn],LOW);
+					suit = card.m_suit;
+					maxCard = card;
+				}
+				else
+				{
+					card = PlayerChoseTrick(_p[plyTrn],suit,LOW);
+				}
+				PlayerPrint(_p[plyTrn]);
+				if(card.m_suit == HEARTS)
+					PlayerHrtStatOn(_p);	
+				cardId = GETID( card.m_suit,card.m_rank );
+				VectorSet(deal->m_trick,i,cardId);
+				if(IsBgCrs(card,maxCard))
+				{
+					maxCard = card;
+					winIdx = plyTrn;
+					CardPrint(card);
+				}
+			}
+			PlayerTakeTrick(_p[winIdx],deal->m_trick);
+			PlayerUpDtPtTrk(_p[winIdx],deal->m_trick);
+			deal->m_curStPly = winIdx;
+		}
+		PlayerHrtStatOff(_p);	
+		DealUpDPt(_p,_score);
+		DealDestroy(deal);
+	}
+}	
+	
 
 
 
