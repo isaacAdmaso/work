@@ -6,11 +6,11 @@
 #ifndef __CARD_H__
 #define __CARD_H__
 #include <stddef.h>
-#include "TTY.h"
+#include "TTY.h"  /** Contains shortcuts to print commands for printing card*/
 
 
-#define NOP 4
-#define SUITNUM 4
+#define NOP 4                /**number of players */
+#define SUITNUM 4     /** CLUBS, DIAMONDS, SPADES, HEARTS */
 #define HAND 13
 #define DECKSZ 52
 #define MAXPOINTS 26
@@ -25,10 +25,14 @@ typedef enum Suit{CLUBS, DIAMONDS, SPADES, HEARTS , NONE_S = -1}Suit;
 typedef enum Rank {TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN,
 		    JACK, QUEEN, KING, ACE,NONE_R = -1}Rank;
 
+/**
+ * @brief card representation structer 
+ * 
+ */
 typedef struct Card
 {
-	Suit m_suit;	 /*	                   */
-	Rank m_rank;	 /* card representation*/
+	Suit m_suit;	 /*	     enum suit     */
+	Rank m_rank;	 /* 	 enum rank  	*/
 }Card;
 
 

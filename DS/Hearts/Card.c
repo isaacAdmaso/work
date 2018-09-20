@@ -1,9 +1,18 @@
+/**
+ * @brief display card
+ * 
+ * @file Card.c
+ */
 #include "Card.h"
 #include<stdio.h>
 
 
-Card carDeck[DECKSZ];
-			
+Card carDeck[DECKSZ]; /**represent a deck of cards */
+
+/**
+ * @brief initialize the deck
+ * 
+ */
 void CardInit()
 {
 	int i;
@@ -15,12 +24,25 @@ void CardInit()
 	}
 }
 
-
+/**
+ * @brief check if two cards are equal
+ * 
+ * @param card1 
+ * @param card2 
+ * @return int 1 if equal int 0 else
+ */
 int IsEqCrs(Card card1,Card card2)
 {
 	return  card1.m_suit == card2.m_suit && card1.m_rank == card2.m_rank;
 }
 
+/**
+ * @brief bool, bg
+ * 
+ * @param card1 
+ * @param card2 
+ * @return int 1 if card1 is bigger or equal to card 2 ,int 0 else
+ */
 int IsBgCrs(Card card1,Card card2)
 {
 	if(card1.m_rank >= card2.m_rank)
@@ -29,7 +51,11 @@ int IsBgCrs(Card card1,Card card2)
 	return 0;  
 }
 
-
+/**
+ * @brief print card
+ * 
+ * @param _card 
+ */
 void CardPrint(Card _card)
 {
 	switch(_card.m_suit)
