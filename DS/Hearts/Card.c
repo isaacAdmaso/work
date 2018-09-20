@@ -1,8 +1,8 @@
-#include "../include/Card.h"
+#include "Card.h"
 #include<stdio.h>
 
 
-Card g_carDeck[DECKSZ];
+Card carDeck[DECKSZ];
 			
 void CardInit()
 {
@@ -10,8 +10,8 @@ void CardInit()
 	
 	for(i = 0; i < DECKSZ;++i)
 	{
-		g_carDeck[i].m_suit = GETSUIT(i);
-		g_carDeck[i].m_rank = GETRANK(i);
+		carDeck[i].m_suit = GETSUIT(i);
+		carDeck[i].m_rank = GETRANK(i);
 	}
 }
 
@@ -23,8 +23,8 @@ int IsEqCrs(Card card1,Card card2)
 
 int IsBgCrs(Card card1,Card card2)
 {
-	if(card1.m_rank > card2.m_rank)
-		if(card1.m_suit == card2.m_suit || card2.m_suit == NONE_S)
+	if(card1.m_rank >= card2.m_rank)
+		if(card1.m_suit == card2.m_suit)
 			return 1;
 	return 0;  
 }
@@ -76,7 +76,7 @@ void CardPrint(Card _card)
 			printf("%s 9%s%s ",TXT_BOLD_ON,TXT_BOLD_OFF,TXT_NORMAL);
 			break;
 		case TEN:
-			printf("%s 10%s%s ",TXT_BOLD_ON,TXT_BOLD_OFF,TXT_NORMAL);
+			printf("%s T%s%s ",TXT_BOLD_ON,TXT_BOLD_OFF,TXT_NORMAL);
 			break;
 		case JACK:
 			printf("%s J%s%s ",TXT_BOLD_ON,TXT_BOLD_OFF,TXT_NORMAL);
@@ -90,6 +90,9 @@ void CardPrint(Card _card)
 		case ACE:
 			printf("%s A%s%s ",TXT_BOLD_ON,TXT_BOLD_OFF,TXT_NORMAL);
 			break;
+		default:
+			return;		
+
 	}
 }
 
@@ -97,19 +100,8 @@ void CardSPrint()
 {
 	int i;
 	for(i = 0;i < DECKSZ;++i)
-		CardPrint(g_carDeck[i]);
+		CardPrint(carDeck[i]);
 }
-
-/*
-int main()
-{
-	CardInit();
-	CardSPrint();
-	return 0;
-}
-*/
-
-
 
 
 

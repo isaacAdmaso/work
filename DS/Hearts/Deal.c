@@ -17,11 +17,7 @@ struct Deal
 	
 };
 
-/**
- * @brief one round of hearts
- * 
- * @return Deal* 
- */
+
 static Deal* DealCreate()
 {
 	Deal* deal;
@@ -40,16 +36,12 @@ static Deal* DealCreate()
 	for(i = 0;i < NOP;++i )
 		VectorAdd(deal->m_trick,-1);
 	deal->m_curStPly = 0;
-	deal->m_suit = CLUBS;/**starting suit is clubs */
+	deal->m_suit = CLUBS;
 	deal->m_magic = MAGIC;
 	return deal;
 }
 
-/**
- * @brief free alloceted memory
- * 
- * @param _deal 
- */
+
 static void DealDestroy(Deal* _deal)
 {
 	if(IS_VALID(_deal))
@@ -60,13 +52,7 @@ static void DealDestroy(Deal* _deal)
 		free(_deal);
 	}
 }
-/**
- * @brief dealing the 
- * 
- * @param _deal 
- * @param _p 
- * @param _nOfCard 
- */
+
 static void DealCards(Deal* _deal,Player* _p[],int _nOfCard )
 {
 	int i,j,k,cardId=0;
@@ -213,8 +199,11 @@ void DealPlay(Player* _p[], int _score[],int _heartInit[])
 		DealCards(deal,_p,_heartInit[0]);
 		DealPassNCard(deal,_p,_heartInit[1],_heartInit[2]);
 		DealWhoHasTwOClu(deal,_p);
+		for(i = 0;i < NOP;++i)
+			PlayerPrint(_p[i]);	
 		suit = deal->m_suit;
 		DealPrint(_p,_score);
+		getchar();
 		for(round = 0;round < HAND;++round )
 		{
 			maxCard.m_suit = NONE_S;
@@ -233,7 +222,10 @@ void DealPlay(Player* _p[], int _score[],int _heartInit[])
 				{
 					card = PlayerChoseTrick(_p[plyTrn],suit,LOW);
 				}
-				PlayerPrint(_p[plyTrn]);
+				printf("\n%s ->",PlayerGetName(_p[plyTrn]));
+				CardPrint(card);
+				printf("\n");
+				getchar();
 				if(card.m_suit == HEARTS)
 					PlayerHrtStatOn(_p);	
 				cardId = GETID( card.m_suit,card.m_rank );
@@ -242,12 +234,13 @@ void DealPlay(Player* _p[], int _score[],int _heartInit[])
 				{
 					maxCard = card;
 					winIdx = plyTrn;
-					CardPrint(card);
 				}
 			}
 			PlayerTakeTrick(_p[winIdx],deal->m_trick);
 			PlayerUpDtPtTrk(_p[winIdx],deal->m_trick);
 			deal->m_curStPly = winIdx;
+			for(i = 0;i < NOP;++i)
+				PlayerPrint(_p[i]);	
 		}
 		PlayerHrtStatOff(_p);	
 		DealUpDPt(_p,_score);

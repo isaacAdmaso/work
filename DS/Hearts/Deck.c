@@ -1,4 +1,4 @@
-#include "../include/Deck.h"
+#include "Deck.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
@@ -81,27 +81,6 @@ void DeckGiveOneC(Deck* _deck,int* cardId)
 		VectorDelete(_deck->m_deck,cardId);
 	}
 }	
-
-
-/*******shuffle*******/
-/*
-void DeckShuff(Deck* _deck);
-s{
-	
-void DeckDeal(Deck* _deck);
-
-int main()
-{
-	Deck* deck;
-	deck = DeckCreate();
-	DeckSPrint(deck);
-	DeckShuffle(deck);
-	DeckSPrint(deck);
-	return 0;
-}
-*/
-
-
 
 
 

@@ -11,6 +11,8 @@ typedef enum
     ERR_REALLOCATION_FAILED,
     ERR_UNDERFLOW,
     ERR_OVERFLOW,
+    ERR_ALREADY_EXISTS,
+    ERR_NOT_FOUND,
     ERR_WRONG_INDEX
     /* Stack  Errors */
 } ADTErr;

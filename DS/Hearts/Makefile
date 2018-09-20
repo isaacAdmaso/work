@@ -1,6 +1,6 @@
 # General compilation flags
 CC=gcc
-CFLAGS= -ansi -pedantic -Wall -Werror  -g
+CFLAGS= -ansi -pedantic -Wall -Werror  -g 
 LDFLAGS= -g
 
 # Include directory
@@ -9,7 +9,7 @@ INC_DIR=../include
 CFLAGS += -I$(INC_DIR)
 
 # this is my target
-TARGET=Heartry
+TARGET=Game
 
 # all .c files in this directory are my sources
 SOURCES=$(wildcard *.c)
@@ -31,4 +31,6 @@ clean:
 	
 run:
 	./$(TARGET)
+	
+	
 

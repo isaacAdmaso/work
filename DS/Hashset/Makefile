@@ -8,7 +8,6 @@ INC_DIR=../include
 
 CFLAGS += -I$(INC_DIR)
 
-# Build Heap
 # this is my target
 TARGET=HashSetTestMU
 

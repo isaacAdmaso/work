@@ -4,6 +4,8 @@
 #include "Card.h"
 #include "vector.h"
 
+#define P_NAME 128
+
 
 typedef enum HeartPlayed{ NO,YES } HeartPlayed;
 
@@ -22,17 +24,24 @@ Card PlayerCardToPass(Player* _p,CHOSE_CARD _modeC);
 
 Card PlayerChoseTrick(Player* _p,Suit _suit,CHOSE_CARD _modeC);
 
+char* PlayerGetName(Player* _p);
+
 void PlayerPrint(Player *_p);
 
 void PlayerTakeCard(Player*_p,Card _card);
 
 int PlayerIsCardExs(Player*_p,Card _card);
 
-void PlayerHrtStatChg(Player* _p[]);
+void PlayerHrtStatOn(Player* _p[]);
+
+void PlayerHrtStatOff(Player* _p[]);
 
 void PlayerTakeTrick(Player* _p,Vector* _trick);
 
-void PlayerUpDtPt( Player* _p,Vector* _trick );
+void PlayerUpDtPtTrk( Player* _p,Vector* _trick );
 
-#include "Deal.h"
+int PlayerGetScore(Player* _p);
+
+void PlayerSetScore(Player* _p,int _setPts);
+
 #endif/*__PLAYER_H__*/
