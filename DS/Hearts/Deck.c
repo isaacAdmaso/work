@@ -47,7 +47,7 @@ void DeckDestroy(Deck* _deck)
 	if(IS_VALID_D(_deck))
 	{
 		_deck->m_magic = 0;
-		free(_deck->m_deck);
+		VectorDestroy(_deck->m_deck);
 		free(_deck);
 	}
 }
