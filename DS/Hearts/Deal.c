@@ -1,6 +1,14 @@
+/**
+ * @brief one round of Hearts card game
+ * 
+ * @file Deal.c
+ * @author your name
+ * @date 2018-09-22
+ */
 #include "Deal.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include <stdlib.h> /**malloc (create deal) */
+#include <stdio.h>	/**for printf */
+#include <assert.h> /**trying using assert */
 
 #define MAGIC 645735825
 #define IS_VALID(D)  ( NULL != (D) && (D)->m_magic == MAGIC)
@@ -17,7 +25,11 @@ struct Deal
 	
 };
 
-
+/**
+ * @brief initializing one round 
+ * 
+ * @return Deal* 
+ */
 static Deal* DealCreate()
 {
 	Deal* deal;
@@ -41,7 +53,11 @@ static Deal* DealCreate()
 	return deal;
 }
 
-
+/**
+ * @brief free memory 
+ * 
+ * @param _deal 
+ */
 static void DealDestroy(Deal* _deal)
 {
 	if(IS_VALID(_deal))
@@ -53,6 +69,13 @@ static void DealDestroy(Deal* _deal)
 	}
 }
 
+/**
+ * @brief dealing chosen amount of cards to players in the beginning 
+ *  
+ * @param _deal 
+ * @param _p 
+ * @param _nOfCard amount of card to deal 
+ */
 static void DealCards(Deal* _deal,Player* _p[],int _nOfCard )
 {
 	int i,j,k,cardId=0;
@@ -63,7 +86,7 @@ static void DealCards(Deal* _deal,Player* _p[],int _nOfCard )
 		for(j = 0,i = 0;j < DECKSZ;j += _nOfCard,++i )
 		{
 			i %= NOP;
-			if(i == NOP-1 && (DECKSZ-1-j) > NOP*_nOfCard )
+			if(!(i == 0 && ((DECKSZ-j) /  _nOfCard) < NOP ))
 			{
 				for(k = 0;k < _nOfCard;++k )
 				{
@@ -90,7 +113,13 @@ static void DealCards(Deal* _deal,Player* _p[],int _nOfCard )
 	}
 }
 
-
+/**
+ * @brief take N highest cards of player
+ * 
+ * @param _p 
+ * @param _vec 
+ * @param _numOfCard chosen amount
+ */
 static void DealGetNCards(Player* _p, Vector* _vec,int _numOfCard )
 {
 	int i,cardId;
@@ -103,6 +132,13 @@ static void DealGetNCards(Player* _p, Vector* _vec,int _numOfCard )
 	}
 }	
 
+/**
+ * @brief give N cards to player
+ * 
+ * @param _p 
+ * @param _vec 
+ * @param _numOfCard 
+ */
 static void DealSetNCards(Player* _p, Vector* _vec,int _numOfCard)
 {
 	int i,cardId;
@@ -116,6 +152,14 @@ static void DealSetNCards(Player* _p, Vector* _vec,int _numOfCard)
 	}
 }
 	
+/**
+ * @brief passing N highest cards of one player to anther base on order 
+ * 
+ * @param _deal 
+ * @param _p all players
+ * @param _numOfCard  amount to pass
+ * @param _passOrder 
+ */
 static void DealPassNCard( Deal* _deal,Player* _p[],int _numOfCard,int _passOrder)
 {
 	int i;
@@ -127,7 +171,12 @@ static void DealPassNCard( Deal* _deal,Player* _p[],int _numOfCard,int _passOrde
 	PlayerHrtStatOff(_p);
 }
 
-		
+/**
+ * @brief update deal field storing starting player index 
+ * 
+ * @param _deal 
+ * @param _p 
+ */
 static void DealWhoHasTwOClu( Deal* _deal,Player* _p[] )
 {
 	int i;
@@ -143,7 +192,12 @@ static void DealWhoHasTwOClu( Deal* _deal,Player* _p[] )
 	}
 }
 
-
+/**
+ * @brief update total score
+ * 
+ * @param _p 
+ * @param _score int array provided by Game
+ */
 static void DealUpDPt(Player* _p[],int* _score)
 {
 	DIVIDE divide = DONOT;
@@ -152,8 +206,7 @@ static void DealUpDPt(Player* _p[],int* _score)
 	for(i = 0;i < NOP;++i )
 	{	
 		plyrPt = PlayerGetScore(_p[i]);
-		if(plyrPt == -1)
-			return;
+		assert(plyrPt != -1);
 		if(plyrPt == MAXPOINTS)
 		{
 			divide = DO;
@@ -164,9 +217,8 @@ static void DealUpDPt(Player* _p[],int* _score)
 	{
 		if(divide == DO) 
 		{
-			if( i == maxPtIdx)
-				continue;
-			_score[i] = MAXPOINTS/(NOP-1);
+			if( i != maxPtIdx)
+				_score[i] += MAXPOINTS/(NOP-1);
 		}
 		else
 		{
@@ -176,6 +228,12 @@ static void DealUpDPt(Player* _p[],int* _score)
 	}
 }		
 
+/**
+ * @brief print round score
+ * 
+ * @param _p 
+ * @param _score 
+ */
 static void DealPrint(Player* _p[],int _score[])
 {
 	int i;
@@ -185,19 +243,27 @@ static void DealPrint(Player* _p[],int _score[])
 	}
 }
 
-
+/**
+ * @brief play COMP player mode -always play low card unless suit
+ * dont exist than play high card 
+ * 
+ * @param _p 
+ * @param _score 
+ * @param _heartInit array of initial data
+ */
 void DealPlay(Player* _p[], int _score[],int _heartInit[])
 {
 	int i,cardId = 0,plyTrn = 0,winIdx = 0,round;
-	Card card,maxCard;
+	Card card,maxCard,testCard = {NONE_S,NONE_R};
 	Suit suit;
 	Deal* deal;
 	
 	deal = DealCreate();
 	if(IS_VALID(deal))
 	{
-		DealCards(deal,_p,_heartInit[0]);
-		DealPassNCard(deal,_p,_heartInit[1],_heartInit[2]);
+		DealCards(deal,_p,_heartInit[0]);	/** _heartInit[0] - amount of cards to start the deal */
+		DealPassNCard(deal,_p,_heartInit[1],_heartInit[2]);/**_heartInit[1] - amount to pass;
+																_heartInit [2] - whom to pass to*/
 		DealWhoHasTwOClu(deal,_p);
 		for(i = 0;i < NOP;++i)
 			PlayerPrint(_p[i]);	
@@ -208,6 +274,8 @@ void DealPlay(Player* _p[], int _score[],int _heartInit[])
 		{
 			maxCard.m_suit = NONE_S;
 			maxCard.m_rank = NONE_R;
+			card.m_suit = NONE_S;
+			card.m_rank = NONE_R;
 			plyTrn = deal->m_curStPly;
 			for(i = 0;i < NOP;++i )
 			{	
@@ -215,12 +283,24 @@ void DealPlay(Player* _p[], int _score[],int _heartInit[])
 				if(i == 0 )
 				{
 					card = PlayerCardToPass(_p[plyTrn],LOW);
+					if(IsEqCrs(card,testCard))
+					{
+						PlayerHrtStatOn(_p);
+						card = PlayerCardToPass(_p[plyTrn],LOW);
+					}
 					suit = card.m_suit;
 					maxCard = card;
 				}
 				else
 				{
 					card = PlayerChoseTrick(_p[plyTrn],suit,LOW);
+					if(IsEqCrs(card,testCard))
+					{
+						PlayerHrtStatOn(_p);
+						card = PlayerCardToPass(_p[plyTrn],HIGH);
+						if(card.m_suit != HEARTS)
+							PlayerHrtStatOff(_p);
+					}
 				}
 				printf("\n%s ->",PlayerGetName(_p[plyTrn]));
 				CardPrint(card);

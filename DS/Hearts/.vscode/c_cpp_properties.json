@@ -3,7 +3,8 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/home/isaac/Desktop/DataStruct/work/DS/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

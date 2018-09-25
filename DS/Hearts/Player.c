@@ -1,24 +1,32 @@
+/**
+ * @brief represent a computer player with it moves
+ * 
+ * @file Player.c
+ */
 #include "Player.h"
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
+#include <stdlib.h>/**malloc */
+#include <string.h>/**using strncpy for name (string) */
+#include <stdio.h>/**printf */
 
 
 #define MAGIC 285375465
 #define IS_VALID(P)  ( NULL != (P) && (P)->m_magic == MAGIC)
 
 
-
+/**
+ * @brief Player have name "hand" and his round points 
+ * 
+ */
 struct Player
 {
 	char m_name[P_NAME];  /*player's name*/
 	PlyT m_roc;        /* human or computer */
-	Vector* m_spades;
+	Vector* m_spades;  /**4 adt (vectors) represent hand */
 	Vector* m_diamond;
 	Vector* m_clubs;
-	Vector* m_hearts; /* is heart played*/
+	Vector* m_hearts;
 	Vector* m_disTrick;/*losing round (trick) pile of cards*/
-	HeartPlayed m_heartPlayed;
+	HeartPlayed m_heartPlayed; /* is heart played*/
 	int m_points;
 	size_t m_magic;
 };
@@ -30,6 +38,13 @@ static void InSortHlp(Vector* _vec);
 static Vector* WiVecToUs(Player*_p,Suit _s);
 
 
+/**
+ * @brief bool check if player has a specific card
+ * 
+ * @param _p - player pointer 
+ * @param _card - with field  m_suit and m_rank
+ * @return int 1 if true ,int 0 false
+ */
 int PlayerIsCardExs(Player*_p,Card _card)	
 {
 	int i,cardId=-1,chId=-1;
@@ -51,25 +66,40 @@ int PlayerIsCardExs(Player*_p,Card _card)
 	return 0;
 }
 	
-	 
+/**
+ * @brief search suit in player's "hand" vectors 
+ * 
+ * @param _p 
+ * @param _s -suit 
+ * @return Vector* 
+ */
 static Vector* WiVecToUs(Player*_p,Suit _s)
 {
-	switch(_s)
-			{
-				case CLUBS:
-					return _p->m_clubs;
-				case DIAMONDS:				
-					return _p->m_diamond;
-				case SPADES:
-					return _p->m_spades;
-				case HEARTS:
-					return _p->m_hearts;
-				default:
-					return NULL;
-			}
+	if(IS_VALID(_p))
+	{
+		switch(_s)
+				{
+					case CLUBS:
+						return _p->m_clubs;
+					case DIAMONDS:				
+						return _p->m_diamond;
+					case SPADES:
+						return _p->m_spades;
+					case HEARTS:
+						return _p->m_hearts;
+					default:
+						return NULL;
+				}
+	}
+	return NULL;
 }
 
-
+/**
+ * @brief add rank of card to vector (suit)  
+ * 
+ * @param _p 
+ * @param _card 
+ */
 void PlayerTakeCard(Player*_p,Card _card)
 {	
 	int card;
@@ -84,7 +114,12 @@ void PlayerTakeCard(Player*_p,Card _card)
 		}
 }
 			
-
+/**
+ * @brief get name
+ * 
+ * @param _p 
+ * @return char* player->name
+ */
 char* PlayerGetName(Player* _p)
 {
 	if(IS_VALID(_p))
@@ -92,7 +127,14 @@ char* PlayerGetName(Player* _p)
 	return NULL;
 }
 
-
+/**
+ * @brief create player using 5 adt (4 suits & discarded pile)
+ * and save round points  
+ * 
+ * @param _name - string
+ * @param _modePlyr - player mode -enum {REAL ,COMP} 
+ * @return Player* 
+ */
 Player* PlayerCreate(char* _name,PlyT _modePlyr)
 {
 	Player* ply;
@@ -100,10 +142,10 @@ Player* PlayerCreate(char* _name,PlyT _modePlyr)
 	ply = (Player*)malloc(sizeof(Player));
 	if(NULL == ply)
 		return NULL;
-	ply->m_spades = VectorCreate(HAND,3);
-	ply->m_diamond = VectorCreate(HAND,3);
-	ply->m_clubs = VectorCreate(HAND,3);
-	ply->m_hearts = VectorCreate(HAND,3);
+	ply->m_spades = VectorCreate(HAND,0);
+	ply->m_diamond = VectorCreate(HAND,0);
+	ply->m_clubs = VectorCreate(HAND,0);
+	ply->m_hearts = VectorCreate(HAND,0);
 	ply->m_disTrick =VectorCreate(4,2);
 	if( NULL == ply->m_spades || NULL == ply->m_diamond ||\
 		NULL == ply->m_clubs || NULL == ply->m_hearts ||\
@@ -118,7 +160,11 @@ Player* PlayerCreate(char* _name,PlyT _modePlyr)
 	ply->m_magic = MAGIC;
 	return ply;
 }	
-
+/**
+ * @brief free player
+ * 
+ * @param Player*
+ */
 void PlayerDestroy(Player* _ply)
 {
 	if(IS_VALID(_ply))
@@ -128,11 +174,16 @@ void PlayerDestroy(Player* _ply)
 		VectorDestroy(_ply->m_diamond);	
 		VectorDestroy(_ply->m_clubs);	
 		VectorDestroy(_ply->m_hearts);
+		VectorDestroy(_ply->m_disTrick);
 		free(_ply);
 	}
 }
 
-
+/**
+ * @brief insertion sort of cards by suit
+ * 
+ * @param _vec 
+ */
 static void InSortHlp(Vector* _vec)
 {
 	size_t size;
@@ -159,7 +210,12 @@ static void InSortHlp(Vector* _vec)
 	}
 }
 
-	
+/**
+ * @brief print cards of the same suit 
+ * 
+ * @param _vec - suit
+ * @param _size - size of array
+ */
 static void printHelper(Vector* _vec,size_t _size)
 {
 	int i,card;
@@ -174,26 +230,36 @@ static void printHelper(Vector* _vec,size_t _size)
 	}
 }
 
-
+/**
+ * @brief print player by his/her name and hand
+ * 
+ * @param _p 
+ */
 void PlayerPrint(Player *_p)
 {	
-	size_t size_s,size_d,size_c,size_h;
-	
-	VectorItemsNum(_p->m_clubs,&size_c);
+	size_t size_s;
+	int i;
+	Vector *suitToDr;
+
+	size_s = 0;
+	suitToDr = NULL;
 	printf("\n%s - %d\n",_p->m_name,_p->m_points);
-	printHelper(_p->m_clubs,size_c);
+	for(i = 0;i < SUITNUM;++i)
+	{
+		suitToDr = WiVecToUs(_p,i);
+		VectorItemsNum(suitToDr,&size_s);
+		printHelper(suitToDr,size_s);
 
-	VectorItemsNum(_p->m_diamond,&size_d);
-	printHelper(_p->m_diamond,size_d);
-
-	VectorItemsNum(_p->m_spades,&size_s);
-	printHelper(_p->m_spades,size_s );
-
-	VectorItemsNum(_p->m_hearts,&size_h);
-	printHelper(_p->m_hearts,size_h);
+	}
 	printf("\n");
 }
-
+/**
+ * @brief chose a high or low card 
+ * 
+ * @param _vec - suit
+ * @param _mode - LOW or HIGH
+ * @return Card 
+ */
 static Card ChoseCard(Vector* _vec,CHOSE_CARD _mode)
 {
 	int cardId,card_replace;
@@ -228,14 +294,21 @@ static Card ChoseCard(Vector* _vec,CHOSE_CARD _mode)
 }
 
 
-
+/**
+ * @brief chose min or max card based on rank by mode
+ * 
+ * @param _card array of struct card (one from each suit) allowed
+ * @param _size size of array
+ * @param _Mcard return selected card (enter with none_ suit & rank) 
+ * @param _modeC HIGH or LOW
+ */
 static void ChoseHiLoCr(Card _card[],int _size,Card *_Mcard,CHOSE_CARD _modeC )
 {
 	int i;
 	*_Mcard = _card[0];
 	for(i = 1; i < _size;++i )
 	{
-		if(_modeC == HIGH)
+		if(_modeC == HIGH) 
 		{
 			if(_Mcard->m_rank < _card[i].m_rank)
 				*_Mcard = _card[i];
@@ -248,6 +321,11 @@ static void ChoseHiLoCr(Card _card[],int _size,Card *_Mcard,CHOSE_CARD _modeC )
 	}
 }
 
+/**
+ * @brief set indicator of hearts (in palyer) to 0  
+ * 
+ * @param _p 
+ */
 void PlayerHrtStatOff(Player* _p[])
 {
 	int i;
@@ -261,6 +339,11 @@ void PlayerHrtStatOff(Player* _p[])
 	}
 }
 
+/**
+ * @brief set indicator of hearts (in palyer) to 0  
+ * 
+ * @param _p 
+ */
 void PlayerHrtStatOn(Player* _p[])
 {
 	int i;
@@ -272,8 +355,14 @@ void PlayerHrtStatOn(Player* _p[])
 			return;
 		_p[i]->m_heartPlayed = YES;
 	}
-}	
-
+}
+	
+/**
+ * @brief player take the pile 
+ * 
+ * @param _p Player
+ * @param _trick Vector
+ */
 void PlayerTakeTrick(Player* _p,Vector* _trick)
 {
 	int cardId,i;
@@ -291,26 +380,127 @@ void PlayerTakeTrick(Player* _p,Vector* _trick)
 	}
 }	
 
-
+/**
+ * @brief chose card to play based on suit  -if suit exists 
+ * if not chose from next suit 
+ * 
+ * @param _p :player
+ * @param _suit: enum {CLUBS, DIAMONDS, SPADES, HEARTS}
+ * @param _modeC: CHOSE_CARD mode HIGH or LOW
+ * @return Card 
+ */
 Card PlayerChoseTrick(Player* _p,Suit _suit,CHOSE_CARD _modeC)
 {
-	Card card = {NONE_S,NONE_R},cardTest = {NONE_S,NONE_R};
-	int i;
+	Card card = {NONE_S,NONE_R};
 	Vector *suitToDr;
 
 	if(IS_VALID(_p))
 	{
-		for( i = 0;i < SUITNUM;++i )
-		{
-			suitToDr = WiVecToUs(_p,(_suit+i) % SUITNUM);
-			card = ChoseCard(suitToDr,_modeC);
-			if(!IsEqCrs(card,cardTest))
-				return card;
-		}
+		suitToDr = WiVecToUs(_p,_suit);
+		card = ChoseCard(suitToDr,_modeC);
 	}
 	return card;
 }
+/**
+ * @brief check if card  played by REAL player is valid 
+ * 			in case of hearts suit
+ * 
+ * @param _p 
+ * @param card 
+ * @return int 1 if card good for play 0 if not -1 for bugs
 
+
+static int PlayerRealValidP(Player* _p,Card card)
+{
+	if(IS_VALID(_p))
+	{
+		if(card.m_suit == HEARTS)
+		{
+			if(_p->m_heartPlayed == YES)
+			{
+				return 1;
+
+			}else
+			{
+				return 0;
+			}
+		}
+		return 1;
+	}
+	return -1;
+}
+ * @brief REAL player chose a card to play
+ * 
+ * @param _p 
+ * @return Card
+
+Card PlayerRealplay(Player* _p)
+{
+	int i,j,card,count;
+	Card cardreal;
+	size_t size_s;
+	Vector *suitToDr;
+
+	cardreal.m_suit = NONE_S;
+	cardreal.m_rank = NONE_R;
+	size_s = 0;
+	count = 0;
+	suitToDr = NULL;
+	if(IS_VALID(_p))
+	{
+		while(1)
+		{	
+			printf("chose card to play \n");
+			for(i = 0;i < SUITNUM;++i)
+			{
+				suitToDr = WiVecToUs(_p,i);
+				VectorItemsNum(suitToDr,&size_s);
+
+				for(j = 0;j < size_s;++j )
+				{
+					VectorGet(suitToDr,i,&card);
+					cardreal.m_suit = GETSUIT(card);
+					cardreal.m_rank = GETRANK(card);
+					printf("%d-> ",++count);
+					CardPrint(cardreal);
+				}
+			}
+			printf("\n");
+			scanf("%d",&card);
+			count = 0;
+			for(i = 0;i < SUITNUM;++i)
+			{
+				suitToDr = WiVecToUs(_p,i);
+				VectorItemsNum(suitToDr,&size_s);
+				
+
+				for(j = 0;j < size_s;++j )
+				{
+					VectorGet(suitToDr,i,&card);
+					cardreal.m_suit = GETSUIT(card);
+					cardreal.m_rank = GETRANK(card);
+					if(card == count)
+						break;
+					count++;
+				}
+				if(card == --count)
+					break;
+			}
+			if(PlayerRealValidP(_p,cardreal))
+				break;
+			printf("Not valid try again... ");
+		}
+	}
+	return cardreal;
+}
+*/
+/**
+ * @brief chose card to play based on "hearts played" status  
+ * 
+ * @param _p: player 
+ * @param _modeC : HIGH or LOW
+ * @return Card 
+ */
 Card PlayerCardToPass(Player* _p,CHOSE_CARD _modeC)
 {
 	int i,j,suitAllowed;
@@ -321,6 +511,7 @@ Card PlayerCardToPass(Player* _p,CHOSE_CARD _modeC)
 	cardTM.m_rank = NONE_R;	
 	suitToDr = NULL;
 	suitAllowed =SUITNUM; 
+	/**enum Suit are ranked fromm 0 - 3 and hearts is 3   */
 	if(_p->m_heartPlayed == NO)
 		--suitAllowed;
 	for(i = 0,j = 0;i < suitAllowed;++i )
@@ -334,6 +525,8 @@ Card PlayerCardToPass(Player* _p,CHOSE_CARD _modeC)
 			++j;
 		}
 	}
+	if(j == 0)
+		return cardTM;
 	ChoseHiLoCr( card,j,&cardTM,_modeC );
 	for(i = 0;i < j;++i)
 	{
@@ -343,6 +536,12 @@ Card PlayerCardToPass(Player* _p,CHOSE_CARD _modeC)
 	}
 	return cardTM;
 }
+/**
+ * @brief update player's round points from pile played 
+ * 
+ * @param _p 
+ * @param _trick pile played  
+ */
 void PlayerUpDtPtTrk( Player* _p ,Vector* _trick)
 {
 	int i,cardId,sumPoits = 0;
@@ -366,77 +565,42 @@ void PlayerUpDtPtTrk( Player* _p ,Vector* _trick)
 	} 
 }
 
+/**
+ * @brief Player type points getter  
+ * 
+ * @param _p player
+ * @return int round points
+ */
 int PlayerGetScore(Player* _p)
 {
 	if(IS_VALID(_p))
 		return _p->m_points;
 	return -1;
 } 
-	
+/**
+ * @brief Player type points setter
+ * 
+ * @param _p 
+ * @param _setPts starting round points
+ */
 void PlayerSetScore(Player* _p,int _setPts)
 {
 	if(IS_VALID(_p))
 		_p->m_points = _setPts;
-} 
-	
-
-		
-/* 
-void updatePoints(player);
-int isHeartplayd()
-int isvalid(Card,vector ,Heartplayd)
-void passCard( player,vector ,Heartplayd)
-
-	 
-
-	
-
-int main()
-{
-	Deal* deal;
-	int i;
-	Player* p[4];
-	Card card = {SPADES,TWO};
-	char* n[4]={ "a","b","c","d"}; 
-	
-	deal = DealCreate();
-	for(i = 0; i < 4;++i)
-		p[i] = PlayerCreate(n[i],COMP);
-	
-	DealCards(deal,p,13);
-	for(i = 0; i < 4;++i)
-		PlayerPrint(p[i]);
-	printf("\n");
-	for(i = 0; i < 4;++i)
-	{
-		if(PlayerIsCardExs(p[i],card))
-		{
-			PlayerPrint(p[i]);
-		}
-	}
-	printf("\n");
-	for(i=0;i<14;++i)
-		CardPrint(ChoseCard(p[0],LOW));
-	PlayerPrint(p[0]);
-	return 0;
 }
-*/
 
-
-
-
-
-
-
-
-
-
-
+/**
+ * @brief getter for player mode  
+ * 
+ * @param _p 
+ * @return int 0 if REAL int 1 if COMP -1 for bugs
+ */
+int PlayerGetMood(Player *_p)
+{
+	if(IS_VALID(_p))
+		return _p->m_roc;
+	return -1;
+}	
 
 	
-
-
-
-
-
 

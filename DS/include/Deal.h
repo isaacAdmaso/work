@@ -9,7 +9,14 @@
 typedef struct Deal Deal;
 
 
-
+/**
+ * @brief play COMP player mode -always play low card unless suit
+ * dont exist than play high card 
+ * 
+ * @param _p players list
+ * @param _score array provided by GAME
+ * @param _heartInit array of initial data (metadata) provided by GAME
+ */
 void DealPlay(Player* _p[], int* _score,int _heartInit[]);
 
 

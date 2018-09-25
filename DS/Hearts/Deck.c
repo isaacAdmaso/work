@@ -1,12 +1,21 @@
+/**
+ * @brief represent of a deck of cards
+ * 
+ * @file Deck.c
+ */
 #include "Deck.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
+#include <stdlib.h>/**for malloc() */
+#include <stdio.h> /**for printf() */
+#include <time.h> /**random shuffle cards using time as seed  */
 
 #define MAGIC_D 465375285
 #define IS_VALID_D(D)  ( NULL != (D) && (D)->m_magic == MAGIC_D)
 
-
+/**
+ * @brief allocats memory for Deck
+ * 
+ * @return Deck* 
+ */
 Deck* DeckCreate()
 {
 	Deck* deck;
@@ -28,7 +37,11 @@ Deck* DeckCreate()
 	return deck;
 }
 
-
+/**
+ * @brief free memory
+ * 
+ * @param _deck 
+ */
 void DeckDestroy(Deck* _deck)
 {
 	if(IS_VALID_D(_deck))
@@ -39,7 +52,11 @@ void DeckDestroy(Deck* _deck)
 	}
 }
 
-
+/**
+ * @brief shuffle using rand
+ * 
+ * @param _deck 
+ */
 void DeckShuffle(Deck* _deck)
 {
 	int val1,idxVal1,val2,idxVal2;
@@ -57,7 +74,11 @@ void DeckShuffle(Deck* _deck)
 	}
 }
 
-
+/**
+ * @brief display deck
+ * 
+ * @param _deck 
+ */
 void DeckSPrint(Deck* _deck)
 {
 	int i,id;
@@ -72,7 +93,12 @@ void DeckSPrint(Deck* _deck)
 	printf("\n");
 }
 	
-
+/**
+ * @brief dealing one card
+ * 
+ * @param _deck 
+ * @param cardId decimal representation of a card
+ */
 void DeckGiveOneC(Deck* _deck,int* cardId)
 {
 	

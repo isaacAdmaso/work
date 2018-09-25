@@ -7,6 +7,9 @@ vector.o: vector.c ../include/vector.h ../include/ADTDefs.h
 Deal.o: Deal.c ../include/Deal.h ../include/Player.h ../include/Card.h \
  ../include/TTY.h ../include/vector.h ../include/ADTDefs.h \
  ../include/Deck.h
+GameMain.o: GameMain.c ../include/Game.h ../include/Player.h \
+ ../include/Card.h ../include/TTY.h ../include/vector.h \
+ ../include/ADTDefs.h ../include/Deal.h ../include/Deck.h
 Game.o: Game.c ../include/Game.h ../include/Player.h ../include/Card.h \
  ../include/TTY.h ../include/vector.h ../include/ADTDefs.h \
  ../include/Deal.h ../include/Deck.h

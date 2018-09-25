@@ -52,7 +52,7 @@ int IsBgCrs(Card card1,Card card2)
 }
 
 /**
- * @brief print card
+ * @brief print "card"
  * 
  * @param _card 
  */
@@ -121,7 +121,10 @@ void CardPrint(Card _card)
 
 	}
 }
-
+/**
+ * @brief print Deck of cards
+ * 
+ */
 void CardSPrint()
 {
 	int i;

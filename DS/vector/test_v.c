@@ -86,8 +86,10 @@ int CheckGetNUllItm()
 	Vector* v = VectorCreate(1,2);
 	if(ERR_NOT_INITIALIZED==VectorGet(v, 0,_item))
 	{
+		VectorDestroy(v);
 		return 0;
 	}
+	VectorDestroy(v);
 	return 1;
 }
 
@@ -99,8 +101,10 @@ int CheckGetGdInx()
 	VectorGet(v,0,&_item);
 	if(_item == 2)
 	{
+		VectorDestroy(v);
 		return 0;
 	}
+	VectorDestroy(v);
 	return 1;
 }
 
@@ -112,8 +116,10 @@ int CheckGetBadInx()
 	
 	if(VectorGet(v,3,&_item)==ERR_WRONG_INDEX)
 	{
+		VectorDestroy(v);
 		return 0;
 	}
+	VectorDestroy(v);	
 	return 1;
 }
 
@@ -128,9 +134,11 @@ int CheckVector(Vector* _v,int* ref,int _size)
 		VectorGet(_v, i, &val);
 		if(ref[i] != val)
 		{
+			VectorDestroy(_v);
 			return 1;
 		}
 	}
+	VectorDestroy(_v);	
 	return 0;	
 }
 
@@ -177,8 +185,10 @@ int CheckAddOvFl()
 	VectorAdd(_v,_itemCheck[0]);
 	if (VectorAdd(_v,_itemCheck[1]) == ERR_OVERFLOW)
 	{
+	 	VectorDestroy(_v);
 		return 0;
 	}
+	VectorDestroy(_v);	
 	return 1;
 }
 	
@@ -201,8 +211,10 @@ int CheckAddIniSizZero()
 	int _itemCheck=654;
 	if(VectorAdd(_v,_itemCheck)==ERR_OK)
 	{
+		VectorDestroy(_v);
 		return 0;
 	}
+	VectorDestroy(_v);	
 	return 1;
 }
 
@@ -228,8 +240,10 @@ int CheckSetGdInx()
 	VectorGet(v,0,&_item);
 	if(1 == _item)
 	{
+		VectorDestroy(v);
 		return 0;
 	}
+	VectorDestroy(v);	
 	return 1;
 }
 
@@ -241,9 +255,10 @@ int CheckSetBadInx()
 	
 	if(VectorSet(v,3,_item)==ERR_WRONG_INDEX)
 	{
-		VectorPrint(v);
+		VectorDestroy(v);
 		return 0;
 	}
+	VectorDestroy(v);
 	return 1;
 }
 
@@ -277,12 +292,14 @@ int CheckDelNUllVec()
 
 int CheckDelNUllItm()
 {
-	int* _item=0;
+	int _item;
 	Vector* v = VectorCreate(1,2);
-	if(ERR_NOT_INITIALIZED==VectorDelete(v, _item))
+	if(ERR_NOT_INITIALIZED==VectorDelete(v, &_item))
 	{
+		VectorDestroy(v);
 		return 0;
 	}
+	VectorDestroy(v);
 	return 1;
 }
 
@@ -293,8 +310,10 @@ int CheckDelUnFl()
 	Vector* _v = VectorCreate(1,1);
 	if (VectorDelete(_v,&_item) == ERR_UNDERFLOW)
 	{
+		VectorDestroy(_v);
 		return 0;
 	}
+	VectorDestroy(_v);
 	return 1;
 }
 
@@ -303,8 +322,8 @@ void CheckAddOF()
 	int val[]={3,54,-77,55,634,356,648,10,-10};
 	Vector * vec = VectorCreate(4,0);
 	FillVector(vec,val,9);
-	VectorPrint(vec);
-	
+	CheckVector(vec,val,9);
+		
 }
 
 

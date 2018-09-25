@@ -1,10 +1,17 @@
-#include "../include/Game.h"
-#include <stdio.h>
-#include <stdlib.h>
+/**
+ * @brief the game 
+ * 
+ * @file Game.c
+ */
+#include <stdio.h>/**for print */
+#include <stdlib.h>/**for malloc */
+#include <assert.h> /**trying using assert */
+#include "Game.h"
 
 #define MAXI 100  /**max points */
 #define MAGIC 109238745
 #define IS_VALID(G) (NULL != (G) && MAGIC == (G)->m_magic)
+
 
 struct Game
 {
@@ -23,7 +30,7 @@ struct Game
  * @param _xChgMode how to pass the cards
  * @return Game* 
  */
-static Game* GameCreate(char* _names[],int _cardToStr ,int _cardToPass,int _xChgMode)
+static Game* GameCreate(char* _names[],int _pMode[],int _cardToStr ,int _cardToPass,int _xChgMode)
 {
 	Game* game;
 	int i,j;
@@ -42,7 +49,7 @@ static Game* GameCreate(char* _names[],int _cardToStr ,int _cardToPass,int _xChg
 	/**initialize players array*/
 	for(i = 0;i < NOP;++i)
 	{
-		game->m_playres[i] = PlayerCreate(_names[i],COMP);
+		game->m_playres[i] = PlayerCreate(_names[i],_pMode[i]);
 		if(NULL == game->m_playres[i])
 		{	
 			for(j = 0;j < i; ++j)
@@ -52,25 +59,11 @@ static Game* GameCreate(char* _names[],int _cardToStr ,int _cardToPass,int _xChg
 			return NULL;
 		}
 	}
-	game->m_heartInit[0] = _cardToStr;
-	game->m_heartInit[1] = _cardToPass;
-	game->m_heartInit[2] = _xChgMode;
+	game->m_heartInit[0] = _cardToStr; /*initial game*/
+	game->m_heartInit[1] = _cardToPass;/*data        */
+	game->m_heartInit[2] = _xChgMode;  
 	game->m_magic = MAGIC;
 	return game;
-}
-		
-/**free allocated memory */
-static void GameDestroy(Game* _game)
-{
-	int i;
-	if(IS_VALID(_game))
-	{
-		_game->m_magic = 0;
-		for(i = 0;i < NOP;++i)
-			PlayerDestroy(_game->m_playres[i]);
-		free(_game->m_score);
-		free(_game);
-	}
 }
 
 /** printing player name and his score */
@@ -88,6 +81,34 @@ void GamePrint(Game* _game)
 	}
 }
 			
+		
+/**free allocated memory */
+static void GameDestroy(Game* _game)
+{
+	int i,minP,minIdx;
+
+	if(IS_VALID(_game))
+	{
+		minP = _game->m_score[0];
+		minIdx = 0;
+		for(i = 1;i < NOP;++i)
+		{
+			if (minP > _game->m_score[i])
+			{
+				minP =  _game->m_score[i];
+				minIdx = i;
+			}
+		}
+		printf("\t\t%sEND OF GAME\n\tTHE WINNER IS: %s%s\n",TXT_BOLD_ON,PlayerGetName(_game->m_playres[minIdx]),TXT_NORMAL);
+		GamePrint(_game);
+		_game->m_magic = 0;
+		for(i = 0;i < NOP;++i)
+			PlayerDestroy(_game->m_playres[i]);
+		free(_game->m_score);
+		free(_game);
+	}
+}
+
 
 /**
  * @brief the actual game loop
@@ -98,11 +119,11 @@ void GamePrint(Game* _game)
  * @param _xChgMode how to pass the cards
  *  
  */
-void GamePlay(char* _names[],int _cardToStr,int _cardToPass,int _xChgMode)
+static void GamePlay(char* _names[],int _pMode[],int _cardToStr,int _cardToPass,int _xChgMode)
 {
 	Game* game;
 	int i,maxSc = 0;
-	game = GameCreate(_names,_cardToStr,_cardToPass,_xChgMode);
+	game = GameCreate(_names,_pMode,_cardToStr,_cardToPass,_xChgMode);
 	if(NULL == game)
 		return;
 		
@@ -120,36 +141,58 @@ void GamePlay(char* _names[],int _cardToStr,int _cardToPass,int _xChgMode)
 		GamePrint(game);
 		getchar();
 	}
-	GamePrint(game);
 	GameDestroy(game);
 }
 		
 		
-
-
-int main()
+/**
+ * @brief take names and  mode and play the game 
+ * 
+ */
+void GameMain()
 {
 	int i,cardToStr,cardToPass,xChgMode;
 	char* names[NOP];
+	int _pMode[NOP];
+	FILE* fp = NULL;
 	
-	for(i = 0;i < NOP;++i)
+	fp = fopen("GameINIT.txt","r");
+	if(NULL == fp)
 	{
-		names[i] = (char*)malloc(P_NAME*sizeof(char));
-		printf("Enter Player #%d name: \n",i+1);
-		scanf("%s",names[i]);
+		for(i = 0;i < NOP;++i)
+		{
+			names[i] = (char*)malloc(P_NAME*sizeof(char));
+			assert(names[i] != NULL);
+			printf("Enter Player #%d name: \n",i+1);
+			scanf("%s",names[i]);
+			printf("enter player #%d type (REAL = 0 , COMP = 1): \n",i+1);
+			scanf("%d",_pMode+i);
+		}
+		printf("How much to deal? \n");
+		scanf("%d",&cardToStr);
+		printf("How much to pass? \n");
+		scanf("%d",&cardToPass);
+		printf("How to exchange cards? (0-3 Counterclockwise) \n");
+		scanf("%d",&xChgMode);
 	}
-	printf("How much to deal? \n");
-	scanf("%d",&cardToStr);
-	printf("How much to pass? \n");
-	scanf("%d",&cardToPass);
-	printf("How to exchange cards? (0-3 Counterclockwise) \n");
-	scanf("%d",&xChgMode);
-
-	GamePlay(names,cardToStr,cardToPass,xChgMode);
-	
-	return 0;
+	else
+	{
+		for(i = 0;i < NOP;++i)
+		{
+			names[i] = (char*)malloc(P_NAME*sizeof(char));
+			assert(names[i] != NULL);
+			fscanf(fp,"%s",names[i]);
+			fscanf(fp,"%d",_pMode+i);
+		}
+		fscanf(fp,"%d",&cardToStr);
+		fscanf(fp,"%d",&cardToPass);
+		fscanf(fp,"%d",&xChgMode);
+		fclose(fp);
+	}
+	GamePlay(names,_pMode,cardToStr,cardToPass,xChgMode);
+	for(i = 0;i < NOP;++i)
+		free(names[i]);
 }
-
 
 /*
 */ 	
