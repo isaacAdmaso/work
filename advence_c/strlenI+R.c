@@ -21,19 +21,10 @@ size_t StrLenRec(const char* _str)
 char* StrCopy(char* _destination, const char* _source)
 {
     char *start = _destination;
-    while( *(_destination++)=*(_source++));
+    while(( *(_destination++)=*(_source++) ));
     return start;
 }
 
-char* StrConcat(char* _destination, const char* _source)
-{
-    char* start = _destination;
-    while(*(_destination++) != '\0')
-    {};
-    while(*(_destination++) = *(_source++))
-    {};
-    return start;
-}
 
 char* StrCopyRec(char* _destination, const char* _source)
 {
@@ -44,6 +35,45 @@ char* StrCopyRec(char* _destination, const char* _source)
     }
     *_destination = *_source;
     return StrCopyRec(_destination+1,_source +1);
+}
+
+
+char* StrNCopy(char* _destination, const char* _source, size_t _num)
+{
+    char *start = _destination;
+    while(( *(_destination++)=*(_source++) ))
+    {
+        if(!--_num)
+        {
+            *_destination='\0';
+            break;
+        }
+    }
+    return start;
+} 
+
+
+
+char* StrNCopyRec(char* _destination, const char* _source, size_t _num)
+{
+    if(!*_source || _num == 0)
+    {
+        *_destination = '\0';
+        return '\0';
+    }
+    *_destination = *_source;
+    return StrNCopyRec(_destination+1,_source +1, _num - 1);
+}
+
+
+char* StrConcat(char* _destination, const char* _source)
+{
+    char* start = _destination;
+    while((*(_destination++) != '\0'))
+    {};
+    while((*(_destination++) = *(_source++)))
+    {};
+    return start;
 }
 
 int StrCompare(const char* _s1, const char* _s2)
@@ -91,23 +121,44 @@ void swap(void* _a,void* _b,size_t _size)
     free(temp);
 }
 
+char* StrSubString(const char* _str, const char* _search)
+{
+    int i = 0;
+    int sub_size = StrLen(_search);
+
+    while (*_str != '\0')
+     {
+        while (*_search == *_str && *_search != '\0') 
+        {
+            i++;
+            _search++;
+            _str++;
+        }
+        if (i == sub_size) 
+            break;        
+        i = 0;  
+        _str ++; 
+    }
+    return (char*)(_str - i);
+}
+
     
 int main()
 {
     
-    char str[16] = "abcdef";
+    char str[16] = "abcdxyzef";
+    int i;
     char str2[8] = "xyz";
     char* p[3]={"yits","adm","hakaso"};
     
-    for(int i = 0;i < 3;++i)
+    for( i = 0;i < 3;++i)
         printf("%s, ",p[i]);
     swap(p+2,p,sizeof(*p));
     printf("\n");
-    for(int i = 0;i < 3;++i)
+    for( i = 0;i < 3;++i)
         printf("%s, ",p[i]);
     
-    StrCopyRec(str,str2);
-    printf("StrlenI of %s: is %ld\n",str,StrLen(str));
+    printf("\n  %s %s %s\n",str,str2,StrSubString(str,str2));
     printf("StrlenR of %s: is %ld\n",str,StrLenRec(str));
     printf("%s\n",str);
 
