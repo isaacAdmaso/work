@@ -112,13 +112,12 @@ int StrComapreRec(const char* _s1, const char* _s2)
     return (*_s1 == *_s2) || StrComapreRec(_s1+1,_s2+1);
 }
 
-void swap(void* _a,void* _b,size_t _size)
+void swap(void** _a,void** _b)
 {
-    void *temp = malloc(_size);
-    memcpy(temp,_a,_size);
-    memcpy(_a,_b,_size);
-    memcpy(_b,temp,_size);
-    free(temp);
+    void *temp ;
+    temp = *_a;
+    *_a = *_b;
+    *_b = temp;
 }
 
 char* StrSubString(const char* _str, const char* _search)

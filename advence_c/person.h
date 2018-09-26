@@ -1,9 +1,19 @@
+#ifndef __PERS_H_
+#define __PERS_H_
+#include<stdlib.h>
+ 
 typedef struct
 {
 	size_t id;
 	int random;
 	char animal[32];
 } Person;
+
+int cmp(Person* _a,Person* _b)
+{
+    return _a->random > _b->random;
+}
+
 
 Person people[] = {
 	{1, 708465, "Manatee"},
@@ -107,3 +117,5 @@ Person people[] = {
 	{99, 828803, "Leopard, indian"},
 	{100, -301330, "Kingfisher, white-throated"}
 };
+
+#endif /*__PERS_H_*/

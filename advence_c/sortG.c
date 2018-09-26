@@ -1,14 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "person.c"
+#include "person.h"
 
-
-int cmp(const Person* _a,const Person* _b)
+/*
+int cmp( int* _a, int* _b)
 {
-    return _a->random > _b->random;
+    return *_a > *_b;
 }
-int Sort(void* _elements, size_t _n, size_t _elemSize, int(*_less)(const void*, const void*))
+*/
+int Sort(void*  const _elements, size_t _n, size_t _elemSize, int(*_less)(const void*, const void*))
 {
     int i,j;
     void *val = malloc(_elemSize);
@@ -28,12 +29,13 @@ int Sort(void* _elements, size_t _n, size_t _elemSize, int(*_less)(const void*, 
 	return 1;
 }
 
+
 int main()
 {
     int i,a[] ={1,2,3,4,5,4,3,2,1,1,2,3,4,5,5};
-    Sort(a,100*sizeof(Person),sizeof(Person),cmp);
-    for( i = 0;i < 100;++i)
-        printf("%d,",people[i].random);
+    Sort(people,sizeof(people)/sizeof(people[0]),sizeof(people[0]),cmp);
+    for( i = 0;i < sizeof(people)/sizeof(people[0]);++i)
+        printf("%d,",people[i].id);
     return 0;
 }
 
