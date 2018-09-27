@@ -78,38 +78,23 @@ char* StrConcat(char* _destination, const char* _source)
 
 int StrCompare(const char* _s1, const char* _s2)
 {
-    int len1 = 0,len2 = 0;
-    while(!*_s1)
-    {
-        len1++;
-    };
-    while(!*_s2)
-    {
-        len2++;
-    };
-    if(len1 != len2)
-        return 0;
-    while(!*_s1)
+    while(!*_s1 || !*_s2)
     {
         if(*(_s1++) != *(_s2++))
-            return 0;
+            break;
+        _s1++;
+        _s2++;
     }
-    return 1;
+    return *(_s1) - *(_s2);
 }
 
 int StrComapreRec(const char* _s1, const char* _s2)
 {
-    if(!*_s1)
+    if(!*_s1 ||  !*_s2)
     {
-        if(!*_s2)
-        {
-            return 1;
-        }else
-        {
-            return 0;
-        }
+        return *_s1 - *_s2;
     }
-    return (*_s1 == *_s2) || StrComapreRec(_s1+1,_s2+1);
+    return  StrComapreRec(_s1+1,_s2+1);
 }
 
 void swap(void** _a,void** _b)
@@ -122,23 +107,20 @@ void swap(void** _a,void** _b)
 
 char* StrSubString(const char* _str, const char* _search)
 {
-    int i = 0;
-    int sub_size = StrLen(_search);
-
+    const char* ptrsrc ;
     while (*_str != '\0')
-     {
-        while (*_search == *_str && *_search != '\0') 
+    {
+        ptrsrc = _search;
+        while (*ptrsrc == *_str && *ptrsrc != '\0') 
         {
-            i++;
-            _search++;
+            ptrsrc++;
             _str++;
         }
-        if (i == sub_size) 
+        if (*ptrsrc == '\0') 
             break;        
-        i = 0;  
-        _str ++; 
+        _str-=(ptrsrc - _search - 1); 
     }
-    return (char*)(_str - i);
+    return (char*)(_str - (ptrsrc - _search));
 }
 
     
@@ -152,7 +134,7 @@ int main()
     
     for( i = 0;i < 3;++i)
         printf("%s, ",p[i]);
-    swap(p+2,p,sizeof(*p));
+    swap((void**)p+2,(void**)p);
     printf("\n");
     for( i = 0;i < 3;++i)
         printf("%s, ",p[i]);

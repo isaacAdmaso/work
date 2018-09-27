@@ -12,19 +12,20 @@ int cmp( int* _a, int* _b)
 int Sort(void*  const _elements, size_t _n, size_t _elemSize, int(*_less)(const void*, const void*))
 {
     int i,j;
+    char* const arr = _elements;
     void *val = malloc(_elemSize);
 
 	for(i=1;i<_n;++i)
 	{
-		memcpy(val,_elements+(i*_elemSize),_elemSize);
+		memcpy(val,arr+(i*_elemSize),_elemSize);
 		j = i-1;
 	/*Move elements bigger than val  */
-		while (j >= 0 && _less(_elements+(j*_elemSize),val))
+		while (j >= 0 && _less(arr+(j*_elemSize),val))
 		{
-			memcpy(_elements+((j+1)*_elemSize),_elements+(j*_elemSize),_elemSize);
+			memcpy(arr+((j+1)*_elemSize),arr+(j*_elemSize),_elemSize);
 			--j;
 		}
-		memcpy(_elements+((j+1)*_elemSize),val,_elemSize);
+		memcpy(arr+((j+1)*_elemSize),val,_elemSize);
 	}
 	return 1;
 }

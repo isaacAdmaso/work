@@ -1,0 +1,1 @@
+sortG.o: sortG.c person.h
