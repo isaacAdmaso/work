@@ -51,6 +51,24 @@ Vector* Vector_Create(size_t _initialCapacity, size_t _blockSize)
 	return newVector;
 }
 
+static Vector_Result Vector_Resize(Vector *_vector, int _resize)
+{
+    void** reAllocItems = NULL;
+	
+	if(_vector->m_blockSize == 0)
+	{
+		return VECTOR_OVERFLOW;
+	}
+	reAllocItems = realloc(_vector->m_items,(_resize)*sizeof(void*));
+
+	if(reAllocItems==NULL)
+	{
+		return VECTOR_REALLOCATION_FAILED;
+	}
+	_vector->m_items = reAllocItems;
+	_vector->m_allocatedSize = _resize ;
+	return VECTOR_SUCCESS;
+}
 /**  
  * @brief Add an Item to the back of the Vector.  
  * @param[in] _vector - Vector to append integer to.
@@ -61,28 +79,22 @@ Vector* Vector_Create(size_t _initialCapacity, size_t _blockSize)
  * @retval VECTOR_OVERFLOW if blocksize == 0
  * @retval VECTOR_REALLOCATION_FAILED for memory problem
  */
+
 Vector_Result Vector_Append(Vector* _vector, void* _item)
 {
-    void** reAllocItems = NULL;
-    
+    Vector_Result error = VECTOR_SUCCESS;
+	int resize = 0;
     if(IS_INVALID(_vector) || NULL == _item)
     {
         return VECTOR_UNINITIALIZED_ERROR;
     }
+
 	if(_vector->m_nItems==_vector->m_allocatedSize)
 	{
-		if(_vector->m_blockSize == 0)
-		{
-			return VECTOR_OVERFLOW;
-		}
-		reAllocItems = realloc(_vector->m_items,(_vector->m_allocatedSize + _vector->m_blockSize)*sizeof(void*));
-	
-		if(reAllocItems==NULL)
-		{
-			return VECTOR_REALLOCATION_FAILED;
-		}
-		_vector->m_items = reAllocItems;
-		_vector->m_allocatedSize += _vector->m_blockSize;
+		resize = _vector->m_allocatedSize + _vector->m_blockSize;
+		error = Vector_Resize(_vector,resize);
+		if(error != VECTOR_SUCCESS)
+			return error;
 	}
 	_vector->m_items[_vector->m_nItems++] = _item;
 	return VECTOR_SUCCESS;
@@ -127,6 +139,10 @@ void Vector_Destroy(Vector** _vector, void (*_elementDestroy)(void* _item))
     assert(NULL != _elementDestroy);
 	if(NULL != _vector)
 	{
+		if(IS_INVALID(*_vector))
+		{
+			return;
+		}
 		(*_vector)->m_magic = 0;
         for(i = 0; i < (*_vector)->m_nItems;++i)
         {
@@ -149,6 +165,7 @@ void Vector_Destroy(Vector** _vector, void (*_elementDestroy)(void* _item))
  */
 Vector_Result Vector_Remove(Vector* _vector, void** _pValue)
 {
+	
     if(IS_INVALID(_vector) || NULL == _pValue)
     {
         return VECTOR_UNINITIALIZED_ERROR;
@@ -183,7 +200,7 @@ Vector_Result Vector_Remove(Vector* _vector, void** _pValue)
  */
 Vector_Result Vector_Get(const Vector* _vector, size_t _index, void** _pValue)
 {
-    if(IS_INVALID(_vector) || _pValue == NULL) 
+    if(IS_INVALID(_vector) || NULL == _pValue || NULL == *_pValue) 
 	{
 		return VECTOR_UNINITIALIZED_ERROR;
 	}

@@ -68,7 +68,7 @@ UNIT(vector_append_string)
 	ASSERT_THAT(item == str[SIZE_ARR(str)-1]);
 	printf("\n%s , %s\n",item,str[SIZE_ARR(str)-1]);
 	ASSERT_THAT(Vector_Size(vec) == SIZE_ARR(str)-1);
-	ASSERT_THAT(Vector_Set(vec,0,(void*)item)== VECTOR_SUCCESS);
+	ASSERT_THAT(Vector_Set(vec,0,item)== VECTOR_SUCCESS);
 	ASSERT_THAT(Vector_Get(vec,0,(void**)&item) == VECTOR_SUCCESS);
 	printf("\n%s , %s\n",item,str[0]);
 	for(i = 0;i < SIZE_ARR(str)-1;++i)
@@ -76,10 +76,10 @@ UNIT(vector_append_string)
 	Vector_Prstr(vec);
 END_UNIT
 
-UNIT(vector_append_strct)
+UNIT(vector_append_struct)
 	Vector* vec = NULL;
 	int i;
-	Person  p = {101,101,"lion"} ;
+	Person  p = {666,101,"lion"} ;
 	Person *_p = &p;
 	
 	ASSERT_THAT((vec= Vector_Create(SIZE_ARR(people),0)) != NULL);
@@ -91,19 +91,24 @@ UNIT(vector_append_strct)
 	ASSERT_THAT(Vector_Append(vec,&p) == VECTOR_OVERFLOW);
 	ASSERT_THAT(Vector_Size(vec) == SIZE_ARR(people));
 	ASSERT_THAT(Vector_Capacity(vec) == SIZE_ARR(people));
+	Person_print(_p);
+	Person_print(&p);
+
 	ASSERT_THAT(Vector_Remove(vec,(void**)(&_p)) == VECTOR_SUCCESS);
 	Person_print(_p);
+	Person_print(&p);
+
 	Person_print(people+SIZE_ARR(people)-1);
-	/*
-	ASSERT_THAT(Is_eq(p,str[SIZE_ARR(str)-1]);
-	printf("\n%s\n",item,str[SIZE_ARR(str)-1]);
-	ASSERT_THAT(Vector_Size(vec) == SIZE_ARR(str)-1);
-	ASSERT_THAT(Vector_Set(vec,0,(void*)item)== VECTOR_SUCCESS);
-	ASSERT_THAT(Vector_Get(vec,0,(void**)&item) == VECTOR_SUCCESS);
-	printf("\n%s , %s\n",item,str[0]);
-	for(i = 0;i < SIZE_ARR(str)-1;++i)
-		ASSERT_THAT(Vector_Get(vec,i,(void**)&item) == VECTOR_SUCCESS);
-	Vector_Prstr(vec);*/	
+	ASSERT_THAT(Vector_Size(vec) == SIZE_ARR(people)-1);
+	ASSERT_THAT(Vector_Set(vec,0,&p)== VECTOR_SUCCESS);
+	ASSERT_THAT(Vector_Get(vec,0,(void**)&_p) == VECTOR_SUCCESS);
+	Person_print(_p);
+
+	for(i = 0;i <10;++i)
+	{
+		ASSERT_THAT(Vector_Get(vec,i,(void**)&_p) == VECTOR_SUCCESS);
+		Person_print(_p);
+	}
 END_UNIT
 
 /*
@@ -128,7 +133,7 @@ TEST_SUITE(framework test)
 	TEST(vector_append_null)
 	TEST(vector_append_normal)
 	TEST(vector_append_string)
-	TEST(vector_append_strct)
+	TEST(vector_append_struct)
 	/*
 	TEST(tree_found_normal)*/
 	
