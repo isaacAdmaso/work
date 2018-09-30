@@ -35,6 +35,8 @@ List* List_Create(void)
 	{
 		return NULL;
 	}
+	l->m_head.m_item = NULL;
+	l->m_tail.m_item = NULL;
 	l->m_head.m_next = &(l->m_tail);
 	l->m_head.m_prev = NULL;
 	l->m_tail.m_prev = &(l->m_head);
@@ -76,7 +78,7 @@ static List_Result NodeDestroy(Node *_node,void** _data)
 {
 	Node *dataHolder;
 
-	if( NULL == *_data)
+	if( NULL == _data)
 	{
 		return LIST_NULL_ELEMENT_ERROR;
 	}
@@ -103,7 +105,7 @@ static List_Result NodeDestroy(Node *_node,void** _data)
 List_Result List_PushHead(List* _list, void* _item)
 {
 	
-	if(IS_INVALID(_list) || NULL == _item)
+	if(IS_INVALID(_list) || NULL == _item )
 	{
 		return LIST_UNINITIALIZED_ERROR;
 	}
@@ -144,7 +146,7 @@ List_Result List_PopHead(List* _list, void** _pItem)
 	{
 		return LIST_UNINITIALIZED_ERROR;
 	}
-	if(_list->m_head.m_next==&(_list->m_tail))
+	if(_list->m_head.m_next == &(_list->m_tail))
 	{
 		return LIST_UNDERFLOW_ERROR;
 	}
@@ -199,7 +201,7 @@ size_t List_Size(const List* _list)
  */
 ListItr ListItr_Begin(const List* _list)
 {
-	if(IS_INVALID(_list))
+	if(IS_INVALID(_list) || 0 >= List_Size(_list))
 	{
 		return NULL;
 	}
@@ -330,77 +332,30 @@ void* ListItr_Remove(ListItr _itr)
 	return item;
 }
 
-            /**dbg print*/
-int ListDoFncForAll(const List* _lst ,void* _itemPtr,ListActionFunction _fnc,void* _testItm)
-{
-	Node *cur;
-	int nItr = 0;
 
-	if(NULL == _lst || NULL == _itemPtr || NULL == _fnc)
-		return -1; 
-	cur = _lst->m_head.m_next;
-	while(cur != &(_lst->m_tail))
-	{	
-		_itemPtr = cur->m_item;
-		cur = cur->m_next;
-		if(!_fnc(_itemPtr,_testItm))
-			break;
-		++nItr;
+
+void List_P(const List* _list,ListActionFunction _func)
+{
+	ListItr start,end;
+
+	printf("\n(");
+	start = ListItr_Begin(_list);
+	end = ListItr_End(_list);
+	ListItr_ForEach(start,end,_func,NULL);
+	printf(")\n");
+}
+
+
+void NIntPrt(void* _itr,void* _itrE)
+{
+	void* null =_itr;
+	Node *node = (Node*)_itr,*nodeE = (Node*)_itrE;
+	while(node != nodeE)
+	{
+		IntPrt(node->m_item,null);
+		node = node->m_next;
 	}
-	return nItr;
-}
-
-
-
-void List_Print(const List* _list)
-{
-	Node *cur;
-	int i ,*itemptr ;
-	i = 8;
-	itemptr = &i;
-	
-	cur = _list->m_head.m_next;
-	printf("\n(");
-	while(cur != &(_list->m_tail))
-	{	
-		itemptr = (cur->m_item);
-		printf("%d ,",*itemptr);
-		cur = cur->m_next;
-	}
-	printf(")\n");
-}
-
-
-int StrPrt(void* _itm,void* _null)
-{
-	char* s = (char*)_itm;
-	return printf(" %s ,",s);
-}
-
-
-void List_Prstr(const List* _list)
-{
-	ListItr curS,curE;
-	curS = ListItr_Begin(_list);
-	curE = ListItr_End(_list);
-
-	printf("\n(");
-	ListItr_ForEach(curS,curE,StrPrt,NULL);
-	printf(")\n");
-}
-
-int List_Prpep(const List* _list)
-{
-	int num = 0;
-	Person p = {123,1234,"qwer"};
-	Person *itemptr;
-
-	itemptr = &p;
-	printf("\n(");
-	num = ListDoFncForAll(_list,(void*)itemptr,Person_print,NULL);
-	printf(")\n");
-	return num;
-}
+} 
 
 
 

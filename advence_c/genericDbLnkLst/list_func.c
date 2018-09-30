@@ -18,13 +18,16 @@
  */
 ListItr ListItr_FindFirst(ListItr _begin, ListItr _end, PredicateFunction _predicate, void* _context)
 {
-	ListItr cur;
-
 	if(NULL ==_begin || NULL == _end || NULL == _predicate || NULL == _context)
 		return NULL;
-	cur = _begin;
-	for(cur = _begin;cur != _end || _predicate(ListItr_Get(cur) ,_context);cur = ListItr_Next(cur));
-	return cur;
+	for(;_begin != _end ;_begin = ListItr_Next(_begin))
+	{
+		if(_predicate(ListItr_Get(_begin) ,_context))
+		{
+			break;
+		}
+	}
+	return _begin;
 }
 
 
@@ -46,7 +49,8 @@ size_t ListItr_CountIf(ListItr _begin, ListItr _end, PredicateFunction _predicat
 
 	if(NULL ==_begin || NULL == _end || NULL == _predicate || NULL == _context)
 		return count;
-	for(cur = _begin;cur != _end || _predicate(ListItr_Get(cur) ,_context);cur = ListItr_Next(cur), ++count)
+	for(cur = _begin;cur != _end || _predicate(ListItr_Get(cur) ,_context);cur = ListItr_Next(cur)\
+	, ++count)
 	{}
 	
 	return count;
@@ -221,13 +225,13 @@ List* ListItr_Cut(ListItr _begin, ListItr _end)
 	void* item;
 
 	lst = List_Create();
-	next = cur = _begin;
-	while (next != _end)
+	cur = _begin;
+	while (cur != _end)
 	{
+		next = ListItr_Next(cur);
 		item = ListItr_Remove(cur);
 		List_PushTail(lst,item); 
-		cur = ListItr_Next(next);	
-		next = ListItr_Next(next);
+		cur = next;	
 	}
 	return lst;
 }
@@ -245,10 +249,12 @@ List* ListItr_Unique(ListItr _begin, ListItr _end, EqualsFunction _equals)
 	void *item,*nxtItm;
 
 	lst = List_Create();
+	if(NULL == lst || _begin == _end)
+		return NULL;
 	cur = _begin;
-	while (cur != _end)
+	next = ListItr_Next(cur);
+	while (next != _end)
 	{
-		next = ListItr_Next(cur);
 		item = ListItr_Get(cur);
 		nxtItm = ListItr_Get(next);
 		while(_equals(nxtItm ,item))
@@ -256,11 +262,14 @@ List* ListItr_Unique(ListItr _begin, ListItr _end, EqualsFunction _equals)
 			item = ListItr_Remove(cur);
 			List_PushTail(lst,item);
 			cur = next;	
-			next = ListItr_Next(cur);
+			next = ListItr_Next(next);
+			if(next == _end )
+				return lst;
 			item = ListItr_Get(cur);
 			nxtItm = ListItr_Get(next);
 		}
 		cur = next;	
+		next  = ListItr_Next(next);
 	}
 	return lst;
 }
