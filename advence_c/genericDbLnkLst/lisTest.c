@@ -361,7 +361,6 @@ UNIT (List_W_struct)
 	start = ListItr_Begin(list);
 	end  = ListItr_End(list);
 	ListItr_Sort(start,end,Person_cmp);
-	List_P(list,Person_print);
 
 END_UNIT
 
