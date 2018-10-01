@@ -1,7 +1,8 @@
-person.o: person.c ../include/person.h
+person.o: person.c ../include/person.h ../include/list_functions.h \
+ ../include/list_itr.h ../include/list.h
 list.o: list.c ../include/list_functions.h ../include/list_itr.h \
- ../include/list.h ../include/person.h
+ ../include/list.h
 list_func.o: list_func.c ../include/list_functions.h \
- ../include/list_itr.h ../include/list.h ../include/person.h
-lisTest.o: lisTest.c ../include/list_functions.h ../include/list_itr.h \
- ../include/list.h ../include/person.h ../include/mu_test.h
+ ../include/list_itr.h ../include/list.h
+lisTest.o: lisTest.c ../include/person.h ../include/list_functions.h \
+ ../include/list_itr.h ../include/list.h ../include/mu_test.h

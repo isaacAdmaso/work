@@ -2,7 +2,6 @@
 
 				/**********************************
 				 * list func using iterFunc only***
-				 * ********************************
 				 **********************************/
 /** 
  * @brief Finds the first element in a range satsifying a predicate
@@ -101,7 +100,7 @@ void ListItr_Sort(ListItr _begin, ListItr _end, LessFunction _less)
 	void* item;
 	void* prvitm;
 		
-	if(NULL ==_begin || NULL == _end || NULL == _less)
+	if(NULL == _begin || NULL == _end || NULL == _less)
 		return;
 
 	for(itr = _begin;itr != _end ;itr = ListItr_Next(itr))
@@ -151,6 +150,7 @@ ListItr ListItr_Splice(ListItr _dest, ListItr _begin, ListItr _end)
 		{
 			if(_begin == _dest)
 			{
+				_begin = ListItr_Next(_begin);
 				count = 0;
 				continue;
 			}
@@ -180,7 +180,7 @@ ListItr ListItr_Splice(ListItr _dest, ListItr _begin, ListItr _end)
 ListItr ListItr_Merge(ListItr _destBegin, ListItr _firstBegin, ListItr _firstEnd,
 			ListItr _secondBegin, ListItr _secondEnd, LessFunction _less)
 			{
-				ListItr nextItr;
+				ListItr nextItr,rtItr;
 
 				if(NULL == _destBegin ||NULL == _firstBegin ||NULL == _firstEnd \
 				||NULL == _secondBegin ||NULL == _secondEnd)
@@ -190,25 +190,27 @@ ListItr ListItr_Merge(ListItr _destBegin, ListItr _firstBegin, ListItr _firstEnd
 					_destBegin = ListItr_Splice(_destBegin,_secondBegin,_secondEnd);
 					return ListItr_Splice(_destBegin,_firstBegin,_firstEnd);
 				}
-				if(_firstBegin == _firstEnd)
-					return ListItr_Prev(_firstBegin);
+				if(_firstBegin == _firstEnd )
+					return ListItr_Splice(_destBegin,_secondBegin,_secondEnd);
+				
 				
 				if(_secondBegin == _secondEnd)
-					return ListItr_Prev(_secondBegin);
+					return ListItr_Splice(_destBegin,_firstBegin,_firstEnd);
 
-				if(_less(_firstBegin,_secondBegin))
+		
+				if(_less(ListItr_Get(_firstBegin),ListItr_Get(_secondBegin)))
 				{
 					nextItr = ListItr_Next(_firstBegin);
-					ListItr_Splice(_destBegin,_firstBegin,nextItr);
+					rtItr = ListItr_InsertBefore(_destBegin, ListItr_Remove(_firstBegin));
 					nextItr = ListItr_Merge(_destBegin,nextItr,_firstEnd,_secondBegin,_secondEnd,_less);
 				}
 				else
 				{
 					nextItr = ListItr_Next(_secondBegin);
-					ListItr_Splice(_destBegin,_secondBegin,nextItr);	
+					rtItr = ListItr_InsertBefore(_destBegin, ListItr_Remove(_secondBegin));
 					nextItr = ListItr_Merge(_destBegin,_firstBegin,_firstEnd,nextItr,_secondEnd,_less);
 				}
-				return nextItr;
+				return rtItr;
 
 			}
 

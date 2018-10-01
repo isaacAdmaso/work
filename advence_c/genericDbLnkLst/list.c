@@ -1,4 +1,4 @@
-#include "list_functions.h"
+#include "list_itr.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -363,33 +363,6 @@ void* ListItr_Remove(ListItr _itr)
 		return NULL;
 	return item;
 }
-
-
-
-void List_P(const List* _list,ListActionFunction _func)
-{
-	ListItr start,end;
-
-	printf("\n(");
-	start = ListItr_Begin(_list);
-	end = ListItr_End(_list);
-	ListItr_ForEach(start,end,_func,NULL);
-	printf(")\n");
-}
-
-
-void NIntPrt(void* _itr,void* _itrE)
-{
-	void* null =_itr;
-	Node *node = (Node*)_itr,*nodeE = (Node*)_itrE;
-	while(node != nodeE)
-	{
-		IntPrt(node->m_item,null);
-		node = node->m_next;
-	}
-} 
-
-
 
 
 

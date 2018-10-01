@@ -1,218 +1,15 @@
+#include <stdlib.h>
 #include <stdio.h>
-#include "list_functions.h"
+#include "person.h"
 #include "mu_test.h"
 #include <string.h>
 #include <time.h>
 
 #define SIZE_ARR(A) sizeof(A)/sizeof(A[0]) 
-#define SIZE_INT_ARR_TEST 128
+#define SIZE_INT_ARR_TEST 100
 
 
 
-
-Person people[] = {
-
-	{1, 708465, "Manatee"},
-
-	{2, 804738, "Cormorant, flightless"},
-
-	{3, 432634, "Giant anteater"},
-
-	{4, -191979, "Least chipmunk"},
-
-	{5, 740434, "Owl, great horned"},
-
-	{6, -598520, "Ibis, sacred"},
-
-	{7, -777850, "Black-backed magpie"},
-
-	{8, 296847, "Cobra, egyptian"},
-
-	{9, -264536, "Black spider monkey"},
-
-	{10, -607105, "Russian dragonfly"},
-
-	{11, -267104, "Antelope, four-horned"},
-
-	{12, 337636, "Asian water buffalo"},
-
-	{13, 471153, "Flamingo, roseat"},
-
-	{14, -977605, "Gulls (unidentified)"},
-
-	{15, 792008, "Mandras tree shrew"},
-
-	{16, 57581, "Puma"},
-
-	{17, 308928, "Olive baboon"},
-
-	{18, -28487, "Galapagos penguin"},
-
-	{19, 730596, "Vulture, white-rumped"},
-
-	{20, -459822, "Raven, white-necked"},
-
-	{21, -535244, "Brolga crane"},
-
-	{22, 221091, "Hornbill, leadbeateri's ground"},
-
-	{23, -133805, "Rufous-collared sparrow"},
-
-	{24, 446085, "Moose"},
-
-	{25, -143827, "Duiker, gray"},
-
-	{26, -457153, "Pine siskin"},
-
-	{27, -132202, "Bat-eared fox"},
-
-	{28, -483433, "Toucan, red-billed"},
-
-	{29, 694444, "Macaque, bonnet"},
-
-	{30, -857195, "Capuchin, white-fronted"},
-
-	{31, 117910, "White stork"},
-
-	{32, 337044, "Great egret"},
-
-	{33, -639826, "Pigeon, wood"},
-
-	{34, 592079, "Steller's sea lion"},
-
-	{35, -218136, "Possum, ring-tailed"},
-
-	{36, 345462, "Dragon, netted rock"},
-
-	{37, 841723, "Scottish highland cow"},
-
-	{38, -55541, "Lion, galapagos sea"},
-
-	{39, 108364, "Gull, swallow-tail"},
-
-	{40, 115977, "Asian red fox"},
-
-	{41, 775768, "Dragonfly, russian"},
-
-	{42, -870178, "American buffalo"},
-
-	{43, -858156, "Ostrich"},
-
-	{44, 551962, "Koala"},
-
-	{45, -278112, "Hottentot teal"},
-
-	{46, 499550, "Waxbill, violet-eared"},
-
-	{47, -806642, "White stork"},
-
-	{48, 961912, "Eastern fox squirrel"},
-
-	{49, -921007, "Hornbill, leadbeateri's ground"},
-
-	{50, 409572, "Crane, sarus"},
-
-	{51, -39219, "Beaver, european"},
-
-	{52, 562224, "Red squirrel"},
-
-	{53, 155810, "Seal, southern elephant"},
-
-	{54, -739806, "Springbuck"},
-
-	{55, -908511, "Duck, blue"},
-
-	{56, 834987, "Monitor lizard (unidentified)"},
-
-	{57, -71541, "Marmot, hoary"},
-
-	{58, 606222, "Deer, black-tailed"},
-
-	{59, 240656, "Crimson-breasted shrike"},
-
-	{60, -904073, "Gazelle, grant's"},
-
-	{61, -299171, "Langur, common"},
-
-	{62, 197850, "Komodo dragon"},
-
-	{63, 944875, "Bateleur eagle"},
-
-	{64, -837564, "Rufous-collared sparrow"},
-
-	{65, 53287, "Tropical buckeye butterfly"},
-
-	{66, 238830, "Vervet monkey"},
-
-	{67, 151803, "Pied butcher bird"},
-
-	{68, -653859, "Turtle, snake-necked"},
-
-	{69, 280489, "Rufous-collared sparrow"},
-
-	{70, -701158, "Wolf spider"},
-
-	{71, -42572, "Tree porcupine"},
-
-	{72, -601588, "Lizard, giant girdled"},
-
-	{73, -441553, "Hornbill, red-billed"},
-
-	{74, -332443, "Crested screamer"},
-
-	{75, -327611, "Black-crowned crane"},
-
-	{76, -322173, "Greater sage grouse"},
-
-	{77, 243735, "Eagle, long-crested hawk"},
-
-	{78, 11833, "Phalarope, northern"},
-
-	{79, -368549, "Magistrate black colobus"},
-
-	{80, -423225, "Shark, blue"},
-
-	{81, 764415, "Mexican boa"},
-
-	{82, -577707, "Long-nosed bandicoot"},
-
-	{83, 584136, "Javanese cormorant"},
-
-	{84, -174144, "Flicker, field"},
-
-	{85, 633159, "Snake, buttermilk"},
-
-	{86, 250190, "Seal, southern elephant"},
-
-	{87, -271336, "Genet, small-spotted"},
-
-	{88, 877347, "White stork"},
-
-	{89, -322618, "Anaconda (unidentified)"},
-
-	{90, -124956, "Wild water buffalo"},
-
-	{91, -982007, "Cape wild cat"},
-
-	{92, -384876, "Sloth, two-toed tree"},
-
-	{93, -367503, "Herring gull"},
-
-	{94, -518159, "Southern tamandua"},
-
-	{95, 992219, "Boa, cook's tree"},
-
-	{96, -57383, "Common melba finch"},
-
-	{97, 426018, "Giant anteater"},
-
-	{98, 718107, "Zorro, common"},
-
-	{99, 828803, "Leopard, indian"},
-
-	{100, -301330, "Kingfisher, white-throated"}
-
-};
 
 
 
@@ -254,7 +51,8 @@ UNIT (List_Push_Head_Normal)
 	int num  =  rand()%SIZE_INT_ARR_TEST;
 
 	ASSERT_THAT((list = List_Create()) != NULL);
-	ASSERT_THAT(List_PushHead(list,&num) == LIST_SUCCESS);          
+	ASSERT_THAT(List_PushHead(list,&num) == LIST_SUCCESS); 
+	List_Destroy(&list,NULL);
 END_UNIT	 
 
 
@@ -272,6 +70,7 @@ UNIT (List_Push_Tail_Normal)
 
 	ASSERT_THAT((list = List_Create()) != NULL); 
 	ASSERT_THAT(List_PushTail(list,&num) == LIST_SUCCESS);
+	List_Destroy(&list,NULL);
 END_UNIT
 
 
@@ -292,15 +91,16 @@ UNIT (List_Pop_Push)
 	ASSERT_THAT(*arr0 == arr[1]);
 	ASSERT_THAT(*arr1== arr[0]);
 	ASSERT_THAT(List_Size(list) == 0 );
-	
+	List_Destroy(&list,NULL);
 END_UNIT
 
-UNIT (List_sort_int)
+
+UNIT (List_sort_Unique_int)
 
 	int i,num,chkNum = 12092,chkNum2 = -12345,arr[SIZE_INT_ARR_TEST],ntRndArr[SIZE_INT_ARR_TEST];
 	int *check = &chkNum , *check2 = &chkNum2;
-	ListItr start = NULL,end = NULL,checkItr =NULL,start1 = NULL,end1 = NULL;
-	List *lstRnd = NULL,*lst = NULL,*l = NULL,*lst1 = NULL;
+	ListItr start = NULL,end = NULL,checkItr =NULL;
+	List *lstRnd = NULL,*lst = NULL,*l = NULL;
 
 	lstRnd = List_Create();
 	lst = List_Create(); 
@@ -321,8 +121,7 @@ UNIT (List_sort_int)
 
 		check = ListItr_Get(start);
 		start  = ListItr_Next(start);
-		num = ntRndArr[i];
-		ASSERT_THAT(*check == num);		
+		ASSERT_THAT(*check == ntRndArr[i]);		
 	}
 	ASSERT_THAT(List_Size(lst) == SIZE_ARR(ntRndArr));		
 
@@ -374,58 +173,125 @@ UNIT (List_sort_int)
 		start = checkItr;
 		checkItr = ListItr_Next(checkItr);
 	}
+	List_Destroy(&lstRnd, NULL);
+	List_Destroy(&lst,NULL);
+	List_Destroy(&l,NULL);
+END_UNIT
+	
+UNIT (List_int_Cut_FindFirst)
+	size_t szLst = 0;
+	int i,chkNum ,arr[SIZE_INT_ARR_TEST],ntRndArr[SIZE_INT_ARR_TEST];
+	ListItr start = NULL,end = NULL,checkItr =NULL;
+	List *srtLst = NULL,*l = NULL;
 
+	l = List_Create();
+	srtLst = List_Create();
 
-	chkNum = rand()%SIZE_INT_ARR_TEST;
-	start = ListItr_Begin(lst);
-	end  = ListItr_End(lst);
+	Arr_Int(arr);
+	for(i = 0;i < SIZE_ARR(arr);++i)
+	{
+		ntRndArr[i] = i;
+		ASSERT_THAT(List_PushTail(srtLst,ntRndArr+i) == LIST_SUCCESS);
+	}
+	chkNum = SIZE_INT_ARR_TEST/2;
+	start = ListItr_Begin(srtLst);
+	end  = ListItr_End(srtLst);
+	szLst = List_Size(srtLst);
 	checkItr = ListItr_FindFirst(start,end,IntEq,(void*)&chkNum);
-	lst1 = ListItr_Cut(start, checkItr);
-
-	
-	start = ListItr_Begin(l);
-	end  = ListItr_End(l);
-	checkItr = ListItr_Begin(lstRnd);
-	checkItr = ListItr_Splice(checkItr,start,end);
-	
-
-
-	start = ListItr_Begin(lst1);
-	end  = ListItr_End(lst1);
-	start1 = ListItr_Begin(lst);
-	end1 = ListItr_End(lst);
-	checkItr = ListItr_Begin(l);
-	checkItr = ListItr_Merge(checkItr,start,end,start1,end1,NULL);
-
-	List_P(lst1,IntPrt);
-	printf("\n%d\n",chkNum);
-	List_P(lst,IntPrt);
-	List_P(l,IntPrt);
-	List_P(lstRnd,IntPrt);
-
-
-	
+	ASSERT_THAT(IntEq((void*)&chkNum,ListItr_Get(checkItr)));
+	l = ListItr_Cut(start, checkItr);
+	ASSERT_THAT(List_Size(l) > 0 && szLst == List_Size(l)+List_Size(srtLst));
 
 END_UNIT
 
 
-/*
-UNIT (List_int1)
-	int i,num,chkNum = 12092,chkNum2 = -12345,arr[SIZE_INT_ARR_TEST],ntRndArr[SIZE_INT_ARR_TEST];
+UNIT (List_int_Splice)
+	size_t szLst = 0;
+	int i,arr[SIZE_INT_ARR_TEST],ntRndArr[SIZE_INT_ARR_TEST];
+	ListItr start = NULL,end = NULL,checkItr =NULL,start1 = NULL,end1 = NULL;
+	List *rndLst = NULL,*noRndLst = NULL,*l = NULL;
+
+	l = List_Create();
+	noRndLst = List_Create();
+	rndLst = List_Create();
+
+	Arr_Int(arr);
+	for(i = 0;i < SIZE_ARR(arr);++i)
+	{
+		ASSERT_THAT(List_PushTail(rndLst,arr+i) == LIST_SUCCESS);
+		
+		ntRndArr[i] = i;
+		ASSERT_THAT(List_PushTail(noRndLst,ntRndArr+i) == LIST_SUCCESS);
+	}
+
+	start = ListItr_Begin(rndLst);
+	end  = ListItr_End(rndLst);
+	start1 = ListItr_Begin(noRndLst);
+	end1 = ListItr_End(noRndLst);
+	szLst = List_Size(rndLst) +List_Size(noRndLst);
+	
+	checkItr = ListItr_Begin(l);
+	checkItr = ListItr_Splice(checkItr,start,end);
+	checkItr = ListItr_Splice(checkItr,start1,end1);
+
+	ASSERT_THAT(List_Size(l) == szLst);
+	ASSERT_THAT(List_Size(rndLst) == 0 && List_Size(noRndLst) == 0);
+	
+
+END_UNIT
+
+UNIT (List_int_merge)
+	size_t szLst = 0;
+	int i,chkNum = 12092,chkNum2 = -12345,arr[SIZE_INT_ARR_TEST],ntRndArr[SIZE_INT_ARR_TEST];
 	int *check = &chkNum , *check2 = &chkNum2;
 	ListItr start = NULL,end = NULL,checkItr =NULL,start1 = NULL,end1 = NULL;
-	List *lstRnd = NULL,*lst = NULL,*l = NULL,*lst1 = NULL;
+	List *rndLst = NULL,*noRndLst = NULL,*l = NULL;
 
+	l = List_Create();
+	noRndLst = List_Create();
+	rndLst = List_Create();
 
-	start = ListItr_Begin(lst1);
-	end  = ListItr_End(lst1);
-	start1 = ListItr_Begin(lst);
-	end1 = ListItr_End(lst);
+	Arr_Int(arr);
+	for(i = 0;i < SIZE_ARR(arr);++i)
+	{
+		ASSERT_THAT(List_PushTail(rndLst,arr+i) == LIST_SUCCESS);
+		
+		ntRndArr[i] = i;
+		ASSERT_THAT(List_PushTail(noRndLst,ntRndArr+i) == LIST_SUCCESS);
+	}
+
+	start = ListItr_Begin(rndLst);
+	end  = ListItr_End(rndLst);
+	start1 = ListItr_Begin(noRndLst);
+	end1 = ListItr_End(noRndLst);
+
+	ListItr_Sort(start,end,IntCmp);
+	ListItr_Sort(start1,end1,IntCmp);
+	
+	szLst = List_Size(rndLst) +List_Size(noRndLst);
+	start = ListItr_Begin(rndLst);
+	end  = ListItr_End(rndLst);
+	start1 = ListItr_Begin(noRndLst);
+	end1 = ListItr_End(noRndLst);
 	checkItr = ListItr_Begin(l);
-	checkItr = ListItr_Merge(checkItr,start,end,start1,end1,NULL);
+
+	
+	checkItr = ListItr_Merge(checkItr,start,end,start1,end1,IntCmp);
+	
+	ASSERT_THAT(List_Size(l) == szLst);
+	
+	
+	for(i = 1; i < szLst-1;++i)
+	{
+		check = ListItr_Get(checkItr);
+		start  = ListItr_Next(checkItr);
+		check2 = ListItr_Get(checkItr);
+		ASSERT_THAT(*check <= *check2);		
+	}
 
 
 END_UNIT
+/*
 
 */
 
@@ -482,9 +348,8 @@ END_UNIT
 UNIT (List_W_struct)
 
 	int i;
-	List *lst = NULL,*list = NULL;
+	List *list = NULL;
 	ListItr start = NULL,end = NULL;
-	list = lst;
 
 	ASSERT_THAT((list = List_Create()) != NULL);
 	ASSERT_THAT(List_PushTail(list,NULL) == LIST_UNINITIALIZED_ERROR);
@@ -496,13 +361,11 @@ UNIT (List_W_struct)
 	start = ListItr_Begin(list);
 	end  = ListItr_End(list);
 	ListItr_Sort(start,end,Person_cmp);
-	/*
 	List_P(list,Person_print);
-	lst = ListItr_Unique(start,end,Person_Eq);
-	List_P(list,Person_print);
-	List_P(lst,Person_print);
-*/
+
 END_UNIT
+
+
 TEST_SUITE(list tester)
 
 	TEST(list_create)
@@ -511,8 +374,10 @@ TEST_SUITE(list tester)
 	TEST(List_Push_Tail_NULL)
 	TEST(List_Push_Tail_Normal)
 	TEST(List_Pop_Push)
+	TEST(List_int_Splice)
+	TEST(List_int_merge)
 	TEST (List_Size_check)
-	TEST(List_sort_int)
+	TEST(List_sort_Unique_int)
 	TEST(List_W_string) 
 	TEST(List_W_struct)
 END_SUITE	
