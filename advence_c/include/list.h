@@ -105,8 +105,6 @@ size_t List_Size(const List* _list);
 
 /**for dbg */
 void List_Print(const List* _list);
-void List_Prstr(const List* _list);
-int List_Prpep(const List* _list);
 
 
 

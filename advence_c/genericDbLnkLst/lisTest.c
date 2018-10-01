@@ -5,7 +5,7 @@
 #include <time.h>
 
 #define SIZE_ARR(A) sizeof(A)/sizeof(A[0]) 
-#define SIZE_INT_ARR_TEST 5
+#define SIZE_INT_ARR_TEST 128
 
 
 
@@ -294,12 +294,11 @@ UNIT (List_Pop_Head_NULL_Data)
 	ASSERT_THAT(List_PushHead(list,arr+1) ==  LIST_SUCCESS);
 	ASSERT_THAT(List_PopHead(list,(void**)&arr0) == LIST_SUCCESS);
 	ASSERT_THAT(List_PopTail(list,(void**)&arr1) == LIST_SUCCESS);
-	printf("\n%d %d\n",*arr0,*arr1);
-	printf("\n%d %d\n",arr[0],arr[1]);
+	ASSERT_THAT(*arr0 == arr[1]);
+	ASSERT_THAT(*arr1== arr[0]);
 	ASSERT_THAT(List_Size(list) == 0 );
 	for(i = 0;i < SIZE_ARR(arr);++i)
 		ASSERT_THAT(List_PushTail(list,arr+i) == LIST_SUCCESS);
-
 
 END_UNIT
 
@@ -318,46 +317,67 @@ UNIT (List_sort_int)
 
 	int i,num,chkNum = 12092,chkNum2 = -12345,arr[SIZE_INT_ARR_TEST],ntRndArr[SIZE_INT_ARR_TEST];
 	int *check = &chkNum , *check2 = &chkNum2;
-	ListItr start = NULL,end = NULL;
-	List *lst = NULL,*l = NULL,*lst2;
-	lst2 = lst;
+	ListItr start = NULL,end = NULL,checkItr =NULL;
+	List *lstRnd = NULL,*lst;
 
-	lst2 = List_Create(); 
-	l = List_Create();
-	ASSERT_THAT(NULL != l);
+	lstRnd = List_Create();
+	lst = List_Create(); 
+	ASSERT_THAT(NULL != lstRnd && NULL != lst);
 	Arr_Int(arr);
 	for(i = 0;i < SIZE_ARR(arr);++i)
 	{
-		ASSERT_THAT(List_PushTail(l,arr+i) == LIST_SUCCESS);
+		ASSERT_THAT(List_PushTail(lstRnd,arr+i) == LIST_SUCCESS);
 		
 		ntRndArr[i] = i;
-		ASSERT_THAT(List_PushTail(lst2,ntRndArr+i) == LIST_SUCCESS);
+		ASSERT_THAT(List_PushTail(lst,ntRndArr+i) == LIST_SUCCESS);
 	}
-	for(i = 0;i < SIZE_ARR(arr);++i)
+	start = ListItr_Begin(lst);
+	num =  List_Size(lst);
+	for(i = 0; i < num;++i)
 	{
-		ASSERT_THAT(List_PushTail(l,arr+i) == LIST_SUCCESS);
-		
+		ASSERT_THAT(List_PushTail(lstRnd,arr+i) == LIST_SUCCESS);
+
+		check = ListItr_Get(start);
+		start  = ListItr_Next(start);
 		num = ntRndArr[i];
-		ASSERT_THAT(List_PopHead(lst2,(void**)&check) == LIST_SUCCESS);
 		ASSERT_THAT(*check == num);		
 	}
+	ASSERT_THAT(List_Size(lst) == SIZE_ARR(ntRndArr));		
+
 	
-	start = ListItr_Begin(l);
-	end  = ListItr_End(l);
+	start = ListItr_Begin(lstRnd);
+	end  = ListItr_End(lstRnd);
 	ListItr_Sort(start,end,IntCmp);
-	num =  List_Size(l);
-	List_P(lst,IntPrt);
-	List_P(l,IntPrt);
-	List_P(lst2,IntPrt);
+	
+	start = ListItr_Begin(lstRnd);
+	end  = ListItr_End(lstRnd);
+	num =  List_Size(lstRnd);
 	for(i = 0; i < num/2;++i)
 	{
-		ASSERT_THAT(List_PopHead(l,(void**)&check) == LIST_SUCCESS);
-		ASSERT_THAT(List_PopTail(l,(void**)&check2) == LIST_SUCCESS);
+
+		check = ListItr_Get(start);
+		start  = ListItr_Next(start);
+		end = ListItr_Prev(end);
+		check2 = ListItr_Get(end);
+		ASSERT_THAT(*check <= *check2 );
+	}
+
+	
+	chkNum = rand()%SIZE_INT_ARR_TEST;
+	start = ListItr_Begin(lst);
+	end  = ListItr_End(lst);
+	checkItr = ListItr_FindFirst(start,end,IntEq,(void*)&chkNum);
+	while(!ListItr_Equals(start,checkItr))
+	{
+		check = ListItr_Get(start);
+		ASSERT_THAT(*check <= chkNum);
+		start = ListItr_Next(start);
+	}
+	List_P(lstRnd,IntPrt);
+	List_P(lst,IntPrt);
 	/* 
-	start = ListItr_FindFirst(start,end,IntEq,(void*)&i);
 	NIntPrt((void*)start,(void*)end);
 	*/
-	}
 
 /*	
 	printf("1");
@@ -386,8 +406,6 @@ UNIT (List_Size_check)
 	List_PushTail(list,ptr1);
 	List_PushTail(list,ptr);
 	ASSERT_THAT(List_Size(list) == 3);
-	List_P(list,IntPrt);
-
 
 END_UNIT
 
@@ -406,22 +424,17 @@ UNIT (List_W_string)
 	for(i = 0;i < SIZE_ARR(str);++i)
 	{
 		ASSERT_THAT(List_PushTail(list,str[i]) == LIST_SUCCESS);
-		List_P(list,StrPrt);
 
 	}
 	ASSERT_THAT(List_Size(list) == SIZE_ARR(str));
 	ASSERT_THAT(List_PopHead(list,(void**)&item) == LIST_SUCCESS);
-	printf("\n%s , %s\n",item,str[0]);
+	ASSERT_THAT(strcmp(item,str[0]) == 0);
 	ASSERT_THAT(List_PopTail(list,(void**)&item) == LIST_SUCCESS);
-	printf("\n%s , %s\n",item,str[SIZE_ARR(str)-1]);
+	ASSERT_THAT(strcmp(item,str[SIZE_ARR(str)-1]) == 0);
 	ASSERT_THAT(item == str[SIZE_ARR(str)-1]);
 	ASSERT_THAT(List_Size(list) == SIZE_ARR(str) - 2);
-	List_P(list,StrPrt);
 	Lidx = ListItr_Begin(list);
-	printf("\n%s\n",item);
 	ASSERT_THAT(item != ListItr_Set(Lidx,item));
-	List_P(list,StrPrt);
-	printf("\n%s\n",item);
 	
 	
 END_UNIT
@@ -431,8 +444,9 @@ END_UNIT
 UNIT (List_W_struct)
 
 	int i;
-	List *lst,*list = NULL;
+	List *lst = NULL,*list = NULL;
 	ListItr start = NULL,end = NULL;
+	list = lst;
 
 	ASSERT_THAT((list = List_Create()) != NULL);
 	ASSERT_THAT(List_PushTail(list,NULL) == LIST_UNINITIALIZED_ERROR);
@@ -444,11 +458,12 @@ UNIT (List_W_struct)
 	start = ListItr_Begin(list);
 	end  = ListItr_End(list);
 	ListItr_Sort(start,end,Person_cmp);
+	/*
 	List_P(list,Person_print);
 	lst = ListItr_Unique(start,end,Person_Eq);
 	List_P(list,Person_print);
 	List_P(lst,Person_print);
-
+*/
 END_UNIT
 TEST_SUITE(list tester)
 

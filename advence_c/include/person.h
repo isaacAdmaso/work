@@ -12,6 +12,11 @@ typedef struct Person
 
 int Person_print(void* _itemt,void* _null);
 int Person_cmp(void* _a,void* _b);
+int IntCmp(void* _a,void* _b);
+int IntEq(void* _a,void* _b);
+int Person_Eq(void* _a,void* _b);
+
+
 
 
 

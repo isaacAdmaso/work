@@ -234,7 +234,7 @@ int ListItr_Equals(const ListItr _a, const ListItr _b)
 	if( NULL == _a || NULL == _b)
 		return -1;
 	
-	return _aNode->m_item == _bNode->m_item;
+	return _aNode == _bNode;
 }
 /** 
  * @brief Get itertator to the next element from a given iterator
