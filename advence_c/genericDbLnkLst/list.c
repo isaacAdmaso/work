@@ -193,6 +193,38 @@ size_t List_Size(const List* _list)
 }
 
 /** 
+ * @brief Destroy list
+ * @details Destroys the list completely 
+ *          optionally destroys elements using user provided function
+ *
+ * @params[in] _pList : A pointer to previously created List returned via ListCreate
+ *					   on completion *_pList will be null
+ * @params[in] _elementDestroy : A function pointer to be used to destroy elements inserted into the list
+ *             or a null if no such destroy is required
+ */
+void List_Destroy(List** _pList, void (*_elementDestroy)(void* _item))
+{
+	Node *nodePtrToFree;
+	if(NULL == _pList)
+	{
+		return;
+	}
+	(*_pList)->m_magic = 0;
+	while ((*_pList)->m_head.m_next != &((*_pList)->m_tail))
+	{
+		nodePtrToFree = (*_pList)->m_head.m_next;
+		if(NULL != _elementDestroy)
+		{
+			_elementDestroy(nodePtrToFree->m_item);
+		}
+		(*_pList)->m_head.m_next=(*_pList)->m_head.m_next->m_next;
+		free(nodePtrToFree);
+	}
+	free((*_pList));
+}
+
+
+/** 
  * @brief Get iterator to the list's beginning
  *
  * @params _list : list to return begin iterator, pointing at first element

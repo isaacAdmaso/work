@@ -1,15 +1,20 @@
 #include"person.h"
 
 
-int Person_print(void* _itemt,void* _null)
+int Person_print(void* _item,void* _null)
 {
-	Person *_p = (Person*)_itemt;
+	Person *_p = (Person*)_item;
 	return printf("\n %ld, %d , %s\n",_p->id,_p->random,_p->animal);
 }
 
 
 
-
+void Person_Free(void* _item)
+{
+	Person *_p = (Person*)_item;
+	if( NULL != _p)
+		free(_p);
+}
 int Person_cmp(void* _a,void* _b)
 {
 	Person *p1 = (Person*)_a ,*p2 = (Person*)_b;
