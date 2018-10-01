@@ -140,7 +140,7 @@ List* ListItr_Unique(ListItr _begin, ListItr _end, EqualsFunction _equals);
 void List_P(const List* _list,ListActionFunction _func);
 int StrPrt(void* _itm,void* _null);
 int IntPrt(void*_itm,void* null);
-void NIntPrt(void* _itr,void* null);
+void NIntPrt(void* _itr,void* _itrE);
 
 
 

@@ -187,8 +187,8 @@ ListItr ListItr_Merge(ListItr _destBegin, ListItr _firstBegin, ListItr _firstEnd
 					return NULL;
 				if(NULL == _less)
 				{
-					_destBegin = ListItr_Splice(_destBegin,_firstBegin,_firstEnd);
-					return ListItr_Splice(_destBegin,_secondBegin,_secondEnd);
+					_destBegin = ListItr_Splice(_destBegin,_secondBegin,_secondEnd);
+					return ListItr_Splice(_destBegin,_firstBegin,_firstEnd);
 				}
 				if(_firstBegin == _firstEnd)
 					return ListItr_Prev(_firstBegin);

@@ -201,7 +201,7 @@ size_t List_Size(const List* _list)
  */
 ListItr ListItr_Begin(const List* _list)
 {
-	if(IS_INVALID(_list) || 0 >= List_Size(_list))
+	if(IS_INVALID(_list))
 	{
 		return NULL;
 	}
