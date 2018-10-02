@@ -1,8 +1,15 @@
 #ifndef __LIST_FUNCTIONS_H__
 #define __LIST_FUNCTIONS_H__
+/**
+ * @file list_functions.h
+ * @brief advanced list operations
+ * 
+ * 
+ */
 
 
 #include "list_itr.h"
+
 
 /** 
  * @brief Predicate function returns a none zero value if predicate holds for element
@@ -136,11 +143,6 @@ List* ListItr_Cut(ListItr _begin, ListItr _end);
  */
 List* ListItr_Unique(ListItr _begin, ListItr _end, EqualsFunction _equals);
 
-/**dbug */
-void List_P(const List* _list,ListActionFunction _func);
-int StrPrt(void* _itm,void* _null);
-int IntPrt(void*_itm,void* null);
-void NIntPrt(void* _itr,void* _itrE);
 
 
 

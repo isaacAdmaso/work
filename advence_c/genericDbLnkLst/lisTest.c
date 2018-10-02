@@ -201,6 +201,9 @@ UNIT (List_int_Cut_FindFirst)
 	ASSERT_THAT(IntEq((void*)&chkNum,ListItr_Get(checkItr)));
 	l = ListItr_Cut(start, checkItr);
 	ASSERT_THAT(List_Size(l) > 0 && szLst == List_Size(l)+List_Size(srtLst));
+	List_Destroy(&l, NULL);
+	List_Destroy(&srtLst, NULL);
+
 
 END_UNIT
 
@@ -236,6 +239,9 @@ UNIT (List_int_Splice)
 
 	ASSERT_THAT(List_Size(l) == szLst);
 	ASSERT_THAT(List_Size(rndLst) == 0 && List_Size(noRndLst) == 0);
+	List_Destroy(&l,NULL);
+	List_Destroy(&rndLst,NULL);
+	List_Destroy(&noRndLst,NULL);
 	
 
 END_UNIT
@@ -288,6 +294,9 @@ UNIT (List_int_merge)
 		check2 = ListItr_Get(checkItr);
 		ASSERT_THAT(*check <= *check2);		
 	}
+	List_Destroy(&l, NULL);
+	List_Destroy(&rndLst, NULL);
+	List_Destroy(&noRndLst, NULL);
 
 
 END_UNIT
@@ -310,36 +319,50 @@ UNIT (List_Size_check)
 	List_PushTail(list,ptr1);
 	List_PushTail(list,ptr);
 	ASSERT_THAT(List_Size(list) == 3);
+	List_Destroy(&list, NULL);
 
 END_UNIT
+
 
 UNIT (List_W_string)
 
 	int i;
 	char* item;
-	char* str[] = {"yitshak","admaaso","i am","late","shoshi"};
-	List* list = NULL;
+	char* str2[] = {"shoshan", "almia","lets","try","merge","cut"};
+	char* str[] = {"yitshak","admaso","i am","late","shoshi"};
+	List *list = NULL,*lst2 = NULL;
 	ListItr Lidx = NULL;
 
 	ASSERT_THAT((list = List_Create()) != NULL);
 
 	ASSERT_THAT(List_PushHead(list,NULL) == LIST_UNINITIALIZED_ERROR);
-	ASSERT_THAT(List_PushTail(list,NULL) == LIST_UNINITIALIZED_ERROR);
+	ASSERT_THAT(List_PushTail(lst2,str2[0]) == LIST_UNINITIALIZED_ERROR);
+	lst2 = List_Create();
+	ASSERT_THAT(NULL != lst2);
 	for(i = 0;i < SIZE_ARR(str);++i)
 	{
 		ASSERT_THAT(List_PushTail(list,str[i]) == LIST_SUCCESS);
 
 	}
+	for(i = 0;i < SIZE_ARR(str2);++i)
+	{
+		ASSERT_THAT(List_PushTail(lst2,str2[i]) == LIST_SUCCESS);
+
+	}
 	ASSERT_THAT(List_Size(list) == SIZE_ARR(str));
 	ASSERT_THAT(List_PopHead(list,(void**)&item) == LIST_SUCCESS);
-	ASSERT_THAT(strcmp(item,str[0]) == 0);
+	ASSERT_THAT(strcmp(item,str[0]) == 0);/**strcmp return 0 when equal  */
 	ASSERT_THAT(List_PopTail(list,(void**)&item) == LIST_SUCCESS);
 	ASSERT_THAT(strcmp(item,str[SIZE_ARR(str)-1]) == 0);
 	ASSERT_THAT(item == str[SIZE_ARR(str)-1]);
 	ASSERT_THAT(List_Size(list) == SIZE_ARR(str) - 2);
 	Lidx = ListItr_Begin(list);
 	ASSERT_THAT(item != ListItr_Set(Lidx,item));
+	List_P(list, StrPrt);
+	List_P(lst2, StrPrt);
 	
+	List_Destroy(&list, NULL);
+	List_Destroy(&lst2,NULL);
 	
 END_UNIT
 
@@ -361,6 +384,8 @@ UNIT (List_W_struct)
 	start = ListItr_Begin(list);
 	end  = ListItr_End(list);
 	ListItr_Sort(start,end,Person_cmp);
+	
+	List_Destroy(&list,NULL);
 
 END_UNIT
 

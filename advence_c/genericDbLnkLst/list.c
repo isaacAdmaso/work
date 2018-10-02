@@ -1,10 +1,11 @@
 #include "list_itr.h"
 #include <stdio.h>
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define MAGIC 918312938
-#define IS_INVALID(l) (((l) == NULL) || (l)->m_magic != MAGIC)
+#define MAGIC (void*)0xDEADBEEF
+#define IS_INVALID(l) (((l) == NULL) || (l)->m_head.m_item != MAGIC)
 
 
 typedef struct Node
@@ -18,7 +19,6 @@ struct List
 {
 	Node m_head;
 	Node m_tail;
-    size_t m_magic;
 };
 
 
@@ -35,13 +35,12 @@ List* List_Create(void)
 	{
 		return NULL;
 	}
-	l->m_head.m_item = NULL;
 	l->m_tail.m_item = NULL;
 	l->m_head.m_next = &(l->m_tail);
 	l->m_head.m_prev = NULL;
 	l->m_tail.m_prev = &(l->m_head);
 	l->m_tail.m_next = NULL;
-    l->m_magic = MAGIC;
+	l->m_head.m_item = MAGIC;
 	return l;
 }
 /**
@@ -78,7 +77,7 @@ static List_Result NodeDestroy(Node *_node,void** _data)
 {
 	Node *dataHolder;
 
-	if( NULL == _data)
+	if( NULL == _data || NULL == _node )
 	{
 		return LIST_NULL_ELEMENT_ERROR;
 	}
@@ -99,7 +98,7 @@ static List_Result NodeDestroy(Node *_node,void** _data)
  * @returns error code
  * @retval LIST_SUCCESS on success
  * @retval LIST_UNINITIALIZED_ERROR if the list is not initialized
- * @retval LIST_NULL_ELEMENT_ERROR  if _item is NULL
+ * @retval LIST_UNINITIALIZED_ERROR  if _item is NULL
  * @retval LIST_ALLOCATION_ERROR on memory allocation failure
  */
 List_Result List_PushHead(List* _list, void* _item)
@@ -205,11 +204,11 @@ size_t List_Size(const List* _list)
 void List_Destroy(List** _pList, void (*_elementDestroy)(void* _item))
 {
 	Node *nodePtrToFree;
-	if(NULL == _pList)
+	if(NULL == _pList || IS_INVALID(*_pList))
 	{
 		return;
 	}
-	(*_pList)->m_magic = 0;
+	(*_pList)->m_head.m_item = NULL;
 	while ((*_pList)->m_head.m_next != &((*_pList)->m_tail))
 	{
 		nodePtrToFree = (*_pList)->m_head.m_next;
@@ -262,10 +261,8 @@ ListItr ListItr_End(const List* _list)
 int ListItr_Equals(const ListItr _a, const ListItr _b)
 {
 	Node *_aNode = (Node*)_a,*_bNode = (Node*)_b;
-
-	if( NULL == _a || NULL == _b)
-		return -1;
 	
+    assert(NULL != _a && NULL != _b); 
 	return _aNode == _bNode;
 }
 /** 
@@ -288,8 +285,9 @@ ListItr ListItr_Prev(ListItr _itr)
 {
 	Node* node = (Node*)_itr;
 
-	if( NULL == _itr)
+	if( NULL == _itr || NULL == node->m_prev )
 		return NULL;
+	
 	return (ListItr)node->m_prev;
 }
 
@@ -351,13 +349,12 @@ ListItr ListItr_InsertBefore(ListItr _itr, void* _element)
  */
 void* ListItr_Remove(ListItr _itr)
 {
-	Node* node;
+	Node* node = (Node*)_itr;
 	void *item = NULL;
 	List_Result error = LIST_UNINITIALIZED_ERROR;
 
-	if(NULL == _itr)
+	if(NULL == _itr || NULL == node->m_next)
 		return NULL;
-	node = (Node*)_itr;
 	error = NodeDestroy(node,&item);
 	if(LIST_SUCCESS != error)
 		return NULL;

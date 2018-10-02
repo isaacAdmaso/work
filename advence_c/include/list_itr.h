@@ -1,5 +1,11 @@
 #ifndef __LSTITR_H__
 #define __LSTITR_H__
+/**
+ * @file list_itr.h
+ * @brief list iteration functions to iterate on a doubly linked list 
+ * 
+ * 
+ */
 #include "list.h"
 
 typedef struct ListItr* ListItr;

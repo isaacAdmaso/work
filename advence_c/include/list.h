@@ -13,7 +13,6 @@
  *  @bug No known bugs.
  */ 
 
-#include "person.h"
 #include <stddef.h>  /* size_t */
 
 
@@ -103,8 +102,6 @@ List_Result List_PopTail(List* _list, void** _pItem);
 size_t List_Size(const List* _list);
 
 
-/**for dbg */
-void List_Print(const List* _list);
 
 
 
