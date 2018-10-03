@@ -43,14 +43,17 @@ ListItr ListItr_FindFirst(ListItr _begin, ListItr _end, PredicateFunction _predi
  */
 size_t ListItr_CountIf(ListItr _begin, ListItr _end, PredicateFunction _predicate, void* _context)
 {
-	ListItr cur;
 	size_t count = 0;
 
 	if(NULL ==_begin || NULL == _end || NULL == _predicate || NULL == _context)
 		return count;
-	for(cur = _begin;cur != _end || _predicate(ListItr_Get(cur) ,_context);cur = ListItr_Next(cur)\
-	, ++count)
-	{}
+	while(_begin != _end)
+	{
+		if(_predicate(ListItr_Get(_begin), _context))
+			++count;
+		
+		_begin = ListItr_Next(_begin);
+	}
 	
 	return count;
 }
@@ -78,7 +81,8 @@ ListItr ListItr_ForEach(ListItr _begin, ListItr _end, ListActionFunction _action
 	while(cur != _end)
 	{
 		_item = ListItr_Get(cur);
-		_action(_item , _context);
+		if(!_action(_item , _context))
+			return cur;
 		cur = ListItr_Next(cur);
 	}
 	return cur;

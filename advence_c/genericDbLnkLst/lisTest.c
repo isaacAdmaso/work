@@ -330,8 +330,8 @@ UNIT (List_W_string)
 	char* item;
 	char* str2[] = {"shoshan", "almia","lets","try","merge","cut"};
 	char* str[] = {"yitshak","admaso","i am","late","shoshi"};
-	List *list = NULL,*lst2 = NULL;
-	ListItr Lidx = NULL;
+	List *list = NULL,*lst2 = NULL,*l = NULL;
+	ListItr checkItr = NULL ,start,end,start1,end1;
 
 	ASSERT_THAT((list = List_Create()) != NULL);
 
@@ -356,13 +356,32 @@ UNIT (List_W_string)
 	ASSERT_THAT(strcmp(item,str[SIZE_ARR(str)-1]) == 0);
 	ASSERT_THAT(item == str[SIZE_ARR(str)-1]);
 	ASSERT_THAT(List_Size(list) == SIZE_ARR(str) - 2);
-	Lidx = ListItr_Begin(list);
-	ASSERT_THAT(item != ListItr_Set(Lidx,item));
-	List_P(list, StrPrt);
-	List_P(lst2, StrPrt);
-	
+	checkItr = ListItr_Begin(list);
+	ASSERT_THAT(item != ListItr_Set(checkItr,item));
+	l = List_Create();
+
+	start = ListItr_Begin(list);
+	end  = ListItr_End(list);
+	start1 = ListItr_Begin(lst2);
+	end1 = ListItr_End(lst2);
+
+	ListItr_Sort(start,end,StrCmp);
+	ListItr_Sort(start1,end1,StrCmp);
+
+	start = ListItr_Begin(list);
+	end  = ListItr_End(list);
+	start1 = ListItr_Begin(lst2);
+	end1 = ListItr_End(lst2);
+	checkItr = ListItr_Begin(l);
+	checkItr = ListItr_Merge(checkItr,start,end,start1,end1,StrCmp);
+
 	List_Destroy(&list, NULL);
 	List_Destroy(&lst2,NULL);
+	
+	List_P(list, StrPrt);
+	List_P(lst2, StrPrt);
+	List_P(l, StrPrt);
+	List_Destroy(&l, NULL);
 	
 END_UNIT
 
@@ -371,8 +390,10 @@ END_UNIT
 UNIT (List_W_struct)
 
 	int i;
-	List *list = NULL;
-	ListItr start = NULL,end = NULL;
+	List *list = NULL,*l1 = NULL,*l2 = NULL;
+	ListItr start = NULL,end = NULL,start1 = NULL,end1 = NULL,start2 = NULL;
+	void* item = NULL;
+	Person p = {50, 409572, "Crane, sarus"};
 
 	ASSERT_THAT((list = List_Create()) != NULL);
 	ASSERT_THAT(List_PushTail(list,NULL) == LIST_UNINITIALIZED_ERROR);
@@ -383,9 +404,30 @@ UNIT (List_W_struct)
 		ASSERT_THAT(List_PushTail(list,people+i) == LIST_SUCCESS);
 	start = ListItr_Begin(list);
 	end  = ListItr_End(list);
-	ListItr_Sort(start,end,Person_cmp);
+	ListItr_Sort(start,end,Person_cmp2);
+	l1 = List_Create();
+	start = ListItr_Begin(list);
+	end  = ListItr_End(list);
+	l1 = ListItr_Unique(start,end,Person_Eq);
+	start = ListItr_Begin(list);
+	end  = ListItr_End(list);
+	start1 = ListItr_Begin(l1);
+	end1  = ListItr_End(l1);
+
+	l2 = List_Create();
+	start2 = ListItr_Merge(ListItr_Begin(l2),start,end,start1,end1,Person_cmp2);
+	start = ListItr_Begin(l2);
+	end  = ListItr_End(l2);
 	
+	ASSERT_THAT(ListItr_CountIf(start,end,Person_Eq,&p) == 2);
+	item = ListItr_Remove(start2);
+	Person_print(item,NULL);
 	List_Destroy(&list,NULL);
+	List_Destroy(&l1,NULL);
+	List_Destroy(&l2,NULL);
+	List_P(l2,Person_print);
+	List_P(list,Person_print);
+	List_P(l1,Person_print);
 
 END_UNIT
 

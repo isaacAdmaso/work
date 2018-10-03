@@ -4,6 +4,7 @@
  * 
  */
 #include "person.h"
+#include <string.h>
 #include <stdio.h> /**for printing */
 #include <stdlib.h>/**for free */
 
@@ -26,13 +27,24 @@ void Person_Free(void* _item)
 int Person_cmp(void* _a,void* _b)
 {
 	Person *p1 = (Person*)_a ,*p2 = (Person*)_b;
-    return p1->random > p2->random;
+    return p1->random < p2->random;
+}
+int Person_cmp2(void* _a,void* _b)
+{
+	Person *p1 = (Person*)_a ,*p2 = (Person*)_b;
+    return p1->id < p2->id;
 }
 
 int Person_Eq(void* _a,void* _b)
 {
 	Person *p1 = (Person*)_a ,*p2 = (Person*)_b;
     return p1->random == p2->random;
+}
+
+int Person_Eq2(void* _a,void* _b)
+{
+	Person *p1 = (Person*)_a ,*p2 = (Person*)_b;
+    return p1->id == p2->id;
 }
 
 int IntPrt(void*_itm,void* null)
@@ -45,6 +57,12 @@ int IntCmp(void* _a,void* _b)
 {
 	int *num1 = (int*)_a,*num2 = (int*)_b;
 	return *num1 < *num2; 
+}
+
+int StrCmp(void* _a,void* _b)
+{
+	char *str1 = (char*)_a,*str2 = (char*)_b;
+	return (strcmp(str1,str2) < 0)?1:0; 
 }
 
 int IntEq(void* _a,void* _b)
