@@ -24,9 +24,13 @@ int IntEq(void* _a,void* _b);
 int Person_Eq(void* _a,void* _b);
 void Person_Free(void* _item);
 int Person_cmp(void* _a,void* _b);
+int Person_cmp2(void* _a,void* _b);
 int IntPrt(void*_itm,void* null);
 int StrPrt(void* _itm,void* _null);
 void List_P(const List* _list,ListActionFunction _func);
+int StrCmp(void* _a,void* _b);
+int Person_Eq2(void* _a,void* _b);
+
 
 extern Person people[100];
 

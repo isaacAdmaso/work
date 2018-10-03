@@ -420,13 +420,20 @@ UNIT (List_W_struct)
 	end  = ListItr_End(l2);
 	
 	ASSERT_THAT(ListItr_CountIf(start,end,Person_Eq,&p) == 2);
+
+
+	start = ListItr_Begin(l2);
+	end  = ListItr_End(l2);
+	start2 = ListItr_FindFirst(start,end,Person_cmp2,(void*)&p);
+	list = ListItr_Cut(start2, end);
+	List_P(l2,Person_print);
+	List_P(list,Person_print);
+
 	item = ListItr_Remove(start2);
 	Person_print(item,NULL);
 	List_Destroy(&list,NULL);
 	List_Destroy(&l1,NULL);
 	List_Destroy(&l2,NULL);
-	List_P(l2,Person_print);
-	List_P(list,Person_print);
 	List_P(l1,Person_print);
 
 END_UNIT

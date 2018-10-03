@@ -62,7 +62,7 @@ int IntCmp(void* _a,void* _b)
 int StrCmp(void* _a,void* _b)
 {
 	char *str1 = (char*)_a,*str2 = (char*)_b;
-	return (strcmp(str1,str2) < 0)?1:0; 
+	return (strcmp(str1,str2) < 0)?0:1; 
 }
 
 int IntEq(void* _a,void* _b)
