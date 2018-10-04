@@ -279,6 +279,7 @@ size_t Vector_ForEach(const Vector* _vector, VectorElementAction _action, void* 
 
 
 
+/*
 void Vector_Print(const Vector* _vec)
 {
 	int i ,*itemptr ;
@@ -303,7 +304,6 @@ void Vector_Prstr(const Vector* _vec)
 	printf("\n");
 }
 
-/*
 */
 
 

@@ -37,14 +37,13 @@ UNIT(vector_append_normal)
 	ASSERT_THAT(Vector_Remove(vec,(void**)&item) == VECTOR_SUCCESS);
 	printf("%d , %d",*item,arr[SIZE_ARR(arr)-1]);
 	ASSERT_THAT(*item == arr[SIZE_ARR(arr)-1]);
-	printf("%d , %d",*item,arr[SIZE_ARR(arr)-1]);
 	ASSERT_THAT(Vector_Size(vec) == SIZE_ARR(arr)-1);
 	ASSERT_THAT(Vector_Set(vec,0,(void*)item)== VECTOR_SUCCESS);
 	ASSERT_THAT(Vector_Get(vec,0,(void**)&item) == VECTOR_SUCCESS);
-	printf("%d , %d",*item,arr[0]);
+	printf("%d, %d",*item,arr[0]);
 	for(i = 0;i < SIZE_ARR(arr)-1;++i)
 		ASSERT_THAT(Vector_Get(vec,i,(void**)&item) == VECTOR_SUCCESS);
-	Vector_Print(vec);
+	
 END_UNIT
 
 
@@ -73,9 +72,8 @@ UNIT(vector_append_string)
 	printf("\n%s , %s\n",item,str[0]);
 	for(i = 0;i < SIZE_ARR(str)-1;++i)
 		ASSERT_THAT(Vector_Get(vec,i,(void**)&item) == VECTOR_SUCCESS);
-	Vector_Prstr(vec);
 END_UNIT
-
+/*
 UNIT(vector_append_struct)
 	Vector* vec = NULL;
 	int i;
@@ -91,26 +89,26 @@ UNIT(vector_append_struct)
 	ASSERT_THAT(Vector_Append(vec,&p) == VECTOR_OVERFLOW);
 	ASSERT_THAT(Vector_Size(vec) == SIZE_ARR(people));
 	ASSERT_THAT(Vector_Capacity(vec) == SIZE_ARR(people));
-	Person_print(_p);
-	Person_print(&p);
+	Person_print(_p,NULL);
+	Person_print(&p,NULL);
 
 	ASSERT_THAT(Vector_Remove(vec,(void**)(&_p)) == VECTOR_SUCCESS);
-	Person_print(_p);
-	Person_print(&p);
+	Person_print(_p,NULL);
+	Person_print(&p,NULL);
 
-	Person_print(people+SIZE_ARR(people)-1);
+	Person_print(people+SIZE_ARR(people)-1,NULL);
 	ASSERT_THAT(Vector_Size(vec) == SIZE_ARR(people)-1);
 	ASSERT_THAT(Vector_Set(vec,0,&p)== VECTOR_SUCCESS);
 	ASSERT_THAT(Vector_Get(vec,0,(void**)&_p) == VECTOR_SUCCESS);
-	Person_print(_p);
+	Person_print(_p,NULL);
 
 	for(i = 0;i <10;++i)
 	{
 		ASSERT_THAT(Vector_Get(vec,i,(void**)&_p) == VECTOR_SUCCESS);
-		Person_print(_p);
+		Person_print(_p,NULL);
 	}
 END_UNIT
-
+*/
 /*
 UNIT(tree_found_normal)
 	Tree* tree = NULL;
@@ -133,8 +131,8 @@ TEST_SUITE(framework test)
 	TEST(vector_append_null)
 	TEST(vector_append_normal)
 	TEST(vector_append_string)
-	TEST(vector_append_struct)
 	/*
+	TEST(vector_append_struct)
 	TEST(tree_found_normal)*/
 	
 END_SUITE

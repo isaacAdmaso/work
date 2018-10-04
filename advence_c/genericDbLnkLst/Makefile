@@ -7,7 +7,7 @@ CFLAGS= -ansi -pedantic -Wall -Werror  -g -c
 LDFLAGS= -g
 
 # Include directory
-INC_DIR=../include
+INC_DIR=../../include
 
 CFLAGS += -I$(INC_DIR)
 

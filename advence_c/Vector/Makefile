@@ -4,12 +4,12 @@ TARGET=tests.out
 # General compilation flags
 CC=gcc
 CFLAGS= -ansi -pedantic -Wall -Werror  -g 
-LDFLAGS= -g
+LDFLAGS= -g 
 
 # Include directory
-INC_DIR=../include
+INC_DIR=../../include
 
-CFLAGS += -I$(INC_DIR)
+CFLAGS += -I$(INC_DIR) 
 
 
 # all .c files in this directory are my sources
