@@ -17,6 +17,7 @@
  *  @bug No known bugs.
  */
 
+
 typedef struct BSTree  BSTree;
 typedef struct BSTreeItr*  BSTreeItr;
 
@@ -46,7 +47,7 @@ typedef enum
     BSTREE_TRAVERSAL_INORDER,
     BSTREE_TRAVERSAL_POSTORDER,
     BSTREE_TRAVERSAL_DEPTH_FIRST,
-    BSTREE_TRAVERSAL_BREADTH_FIRST,
+    BSTREE_TRAVERSAL_BREADTH_FIRST
 } TreeTraversalMode;
 
 
@@ -163,7 +164,7 @@ void* BSTreeItr_Get(BSTreeItr _it);
 /** 
  * @brief Performs an action function on every element in tree, by given traversal mode
  * @details iteration will stop on the first element for which the action function returns a zero
- * or on reaching end of the conrainer
+ * or on reaching end of the container
  *
  * @params _tree : tree to iterate over
  * @params _mode : Traversal mode - TREE_TRAVERSAL_PREORDER, TREE_TRAVERSAL_INORDER or TREE_TRAVERSAL_POSTORDER
