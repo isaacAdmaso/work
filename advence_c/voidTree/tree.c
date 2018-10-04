@@ -48,45 +48,40 @@ BSTree* BSTree_Create(LessComparator _less)
 }
 
 
-static Node* BSTreeItr_Begin_Rec(Node* _node)
+static void NodeDestroyHelpr(Node* _node, void (*_destroyer)(void*))
 {
-    if( NULL == _node->m_left)
-    {
-        return _node;
-    }
-    return BSTreeItr_Begin_Rec(_node->m_left);
+	if(NULL == _node)
+	{
+		return;
+	}
+	NodeDestroyHelpr(_node->m_left,_destroyer);
+	NodeDestroyHelpr(_node->m_right,_destroyer);
+	if(NULL != _destroyer)
+	{
+		_destroyer(_node->m_data);
+	}
+	free(_node);
 }
+	
+
 /** 
- * @brief Get an in-order iterator to the tree's begin 
+ * @brief Destroy tree
+ * Destroys the tree, freeing the memory.
+ * If supplied with non-NULL destroyer function, frees items in tree.
+ * Average time complexity: O(1)..O(n) (depends on memory freeing)
  *
- * @param _tree : tree to create iterator from
- * @return an iterator pointing at the tree's begin or end if tree is empty 
+ * @params _tree : A previously created Tree ADT returned via BSTreeCreate
+ * @params _destroyer : A function to destroy the data in the tree (may be NULL if unnecessary)
  */
-BSTreeItr BSTreeItr_Begin(const BSTree* _tree)
+void  BSTree_Destroy(BSTree* _tree, void (*_destroyer)(void*))
 {
-    if(IS_INVALID(_tree))
-    {
-        return NULL;
-    }
-    if(_tree->m_root.m_left == NULL)
-    {
-        return (BSTreeItr)&_tree->m_root;
-    }
-    return (BSTreeItr)BSTreeItr_Begin_Rec(_tree->m_root.m_left);
-}
-/** 
- * @brief Get itertator to the tree's end (in order)
- *
- * @param _tree : tree to create iterator from
- * @return an iterator pointing at the tree's end
- */
-BSTreeItr BSTreeItr_End(const BSTree* _tree)
-{
-    if(IS_INVALID(_tree))
-    {
-        return NULL;
-    }
-    return (BSTreeItr)&_tree->m_root;
+	if(IS_INVALID(_tree))
+	{
+		return ;
+	}
+	_tree->m_root.m_data = NULL;
+	NodeDestroyHelpr(_tree->m_root.m_left, _destroyer);
+	free(_tree);
 }
 
 
@@ -170,42 +165,49 @@ BSTreeItr BSTree_Insert(BSTree* _tree, void* _item)
 
 
 
-
-static void NodeDestroyHelpr(Node* _node, void (*_destroyer)(void*))
+static Node* BSTreeItr_Begin_Rec(Node* _node)
 {
-	if(NULL == _node)
-	{
-		return;
-	}
-	NodeDestroyHelpr(_node->m_left,_destroyer);
-	NodeDestroyHelpr(_node->m_right,_destroyer);
-	if(NULL != _destroyer)
-	{
-		_destroyer(_node->m_data);
-	}
-	free(_node);
+    if( NULL == _node->m_left)
+    {
+        return _node;
+    }
+    return BSTreeItr_Begin_Rec(_node->m_left);
 }
-	
+/** 
+ * @brief Get an in-order iterator to the tree's begin 
+ *
+ * @param _tree : tree to create iterator from
+ * @return an iterator pointing at the tree's begin or end if tree is empty 
+ */
+BSTreeItr BSTreeItr_Begin(const BSTree* _tree)
+{
+    if(IS_INVALID(_tree))
+    {
+        return NULL;
+    }
+    if(_tree->m_root.m_left == NULL)
+    {
+        return (BSTreeItr)&_tree->m_root;
+    }
+    return (BSTreeItr)BSTreeItr_Begin_Rec(_tree->m_root.m_left);
+}
+
 
 /** 
- * @brief Destroy tree
- * Destroys the tree, freeing the memory.
- * If supplied with non-NULL destroyer function, frees items in tree.
- * Average time complexity: O(1)..O(n) (depends on memory freeing)
+ * @brief Get itertator to the tree's end (in order)
  *
- * @params _tree : A previously created Tree ADT returned via BSTreeCreate
- * @params _destroyer : A function to destroy the data in the tree (may be NULL if unnecessary)
+ * @param _tree : tree to create iterator from
+ * @return an iterator pointing at the tree's end
  */
-void  BSTree_Destroy(BSTree* _tree, void (*_destroyer)(void*))
+BSTreeItr BSTreeItr_End(const BSTree* _tree)
 {
-	if(IS_INVALID(_tree))
-	{
-		return ;
-	}
-	_tree->m_root.m_data = NULL;
-	NodeDestroyHelpr(_tree->m_root.m_left, _destroyer);
-	free(_tree);
+    if(IS_INVALID(_tree))
+    {
+        return NULL;
+    }
+    return (BSTreeItr)&_tree->m_root;
 }
+
 
 
 /** 
@@ -222,6 +224,7 @@ int BSTreeItr_Equals(BSTreeItr _a, BSTreeItr _b)
     assert(NULL != _a && NULL != _b); 
 	return _aNode == _bNode;
 }
+
 
 
 static Node* first_Has_Right(Node* _node,Node* _chkN)
@@ -340,6 +343,23 @@ void* BSTreeItr_Remove(BSTreeItr _it)
 	return item;
 }
 
+/** 
+ * @brief Get element stored at tree position pointed to by iterator
+ * time complexity O(1).
+ * We do not provide a BSTreeItr_Put(it, data) function. Can you imagine why???
+ * @param _it : A tree iterator
+ * @return the item the iterator points at or null if _it as at end
+ */
+void* BSTreeItr_Get(BSTreeItr _it)
+{
+	Node* node = (Node*)_it;
+
+	if(NULL == node || NULL == node->m_parent)
+	{
+		return NULL;
+	}
+	return node->m_data;
+}
 
 /*
 BSTreeItr NodeIsDataFoundHElper(Node* _node, PredicateFunction _predicate, void* _context)
@@ -372,31 +392,41 @@ BSTreeItr BSTree_FindFirst(const BSTree* _tree, PredicateFunction _predicate, vo
 	}
 	return NodeIsDataFoundHElper(_tree->m_root, _data);
 }
+(const BSTree* _tree, TreeTraversalMode _mode, ActionFunction _action, void* _context)
 */
 
 /*
-static void NodePrint(Node* _node,TreeTraverse _mode)
+static void NodePrint(Node* _node,TreeTraversalMode _mode,ActionFunction _action, void* _context)
 {
-	if(NULL == _node)
+	if(NULL == _node->m_parent)
 	{
 		return;
 	}
 	switch(_mode)
 	{
-		case(PRE_ORDER):
-			printf("%d ",_node->m_data);
+		case(BSTREE_TRAVERSAL_PREORDER):
+			if(!_action(node->m_data,_context))
+			{
+				return node;
+			}
 			NodePrint(_node->m_left,_mode);
 			NodePrint(_node->m_right,_mode);
 			break;
-		case(IN_ORDER):
+		case(BSTREE_TRAVERSAL_INORDER):
 			NodePrint(_node->m_left,_mode);
-			printf("%d ",_node->m_data);
+			if(!_action(node->m_data,_context))
+			{
+				return node;
+			}
 			NodePrint(_node->m_right,_mode);
 			break;
 		case(POST_ORDER):
 			NodePrint(_node->m_left,_mode);
 			NodePrint(_node->m_right,_mode);
-			printf("%d ",_node->m_data);
+			if(!_action(node->m_data,_context))
+			{
+				return node;
+			}
 			break;				
 		default:
 			break;
