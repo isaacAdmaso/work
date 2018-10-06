@@ -1,5 +1,5 @@
 # this is my target
-TARGET=tree.out
+TARGET=list.out
 
 # General compilation flags
 CC=gcc
@@ -8,9 +8,10 @@ LDFLAGS= -g
 
 # Include directory
 INC_DIR=../../include
+INC_LIB=../../lib
 
 CFLAGS += -I$(INC_DIR)
-
+LDFLAGS += -L$(INC_LIB)
 
 # all .c files in this directory are my sources
 SOURCES=$(wildcard *.c)

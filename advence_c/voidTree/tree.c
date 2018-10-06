@@ -37,6 +37,7 @@ BSTree* BSTree_Create(LessComparator _less)
 {
 	BSTree* t;
 	
+	assert(NULL != _less);
 	t = (BSTree*)calloc(1,sizeof(BSTree));
 	if(NULL == t)
 	{
@@ -156,12 +157,53 @@ BSTreeItr BSTree_Insert(BSTree* _tree, void* _item)
 	if(_tree->m_root.m_left == NULL)
 	{
 		_tree->m_root.m_left = newNode;
-		newNode->m_parent = _tree->m_root.m_left;
+		newNode->m_parent = &(_tree->m_root);
 	}
     newItr = (BSTreeItr)NodeInsertHelper(_tree->m_root.m_left,newNode,_tree->m_compere);
 	return  (NULL == newItr) ? (BSTreeItr)&_tree->m_root : newItr;
 }
 
+
+static Node* Find_First_H(Node* _node,PredicateFunction _predicate, void* _context)
+{
+	Node* rtNode = NULL;
+	if(NULL == _node)
+	{
+		return _node->m_parent;
+	}
+	Find_First_H(_node->m_left,_predicate,_context);
+	if(!_predicate(_node->m_data,_context))
+	{
+		rtNode = _node;
+	}
+	Find_First_H(_node->m_right,_predicate,_context);
+	return rtNode;
+}
+
+/** 
+ * @brief Search the first element for which the given predicate returns 0
+ * iterating using in-order manner over elements
+ * O(k * n) where O(k) is the time complexity of the predicate
+ *
+ * @param _tree : A previously created Tree ADT returned via BSTreeCreate
+ * @param _predicate : Predicate function
+ * @param _params : Predicate parameters
+ * @return an iterator pointing to the first data found, to end of tree if not found or NULL on NULL input
+ */
+/*
+*/
+BSTreeItr BSTree_FindFirst(const BSTree* _tree, PredicateFunction _predicate, void* _context)
+{
+	if(IS_INVALID(_tree) || NULL ==_predicate || NULL == _context)
+	{
+		return NULL;
+	}
+	if(NULL == _tree->m_root.m_left)
+	{
+		return (BSTreeItr)&_tree->m_root;
+	}
+	return (BSTreeItr)Find_First_H(_tree->m_root.m_left,_predicate,_context);
+}
 
 
 
@@ -227,13 +269,13 @@ int BSTreeItr_Equals(BSTreeItr _a, BSTreeItr _b)
 
 
 
-static Node* first_Has_Right(Node* _node,Node* _chkN)
+static Node* First_Has_Right(Node* _node,Node* _chkN)
 {
 	if(_chkN == _node->m_left || _node->m_parent == NULL)
 	{
 		return _node;
 	}
-	return  first_Has_Right(_node->m_parent,_node);
+	return  First_Has_Right(_node->m_parent,_node);
 }
 /** 
  * @brief Get iterator to the next element from current iterator
@@ -252,7 +294,7 @@ BSTreeItr BSTreeItr_Next(BSTreeItr _it)
 	}
 	else 
 	{
-		return (BSTreeItr)first_Has_Right(node->m_parent,node);
+		return (BSTreeItr)First_Has_Right(node->m_parent,node);
 	}
 }
 
@@ -361,89 +403,66 @@ void* BSTreeItr_Get(BSTreeItr _it)
 	return node->m_data;
 }
 
-/*
-BSTreeItr NodeIsDataFoundHElper(Node* _node, PredicateFunction _predicate, void* _context)
+
+
+
+static Node* FotEach_H(Node* _node,TreeTraversalMode _mode,ActionFunction _action, void* _context)
 {
+	Node* rtNode = NULL;
 	if(NULL == _node)
 	{
-		return NULL;
-	}
-	if(!_predicate(_context ,_node->m_data))
-	{
-		return (BSTreeItr)_node;
-	}
-	return NodeIsDataFoundHElper(_node->m_left,_predicate,_context) || NodeIsDataFoundHElper(_node->m_right,_predicate,_context);
-}
-
- * @brief Search the first element for which the given predicate returns 0
- * iterating using in-order manner over elements
- * O(k * n) where O(k) is the time complexity of the predicate
- *
- * @param _tree : A previously created Tree ADT returned via BSTreeCreate
- * @param _predicate : Predicate function
- * @param _params : Predicate parameters
- * @return an iterator pointing to the first data found, to end of tree if not found or NULL on NULL input
- *//*
-BSTreeItr BSTree_FindFirst(const BSTree* _tree, PredicateFunction _predicate, void* _context)
-{
-	if(IS_INVALID(_tree) || NULL == _context)
-	{
-		return NULL;
-	}
-	return NodeIsDataFoundHElper(_tree->m_root, _data);
-}
-(const BSTree* _tree, TreeTraversalMode _mode, ActionFunction _action, void* _context)
-*/
-
-/*
-static void NodePrint(Node* _node,TreeTraversalMode _mode,ActionFunction _action, void* _context)
-{
-	if(NULL == _node->m_parent)
-	{
-		return;
+		return _node->m_parent;
 	}
 	switch(_mode)
 	{
 		case(BSTREE_TRAVERSAL_PREORDER):
-			if(!_action(node->m_data,_context))
+			if(!_action(_node->m_data,_context))
 			{
-				return node;
+				return _node;
 			}
-			NodePrint(_node->m_left,_mode);
-			NodePrint(_node->m_right,_mode);
+			rtNode = FotEach_H(_node->m_left,_mode,_action,_context);
+			rtNode = FotEach_H(_node->m_right,_mode,_action,_context);
 			break;
 		case(BSTREE_TRAVERSAL_INORDER):
-			NodePrint(_node->m_left,_mode);
-			if(!_action(node->m_data,_context))
+			rtNode = FotEach_H(_node->m_left,_mode,_action,_context);
+			if(!_action(_node->m_data,_context))
 			{
-				return node;
+				return _node;
 			}
-			NodePrint(_node->m_right,_mode);
+			rtNode = FotEach_H(_node->m_right,_mode,_action,_context);
 			break;
-		case(POST_ORDER):
-			NodePrint(_node->m_left,_mode);
-			NodePrint(_node->m_right,_mode);
-			if(!_action(node->m_data,_context))
+		case(BSTREE_TRAVERSAL_POSTORDER):
+			rtNode = FotEach_H(_node->m_left,_mode,_action,_context);
+			rtNode = FotEach_H(_node->m_right,_mode,_action,_context);
+			if(!_action(_node->m_data,_context))
 			{
-				return node;
+				return _node;
 			}
 			break;				
 		default:
 			break;
 	}
+	return rtNode;
 } 		
-		
-void  TreePrint(const Tree* _tree, TreeTraverse _traverseMode)
+/** 
+ * @brief Performs an action function on every element in tree, by given traversal mode
+ * @details iteration will stop on the first element for which the action function returns a zero
+ * or on reaching end of the container
+ *
+ * @params _tree : tree to iterate over
+ * @params _mode : Traversal mode - TREE_TRAVERSAL_PREORDER, TREE_TRAVERSAL_INORDER or TREE_TRAVERSAL_POSTORDER
+ * @params _action : Action function to call for each element
+ * @params _context : Context for the _action function
+ * @return Iterator refering to the tree end or the element where iteration stopped
+ */
+BSTreeItr BSTree_ForEach(const BSTree* _tree, TreeTraversalMode _mode,ActionFunction _action, void* _context)
 {
-	if(NULL == _tree)
+	if(IS_INVALID(_tree) || NULL ==_action)
 	{
-		return;
+		return NULL;
 	}
-	NodePrint(_tree->m_root,_traverseMode);
+	return (BSTreeItr)FotEach_H(_tree->m_root.m_left,_mode,_action,_context);
 }
-	
-
-*/
 
 
 

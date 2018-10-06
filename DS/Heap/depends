@@ -1,5 +1,0 @@
-Heap.o: Heap.c ../include/Heap.h ../include/ADTDefs.h ../include/vector.h
-Htest.o: Htest.c ../include/Heap.h ../include/ADTDefs.h \
- ../include/vector.h ../include/mu_test.h
-vector.o: vector.c ../include/ADTDefs.h ../include/vector.h \
- ../include/ADTDefs.h

@@ -75,7 +75,7 @@ ADTErr ShakeSort  (int *_arr,unsigned int _size)
 				swap = 1;
 			}
 		}
-		/*No swap was needed alredy sorted*/
+		/*No swap was needed already sorted*/
 		if(swap == 0)
 		{
 			break;

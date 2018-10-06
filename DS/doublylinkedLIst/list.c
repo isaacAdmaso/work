@@ -5,6 +5,8 @@
 #define IS_INVALID(l) (((l) == NULL) || l->m_tail.m_item != MAGIC)
 
 
+
+
 typedef struct Node
 {
 	int m_item;
@@ -41,8 +43,9 @@ void   ListDestroy(List_t *_list)
 	if(IS_INVALID(_list))
 	{
 		return;
-	}	
-	nodePtrToFree=(Node*)malloc(sizeof(Node));
+	}
+	_list->m_head.m_item = 0;
+	_list->m_tail.m_item = 0;
 	while (_list->m_head.m_next != &(_list->m_tail))
 	{
 		nodePtrToFree=(_list->m_head.m_next);

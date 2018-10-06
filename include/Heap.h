@@ -27,14 +27,14 @@ typedef int (*LessComparator)(void* _left, void* _right);
  * @warning allocating and freeing the underlying vector is user responsibility. 
  * as long as vector is under the heap control, user should not access the vector directly
  */
-Heap* HeapBuild(Vector* _vector);
+Heap* HeapBuild(Vector* _vector,LessComparator _less);
 
 /**  
  * @brief Deallocate a previously allocated heap
  * Frees the heap but not the underlying vector  
  * @param[in] _heap - Heap to be deallocated.
  */
-void HeapDestroy(Heap** _heap);
+void HeapDestroy(Heap* _heap);
 
 /**  
  * @brief Add an element to the Heap preserving heap property.  
@@ -45,7 +45,7 @@ void HeapDestroy(Heap** _heap);
  * @retval ERR_NOT_INITIALIZED  error, heap not initilized
  * @retval ERR_REALLOCATION_FAILED error, heap could not reallocate underlying vector 
  */
-HeapItr HeapInsert(Heap* _heap, void _element);
+Vector_Result HeapInsert(Heap* _heap, void* _element)
 
 /**  
  * @brief Return the current maximum element from th heap without extracting it.  
