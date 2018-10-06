@@ -143,10 +143,13 @@ void Vector_Destroy(Vector** _vector, void (*_elementDestroy)(void* _item))
 			return;
 		}
 		(*_vector)->m_magic = 0;
-        for(i = 0; i < (*_vector)->m_nItems;++i)
-        {
-            _elementDestroy((*_vector)->m_items[i]);
-        }
+		if(NULL != _elementDestroy)
+		{
+			for(i = 0; i < (*_vector)->m_nItems;++i)
+			{
+				_elementDestroy((*_vector)->m_items[i]);
+			}
+		}
 	 	free((*_vector)->m_items);
 		free(*_vector);	
 	}
