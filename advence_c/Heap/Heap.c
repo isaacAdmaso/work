@@ -85,22 +85,36 @@ Heap* Heap_Build(Vector* _vector,LessThanComparator _pfLess)
 /**  
  * @brief Deallocate a previously allocated heap
  * Frees the heap but not the underlying vector  
- * @param[in] _heap - Heap to be deallocated.
- */	
-Vector* HeapDestroy(Heap* _heap)
+ * @param[in] _heap - Heap to be deallocated.  On success will be nulled.
+ * @return Underlying vector
+ */
+Vector* Heap_Destroy(Heap** _heap)
 {
 	Vector* vec = NULL;
-		
-	if(!IS_INVALID(_heap))
+	
+	if(_heap == NULL)
 	{
-		_heap->m_magic = -1;
-		vec = _heap->m_vec;
-		free(_heap);
+		return NULL;
+	}
+	if(!IS_INVALID(*_heap))
+	{
+		(*_heap)->m_magic = -1;
+		vec = (*_heap)->m_vec;
+		free(*_heap);
 	}
 	return vec;
 }
-	
-Heap_Result HeapInsert(Heap* _heap, void* _element)
+
+/**  
+ * @brief Add an element to the Heap preserving heap property.  
+ * @param[in] _heap - Heap to insert element to.
+ * @param[in] _element - Element to insert. can't be null
+ * @return success or error code 
+ * @retval HEAP_OK  on success
+ * @retval HEAP_NOT_INITIALIZED  error, heap not initilized
+ * @retval HEAP_REALLOCATION_FAILED error, heap could not reallocate underlying vector 
+ */
+Heap_Result Heap_Insert(Heap* _heap, void* _element)
 {
 	size_t itemNum;
 	int i;

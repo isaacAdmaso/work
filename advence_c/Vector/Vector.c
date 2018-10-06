@@ -136,7 +136,6 @@ size_t Vector_Capacity(const Vector* _vector)
 void Vector_Destroy(Vector** _vector, void (*_elementDestroy)(void* _item))
 {
     int i;
-    assert(NULL != _elementDestroy);
 	if(NULL != _vector)
 	{
 		if(IS_INVALID(*_vector))
@@ -200,7 +199,7 @@ Vector_Result Vector_Remove(Vector* _vector, void** _pValue)
  */
 Vector_Result Vector_Get(const Vector* _vector, size_t _index, void** _pValue)
 {
-    if(IS_INVALID(_vector) || NULL == _pValue || NULL == *_pValue) 
+    if(IS_INVALID(_vector) || NULL == _pValue) 
 	{
 		return VECTOR_UNINITIALIZED_ERROR;
 	}

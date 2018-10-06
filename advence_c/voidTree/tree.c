@@ -158,6 +158,7 @@ BSTreeItr BSTree_Insert(BSTree* _tree, void* _item)
 	{
 		_tree->m_root.m_left = newNode;
 		newNode->m_parent = &(_tree->m_root);
+		return (BSTreeItr)newNode;
 	}
     newItr = (BSTreeItr)NodeInsertHelper(_tree->m_root.m_left,newNode,_tree->m_compere);
 	return  (NULL == newItr) ? (BSTreeItr)&_tree->m_root : newItr;
