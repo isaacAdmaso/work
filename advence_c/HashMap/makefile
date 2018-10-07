@@ -1,5 +1,5 @@
 # this is my target
-TARGET = HeapTestMU.out
+TARGET = HashMapTest.out
 LIBS = ADS
 
 .PHONY: run clean gdb
@@ -20,15 +20,15 @@ CFLAGS += -I$(INC_DIR)
 
 
 # All .c files in this directory are my sources
-SOURCES = HeapTestMU.c
-LIB_SRC = Heap.c
+SOURCES = HashMapTest.c
+LIB_SRC = HashMap.c
 # All .o files in this directory are my objects
 OBJECTS = $(SOURCES:.c=.o)
 LIB_OBJ = $(LIB_SRC:.c=.o)
 
 # The default command, compile all the sources
 $(TARGET): $(OBJECTS) libs
-	$(CC) $(OBJECTS) -o $(TARGET)  -L$(LIB_PATH) -lADS
+	$(CC) $(OBJECTS) -o $(TARGET)  -L$(LIB_PATH) -lADS   
 
 libADS.a: $(LIB_OBJ) #let's link library files into a static library
 	ar rcs $(LIB_PATH)/libADS.a $(LIB_OBJ)

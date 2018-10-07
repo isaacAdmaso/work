@@ -1,111 +1,171 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-
 #include "Heap.h"
 #include "mu_test.h"
 
-#define NOI 10
 
-/*static int arr[]= {7, 3, 10, 11, 12, 13};*/
 
-void FillVector(Vector* v)
+int IntCmp(const void* _a,const void* _b)
 {
-    int i;
-    int* val;
-    srand(time(NULL));
-    
-    for(i = 0; i < NOI; ++i)
-    {
-        val = (int*)malloc(sizeof(int));
-        *val = rand()%10 + 1;
-    	Vector_Append(v, val); 
-    }
+	int *num1 = (int*)_a,*num2 = (int*)_b;
+	return *num1 < *num2; 
 }
-
-
-int	comparator(const void *_left, const void *_right)
+int CreatVector(Vector *v)
 {
-    return((*(int*)_left) >= (*(int*)_right));
+	int  i;
+	int arr[]={1,2,3,4,5,36,77,81,29,120};
+	for (i = 0; i < sizeof(arr)/sizeof(arr[0]); ++i)
+	{
+		ASSERT_THAT(Vector_Append(v,&arr[i])==VECTOR_SUCCESS);
+	}
+	return PASS;
 }
+UNIT(heapBuild)
+	Heap *h = NULL;
+	Vector *v;
+	v=Vector_Create(2,2);
+	h = Heap_Build(v,IntCmp);
+	ASSERT_THAT(h != NULL);
+	Heap_Destroy(&h);
+	Vector_Destroy(&v,NULL);
 
-
-UNIT(heap_create_normal)
-    Heap* heap;
-    Vector* vector;
-    vector = Vector_Create(4, 2);
-    FillVector(vector);
-    heap = Heap_Build(vector, comparator);
-    ASSERT_THAT(heap != NULL);
-    Heap_Destroy(&heap);
-	Vector_Destroy(&vector, NULL);
 END_UNIT
 
-UNIT(heap_create_vector_empty)
-    Heap* heap;
-    Vector* vector;
-    vector = Vector_Create(4, 2);
-    heap = Heap_Build(vector, comparator);
-    ASSERT_THAT(heap != NULL);
-    Heap_Destroy(&heap);
-	Vector_Destroy(&vector, NULL);
+UNIT(heapBuild_NULL)
+	Heap *h;
+	Vector *v;
+	v = NULL;
+	h = Heap_Build(v,IntCmp);
+	ASSERT_THAT(h == NULL);
+	Heap_Destroy(&h);
+	Vector_Destroy(&v,NULL);
 END_UNIT
 
-UNIT(heap_insert_normal)
-    int element  = 100;
-    Heap* heap;
-    Vector* vector;
-    vector = Vector_Create(4, 2);
-    FillVector(vector);
-    heap = Heap_Build(vector, comparator);
-    ASSERT_THAT(Heap_Insert(heap, (void*)&element) == HEAP_SUCCESS);
-    Heap_Destroy(&heap);
-	Vector_Destroy(&vector, NULL);
+UNIT(heapInsert_normal)
+	int item = 2303,item2 = 123,*itemPtr = &item2;
+	const void *itmPtr; 
+	Heap *h;
+	Vector *v;
+	v=Vector_Create(2,2);
+	h = Heap_Build(v,IntCmp);
+	ASSERT_THAT(h != NULL);
+	ASSERT_THAT(Heap_Insert(h,&item) == HEAP_SUCCESS);
+	itmPtr = Heap_Peek(h);
+	itemPtr = (int*)itmPtr;
+	ASSERT_THAT(*itemPtr == item);
+	Heap_Destroy(&h);
+	ASSERT_THAT(Heap_Insert(h,&item2) == HEAP_NOT_INITIALIZED);
+	Vector_Destroy(&v,NULL);
+/*
+	ASSERT_THAT(item == 2303);
+*/	
 END_UNIT
-
-UNIT(heap_peek_normal)
-    void* _pValue;
-    Heap* heap;
-    Vector* vector;
-    vector = Vector_Create(4, 2);
-    FillVector(vector);
-    heap = Heap_Build(vector, comparator);
-    Vector_Get(vector, 0, &_pValue);
-    ASSERT_THAT(*(int*)Heap_Peek(heap) == *(int*)_pValue);
-    Heap_Destroy(&heap);
-	Vector_Destroy(&vector, NULL);
-END_UNIT
-
-UNIT(heap_extract_normal)
-    void* _pValue;
-    Heap* heap;
-    Vector* vector;
-    vector = Vector_Create(4, 2);
-    FillVector(vector);
-    heap = Heap_Build(vector, comparator);
-    Vector_Get(vector, 0, &_pValue);
-    ASSERT_THAT(*(int*)Heap_Extract(heap) == *(int*)_pValue);
-    Heap_Destroy(&heap);
-	Vector_Destroy(&vector, NULL);
-END_UNIT
-
-UNIT(heap_size_normal)
-    Heap* heap;
-    Vector* vector;
-    vector = Vector_Create(4, 2);
-    FillVector(vector);
-    heap = Heap_Build(vector, comparator);
-    ASSERT_THAT(Heap_Size(heap) == NOI);
-    Heap_Destroy(&heap);
-	Vector_Destroy(&vector, NULL);
+/*
+UNIT(heapInsert_null)
+	Heap *h;
+	h = NULL;
+	ASSERT_THAT(h == NULL);
+	ASSERT_THAT(HeapInsert(h,2303) == ERR_NOT_INITIALIZED);
+	HeapDestroy(h);
 END_UNIT
 
 
-TEST_SUITE(heap_test)
-    TEST(heap_create_normal)
-    TEST(heap_create_vector_empty)
-    TEST(heap_insert_normal)
-    TEST(heap_peek_normal)
-    TEST(heap_extract_normal)
-    TEST(heap_size_normal)
+UNIT(heapInsert_overflow)
+	Heap *h;
+	Vector *v;
+	v=VectorCreate(1,0);
+	CreatVector(v);
+	h = HeapBuild(v);
+	ASSERT_THAT(h != NULL);
+	ASSERT_THAT(HeapInsert(h,2303) == ERR_OVERFLOW);
+	HeapDestroy(h);
+	VectorDestroy(v);
+END_UNIT
+
+
+UNIT(heapMaxNormal)
+	int item;
+	Heap *h;
+	Vector *v;
+	v=VectorCreate(2,2);
+	CreatVector(v);
+	h = HeapBuild(v);
+	ASSERT_THAT(h != NULL);
+	ASSERT_THAT(HeapInsert(h,2303) == ERR_OK);
+	ASSERT_THAT(HeapExtractMax(h , &item) == ERR_OK);
+	ASSERT_THAT(item == 2303);
+	HeapDestroy(h);
+	VectorDestroy(v);
+END_UNIT
+
+
+UNIT(heapMaxNULL)
+	int item;
+	Heap *h;
+	h = NULL;
+	ASSERT_THAT(HeapMax(h,&item) == ERR_NOT_INITIALIZED);
+END_UNIT
+
+UNIT(heapMaxuNDERFLOW)
+	int item;
+	Heap *h;
+	Vector *v;
+	v=VectorCreate(2,2);
+	h = HeapBuild(v);
+	ASSERT_THAT(h != NULL);
+	ASSERT_THAT(HeapMax(h,&item) == ERR_UNDERFLOW);
+	ASSERT_THAT(HeapExtractMax(h , &item) == ERR_UNDERFLOW);
+	HeapDestroy(h);
+	VectorDestroy(v);
+END_UNIT
+
+UNIT(heapExtractMax)
+	int item;
+	Heap *h;
+	Vector *v;
+	v=VectorCreate(2,2);
+	CreatVector(v);
+	h = HeapBuild(v);
+	ASSERT_THAT(h != NULL);
+	ASSERT_THAT(HeapInsert(h,2303) == ERR_OK);
+	ASSERT_THAT(HeapExtractMax(h , &item) == ERR_OK);
+	ASSERT_THAT(item == 2303);
+	ASSERT_THAT(HeapExtractMax(h , &item) == ERR_OK);
+	ASSERT_THAT(item != 2303);
+	HeapDestroy(h);
+	VectorDestroy(v);
+END_UNIT
+
+
+UNIT(heapSize)
+	Heap *h;
+	Vector *v;
+	h = NULL;
+	ASSERT_THAT(HeapSize(h) == -1);
+	v=VectorCreate(2,2);
+	h = HeapBuild(v);
+	ASSERT_THAT(HeapSize(h) == 0);
+	CreatVector(v);
+	h = HeapBuild(v);
+	ASSERT_THAT(HeapSize(h) == 10);
+	HeapDestroy(h);
+	VectorDestroy(v);
+
+END_UNIT
+
+*/
+TEST_SUITE(Heap test)
+	TEST(heapBuild)
+	TEST(heapBuild_NULL)
+	TEST(heapInsert_normal)
+/*
+	TEST(heapInsert_null)
+	TEST(heapInsert_overflow)
+	TEST(heapMaxNormal)	
+	TEST(heapExtractMax)
+	TEST(heapSize)
+	TEST(heapMaxNULL)
+	TEST(heapMaxuNDERFLOW)
+*/
 END_SUITE
+
