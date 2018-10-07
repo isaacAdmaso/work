@@ -13,43 +13,49 @@ struct Heap
     LessThanComparator m_compere;
 };
 
+typedef struct pair
+{
+	size_t m_idx;
+	void* m_val;
+}pair;
+
 static void MaxHeapify(Heap* _heap,size_t _index)
 {
-	void *index_val,*l_val,*r_val,*largest_val;
-	size_t l,r,largest;
+	pair leftC,rightC,parent,*largest;
 
-	l = 2*_index+1;
-	r = 2*_index+2;
-	Vector_Get(_heap->m_vec,_index,&index_val);
+	leftC.m_idx = 2*_index+1;
+	rightC.m_idx = 2*_index+2;
+	parent.m_idx = _index;
+	Vector_Get(_heap->m_vec,parent.m_idx,&(parent.m_val));
 
-	if(l < _heap->m_heap_size)
+	if(leftC.m_idx < _heap->m_heap_size)
 	{
-		Vector_Get(_heap->m_vec,l,&l_val);
-		if(_heap->m_compere(index_val,l_val))
+		Vector_Get(_heap->m_vec,leftC.m_idx,&leftC.m_val);
+		if(_heap->m_compere(parent.m_val,leftC.m_val))
 		{
-			largest = l;
+			largest = &leftC;
 		}else
 		{
-			largest = _index;
+			largest = &parent;
 		}
 	}else 
 	{
-		largest = _index;
+		largest = &parent;
 	}
-	if(r < _heap->m_heap_size)
+	if(rightC.m_idx < _heap->m_heap_size)
 	{
-		Vector_Get(_heap->m_vec,r,&r_val);
-		if(_heap->m_compere(l_val,r_val) && _heap->m_compere(index_val,r_val))
+		Vector_Get(_heap->m_vec,rightC.m_idx,&rightC.m_val);
+		if(_heap->m_compere(leftC.m_val,rightC.m_val) && _heap->m_compere(parent.m_val,rightC.m_val))
 		{
-			largest = r;
+			largest = &rightC;
 		}
 	}
-	if (largest != _index)
+	if (largest != &parent)
 	{
-		Vector_Get(_heap->m_vec,largest,&largest_val);
-		Vector_Set(_heap->m_vec,_index,largest_val);
-		Vector_Set(_heap->m_vec,largest,index_val);
-		MaxHeapify(_heap,largest);
+		Vector_Get(_heap->m_vec,largest->m_idx,&(largest->m_val));
+		Vector_Set(_heap->m_vec,parent.m_idx,largest->m_val);
+		Vector_Set(_heap->m_vec,largest->m_idx,parent.m_val);
+		MaxHeapify(_heap,largest->m_idx);
 	}
 }
 		
