@@ -1,6 +1,6 @@
 # this is my target
 TARGET = HeapTestMU.out
-LIBS = ADC
+LIBS = ADS
 
 .PHONY: run clean gdb
 
@@ -28,10 +28,10 @@ LIB_OBJ = $(LIB_SRC:.c=.o)
 
 # The default command, compile all the sources
 $(TARGET): $(OBJECTS) libs
-	$(CC) $(OBJECTS) -o $(TARGET)  -L$(LIB_PATH) -lADC
+	$(CC) $(OBJECTS) -o $(TARGET)  -L$(LIB_PATH) -lADS
 
-libADC.a: $(LIB_OBJ) #let's link library files into a static library
-	ar rcs $(LIB_PATH)/libADC.a $(LIB_OBJ)
+libADS.a: $(LIB_OBJ) #let's link library files into a static library
+	ar rcs $(LIB_PATH)/libADS.a $(LIB_OBJ)
 	
 # Built-in recipe for link("include" is MAKE command), include call "depends"
 
@@ -42,7 +42,7 @@ include depends
 depends:
 	$(CC) -MM -I$(INC_DIR) $(SOURCES) $(LIB_SRC) > depends
 
-libs: libADC.a
+libs: libADS.a
 
 clean:
 	-rm $(TARGET) *.o depends

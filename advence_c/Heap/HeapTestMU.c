@@ -56,18 +56,19 @@ UNIT(heapInsert_normal)
 	Heap_Destroy(&h);
 	ASSERT_THAT(Heap_Insert(h,&item2) == HEAP_NOT_INITIALIZED);
 	Vector_Destroy(&v,NULL);
-/*
 	ASSERT_THAT(item == 2303);
+END_UNIT
+UNIT(heapInsert_null)
+	Heap *h;
+	int item = 2303;
+
+	h = NULL;
+	ASSERT_THAT(Heap_Insert(h,&item) == HEAP_NOT_INITIALIZED);
+	Heap_Destroy(&h);
+/*
 */	
 END_UNIT
 /*
-UNIT(heapInsert_null)
-	Heap *h;
-	h = NULL;
-	ASSERT_THAT(h == NULL);
-	ASSERT_THAT(HeapInsert(h,2303) == ERR_NOT_INITIALIZED);
-	HeapDestroy(h);
-END_UNIT
 
 
 UNIT(heapInsert_overflow)
@@ -158,8 +159,8 @@ TEST_SUITE(Heap test)
 	TEST(heapBuild)
 	TEST(heapBuild_NULL)
 	TEST(heapInsert_normal)
-/*
 	TEST(heapInsert_null)
+/*
 	TEST(heapInsert_overflow)
 	TEST(heapMaxNormal)	
 	TEST(heapExtractMax)

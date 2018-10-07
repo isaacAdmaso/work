@@ -1,0 +1,3 @@
+HeapTestMU.o: HeapTestMU.c ../../include/Heap.h ../../include/Vector.h \
+ ../../include/mu_test.h
+Heap.o: Heap.c ../../include/Heap.h ../../include/Vector.h
