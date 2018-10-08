@@ -1,6 +1,7 @@
 #include "HashMap.h"
-#include "../../include/list_functions.h"
+#include "list_functions.h"
 #include <stdlib.h>
+#include <assert.h>
 
 
 #define MAGIC 1073741824
@@ -220,7 +221,7 @@ Map_Result HashMap_Insert(HashMap* _map, const void* _key, const void* _value)
  */
 Map_Result HashMap_Remove(HashMap* _map, const void* _searchKey, void** _pValue)
 {
-	pair* data;
+	pair* data = NULL;
 	size_t idx;
 	ListItr begin, end,check;
 
@@ -235,10 +236,10 @@ Map_Result HashMap_Remove(HashMap* _map, const void* _searchKey, void** _pValue)
 	}
 
 	idx = HashIdx(_map,data);
-
+	assert(data != NULL);
 	begin = ListItr_Begin(_map->m_items[idx]);
 	end = ListItr_End(_map->m_items[idx]);
-	check = ListItr_FindFirst(begin,end, _map->m_keysEqualFunc,_searchKey);
+	check = ListItr_FindFirst(begin,end, _map->m_keysEqualFunc,(void*)_searchKey);
 	if( check != end)
 	{
 		data = (pair*)ListItr_Remove(check);
@@ -257,7 +258,6 @@ Map_Result HashMap_Rehash(HashMap *_map, size_t newCapacity)
 {
 	int i,j;
 	pair* dataHlder;
-    size_t hash_idx;
 	ListItr begin, end,cur;
     List** m_NewData = NULL;
     size_t old_size = _map->m_size;
@@ -319,8 +319,8 @@ Map_Result HashMap_Rehash(HashMap *_map, size_t newCapacity)
  */
 Map_Result HashMap_Find(const HashMap* _map, const void* _key, void** _pValue)
 {
-	pair* data;
 	size_t idx;
+	pair* data  = malloc(sizeof(pair));
 	ListItr begin, end,check;
 
 	if(IS_INVALID(_map) || NULL ==  _pValue)
@@ -332,12 +332,12 @@ Map_Result HashMap_Find(const HashMap* _map, const void* _key, void** _pValue)
 	{
 		return MAP_KEY_NULL_ERROR;
 	}
-
-	idx = HashIdx(_map,data);
+	data->m_key = (void*)_key;
+	idx = HashIdx((HashMap*)_map,data);
 
 	begin = ListItr_Begin(_map->m_items[idx]);
 	end = ListItr_End(_map->m_items[idx]);
-	check = ListItr_FindFirst(begin,end, _map->m_keysEqualFunc,_key);
+	check = ListItr_FindFirst(begin,end, _map->m_keysEqualFunc,(void*)_key);
 	if( check != end)
 	{
 		data = (pair*)ListItr_Get(check);
@@ -348,18 +348,7 @@ Map_Result HashMap_Find(const HashMap* _map, const void* _key, void** _pValue)
 }
 
 
-/**
- * @brief Get number of key-value pairs inserted into the hash map
- * @warning complexity can be O(?)
- */
-size_t HashMap_Size(const HashMap* _map)
-{
-	if(IS_INVALID(_map))
-	{
-		return 0;
-	}
-	return _map->m_noItems;
-}
+
 /** 
  * This method is optional in the homewor 
  * @brief Iterate over all key-value pairs in the map.
@@ -376,11 +365,12 @@ size_t HashMap_ForEach(const HashMap* _map, KeyValueActionFunction _action, void
 	size_t count = 0, size;
 	int i;
 
+	assert(NULL !=_action);
 	size = _map->m_capacity;
 	for(i = 0; i < size; ++i)
     {
 		begin = ListItr_Begin(_map->m_items[i]);
-		end = ListItr_End(_map->m_items[i]));
+		end = ListItr_End(_map->m_items[i]);
 		while(begin != end)
 		{
 			++count;
@@ -393,7 +383,43 @@ size_t HashMap_ForEach(const HashMap* _map, KeyValueActionFunction _action, void
 			}
 		}
 	}
-	return 0;
+	return count;
 }
+
+
+#ifndef NDEBUG
+
+
+Map_Stats HashMap_GetStatistics(const HashMap* _map)
+{
+	Map_Stats stats = {0};
+	size_t size;
+	int cur=0,count_max = 0, i;
+
+	if(IS_INVALID(_map))
+	{
+		return stats;
+	}
+	size = _map->m_size;
+	stats.numberOfBuckets = _map->m_size;
+	for(i = 0;i < size;++i)
+	{
+		cur = List_Size(_map->m_items[i]);
+		if(cur != 0)
+		{
+			++(stats.numberOfChains);
+			if (cur > count_max)
+			{
+				count_max = cur;
+			}
+		}
+	}
+	stats.maxChainLength = count_max;
+	stats.averageChainLength = (_map->m_noItems)/(stats.numberOfChains);
+	return stats;
+	
+}
+
+#endif /* NDEBUG */
 
 

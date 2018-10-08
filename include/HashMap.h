@@ -32,7 +32,7 @@ typedef enum Map_Result {
 
 
 typedef size_t (*HashFunction)(const void* _key);
-typedef int (*EqualityFunction)(const void* _firstKey, const void* _secondKey);
+typedef int (*EqualityFunction)(void* _firstKey, void* _secondKey);
 typedef int	(*KeyValueActionFunction)(const void* _key, void* _value, void* _context);
 
 

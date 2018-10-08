@@ -11,14 +11,14 @@ static size_t mod(const void* _null)
 	return 1 ;
 }
 
-int nul(const void* _a,const void* _b)
+int nul( void* _a, void* _b)
 {
     return 1;
 }
 
 UNIT(hashBuild)
 	HashMap *h;
-	h = HashMap_Create(1,mod,nul);
+	h = HashMap_Create(6,mod,nul);
 	ASSERT_THAT(h != NULL);
 END_UNIT
 /*
@@ -199,8 +199,8 @@ END_UNIT
 */
 
 TEST_SUITE(HashSet test)
-/*
 	TEST(hashBuild)
+/*
 	TEST(hashBuild_capacityZero)
 	TEST(hashBuild_loadFactorbiggerThenOne)
 	TEST(HashSetInsert_normal)
