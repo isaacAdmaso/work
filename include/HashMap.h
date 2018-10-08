@@ -27,13 +27,13 @@ typedef enum Map_Result {
 	MAP_KEY_DUPLICATE_ERROR, 		/**< Duplicate key error 		*/
 	MAP_KEY_NOT_FOUND_ERROR, 		/**< Key not found 				*/
 	MAP_ALLOCATION_ERROR, 			/**< Allocation error 	 		*/
-	MAP_OVERFLOW_ERROR				/**< NEED TO USE RE_HASH FUNC*/
 } Map_Result;
 
 
 typedef size_t (*HashFunction)(const void* _key);
 typedef int (*EqualityFunction)(void* _firstKey, void* _secondKey);
 typedef int	(*KeyValueActionFunction)(const void* _key, void* _value, void* _context);
+typedef void (*Destroy)(void* _item);
 
 
 /** 

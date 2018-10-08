@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-
+#define OK   1   
 #define MAGIC 1073741824
 #define MININPUT 1
 #define IS_INVALID(H) ((NULL == (H)) || (H)->m_magic != MAGIC)
@@ -25,6 +25,12 @@ typedef struct pair
 	void* m_key;
 	void* m_data;
 }pair;
+
+typedef struct Destroy_Pair_Func
+	{
+		Destroy m_keyDestroy; 
+		Destroy m_valDestroy;
+	}Destroy_Pair_Func;
 
 static int GetNumber(int _number);/*next prime number*/
 
@@ -59,20 +65,7 @@ HashMap* HashMap_Create(size_t _capacity, HashFunction _hashFunc, EqualityFuncti
 		free(h);
 		return NULL;
 	}
-    for(i = 0;i < primeN;++i)
-	{
-		h->m_items[i] = List_Create();
-		if(NULL == h->m_items[i])
-		{
-			for(j = 0;j < i;++j)
-			{
-				List_Destroy(&(h->m_items[j]),NULL);
-			}
-			free(h->m_items);
-			free(h);
-			return NULL;
-		}
-	}
+    
     h->m_size = primeN;
 	h->m_noItems = 0;
 	h->m_hashFunc = _hashFunc;
@@ -87,30 +80,51 @@ static size_t HashIdx(HashMap* _map,pair* _data)
 	return (_map->m_hashFunc(_data->m_key))%_map->m_size;
 }
 
+static int Destroy_Pair(void* _element, void* _destryStruct)
+{
+	pair* nodeData = _element;
+	Destroy_Pair_Func d_p_f = _destryStruct;
+
+	if(NULL == nodeData)
+	{
+		return 0;/**is NULL data allowed? */
+	}
+	d_p_f.m_keyDestroy(nodeData->m_key);
+	d_p_f.m_valDestroy(nodeData->m_data);
+	return OK;
+}
+
 /**
  * @brief destroy hash map and set *_map to null
  * @param[in] _map : map to be destroyed
  * @param[optional] _keyDestroy : pointer to functionto destroy keys
  * @param[optional] _valDestroy : pointer to functionto destroy values 
  * @details optionally destroy all keys and values using user provided functions
+ */
 void HashMap_Destroy(HashMap** _map, void (*_keyDestroy)(void* _key), void (*_valDestroy)(void* _value))
 {
+	Destroy_Pair_Func d_p_f = {_keyDestroy,_valDestroy};
 	size_t mapSize;
 	int i;
+	ListItr start,end;
 
 	if(NULL == _map || IS_INVALID(*_map))
 	{
 		return;
 	}
 	mapSize = (*_map)->m_size;
+
+	
 	for(i = 0;i < mapSize;++i)
 	{
-		List_Destroy(&((*_map)->m_items[i]),_valDestroy);
+		start = ListItr_Begin((*_map)->m_items[i]);
+		end = ListItr_End((*_map)->m_items[i]);
+		ListItr_ForEach(start,end,Destroy_Pair,&d_p_f);
+		List_Destroy(&((*_map)->m_items[i]),NULL);
 	}
 	free((*_map)->m_items);
 	free(*_map);
 }
- */
 
 
 /**
@@ -195,7 +209,15 @@ Map_Result HashMap_Insert(HashMap* _map, const void* _key, const void* _value)
 
 	begin = ListItr_Begin(_map->m_items[idx]);
 	end = ListItr_End(_map->m_items[idx]);
-	if(ListItr_FindFirst(begin,end, _map->m_keysEqualFunc,data->m_data) != end)
+	if(NULL == begin)
+	{
+		_map->m_items[idx] = List_Create;
+		if(NULL == _map->m_items[idx])
+		{
+			return MAP_ALLOCATION_ERROR;
+		}
+	}
+	else if(ListItr_FindFirst(begin,end, _map->m_keysEqualFunc,data->m_data) != end)
 	{
 		free(data);
 		return MAP_KEY_DUPLICATE_ERROR;
