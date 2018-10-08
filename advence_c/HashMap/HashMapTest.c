@@ -20,9 +20,9 @@ UNIT(hashBuild)
 	HashMap *h;
 	h = HashMap_Create(6,mod,nul);
 	ASSERT_THAT(h != NULL);
+	HashMap_Destroy(&h,NULL,NULL);
 END_UNIT
 /*
-	HashSetDestroy(HashMap_Destroy);
 UNIT(hashBuild_capacityZero)
 	HashSet *h;
 	h = HashSetCreate(0,0.7,mod);

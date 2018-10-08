@@ -52,4 +52,6 @@ run:  $(TARGET)
 
 gdb:  $(TARGET)
 	 gdb -q ./$(TARGET)
-	
+
+val: $(TARGET)
+	valgrind -q --leak-check=full -v ./$(TARGET)

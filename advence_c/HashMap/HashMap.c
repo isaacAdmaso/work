@@ -45,7 +45,7 @@ static int GetNumber(int _number);/*next prime number*/
 HashMap* HashMap_Create(size_t _capacity, HashFunction _hashFunc, EqualityFunction _keysEqualFunc)
 {
     HashMap *h;
-	int primeN,i,j; 
+	int primeN; 
 	
 	/*parameter check*/
 	if(_capacity <= MININPUT || NULL == _hashFunc || NULL == _keysEqualFunc)
@@ -83,14 +83,14 @@ static size_t HashIdx(HashMap* _map,pair* _data)
 static int Destroy_Pair(void* _element, void* _destryStruct)
 {
 	pair* nodeData = _element;
-	Destroy_Pair_Func d_p_f = _destryStruct;
+	Destroy_Pair_Func* d_p_f = (Destroy_Pair_Func*)_destryStruct;
 
 	if(NULL == nodeData)
 	{
 		return 0;/**is NULL data allowed? */
 	}
-	d_p_f.m_keyDestroy(nodeData->m_key);
-	d_p_f.m_valDestroy(nodeData->m_data);
+	d_p_f->m_keyDestroy(nodeData->m_key);
+	d_p_f->m_valDestroy(nodeData->m_data);
 	return OK;
 }
 
@@ -103,23 +103,28 @@ static int Destroy_Pair(void* _element, void* _destryStruct)
  */
 void HashMap_Destroy(HashMap** _map, void (*_keyDestroy)(void* _key), void (*_valDestroy)(void* _value))
 {
-	Destroy_Pair_Func d_p_f = {_keyDestroy,_valDestroy};
+	Destroy_Pair_Func d_p_f;
 	size_t mapSize;
 	int i;
 	ListItr start,end;
+
 
 	if(NULL == _map || IS_INVALID(*_map))
 	{
 		return;
 	}
 	mapSize = (*_map)->m_size;
-
+	d_p_f.m_keyDestroy = _keyDestroy;
+	d_p_f.m_valDestroy = _valDestroy;
 	
 	for(i = 0;i < mapSize;++i)
 	{
-		start = ListItr_Begin((*_map)->m_items[i]);
-		end = ListItr_End((*_map)->m_items[i]);
-		ListItr_ForEach(start,end,Destroy_Pair,&d_p_f);
+		if(NULL == _keyDestroy || NULL == _valDestroy)
+		{
+			start = ListItr_Begin((*_map)->m_items[i]);
+			end = ListItr_End((*_map)->m_items[i]);
+			ListItr_ForEach(start,end,Destroy_Pair,&d_p_f);
+		}
 		List_Destroy(&((*_map)->m_items[i]),NULL);
 	}
 	free((*_map)->m_items);
@@ -211,7 +216,7 @@ Map_Result HashMap_Insert(HashMap* _map, const void* _key, const void* _value)
 	end = ListItr_End(_map->m_items[idx]);
 	if(NULL == begin)
 	{
-		_map->m_items[idx] = List_Create;
+		_map->m_items[idx] = List_Create();
 		if(NULL == _map->m_items[idx])
 		{
 			return MAP_ALLOCATION_ERROR;
