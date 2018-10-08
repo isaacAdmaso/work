@@ -15,7 +15,6 @@ struct HashMap
     List** m_items;			                /*data holder*/
 	size_t m_size;			                /*actual DS size*/
 	size_t m_noItems;		                /* number of inputs*/
-	size_t m_capacity;		                /*client max inputs*/
     HashFunction m_hashFunc;                /*Hash func given by client*/
     EqualityFunction m_keysEqualFunc;        /* Equality Function given by client*/
 };
@@ -70,7 +69,6 @@ HashMap* HashMap_Create(size_t _capacity, HashFunction _hashFunc, EqualityFuncti
 	h->m_noItems = 0;
 	h->m_hashFunc = _hashFunc;
 	h->m_keysEqualFunc = _keysEqualFunc;
-	h->m_capacity = _capacity;
 	h->m_magic = MAGIC;
 	return h;
 }
@@ -193,10 +191,7 @@ Map_Result HashMap_Insert(HashMap* _map, const void* _key, const void* _value)
 	{
 		return MAP_UNINITIALIZED_ERROR;
 	}
-	if(_map->m_noItems == _map->m_capacity)
-	{
-		return MAP_OVERFLOW_ERROR;
-	}
+	
 	if(NULL == _key)
 	{
 		return MAP_KEY_NULL_ERROR;
@@ -393,7 +388,7 @@ size_t HashMap_ForEach(const HashMap* _map, KeyValueActionFunction _action, void
 	int i;
 
 	assert(NULL !=_action);
-	size = _map->m_capacity;
+	size = _map->m_size;
 	for(i = 0; i < size; ++i)
     {
 		begin = ListItr_Begin(_map->m_items[i]);

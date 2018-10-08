@@ -13,4 +13,5 @@
 .DS_Store
 core
 *.gch
+depends
 *.json
