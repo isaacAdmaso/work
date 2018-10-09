@@ -5,7 +5,10 @@
             "includePath": [
                 "../../include",
                 "${workspaceFolder}/**",
-                "/usr/include/x86_64-linux-gnu/bits"
+                "/usr/include/x86_64-linux-gnu/bits",
+                "/usr/lib/gcc/x86_64-linux-gnu/7/include",
+                "/usr/include"
+
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

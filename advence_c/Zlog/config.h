@@ -1,7 +1,12 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
-#include "zlog.h"
 
-void* GetParam(char* _str);
+#define MAX_LINE_SIZE  1024
+#define MAX_WORD_SIZE  128
+
+
+
+void Config_GetParametrs(char* _configName, char* _logName, int* _errorLevel);
+
 
 #endif /*__CONFIG_H__*/
