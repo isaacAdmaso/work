@@ -3,12 +3,15 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "../../include",
+                "${workspaceFolder}/**",
+                "/usr/include/x86_64-linux-gnu/bits"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "c11",
             "cppStandard": "c++17",
+            "compileCommands": "../include",
             "intelliSenseMode": "gcc-x64"
         }
     ],
