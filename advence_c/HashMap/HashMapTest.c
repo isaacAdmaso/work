@@ -2,10 +2,10 @@
 #include "mu_test.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "logger.h"
 
 #define SIZE 23
 #define CAPA 10
-
 static size_t mod(const void* _null)
 {
 	return 1 ;
@@ -18,6 +18,7 @@ int nul( void* _a, void* _b)
 
 UNIT(hashBuild)
 	HashMap *h;
+
 	h = HashMap_Create(6,mod,nul);
 	ASSERT_THAT(h != NULL);
 	HashMap_Destroy(&h,NULL,NULL);

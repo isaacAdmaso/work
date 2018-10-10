@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include<ctype.h>
+#include "logger.h"
 #define NUM_OF_ALPHA 128
 #define NOR 3
 #define NOC 256
@@ -18,6 +19,7 @@ void last(char* _fileName,int n)
 		perror("Error file is NULL");
 		return;
 	}
+	ZLOG("last",LOG_TRACE,"hope will work");
 	while(!feof(fp))
 	{		
 		fgets(line,NOC,fp);
@@ -69,6 +71,7 @@ void freq(char* _fileName)
 
 int main()
 {	
+	Zlog_Init("Confile.txt");
 	last("testl.c",NOR);
 	freq("last");
 	return 0;

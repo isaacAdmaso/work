@@ -14,13 +14,13 @@ FILE* LogFile_OpenLog(char* _fileName)
 }
 
 
-void LogFile_WriteLine(File* _filePtrW,char* _line)
+void LogFile_WriteLine(FILE* _filePtrW,char* _line)
 {
     fprintf(_filePtrW,"%s",_line);    
 }
 
 
-void LogFile_CloseLog(File* _filePtrC)
+void LogFile_CloseLog(FILE* _filePtrC)
 {
     fclose(_filePtrC);
 }

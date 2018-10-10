@@ -1,16 +1,22 @@
 #ifndef __LOGGER_H__
 #define __LOGGER_H__
 #include <stdio.h>
+#include <string.h>
 #include "zlogStruct.h"
+#include "logFile.h"
+#include "config.h"
 
 
+#pragma GCC system_header
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Werror"
 
-extern zlog;
-
+extern zlog_t zlog;
 #define ZLOG(MODULE,LEVEL,MSG) \
 			do{if(zlog.m_level <= LEVEL) \
-				Zlog_Print(__SOURCE_FILE__,__LINE__,__func__,MSG ,LEVEL ,MODULE);}while(0)
+				Zlog_Print(__FILE__,__LINE__,__func__,MSG ,LEVEL ,MODULE);}while(0)
 
+#pragma GCC diagnostic pop
 
 typedef enum ErrorLevels
 {
@@ -27,14 +33,11 @@ typedef enum ErrorLevels
 
 
 
-void zlog_Init(char* _configFile);
+void Zlog_Init(char* _configFile);
 
     /*logfile write*/
-void Zlog_Print(char* _sourceFileName, int _lineNum, char* _func, char* _freeStr, ErrorLevels _level, char* _module);
-
+void Zlog_Print(char* _sourceFileName, int _lineNum,const char* _func, char* _freeStr, ErrorLevels _level, char* _module);
     /*logfile close*/
-void Logger_Destroy();
+void Zlog_Destroy();
 
-#endif __LOGGER_H__
-
-/*do{ if(!(e)) return __LINE__;} while(0)*/
+#endif /*__LOGGER_H__*/
