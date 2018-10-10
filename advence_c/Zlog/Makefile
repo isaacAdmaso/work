@@ -45,7 +45,7 @@ depends:
 libs: libADS.a
 
 clean:
-	-rm $(TARGET) *.o depends
+	-rm $(TARGET) *.o depends log.txt
 
 run:  $(TARGET)
 	 ./$(TARGET)
