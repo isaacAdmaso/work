@@ -58,7 +58,26 @@ static void MaxHeapify(Heap* _heap,size_t _index)
 		MaxHeapify(_heap,largest->m_idx);
 	}
 }
-		
+
+void HeapifyUp(Heap* _heap,size_t _index)
+{
+	pair _idxValP,parent;
+
+	parent.m_idx = (_index - 1)/2;
+	_idxValP.m_idx = _index;
+	if(0 <= _index && _index < _heap->m_heap_size)
+	{
+		Vector_Get(_heap->m_vec,parent.m_idx,&(parent.m_val));
+		Vector_Get(_heap->m_vec,_idxValP.m_idx,&(_idxValP.m_val));
+
+		if(_heap->m_compere(parent.m_val,_idxValP.m_val))
+		{
+			Vector_Set(_heap->m_vec,parent.m_idx,_idxValP.m_val);
+			Vector_Set(_heap->m_vec,_idxValP.m_idx,parent.m_val);
+			HeapifyUp(_heap,parent.m_idx);
+		}
+	} 
+}		
 /**  
  * @brief Apply a heap policy over a Vector container.  
  * @param[in] _vector - Vector that holds the elements, must be initialized
@@ -123,8 +142,6 @@ Vector* Heap_Destroy(Heap** _heap)
 Heap_Result Heap_Insert(Heap* _heap, void* _element)
 {
 	size_t itemNum;
-	int i;
-	void* temp_first;
 	Vector_Result error = VECTOR_SUCCESS;
 
 	if(IS_INVALID(_heap))
@@ -136,15 +153,9 @@ Heap_Result Heap_Insert(Heap* _heap, void* _element)
 	{
 		return HEAP_REALLOCATION_FAILED;
 	}
-	Vector_Get(_heap->m_vec,0,&temp_first);
 	itemNum = Vector_Size(_heap->m_vec);
-	Vector_Set(_heap->m_vec,0,_element);
-	Vector_Set(_heap->m_vec,itemNum-1,temp_first);
+	HeapifyUp(_heap,itemNum-1);
 	++(_heap->m_heap_size);
-	for(i = (_heap->m_heap_size)/2; i >= 0; --i)
-	{	
-		MaxHeapify(_heap,i);
-	}
 	return HEAP_SUCCESS;
 	
 }
