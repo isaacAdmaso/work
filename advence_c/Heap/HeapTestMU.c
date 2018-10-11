@@ -10,14 +10,15 @@ int IntCmp(const void* _a,const void* _b)
 	int *num1 = (int*)_a,*num2 = (int*)_b;
 	return *num1 < *num2; 
 }
+int arr[]={1,2,3,4,5,36,77,81,298998,120};
 int CreatVector(Vector *v)
 {
 	int  i;
-	int arr[]={1,2,3,4,5,36,77,81,29,120};
 	for (i = 0; i < sizeof(arr)/sizeof(arr[0]); ++i)
 	{
 		ASSERT_THAT(Vector_Append(v,&arr[i])==VECTOR_SUCCESS);
 	}
+	
 	return PASS;
 }
 UNIT(heapBuild)
@@ -56,32 +57,39 @@ UNIT(heapInsert_normal)
 	Heap_Destroy(&h);
 	ASSERT_THAT(Heap_Insert(h,&item2) == HEAP_NOT_INITIALIZED);
 	Vector_Destroy(&v,NULL);
-/*
-	ASSERT_THAT(item == 2303);
-*/	
+	
 END_UNIT
-/*
+
 UNIT(heapInsert_null)
 	Heap *h;
+	int num = 1324;
+
 	h = NULL;
-	ASSERT_THAT(h == NULL);
-	ASSERT_THAT(HeapInsert(h,2303) == ERR_NOT_INITIALIZED);
-	HeapDestroy(h);
+	ASSERT_THAT(Heap_Insert(h,&num) == HEAP_NOT_INITIALIZED);
+	Heap_Destroy(&h);
 END_UNIT
 
 
 UNIT(heapInsert_overflow)
 	Heap *h;
 	Vector *v;
-	v=VectorCreate(1,0);
+	int num = 3,*intPtr = &num;
+
+	v = Vector_Create(2,2);
 	CreatVector(v);
-	h = HeapBuild(v);
+	h = Heap_Build(v,IntCmp);
 	ASSERT_THAT(h != NULL);
-	ASSERT_THAT(HeapInsert(h,2303) == ERR_OVERFLOW);
-	HeapDestroy(h);
-	VectorDestroy(v);
+	intPtr = (int*)Heap_Peek(h);
+	Vector_Print(v);
+	printf("\n%d\n",*intPtr);
+	intPtr = (int*)Heap_Extract(h);
+	printf("\n%d\n",*intPtr);
+	Heap_Destroy(&h);
+	ASSERT_THAT(Heap_Insert(h,&num) == HEAP_NOT_INITIALIZED);
+	Vector_Destroy(&v,NULL);
 END_UNIT
 
+/*
 
 UNIT(heapMaxNormal)
 	int item;
@@ -158,9 +166,9 @@ TEST_SUITE(Heap test)
 	TEST(heapBuild)
 	TEST(heapBuild_NULL)
 	TEST(heapInsert_normal)
+	TEST(heapInsert_overflow)
 /*
 	TEST(heapInsert_null)
-	TEST(heapInsert_overflow)
 	TEST(heapMaxNormal)	
 	TEST(heapExtractMax)
 	TEST(heapSize)

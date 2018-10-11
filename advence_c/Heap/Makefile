@@ -2,7 +2,7 @@
 TARGET = HeapTestMU.out
 LIBS = ADS
 
-.PHONY: run clean gdb
+.PHONY: run clean gdb val
 
 # General compilation flags
 
@@ -52,4 +52,7 @@ run:  $(TARGET)
 
 gdb:  $(TARGET)
 	 gdb -q ./$(TARGET)
+
+val: $(TARGET)
+	valgrind -q --leak-check=full -v ./$(TARGET)
 	

@@ -42,7 +42,9 @@ UNIT(vector_append_normal)
 	ASSERT_THAT(Vector_Get(vec,0,(void**)&item) == VECTOR_SUCCESS);
 	printf("%d, %d",*item,arr[0]);
 	for(i = 0;i < SIZE_ARR(arr)-1;++i)
-		ASSERT_THAT(Vector_Get(vec,i,(void**)&item) == VECTOR_SUCCESS);
+		ASSERT_THAT(Vector_Remove(vec,(void**)&item) == VECTOR_SUCCESS);
+	ASSERT_THAT(Vector_Size(vec) == 0);
+	ASSERT_THAT(Vector_Remove(vec,(void**)&item) == VECTOR_UNDERFLOW);	
 	
 END_UNIT
 
