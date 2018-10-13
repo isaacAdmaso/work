@@ -2,15 +2,17 @@
 #define __TIME_H__
 
 #include <stddef.h>
-#include "time.h"
+#include <time.h>
 
-typedef  timespec ScdTime;
+typedef struct timespec ScdTime;
 
-int Time_Comp(ScdTime,ScdTime);
+int Time_Comp(ScdTime _aTaskT,ScdTime _bTaskT);
 
-ScdTime Time_convert(double _time);
+ScdTime Time_Convert(double _seconds);
 
-ScdTime Time_Add(ScdTime _time);
+ScdTime Time_Add(ScdTime _time,ScdTime _timeToADD);
+
+double Time_To_Dbl(ScdTime _time);
 
 void Time_Tsleep(ScdTime _time);
 

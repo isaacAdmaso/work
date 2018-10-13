@@ -5,6 +5,7 @@
 #include "zlogStruct.h"
 #include "logFile.h"
 #include "config.h"
+#include "Ztime.h"
 
 
 #pragma GCC system_header

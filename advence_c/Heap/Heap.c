@@ -90,22 +90,22 @@ void HeapifyUp(Heap* _heap,size_t _index)
 Heap* Heap_Build(Vector* _vector,LessThanComparator _pfLess)
 {
 	int i;
-	Heap* h = NULL;
+	Heap* heap = NULL;
 
-	h = (Heap*)malloc(sizeof(Heap));
-	if(NULL == _vector || NULL == h)
+	if(NULL == _vector || NULL == _pfLess)
 	{
 		return NULL;
 	}
-	h->m_vec = _vector;
-	h->m_heap_size = Vector_Size(_vector);
-	h->m_compere = _pfLess;
-	for(i = (h->m_heap_size -1)/2; i >= 0; --i)
+	heap = (Heap*)malloc(sizeof(Heap));
+	heap->m_vec = _vector;
+	heap->m_heap_size = Vector_Size(_vector);
+	heap->m_compere = _pfLess;
+	for(i = (heap->m_heap_size -1)/2; i >= 0; --i)
 	{	
-		MaxHeapify(h,i);
+		MaxHeapify(heap,i);
 	}
-	h->m_magic = MAGIC;
-	return h;
+	heap->m_magic = MAGIC;
+	return heap;
 }
 /**  
  * @brief Deallocate a previously allocated heap

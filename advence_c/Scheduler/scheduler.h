@@ -2,9 +2,7 @@
 #define __SCHEDULER_H__
 
 #include <stddef.h>
-#include "../../include/Heap.h"
 #include "task.h"
-#include "timeScd.h"
 
 
 typedef struct Scheduler Scheduler;

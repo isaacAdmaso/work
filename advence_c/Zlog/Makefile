@@ -21,7 +21,7 @@ CFLAGS += -I$(INC_DIR)
 
 # All .c files in this directory are my sources
 SOURCES = dummy.c 
-LIB_SRC = config.c LogFile.c zlog.c 
+LIB_SRC = config.c LogFile.c zlog.c Ztime.c
 # All .o files in this directory are my objects
 OBJECTS = $(SOURCES:.c=.o)
 LIB_OBJ = $(LIB_SRC:.c=.o)
