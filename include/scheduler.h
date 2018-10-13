@@ -13,7 +13,7 @@ typedef enum Scheduler_Err {
 	SCHEDULER_UNINITIALIZED_ERROR,			/**< Uninitialized list 					 	*/
 	SCHEDULER_ALLOCATION_ERROR,				/**< Node allocation failed due to heap error   */
 	SCHEDULER_UNDERFLOW_ERROR,
-	SCHEDULER_NULL_ELEMENT_ERROR
+	SCHEDULER_ERROR
 	/* Add more as needed by your implementation */
 	
 }Scheduler_Err;

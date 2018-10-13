@@ -1,12 +1,13 @@
 #include "scheduler.h"
-#include "../../include/Heap.h"
-#include "../../include/Vector.h"
+#include "Heap.h"
+#include "Vector.h"
 #include "timeScd.h"
 
 
 #include <stdlib.h>
 
 #define MAGIC  823791
+#define IS_INVALID(S) (NULL == (S) || (S)->m_magic != MAGIC)
 #define MIN_VEC_SIZE 4
 
 struct Scheduler 
@@ -36,7 +37,7 @@ Scheduler* Scheduler_Create(void)
     if(NULL == scdul)
     {
         Heap_Destroy(&heap);
-        Vector_Destroy(vec,NULL);
+        Vector_Destroy(&vec,NULL);
         return NULL;
     }
     scdul->m_priorityQueue = heap;
@@ -44,13 +45,43 @@ Scheduler* Scheduler_Create(void)
     return scdul;
 }
 
-/*
 void Scheduler_Destroy(Scheduler* _scd)
+{
+    Vector* vec;
+
+    if(IS_INVALID(_scd))
+    {
+        return;   
+    }
+    vec =  Heap_Destroy(&(_scd->m_priorityQueue));
+    Vector_Destroy(&vec,Task_Destroy);
+    free(_scd);
+}
+
+Scheduler_Err Scheduler_Add(Scheduler* _scd,TaskFunc _task,void* _context,double _period)
+{
+    void *task;
+
+    if(IS_INVALID(_scd))
+    {
+        return SCHEDULER_UNINITIALIZED_ERROR;
+    }
+    task = (void*)Task_Create(_task,_context,_period);
+    if(NULL == task)
+    {
+        return SCHEDULER_ALLOCATION_ERROR;
+    }
+    if(Heap_Insert(_scd->m_priorityQueue,task) != HEAP_SUCCESS)
+    {
+    
+        return SCHEDULER_ERROR;
+    }
+    return SCHEDULER_SUCCESS;
+}
+
+/*
+Scheduler_Err Scheduler_Run(Scheduler* _scd)
 {
 
 }
-
-Scheduler_Err Scheduler_Add(Scheduler* _scd,TaskFunc _task,void* _context,double _period);
-
-Scheduler_Err Scheduler_Run(Scheduler* _scd);
 */

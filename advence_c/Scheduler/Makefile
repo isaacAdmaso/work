@@ -1,8 +1,8 @@
 # this is my target
-TARGET = dummy.out
+TARGET = schedulerTestMU.out
 LIBS = ADS
 
-.PHONY: run clean gdb
+.PHONY: run clean gdb val
 
 # General compilation flags
 
@@ -20,8 +20,8 @@ CFLAGS += -I$(INC_DIR)
 
 
 # All .c files in this directory are my sources
-SOURCES = dummy.c 
-LIB_SRC = config.c LogFile.c zlog.c Ztime.c
+SOURCES = schedulerTestMU.c person.c
+LIB_SRC = scheduler.c task.c timeScd.c 
 # All .o files in this directory are my objects
 OBJECTS = $(SOURCES:.c=.o)
 LIB_OBJ = $(LIB_SRC:.c=.o)
@@ -45,7 +45,7 @@ depends:
 libs: libADS.a
 
 clean:
-	-rm $(TARGET) *.o depends log.txt
+	-rm $(TARGET) *.o depends 
 
 run:  $(TARGET)
 	 ./$(TARGET)

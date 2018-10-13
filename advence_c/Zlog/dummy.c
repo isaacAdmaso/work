@@ -28,6 +28,9 @@ int main()
     {
         foo2();
     }
+    foo();
+    ZLOG(MODULE,LOG_TRACE,"try");
     Zlog_Destroy();
+    foo();
     return 0;
 }

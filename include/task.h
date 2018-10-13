@@ -11,11 +11,11 @@ typedef int(*TaskFunc)(void* _context);
 
 Task* Task_Create(TaskFunc _task,void* _context,double _period);
 
-void Task_Destroy(Task* _task);
+void Task_Destroy(void* _task);
 
-int Task_Run(Task* _task);
+int Task_Run(void* _task);
 
-int Task_Comp(void* _firsTask,void* _sedcondTask);
+int Task_Comp(const void* _firsTask,const void* _sedcondTask);
 
 
 

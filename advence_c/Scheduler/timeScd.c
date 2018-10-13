@@ -5,11 +5,11 @@
 
 int Time_Comp(ScdTime _aTaskT,ScdTime _bTaskT)
 {
-	if (_bTaskT->tv_sec > _aTaskT->tv_sec)
+	if (_bTaskT.tv_sec > _aTaskT.tv_sec)
 		return 1;
-    if (_bTaskT->tv_sec < _aTaskT->tv_sec)
+    if (_bTaskT.tv_sec < _aTaskT.tv_sec)
 		return 0;
-	return ((_bTaskT->tv_nsec - _aTaskT->tv_nsec) > 0);
+	return ((_bTaskT.tv_nsec - _aTaskT.tv_nsec) > 0);
 }
 
 ScdTime Time_Convert(double _seconds)
