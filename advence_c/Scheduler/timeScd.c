@@ -120,7 +120,6 @@ void Time_Tsleep(ScdTime _time)
 	ScdTime ref,null;
 
     clock_gettime(CLOCK_REALTIME,&ref);
-    ZLOG("time",LOG_TRACE,"hope");
     ref = Time_Subt(ref,_time);
 	nanosleep(&ref,&null);
 }

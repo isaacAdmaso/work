@@ -66,7 +66,6 @@ Scheduler_Err Scheduler_Add(Scheduler* _scd,int(*_task)(void*),void* _context,do
     {
         return SCHEDULER_UNINITIALIZED_ERROR;
     }
-    ZLOG("schedul",LOG_TRACE,"hope1");
     task = (void*)Task_Create(_task,_context,_period);
     if(NULL == task)
     {

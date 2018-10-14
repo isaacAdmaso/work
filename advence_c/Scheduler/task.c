@@ -63,7 +63,6 @@ int Task_Run(void* _task)
     {
         return 0;
     }
-    ZLOG("task",LOG_TRACE,"hope2");
     sRef = Time_Get_Start();
     rtVal = task->m_task(task->m_context);
     eRef = Time_Get_End();
