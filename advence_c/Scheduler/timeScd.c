@@ -3,6 +3,7 @@
 
 
 
+
 int Time_Comp(ScdTime _aTaskT,ScdTime _bTaskT)
 {
 	if (_bTaskT.tv_sec > _aTaskT.tv_sec)
@@ -56,5 +57,49 @@ void Time_Tsleep(ScdTime _time)
 
 	nanosleep(&_time,&ref);
 }
+
+ScdTime Time_Get_Start()
+{
+	ScdTime ref;
+
+    clock_gettime(CLOCK_REALTIME,&ref);
+
+    return ref;
+}
+
+ScdTime Time_Get_End()
+{
+    return Time_Get_Start();
+}
+
+ScdTime Time_Subt(ScdTime time2,ScdTime time1)
+{
+    ScdTime result;
+
+        	/* TIME1 <= TIME2 */
+    if ((time1.tv_sec < time2.tv_sec) ||
+       ((time1.tv_sec == time2.tv_sec) &&
+        (time1.tv_nsec <= time2.tv_nsec)))
+    {
+        result.tv_sec = result.tv_nsec = 0 ;
+    }
+            /* TIME1 > TIME2 */
+    else
+    {
+        result.tv_sec = time1.tv_sec - time2.tv_sec ;
+        if (time1.tv_nsec < time2.tv_nsec)
+        {
+            result.tv_nsec = time1.tv_nsec + 1000000000L - time2.tv_nsec ;
+            result.tv_sec-- ;				/* Borrow a second. */
+        }
+        else
+        {
+            result.tv_nsec = time1.tv_nsec - time2.tv_nsec ;
+        }
+    }
+    return result;
+}
+/*
+*/
 
 

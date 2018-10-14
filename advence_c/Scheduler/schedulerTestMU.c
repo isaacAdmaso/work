@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "scheduler.h"
+#include "person.h"
 #include "mu_test.h"
 
 
@@ -36,12 +37,14 @@ END_UNIT
 
 UNIT(heapInsert_normal)
 
-	iScheduler *scd = NULL;
+	Scheduler *scd = NULL;
+	Person p = {50, 409572, "Crane, sarus"};
+
 
 	scd = Scheduler_Create();
 	ASSERT_THAT(scd != NULL);
+	ASSERT_THAT(Scheduler_Add(scd,Person_print_Scd,(void*)&p,0.2) == SCHEDULER_SUCCESS);
 /*	
-	ASSERT_THAT(Scheduler_Add(scd,&item) == HEAP_SUCCESS);
 	itmPtr = Heap_Peek(h);
 	itemPtr = (int*)itmPtr;
 	ASSERT_THAT(*itemPtr == item);
@@ -155,10 +158,11 @@ END_UNIT
 
 */
 TEST_SUITE(Scheduler test)
+
 	TEST(SchedulerBuild)
+	TEST(heapInsert_normal)
 /*
 	TEST(heapBuild_NULL)
-	TEST(heapInsert_normal)
 	TEST(heapInsert_overflow)
 	TEST(heapInsert_null)
 	TEST(heapMaxNormal)	

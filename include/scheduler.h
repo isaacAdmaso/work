@@ -12,7 +12,6 @@ typedef enum Scheduler_Err {
 	SCHEDULER_SUCCESS = 0,
 	SCHEDULER_UNINITIALIZED_ERROR,			/**< Uninitialized list 					 	*/
 	SCHEDULER_ALLOCATION_ERROR,				/**< Node allocation failed due to heap error   */
-	SCHEDULER_UNDERFLOW_ERROR,
 	SCHEDULER_ERROR
 	/* Add more as needed by your implementation */
 	

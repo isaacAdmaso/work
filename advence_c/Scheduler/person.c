@@ -16,6 +16,11 @@ int Person_print(void* _item,void* _null)
 	return printf("\n %ld, %d , %s\n",_p->id,_p->random,_p->animal);
 }
 
+int Person_print_Scd(void* _item)
+{
+	Person *_p = (Person*)_item;
+	return printf("\n %ld, %d , %s\n",_p->id,_p->random,_p->animal);
+}
 
 
 void Person_Free(void* _item)
