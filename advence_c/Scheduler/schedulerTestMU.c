@@ -56,16 +56,22 @@ UNIT(heapInsert_normal)
 	Scheduler_Destroy(scd);
 END_UNIT
 
-/*
-UNIT(heapInsert_null)
-	Heap *h;
-	int num = 1324;
+UNIT(ScdInsert)
+	Scheduler *scd = NULL;
+	int num = 7;
+	Zlog_Init("Confile.txt");
 
-	h = NULL;
-	ASSERT_THAT(Heap_Insert(h,&num) == HEAP_NOT_INITIALIZED);
-	Heap_Destroy(&h);
+
+	scd = Scheduler_Create();
+	ASSERT_THAT(scd != NULL);
+	ASSERT_THAT(Scheduler_Add(scd,Person_print_Scd2,(void*)&num,1) == SCHEDULER_SUCCESS);
+
+	ASSERT_THAT(Scheduler_Run(scd) == SCHEDULER_SUCCESS);
+	Zlog_Destroy();
+	Scheduler_Destroy(scd);
 END_UNIT
 
+/*
 
 UNIT(heapInsert_overflow)
 	Heap *h;
@@ -162,8 +168,8 @@ TEST_SUITE(Scheduler test)
 
 	TEST(SchedulerBuild)
 	TEST(heapInsert_normal)
+	TEST(ScdInsert)
 /*
-	TEST(heapBuild_NULL)
 	TEST(heapInsert_overflow)
 	TEST(heapInsert_null)
 	TEST(heapMaxNormal)	

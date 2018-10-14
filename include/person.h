@@ -31,6 +31,7 @@ int StrCmp(void* _a,void* _b);
 int Person_Eq2(void* _a,void* _b);
 int Person_print_Scd(void* _item);
 int IntPrt_Scd(void* _item);
+int Person_print_Scd2(void* _item);
 
 
 extern Person people[100];

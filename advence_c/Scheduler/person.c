@@ -527,4 +527,13 @@ Person people[100] = {
 };
 
 
+int Person_print_Scd2(void* _item)
+{
+	int* i = _item;
 
+	--(*i);
+	printf("\n%ld, %d , %s\n",people[*i].id,people[*i].random,people[*i].animal);
+    ZLOG(M,LOG_TRACE,"hope person");
+
+	return *i;
+}
