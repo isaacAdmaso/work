@@ -1,4 +1,6 @@
 #include "task.h"
+#include "timeScd.h"
+
 #include <stdlib.h>
 
 #define MAGIC 871235

@@ -1,8 +1,7 @@
 #include "scheduler.h"
 #include "Heap.h"
 #include "Vector.h"
-#include "timeScd.h"
-
+#include "task.h"
 
 #include <stdlib.h>
 
@@ -58,7 +57,7 @@ void Scheduler_Destroy(Scheduler* _scd)
     free(_scd);
 }
 
-Scheduler_Err Scheduler_Add(Scheduler* _scd,TaskFunc _task,void* _context,double _period)
+Scheduler_Err Scheduler_Add(Scheduler* _scd,int(*_task)(void*),void* _context,double _period)
 {
     void *task;
 
@@ -79,9 +78,23 @@ Scheduler_Err Scheduler_Add(Scheduler* _scd,TaskFunc _task,void* _context,double
     return SCHEDULER_SUCCESS;
 }
 
-/*
 Scheduler_Err Scheduler_Run(Scheduler* _scd)
 {
+    void* task;
 
+    if(IS_INVALID(_scd))
+    {
+        return SCHEDULER_UNINITIALIZED_ERROR;
+    }
+    while(Heap_Size(_scd->m_priorityQueue) != 0)
+    {
+        task = Heap_Extract(_scd->m_priorityQueue);
+        if(Task_Run(task))
+        {
+            Heap_Insert(_scd->m_priorityQueue,task);
+        }
+    }
+    return SCHEDULER_SUCCESS;
 }
+/*
 */
