@@ -46,21 +46,12 @@ UNIT(heapInsert_normal)
 
 	scd = Scheduler_Create();
 	ASSERT_THAT(scd != NULL);
+	ASSERT_THAT(Scheduler_Add(scd,Person_print_Scd,(void*)&p,0.1) == SCHEDULER_SUCCESS);
 	ASSERT_THAT(Scheduler_Add(scd,Person_print_Scd,(void*)&p,2) == SCHEDULER_SUCCESS);
-	ASSERT_THAT(Scheduler_Add(scd,IntPrt_Scd,(void*)&num,0.5) == SCHEDULER_SUCCESS);
-	ASSERT_THAT(Scheduler_Add(scd,Person_print_Scd,(void*)&p2,1) == SCHEDULER_SUCCESS);
+	ASSERT_THAT(Scheduler_Add(scd,IntPrt_Scd,(void*)&num,2) == SCHEDULER_SUCCESS);
+	ASSERT_THAT(Scheduler_Add(scd,Person_print_Scd,(void*)&p2,2) == SCHEDULER_SUCCESS);
 
 	ASSERT_THAT(Scheduler_Run(scd) == SCHEDULER_SUCCESS);
-
-	
-/*	
-	itmPtr = Heap_Peek(h);
-	itemPtr = (int*)itmPtr;
-	ASSERT_THAT(*itemPtr == item);
-	Heap_Destroy(&h);
-	ASSERT_THAT(Heap_Insert(h,&item2) == HEAP_NOT_INITIALIZED);
-	Vector_Destroy(&v,NULL);
-	*/
 	Zlog_Destroy();
 	Scheduler_Destroy(scd);
 END_UNIT
