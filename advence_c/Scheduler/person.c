@@ -9,7 +9,7 @@
 #include <stdio.h> /**for printing */
 #include <stdlib.h>/**for free */
 
-
+#define M "hope"
 
 int Person_print(void* _item,void* _null)
 {
@@ -21,6 +21,8 @@ int Person_print_Scd(void* _item)
 {
 	Person *_p = (Person*)_item;
 	printf("\n%ld, %d , %s\n",_p->id,_p->random,_p->animal);
+    ZLOG(M,LOG_TRACE,"hope person");
+
 	return 0;
 }
 
@@ -29,6 +31,7 @@ int IntPrt_Scd(void* _item)
 {
 	int *ptr = (int*)_item;
 	printf("\n%d\n",*ptr);
+    ZLOG(M,LOG_TRACE,"hope1 int");
 	return 0;
 }
 

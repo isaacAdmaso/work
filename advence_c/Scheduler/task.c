@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#define M "task.h"
 #define MAGIC 871235
 #define IS_INVALID(T) (NULL == (T) || (T)->m_magic != MAGIC)
 

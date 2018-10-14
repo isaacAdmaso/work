@@ -86,6 +86,7 @@ Scheduler_Err Scheduler_Run(Scheduler* _scd)
     {
         return SCHEDULER_UNINITIALIZED_ERROR;
     }
+    ZLOG("starts",LOG_CRITICAL,"before entring while");
     while(Heap_Size(_scd->m_priorityQueue) != 0)
     {
         task = Heap_Extract(_scd->m_priorityQueue);
