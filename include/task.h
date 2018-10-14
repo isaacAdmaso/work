@@ -14,6 +14,8 @@ void Task_Destroy(void* _task);
 
 int Task_Run(void* _task);
 
+void Task_Sleep(void* _task);
+
 int Task_Comp(const void* _firsTask,const void* _sedcondTask);
 
 

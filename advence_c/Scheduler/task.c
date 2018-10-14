@@ -2,6 +2,7 @@
 #include "timeScd.h"
 
 #include <stdlib.h>
+#include <assert.h>
 
 #define MAGIC 871235
 #define IS_INVALID(T) (NULL == (T) || (T)->m_magic != MAGIC)
@@ -10,8 +11,8 @@ struct Task
 {
     TaskFunc m_task;
     void* m_context;
-    ScdTime m_period;
-    ScdTime m_nextRun;
+    ScdTime* m_period;
+    ScdTime* m_nextRun;
     size_t m_magic;
 };
 
@@ -31,7 +32,8 @@ Task* Task_Create(TaskFunc _task,void* _context,double _period)
     }
     sTask->m_task = _task;
     sTask->m_context = _context;
-    sTask->m_period = sTask->m_nextRun = Time_Convert(_period);
+    sTask->m_period = Time_Convert(_period);
+    sTask->m_nextRun = Time_Add(Time_Create(),sTask->m_period);
     sTask->m_magic = MAGIC;
     return sTask;
 }
@@ -63,7 +65,7 @@ int Task_Run(void* _task)
     eRef = Time_Get_End();
     timeToRun = Time_Subt(sRef,eRef);
     task->m_nextRun = Time_Add(task->m_nextRun,task->m_period);
-    task->m_nextRun = Time_Add(task->m_nextRun,timeToRun);
+    task->m_nextRun = Time_Add(task->m_nextRun,&timeToRun);
     return rtVal;
 }
 
@@ -75,5 +77,15 @@ int Task_Comp(const void* _firsTask,const void* _sedcondTask)
     {
         return 0;
     }
-    return Time_Comp(firsTask->m_nextRun,sedcondTask->m_nextRun);
+    return Time_Comp(*(firsTask->m_nextRun),*(sedcondTask->m_nextRun));
 }
+
+void Task_Sleep(void* _task)
+{
+    Task* task = (Task*)_task;
+
+    assert(!IS_INVALID(task));
+    Time_Tsleep(*(task->m_nextRun));
+
+}
+
