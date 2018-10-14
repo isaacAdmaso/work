@@ -84,6 +84,8 @@ UNIT(heapInsert_overflow)
 	printf("\n%d\n",*intPtr);
 	intPtr = (int*)Heap_Extract(h);
 	printf("\n%d\n",*intPtr);
+	intPtr = (int*)Heap_Peek(h);
+	printf("\n%d\n",*intPtr);
 	Heap_Destroy(&h);
 	ASSERT_THAT(Heap_Insert(h,&num) == HEAP_NOT_INITIALIZED);
 	Vector_Destroy(&v,NULL);

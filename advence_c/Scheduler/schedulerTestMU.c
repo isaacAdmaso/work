@@ -39,15 +39,17 @@ END_UNIT
 UNIT(heapInsert_normal)
 
 	Scheduler *scd = NULL;
-	Person p = {50, 409572, "Crane, sarus"};
+	Person p = {50, 409572, "Crane, sarus"},p2 = {5, 740434, "Owl, great horned"};
 	int num = 999999;
 	Zlog_Init("Confile.txt");
 
 
 	scd = Scheduler_Create();
 	ASSERT_THAT(scd != NULL);
-	ASSERT_THAT(Scheduler_Add(scd,Person_print_Scd,(void*)&p,1) == SCHEDULER_SUCCESS);
-	ASSERT_THAT(Scheduler_Add(scd,IntPrt_Scd,(void*)&num,0.2) == SCHEDULER_SUCCESS);
+	ASSERT_THAT(Scheduler_Add(scd,Person_print_Scd,(void*)&p,2) == SCHEDULER_SUCCESS);
+	ASSERT_THAT(Scheduler_Add(scd,IntPrt_Scd,(void*)&num,0.5) == SCHEDULER_SUCCESS);
+	ASSERT_THAT(Scheduler_Add(scd,Person_print_Scd,(void*)&p2,1) == SCHEDULER_SUCCESS);
+
 	ASSERT_THAT(Scheduler_Run(scd) == SCHEDULER_SUCCESS);
 
 	

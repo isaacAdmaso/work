@@ -65,7 +65,7 @@ void HeapifyUp(Heap* _heap,size_t _index)
 
 	parent.m_idx = (_index - 1)/2;
 	_idxValP.m_idx = _index;
-	if(0 <= _index && _index < _heap->m_heap_size)
+	if(0 < _index && _index < _heap->m_heap_size)
 	{
 		Vector_Get(_heap->m_vec,parent.m_idx,&(parent.m_val));
 		Vector_Get(_heap->m_vec,_idxValP.m_idx,&(_idxValP.m_val));
