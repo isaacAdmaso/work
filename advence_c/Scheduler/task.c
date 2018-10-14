@@ -1,5 +1,6 @@
 #include "task.h"
 #include "timeScd.h"
+#include "logger.h"
 
 #include <stdlib.h>
 #include <assert.h>
@@ -47,6 +48,8 @@ void Task_Destroy(void* _task)
         return;
     }
     task->m_magic = 0;
+    free(task->m_nextRun);
+    free(task->m_period);
     free(task);
 }
 
@@ -60,6 +63,7 @@ int Task_Run(void* _task)
     {
         return 0;
     }
+    ZLOG("task",LOG_TRACE,"hope2");
     sRef = Time_Get_Start();
     rtVal = task->m_task(task->m_context);
     eRef = Time_Get_End();
@@ -77,7 +81,7 @@ int Task_Comp(const void* _firsTask,const void* _sedcondTask)
     {
         return 0;
     }
-    return Time_Comp(*(firsTask->m_nextRun),*(sedcondTask->m_nextRun));
+    return Time_Comp(*(sedcondTask->m_nextRun),*(firsTask->m_nextRun));
 }
 
 void Task_Sleep(void* _task)
@@ -86,6 +90,5 @@ void Task_Sleep(void* _task)
 
     assert(!IS_INVALID(task));
     Time_Tsleep(*(task->m_nextRun));
-
 }
 

@@ -30,6 +30,7 @@ void List_P(const List* _list,ListActionFunction _func);
 int StrCmp(void* _a,void* _b);
 int Person_Eq2(void* _a,void* _b);
 int Person_print_Scd(void* _item);
+int IntPrt_Scd(void* _item);
 
 
 extern Person people[100];

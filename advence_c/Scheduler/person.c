@@ -4,6 +4,7 @@
  * 
  */
 #include "person.h"
+#include "logger.h"
 #include <string.h>
 #include <stdio.h> /**for printing */
 #include <stdlib.h>/**for free */
@@ -19,9 +20,19 @@ int Person_print(void* _item,void* _null)
 int Person_print_Scd(void* _item)
 {
 	Person *_p = (Person*)_item;
-	return printf("\n %ld, %d , %s\n",_p->id,_p->random,_p->animal);
+	ZLOG("person",LOG_TRACE,"hope3");
+	printf("\n%ld, %d , %s\n",_p->id,_p->random,_p->animal);
+	return 0;
 }
 
+
+int IntPrt_Scd(void* _item)
+{
+	int *ptr = (int*)_item;
+	ZLOG("int-99...",LOG_TRACE,"hope4");
+	printf("\n%d\n",*ptr);
+	return 0;
+}
 
 void Person_Free(void* _item)
 {

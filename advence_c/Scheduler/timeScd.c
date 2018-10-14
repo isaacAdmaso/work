@@ -1,4 +1,5 @@
 #include "timeScd.h"
+#include "logger.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -116,12 +117,12 @@ ScdTime Time_Subt(ScdTime time2,ScdTime time1)
 }
 void Time_Tsleep(ScdTime _time)
 {
-	ScdTime ref;
+	ScdTime ref,null;
 
     clock_gettime(CLOCK_REALTIME,&ref);
-
-    ref = Time_Subt(_time,ref);
-	nanosleep(&_time,&ref);
+    ZLOG("time",LOG_TRACE,"hope");
+    ref = Time_Subt(ref,_time);
+	nanosleep(&ref,&null);
 }
 /*
 */

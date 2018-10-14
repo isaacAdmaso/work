@@ -1,5 +1,6 @@
 #include "scheduler.h"
 #include "Heap.h"
+#include "logger.h"
 #include "Vector.h"
 #include "task.h"
 
@@ -65,6 +66,7 @@ Scheduler_Err Scheduler_Add(Scheduler* _scd,int(*_task)(void*),void* _context,do
     {
         return SCHEDULER_UNINITIALIZED_ERROR;
     }
+    ZLOG("schedul",LOG_TRACE,"hope1");
     task = (void*)Task_Create(_task,_context,_period);
     if(NULL == task)
     {
@@ -72,7 +74,6 @@ Scheduler_Err Scheduler_Add(Scheduler* _scd,int(*_task)(void*),void* _context,do
     }
     if(Heap_Insert(_scd->m_priorityQueue,task) != HEAP_SUCCESS)
     {
-    
         return SCHEDULER_ERROR;
     }
     return SCHEDULER_SUCCESS;
@@ -89,6 +90,7 @@ Scheduler_Err Scheduler_Run(Scheduler* _scd)
     while(Heap_Size(_scd->m_priorityQueue) != 0)
     {
         task = Heap_Extract(_scd->m_priorityQueue);
+        Task_Sleep(task);
         if(Task_Run(task))
         {
             Heap_Insert(_scd->m_priorityQueue,task);

@@ -154,8 +154,8 @@ Heap_Result Heap_Insert(Heap* _heap, void* _element)
 		return HEAP_REALLOCATION_FAILED;
 	}
 	itemNum = Vector_Size(_heap->m_vec);
-	HeapifyUp(_heap,itemNum-1);
 	++(_heap->m_heap_size);
+	HeapifyUp(_heap,itemNum-1);
 	return HEAP_SUCCESS;
 	
 }

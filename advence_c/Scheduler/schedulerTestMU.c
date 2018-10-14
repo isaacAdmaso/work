@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "scheduler.h"
 #include "person.h"
+#include "logger.h"
 #include "mu_test.h"
 
 
@@ -39,11 +40,17 @@ UNIT(heapInsert_normal)
 
 	Scheduler *scd = NULL;
 	Person p = {50, 409572, "Crane, sarus"};
+	int num = 999999;
+	Zlog_Init("Confile.txt");
 
 
 	scd = Scheduler_Create();
 	ASSERT_THAT(scd != NULL);
-	ASSERT_THAT(Scheduler_Add(scd,Person_print_Scd,(void*)&p,0.2) == SCHEDULER_SUCCESS);
+	ASSERT_THAT(Scheduler_Add(scd,Person_print_Scd,(void*)&p,1) == SCHEDULER_SUCCESS);
+	ASSERT_THAT(Scheduler_Add(scd,IntPrt_Scd,(void*)&num,0.2) == SCHEDULER_SUCCESS);
+	ASSERT_THAT(Scheduler_Run(scd) == SCHEDULER_SUCCESS);
+
+	
 /*	
 	itmPtr = Heap_Peek(h);
 	itemPtr = (int*)itmPtr;
@@ -52,6 +59,7 @@ UNIT(heapInsert_normal)
 	ASSERT_THAT(Heap_Insert(h,&item2) == HEAP_NOT_INITIALIZED);
 	Vector_Destroy(&v,NULL);
 	*/
+	Zlog_Destroy();
 	Scheduler_Destroy(scd);
 END_UNIT
 
