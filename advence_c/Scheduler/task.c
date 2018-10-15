@@ -2,7 +2,6 @@
 #include "logger.h"
 
 #include <stdlib.h>
-#include <assert.h>
 
 #define M "task.h"
 #define MAGIC 871235
@@ -98,7 +97,10 @@ void Task_Sleep(void* _task)
 {
     Task* task = (Task*)_task;
 
-    assert(!IS_INVALID(task));
+    if(IS_INVALID(task))
+    {
+        return;
+    }
     Time_Tsleep(*(task->m_nextRun));
 }
 
