@@ -81,6 +81,7 @@ Scheduler_Err Scheduler_Add(Scheduler* _scd,int(*_task)(void*),void* _context,do
 Scheduler_Err Scheduler_Run(Scheduler* _scd)
 {
     void* task;
+    int status = 0;
 
     if(IS_INVALID(_scd))
     {
@@ -91,7 +92,12 @@ Scheduler_Err Scheduler_Run(Scheduler* _scd)
     {
         task = Heap_Extract(_scd->m_priorityQueue);
         Task_Sleep(task);
-        if(Task_Run(task))
+        status = Task_Run(task);
+        if (status == MAGIC)
+        {
+            return SCHEDULER_SUCCESS;
+        }
+        if(status)
         {
             Heap_Insert(_scd->m_priorityQueue,task);
         }
