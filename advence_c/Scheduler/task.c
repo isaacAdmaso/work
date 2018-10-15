@@ -1,5 +1,4 @@
 #include "task.h"
-#include "timeScd.h"
 #include "logger.h"
 
 #include <stdlib.h>
@@ -39,7 +38,18 @@ Task* Task_Create(TaskFunc _task,void* _context,double _period)
     sTask->m_magic = MAGIC;
     return sTask;
 }
+ScdTime Task_Get_Next_Run(Task* _task)
+{
+    return *(_task->m_nextRun);
+}
 
+int Task_Update_after_P(Task* _task,size_t _i,ScdTime* _timeToAdd)
+{
+    _task->m_nextRun = Time_Add(_task->m_nextRun,_timeToAdd);
+    return 1;
+}
+/*
+*/
 void Task_Destroy(void* _task)
 {
     Task* task =_task;
@@ -49,8 +59,8 @@ void Task_Destroy(void* _task)
         return;
     }
     task->m_magic = 0;
-    free(task->m_nextRun);
-    free(task->m_period);
+    Time_Destroy(task->m_nextRun);
+    Time_Destroy(task->m_period);
     free(task);
 }
 

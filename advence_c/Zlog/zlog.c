@@ -15,9 +15,14 @@
 void Zlog_Init(char* _configFile)
 {
     char _logName[MAX_WORD_SIZE];
-    int _errorLevel;
+    int _errorLevel = -1;
 
     Config_GetParametrs(_configFile,_logName,&_errorLevel);
+    if(_errorLevel == -1)
+    {
+        zlog.m_level = LOG_NONE;
+        return;
+    }
     zlog.m_log_f_Ptr = LogFile_OpenLog(_logName);
     zlog.m_level = _errorLevel;
 }

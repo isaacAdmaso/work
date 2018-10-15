@@ -14,7 +14,11 @@ typedef struct timespec ScdTime;
 
 int Time_Comp(ScdTime _aTaskT,ScdTime _bTaskT);
 
+int Time_Eq(ScdTime _aTaskT,ScdTime _bTaskT);
+
 ScdTime* Time_Create();
+
+void Time_Destroy(ScdTime* _del);
 
 ScdTime* Time_Convert(double _seconds);
 

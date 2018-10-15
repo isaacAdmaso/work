@@ -16,6 +16,11 @@ int Time_Comp(ScdTime _aTaskT,ScdTime _bTaskT)
 	return ((_bTaskT.tv_nsec - _aTaskT.tv_nsec) > 0);
 }
 
+int Time_Eq(ScdTime _aTaskT,ScdTime _bTaskT)
+{
+    return ((_bTaskT.tv_sec == _aTaskT.tv_sec) && (_bTaskT.tv_nsec == _aTaskT.tv_nsec));
+}
+
 ScdTime* Time_Convert(double _seconds)
 {
 	ScdTime*  rtTime ;
@@ -82,6 +87,14 @@ ScdTime* Time_Create()
     }
     *timeN = Time_Get_Start();
     return timeN;
+}
+
+void Time_Destroy(ScdTime* _del)
+{
+    if(NULL != _del)
+    {
+        free(_del);
+    }
 }
 ScdTime Time_Get_End()
 {

@@ -9,9 +9,10 @@
 *.a
 *.so
 *~
-*.lib
 .DS_Store
 core
 *.gch
 depends
 *.json
+*.lib
+*.txt

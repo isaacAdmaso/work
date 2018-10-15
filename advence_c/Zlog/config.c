@@ -53,7 +53,10 @@ void Config_GetParametrs(char* _configName, char* _logName, int* _errorLevel)
     FILE* conFp = OpenConfig(_configName);
     char level[MAX_WORD_SIZE];
 
-    assert(conFp != NULL);
+    if(conFp == NULL)
+    {
+        return;
+    }
     GetLastWord(conFp,level);
     *_errorLevel = StrToEnum(level);
     GetLastWord(conFp,_logName);

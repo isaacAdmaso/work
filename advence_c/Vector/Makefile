@@ -2,7 +2,7 @@
 TARGET = tests.out
 LIBS = ADS
 
-.PHONY: run clean gdb
+.PHONY: run clean gdb mklib
 
 # General compilation flags
 
@@ -42,7 +42,10 @@ include depends
 depends:
 	$(CC) -MM -I$(INC_DIR) $(SOURCES) $(LIB_SRC) > depends
 
-libs: libADS.a
+libs: mklib libADS.a
+
+mklib:
+	mkdir -p $(LIB_PATH)
 
 clean:
 	-rm $(TARGET) *.o depends

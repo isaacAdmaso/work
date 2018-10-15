@@ -9,7 +9,7 @@
 #include <stdio.h> /**for printing */
 #include <stdlib.h>/**for free */
 
-#define M "hope"
+#define M "person"
 
 int Person_print(void* _item,void* _null)
 {
