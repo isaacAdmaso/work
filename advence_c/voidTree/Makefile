@@ -1,19 +1,22 @@
 # this is my target
 TARGET=tree.out
+LIBS = ADS
 
+.PHONY: run clean gdb libs
 # General compilation flags
 CC=gcc
-CFLAGS= -ansi -pedantic -Wall -Werror  -g -c
+CFLAGS= -ansi -pedantic -Wall -Werror  -g -c -fPIC
 LDFLAGS= -g
 
 # Include directory
 INC_DIR=../../include
-
+LIB_PATH= ../../lib
 CFLAGS += -I$(INC_DIR)
 
 
 # all .c files in this directory are my sources
 SOURCES=$(wildcard *.c)
+
 # all .o files in this directory are my objects
 OBJECTS=$(SOURCES:.c=.o)
 

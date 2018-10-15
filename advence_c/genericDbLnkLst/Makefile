@@ -2,14 +2,14 @@
 TARGET = listTest.out
 LIBS = ADS
 
-.PHONY: run clean gdb
+.PHONY: run clean gdb libs
 
 # General compilation flags
 
 # The compiler will be gcc("CC" is MAKE variable)
 CC = gcc
 # The compiler flags will be... ("CFLAGS" is MAKE variable)
-CFLAGS = -ansi -pedantic -Wall -Werror -g
+CFLAGS = -ansi -pedantic -Wall -Werror -g 
 # The debugger flags will be... ("LDFLAGS" is MAKE variable)
 LDFLAGS = -g
 
@@ -42,8 +42,8 @@ include depends
 depends:
 	$(CC) -MM -I$(INC_DIR) $(SOURCES) $(LIB_SRC) > depends
 
-libs: libADS.a
-
+libs: mklib libADS.a
+	mkdir -p 
 clean:
 	-rm $(TARGET) *.o depends
 
