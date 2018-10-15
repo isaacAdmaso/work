@@ -2,7 +2,7 @@
 TARGET = dummy.out
 LIBS = ADS
 
-.PHONY: run clean gdb mklib
+.PHONY: run clean gdb lib
 
 # General compilation flags
 
