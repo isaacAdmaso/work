@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "scheduler.h"
 #include "person.h"
 #include "logger.h"
@@ -36,7 +37,7 @@ UNIT(SchedulerBuild)
 END_UNIT
 
 
-UNIT(heapInsert_normal)
+UNIT(ScdInsert_normal)
 
 	Scheduler *scd = NULL;
 	Person p = {50, 409572, "Crane, sarus"},p2 = {5, 740434, "Owl, great horned"};
@@ -46,11 +47,16 @@ UNIT(heapInsert_normal)
 
 	scd = Scheduler_Create();
 	ASSERT_THAT(scd != NULL);
-	ASSERT_THAT(Scheduler_Add(scd,Person_print_Scd,(void*)&p,0.1) == SCHEDULER_SUCCESS);
-	ASSERT_THAT(Scheduler_Add(scd,Person_print_Scd,(void*)&p,2) == SCHEDULER_SUCCESS);
-	ASSERT_THAT(Scheduler_Add(scd,IntPrt_Scd,(void*)&num,2) == SCHEDULER_SUCCESS);
+	ASSERT_THAT(Scheduler_Add(scd,Person_print_Scd,(void*)&p,1) == SCHEDULER_SUCCESS);
 	ASSERT_THAT(Scheduler_Add(scd,Person_print_Scd,(void*)&p2,2) == SCHEDULER_SUCCESS);
+	ASSERT_THAT(Scheduler_Add(scd,Scheduler_Pause,scd,3) == SCHEDULER_SUCCESS);
+	/*
+	*/
+	ASSERT_THAT(Scheduler_Add(scd,IntPrt_Scd,(void*)&num,4) == SCHEDULER_SUCCESS);
+	ASSERT_THAT(Scheduler_Add(scd,Person_print_Scd,(void*)&p,5) == SCHEDULER_SUCCESS);
 
+	ASSERT_THAT(Scheduler_Run(scd) == SCHEDULER_SUCCESS);
+	sleep(5);
 	ASSERT_THAT(Scheduler_Run(scd) == SCHEDULER_SUCCESS);
 	Zlog_Destroy();
 	Scheduler_Destroy(scd);
@@ -58,7 +64,7 @@ END_UNIT
 
 UNIT(ScdInsert)
 	Scheduler *scd = NULL;
-	int num = 7;
+	int num = 1;
 	Zlog_Init("Confile.txt");
 
 
@@ -167,9 +173,9 @@ END_UNIT
 TEST_SUITE(Scheduler test)
 
 	TEST(SchedulerBuild)
-	TEST(heapInsert_normal)
-	TEST(ScdInsert)
+	TEST(ScdInsert_normal)
 /*
+	TEST(ScdInsert)
 	TEST(heapInsert_overflow)
 	TEST(heapInsert_null)
 	TEST(heapMaxNormal)	

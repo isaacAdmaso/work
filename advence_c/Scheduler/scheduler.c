@@ -84,10 +84,25 @@ Scheduler_Err Scheduler_Add(Scheduler* _scd,int(*_task)(void*),void* _context,do
 
 static void Scheduler_Re_Do(Scheduler*_scd)
 {
+
+    Task* fTask;
+    int i;
+    size_t size;
+    /*
     ScdTime time_To_Add = Time_Get_Start();
     ScdTime ref = {0};
-    Task* fTask;
-
+*/    
+    size = Heap_Size(_scd->m_priorityQueue);
+    if(size == 0)
+    {
+        return;
+    }
+    for(i = 0;i < size;++i)
+    {
+        fTask = (Task*)Heap_Extract(_scd->m_priorityQueue);
+        Scheduler_Add(_scd,Task_Get_Func(fTask),Task_Get_Context(fTask),Task_Get_Period(fTask));
+    }
+    /*
     fTask = (Task*)Heap_Peek(_scd->m_priorityQueue);
     time_To_Add = Time_Subt(Task_Get_Next_Run(fTask),time_To_Add);
     if(Time_Eq(time_To_Add,ref))
@@ -95,6 +110,7 @@ static void Scheduler_Re_Do(Scheduler*_scd)
         return;
     }
     Heap_ForEach(_scd->m_priorityQueue,(int (*)(void *, long unsigned int,  void *))Task_Update_after_P,&time_To_Add);
+    */
     _scd->m_is_pause = 0;
 }
 
@@ -127,6 +143,8 @@ Scheduler_Err Scheduler_Run(Scheduler* _scd)
 int Scheduler_Pause(void* _scd)
 {
     Scheduler* scd = (Scheduler*)_scd;
+    
+    ZLOG(MODULE,LOG_CRITICAL,"inside pause");
     scd->m_is_pause = 1;
     return 0;
 }

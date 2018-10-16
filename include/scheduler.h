@@ -23,5 +23,8 @@ Scheduler_Err Scheduler_Add(Scheduler* _scd,int(*_task)(void*),void* _context,do
 
 Scheduler_Err Scheduler_Run(Scheduler* _scd);
 
+int Scheduler_Pause(void* _scd);
+
+
 
 #endif /**__SCHEDULER_H__ */

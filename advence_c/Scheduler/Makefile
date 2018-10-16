@@ -9,7 +9,7 @@ LIBS = ADS
 # The compiler will be gcc("CC" is MAKE variable)
 CC = gcc
 # The compiler flags will be... ("CFLAGS" is MAKE variable)
-CFLAGS = -ansi -pedantic -Wall -Werror -g
+CFLAGS = -ansi -pedantic -Wall -Werror -g 
 # The debugger flags will be... ("LDFLAGS" is MAKE variable)
 LDFLAGS = -g
 

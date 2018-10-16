@@ -16,6 +16,26 @@ struct Task
     size_t m_magic;
 };
 
+TaskFunc Task_Get_Func(Task* _task)
+{
+    return _task->m_task;
+}
+
+void* Task_Get_Context(Task* _task)
+{
+    return _task->m_context;
+}
+
+double Task_Get_Period(Task* _task)
+{
+    return Time_To_Dbl(*(_task->m_period));
+}
+
+ScdTime Task_Get_Time(Task* _task)
+{
+    return *(_task->m_nextRun);
+}
+
 
 Task* Task_Create(TaskFunc _task,void* _context,double _period)
 {
@@ -36,10 +56,6 @@ Task* Task_Create(TaskFunc _task,void* _context,double _period)
     sTask->m_nextRun = Time_Add(Time_Create(),sTask->m_period);
     sTask->m_magic = MAGIC;
     return sTask;
-}
-ScdTime Task_Get_Next_Run(Task* _task)
-{
-    return *(_task->m_nextRun);
 }
 
 int Task_Update_after_P(Task* _task,size_t _i,ScdTime* _timeToAdd)
