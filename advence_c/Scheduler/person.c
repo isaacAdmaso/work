@@ -21,7 +21,7 @@ int Person_print_Scd(void* _item)
 {
 	Person *_p = (Person*)_item;
 	printf("\n%ld, %d , %s\n",_p->id,_p->random,_p->animal);
-    ZLOG(M,LOG_TRACE,"hope person");
+    ZLOG(M,LOG_TRACE," person print");
 
 	return 0;
 }
