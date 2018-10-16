@@ -8,4 +8,5 @@ libs:
 	make -C queue libs
 	make -C Zlog libs
 	gcc $(CFLAGS) -g -pedantic -Werror -Wall -ansi -shared -fPIC  genericDbLnkLst/list.c genericDbLnkLst/list_func.c HashMap/HashMap.c Vector/Vector.c queue/queue.c Heap/Heap.c Zlog/config.c Zlog/LogFile.c Zlog/Ztime.c Zlog/zlog.c Scheduler/scheduler.c Scheduler/task.c Scheduler/timeScd.c  -o ../lib/libADS.so
-
+clean:
+	-rm -R *.o depends log.txt

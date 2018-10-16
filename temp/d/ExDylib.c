@@ -12,12 +12,11 @@ int main(int argc, char const *argv[])
     char ch,func_name[8],*error;
     void* handle;
     PtrFunc func;
-
     if (argc != 4)
     {
-        printf("invalid input");
+        fputs("invalid input\n",stderr);
         return 1;
-    }    
+    }
     num1 = atoi(argv[1]);
     num2 = atoi(argv[3]);
     ch = argv[2][0];
@@ -44,7 +43,7 @@ int main(int argc, char const *argv[])
     }
     if (!handle)
     {
-        fputs("Error", stderr);
+        fputs("Error\n", stderr);
         exit(1);
     }
 
@@ -52,11 +51,11 @@ int main(int argc, char const *argv[])
 
     if ((error = dlerror()) != NULL)
     {
-        fputs("Error", stderr);
+        fputs("Error_func\n", stderr);
         exit(1);
     }
 
-    printf("%s %s %s = %d",argv[1],argv[2],argv[3],func(&num1,&num2));
+    printf("%s %s %s = %d\n",argv[1],argv[2],argv[3],func(&num1,&num2));
     dlclose(handle);
 
     return 0;
