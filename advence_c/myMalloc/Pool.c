@@ -20,10 +20,16 @@ struct Pool
 Pool* Pool_Create(size_t _bufSize,size_t _numOfBufs)
 {
     Pool* pol;
+    size_t aliSize;
 
     if(0 >= _bufSize || 0 >= _numOfBufs)
     {
         return NULL;
+    }
+    aliSize = _bufSize % sizeof(size_t); 
+    if(aliSize != 0)
+    {
+        _bufSize += (sizeof(size_t) - aliSize);
     }
     pol = malloc(sizeof(Pool)+_bufSize*_numOfBufs);
     if(NULL == pol)
@@ -104,12 +110,14 @@ void* MyMalloc(Pool* _pool)
  */
 void MyFree(Pool* _pool,void* _rtPtr)
 {
+    char **tempRt = (char**)_rtPtr;
+
     if(_pool->m_numOfBufs == 0 || _rtPtr == NULL)
     {
         return;
     }
-    *((char**)_rtPtr) = (char*)_pool->m_Buffer;
-    _pool->m_Buffer = _rtPtr;
+    *(tempRt) = (char*)_pool->m_Buffer;
+    _pool->m_Buffer = tempRt;
     ++(_pool->m_numOfBufs);
 
     /*

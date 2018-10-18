@@ -10,9 +10,11 @@
 typedef struct Inode
 {
     void* m_magic;
-    int m_size;
+    size_t m_size;
+    struct Inode *m_next;
+    struct Inode *m_prev;
+    size_t m_isFree;
     char** m_iBuffer;
-    char** m_next;
 }Inode;
 
 struct Pool
@@ -98,6 +100,7 @@ static void* Div_Mem(Pool _pool,size_t _size)
 void* MyMalloc(Pool* _pool,size_t _size)
 {
     void* rtPtr;
+    char** cur;
     Inode newNode;
 
     if(IS_INVALID(_pool) || 0 == _pool->m_totBufleft)
@@ -123,6 +126,7 @@ void* MyMalloc(Pool* _pool,size_t _size)
     }
     else
     {
+        cur = _pool->m_buffer.m_next;
         while()
         _pool->m_Buffer = (char**)(*(_pool->m_Buffer));
     }
