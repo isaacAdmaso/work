@@ -13,7 +13,6 @@ typedef struct Inode
     size_t m_size;
     struct Inode *m_next;
     struct Inode *m_prev;
-    size_t m_isFree;
     char** m_iBuffer;
 }Inode;
 
