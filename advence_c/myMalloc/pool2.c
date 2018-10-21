@@ -2,16 +2,17 @@
 
 #include <stdlib.h>
 
+#define DLT  sizeof(void*)
 #define MAGIC 12432132
 #define IMAGIC (void*)0xDEADBEEF
 #define IS_INVALID(P) (NULL == (P) || (P)->m_magic != MAGIC)
 
 typedef struct Inode
 {
-    void* m_magic;
     size_t m_size;
     struct Inode *m_next;
     struct Inode *m_prev;
+    void* m_magic;
     char** m_iBuffer;
 }Inode;
 
@@ -42,6 +43,7 @@ Pool* Pool_Create(size_t _bufSize)
     pol->m_totBufleft = _bufSize;
     pol->m_buffer.m_iBuffer = (char**)(pol + 1);
     pol->m_buffer.m_next = NULL;
+    pol->m_buffer.m_prev = NULL;
     pol->m_buffer.m_size = _bufSize;
     pol->m_buffer.m_magic = IMAGIC;
     pol->m_magic = MAGIC;
@@ -60,31 +62,47 @@ void Pool_Destroy(Pool* _pool)
     }
     free(_pool);
 }
-/*
-static void* MyHash(Pool* _pool)
-{
-    char i;
-    void* tmpFree = NULL;
-    size_t numOfBuff = _pool->m_numOfBufs;
 
-    for(i = 0;i < numOfBuff; ++i)
+static Inode* Split(Inode *_node,size_t _size)
+{
+    Inode* newNode = (Inode*)(_node->m_iBuffer + _size);
+
+    newNode->m_size = _node->m_size -(_size + sizeof(Inode));
+    _node->m_size = _size;
+    newNode->m_iBuffer = (char**)(newNode + 1);
+    newNode->m_magic = IMAGIC;
+    newNode->m_next = _node->m_next;
+    newNode->m_prev = _node->m_prev;
+    return newNode;
+}
+
+static void* FindFirstFree(Pool* _pool,size_t _size)
+{
+    Inode *cur = &(_pool->m_buffer) ;
+    
+    while ((cur->m_next != NULL) && (cur->m_size >= _size))
     {
-        if(*(_pool->m_Buffer) == ((char*)_pool->m_Buffer+((char)(_pool->m_bufSize) * i)))
-        {
-            tmpFree = _pool->m_Buffer;
-            _pool->m_Buffer = (char*)_pool->m_Buffer+((char)(_pool->m_bufSize) * i);
-            break;
-        }
+        cur = cur->m_next;
     }
-    return tmpFreInodee;
-}
-static void* Div_Mem(Pool _pool,size_t _size)
-{
-    Inode newF;
+    if ((cur->m_size >= _size) && (cur->m_size <= _size + sizeof(Inode) + DLT))
+    {
+        if(cur->m_next != NULL)
+        {
+            cur->m_next->m_prev = cur->m_prev;
+            cur->m_prev->m_next = cur->m_next;
+        }
+        _pool->m_totBufleft -=_size;
+        return (void*)cur->m_iBuffer;
 
-    _pool->m_buffer.
+    }
+    else if(cur->m_size > _size + sizeof(Inode) + DLT)
+    {
+        cur = Split(cur , _size);
+        _pool->m_totBufleft -=(_size + sizeof(Inode));
+        return (void*)cur->m_iBuffer;
+    }
+    return NULL;
 }
-*/
 /**
  * @brief give buffer size of memory  from the Pool
  * return NULL if error else return ptr
@@ -95,39 +113,16 @@ static void* Div_Mem(Pool _pool,size_t _size)
  */
 void* MyMalloc(Pool* _pool,size_t _size)
 {
-    void* rtPtr;
-    char** cur;
-    Inode newNode;
+    void* newNode;
 
-    if(IS_INVALID(_pool) || 0 == _pool->m_totBufleft || 0 == _size)
+    if(IS_INVALID(_pool) || 0 == _size)
     {
         return NULL;
     }
     
-    rtPtr = FindFirstFree(_pool);
-    /*
-    if(NULL == _pool->m_buffer.m_next && _size < _pool->m_totBufleft)
-    {
-        _pool->m_buffer.m_size = _size;
-        newNode.m_size = _pool->m_totBufleft - _size;
-        if(0 >= newNode.m_size)
-        {
-            return NULL;
-        }
-        _pool->m_totBufleft -= (_size +sizeof(Inode)); 
-        newNode.m_iBuffer =(_pool->m_buffer.m_iBuffer + _size + sizeof(Inode)); 
-        newNode.m_next = NULL;
-        memset((void*)((_pool->m_buffer.m_iBuffer) + _size),newNode,sizeof(Inode));
-    }
-    else
-    {
-        cur = _pool->m_buffer.m_next;
-        while()
-        _pool->m_Buffer = (char**)(*(_pool->m_Buffer));
-    }
-    --(_pool->m_numOfBufs);
-*/
-    return rtPtr; 
+    newNode = FindFirstFree(_pool,_size);
+
+    return newNode; 
 }
 /**
  * @brief return bufsize to pool
@@ -135,21 +130,19 @@ void* MyMalloc(Pool* _pool,size_t _size)
  */
 void MyFree(Pool* _pool,void* _rtPtr)
 {
-    if(_pool->m_numOfBufs == 0 || _rtPtr == NULL)
-    {
-        return;
-    }
-    *((char**)_rtPtr) = (char*)_pool->m_Buffer;
-    _pool->m_Buffer = _rtPtr;
-    ++(_pool->m_numOfBufs);
+    Inode* cur = _rtPtr;
 
-    /*
-    if(IS_INVALID(_pool) || NULL == _rtPtr)
+    --cur;
+    if( IS_INVALID(_pool) || _rtPtr == NULL)
     {
         return;
     }
-    *(char**)_rtPtr = _pool->m_Buffer; 
-    _rtPtr = (_pool->m_Buffer);
-    _pool->m_Buffer = tempPtr;
-*/
+    if (cur->m_magic != IMAGIC)
+    {
+        return;
+    }
+    
+    cur->m_next =  _pool->m_buffer.m_next;
+    _pool->m_buffer.m_next = cur;
+    cur->m_prev = &_pool->m_buffer;
 }
