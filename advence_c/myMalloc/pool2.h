@@ -1,6 +1,7 @@
 #ifndef __POOL_H__
 #define __POOL_H__
 #include <stddef.h>
+#define AVG_BUFF 8
 
 typedef struct Pool Pool;
 
