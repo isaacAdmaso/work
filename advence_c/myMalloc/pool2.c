@@ -1,7 +1,6 @@
 #include "pool2.h"
 
 #include <stdlib.h>
-#include <string.h>
 
 #define MAGIC 12432132
 #define IMAGIC (void*)0xDEADBEEF
@@ -84,8 +83,6 @@ static void* Div_Mem(Pool _pool,size_t _size)
     Inode newF;
 
     _pool->m_buffer.
-
-
 }
 */
 /**
@@ -102,14 +99,13 @@ void* MyMalloc(Pool* _pool,size_t _size)
     char** cur;
     Inode newNode;
 
-    if(IS_INVALID(_pool) || 0 == _pool->m_totBufleft)
+    if(IS_INVALID(_pool) || 0 == _pool->m_totBufleft || 0 == _size)
     {
         return NULL;
     }
+    
+    rtPtr = FindFirstFree(_pool);
     /*
-    rtPtr = MyHash(_pool->m_Buffer);
-    */
-    rtPtr = (void*)(_pool->m_buffer.m_iBuffer);
     if(NULL == _pool->m_buffer.m_next && _size < _pool->m_totBufleft)
     {
         _pool->m_buffer.m_size = _size;
@@ -130,6 +126,7 @@ void* MyMalloc(Pool* _pool,size_t _size)
         _pool->m_Buffer = (char**)(*(_pool->m_Buffer));
     }
     --(_pool->m_numOfBufs);
+*/
     return rtPtr; 
 }
 /**
