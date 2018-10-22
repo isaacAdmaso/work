@@ -90,7 +90,11 @@ static int Destroy_Pair(void* _element, void* _destryStruct)
 	d_p_f->m_valDestroy(nodeData->m_data);
 	return OK;
 }
-
+static void Free_Pair(void* _pair)
+{
+	if(_pair != NULL)
+		free(_pair);
+}
 /**
  * @brief destroy hash map and set *_map to null
  * @param[in] _map : map to be destroyed
@@ -116,13 +120,14 @@ void HashMap_Destroy(HashMap** _map, void (*_keyDestroy)(void* _key), void (*_va
 	
 	for(i = 0;i < mapSize;++i)
 	{
-		if(NULL != _keyDestroy || NULL != _valDestroy)
+		if(NULL != _keyDestroy && NULL != _valDestroy)
 		{
 			start = ListItr_Begin((*_map)->m_items[i]);
 			end = ListItr_End((*_map)->m_items[i]);
 			ListItr_ForEach(start,end,Destroy_Pair,&d_p_f);
 		}
-		List_Destroy(&((*_map)->m_items[i]),NULL);
+		/*pair destroy*/
+		List_Destroy(&((*_map)->m_items[i]),Free_Pair);
 	}
 	free((*_map)->m_items);
 	free(*_map);
@@ -249,9 +254,9 @@ Map_Result HashMap_Insert(HashMap* _map, const void* _key, const void* _value)
  */
 Map_Result HashMap_Remove(HashMap* _map, const void* _searchKey, void** _pValue)
 {
-	pair* data = NULL;
+	pair data  ,*checkData;
 	size_t idx;
-	ListItr begin, end,check;
+	ListItr begin, end;
 
 	if(IS_INVALID(_map) || NULL ==  _pValue)
 	{
@@ -262,17 +267,20 @@ Map_Result HashMap_Remove(HashMap* _map, const void* _searchKey, void** _pValue)
 	{
 		return MAP_KEY_NULL_ERROR;
 	}
-
-	idx = HashIdx(_map,data);
-	assert(data != NULL);
+	data.m_key = (void*)_searchKey;
+	idx = HashIdx(_map,&data);
 	begin = ListItr_Begin(_map->m_items[idx]);
 	end = ListItr_End(_map->m_items[idx]);
-	check = ListItr_FindFirst(begin,end, _map->m_keysEqualFunc,(void*)_searchKey);
-	if( check != end)
+
+	for(;begin != end ;begin = ListItr_Next(begin))
 	{
-		data = (pair*)ListItr_Remove(check);
-		_pValue = data->m_data;
-		return MAP_SUCCESS;
+		checkData = ListItr_Get(begin);
+		if(_map->m_keysEqualFunc(checkData->m_key,(void*)_searchKey))
+		{
+			checkData = (pair*)ListItr_Remove(begin);
+			_pValue = checkData->m_data;
+			return MAP_SUCCESS;
+		}
 	}
 	return MAP_KEY_NOT_FOUND_ERROR;
 }
@@ -284,7 +292,7 @@ Map_Result HashMap_Remove(HashMap* _map, const void* _searchKey, void** _pValue)
  */
 Map_Result HashMap_Rehash(HashMap *_map, size_t newCapacity)
 {
-	int i,j;
+	int i;
 	pair* dataHlder;
 	ListItr begin, end,cur;
     List** m_NewData = NULL;
@@ -301,20 +309,6 @@ Map_Result HashMap_Rehash(HashMap *_map, size_t newCapacity)
 		_map->m_items = m_NewData;
   		return MAP_ALLOCATION_ERROR;
     }
-  
-    for(i = 0; i < newCapacity; ++i)
-    {
-    	_map->m_items[i] = List_Create();
-  		if(NULL == _map->m_items[i])
-  		{
-  			for(j = 0;j < i;++j)
-  			{
-  				free(_map->m_items[j]);
-  			}
-			_map->m_items = m_NewData;
-			return MAP_ALLOCATION_ERROR;
-    	}
-	}
 	_map->m_size = newCapacity;		
     for(i = 0; i < old_size; ++i)
     {
@@ -326,6 +320,7 @@ Map_Result HashMap_Rehash(HashMap *_map, size_t newCapacity)
 			begin = ListItr_Next(begin);
 			dataHlder = (pair*)ListItr_Remove(cur);
 			HashMap_Insert(_map,dataHlder->m_key,dataHlder->m_data);
+			free(dataHlder);
 		}
 		List_Destroy(&m_NewData[i],NULL);
 	}
@@ -348,8 +343,8 @@ Map_Result HashMap_Rehash(HashMap *_map, size_t newCapacity)
 Map_Result HashMap_Find(const HashMap* _map, const void* _key, void** _pValue)
 {
 	size_t idx;
-	pair* data  = malloc(sizeof(pair));
-	ListItr begin, end,check;
+	pair  *checkData,*data = malloc(sizeof(pair));
+	ListItr begin, end;
 
 	if(IS_INVALID(_map) || NULL ==  _pValue)
 	{
@@ -365,13 +360,17 @@ Map_Result HashMap_Find(const HashMap* _map, const void* _key, void** _pValue)
 
 	begin = ListItr_Begin(_map->m_items[idx]);
 	end = ListItr_End(_map->m_items[idx]);
-	check = ListItr_FindFirst(begin,end, _map->m_keysEqualFunc,(void*)_key);
-	if( check != end)
+	for(;begin != end ;begin = ListItr_Next(begin))
 	{
-		data = (pair*)ListItr_Get(check);
-		_pValue = data->m_data;
-		return MAP_SUCCESS;
+		checkData = ListItr_Get(begin);
+		if(_map->m_keysEqualFunc(checkData->m_key,(void*)_key))
+		{
+			data = (pair*)ListItr_Remove(begin);
+			_pValue = data->m_data;
+			return MAP_SUCCESS;
+		}
 	}
+	
 	return MAP_KEY_NOT_FOUND_ERROR;
 }
 
@@ -451,3 +450,19 @@ Map_Stats HashMap_GetStatistics(const HashMap* _map)
 #endif /* NDEBUG */
 
 
+
+ /* 
+    for(i = 0; i < newCapacity; ++i)
+    {
+    	_map->m_items[i] = List_Create();
+  		if(NULL == _map->m_items[i])
+  		{
+  			for(j = 0;j < i;++j)
+  			{
+  				free(_map->m_items[j]);
+  			}
+			_map->m_items = m_NewData;
+			return MAP_ALLOCATION_ERROR;
+    	}
+	}
+	*/
