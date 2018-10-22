@@ -64,7 +64,6 @@ HashMap* HashMap_Create(size_t _capacity, HashFunction _hashFunc, EqualityFuncti
 		free(h);
 		return NULL;
 	}
-    
     h->m_size = primeN;
 	h->m_noItems = 0;
 	h->m_hashFunc = _hashFunc;
@@ -117,7 +116,7 @@ void HashMap_Destroy(HashMap** _map, void (*_keyDestroy)(void* _key), void (*_va
 	
 	for(i = 0;i < mapSize;++i)
 	{
-		if(NULL == _keyDestroy || NULL == _valDestroy)
+		if(NULL != _keyDestroy || NULL != _valDestroy)
 		{
 			start = ListItr_Begin((*_map)->m_items[i]);
 			end = ListItr_End((*_map)->m_items[i]);
@@ -183,9 +182,13 @@ static int GetNumber(int _number)
  */
 Map_Result HashMap_Insert(HashMap* _map, const void* _key, const void* _value)
 {
-	pair* data;
+	pair *data,*checkData;
 	size_t idx;
+	/*
+	Map_Result error = MAP_OVERFLOW_ERROR;
+	*/
 	ListItr begin, end;
+	
 
 	if(IS_INVALID(_map))
 	{
@@ -206,7 +209,6 @@ Map_Result HashMap_Insert(HashMap* _map, const void* _key, const void* _value)
 	data->m_data = (void*)_value;
 	
 	idx = HashIdx(_map,data);
-
 	begin = ListItr_Begin(_map->m_items[idx]);
 	end = ListItr_End(_map->m_items[idx]);
 	if(NULL == begin)
@@ -217,10 +219,14 @@ Map_Result HashMap_Insert(HashMap* _map, const void* _key, const void* _value)
 			return MAP_ALLOCATION_ERROR;
 		}
 	}
-	else if(ListItr_FindFirst(begin,end, _map->m_keysEqualFunc,data->m_data) != end)
+	for(;begin != end ;begin = ListItr_Next(begin))
 	{
-		free(data);
-		return MAP_KEY_DUPLICATE_ERROR;
+		checkData = ListItr_Get(begin);
+		if(_map->m_keysEqualFunc(checkData->m_key,data->m_key))
+		{
+			free(data);
+			return MAP_KEY_DUPLICATE_ERROR;
+		}
 	}
 
 	List_PushTail(_map->m_items[idx],(void*)data);

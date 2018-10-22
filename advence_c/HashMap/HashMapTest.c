@@ -1,66 +1,66 @@
 #include "HashMap.h"
+#include "person.h"
 #include "mu_test.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "logger.h"
 
-#define SIZE 23
-#define CAPA 10
+#define SIZE 100
+
+
 static size_t mod(const void* _null)
 {
-	return 1 ;
+	return *(int*)_null % SIZE ;
 }
 
-int nul( void* _a, void* _b)
-{
-    return 1;
-}
 
 UNIT(hashBuild)
 	HashMap *h;
 
-	h = HashMap_Create(6,mod,nul);
+	h = HashMap_Create(6,mod,Person_Eq2);
 	ASSERT_THAT(h != NULL);
 	HashMap_Destroy(&h,NULL,NULL);
 END_UNIT
-/*
 UNIT(hashBuild_capacityZero)
-	HashSet *h;
-	h = HashSetCreate(0,0.7,mod);
+	HashMap *h;
+	h = HashMap_Create(0,mod,Person_Eq2);
 	ASSERT_THAT(NULL == h);
 END_UNIT
 
-UNIT(hashBuild_loadFactorbiggerThenOne)
-	HashSet *h;
-	h = HashSetCreate(53,1.5,mod);
+UNIT(hashBuild_Null_param)
+	HashMap *h;
+	h = HashMap_Create(53,NULL,Person_Eq2);
+	ASSERT_THAT(NULL == h);
+	h = HashMap_Create(53,mod,NULL);
 	ASSERT_THAT(NULL == h);
 END_UNIT
 
 UNIT(HashSetInsert_normal)
-	HashSet *h;
-	h = HashSetCreate(CAPA,0.5,mod);
+	HashMap *h;
+	h = HashMap_Create(SIZE,mod,Person_Eq2);
 	ASSERT_THAT(NULL != h);
-	ASSERT_THAT(HashSetInsert(h,3) == ERR_OK);
-	ASSERT_THAT(HashSetInsert(h,6) == ERR_OK);
-	HashSetDestroy(h);
+	ASSERT_THAT(HashMap_Insert(h,&(people[0].id),&people[0]) == MAP_SUCCESS);
+	ASSERT_THAT(HashMap_Insert(h,&(people[1].id),&people[1]) == MAP_SUCCESS);
+	HashMap_Destroy(&h,NULL,NULL);
 END_UNIT
 
 UNIT(HashSetInsertALREADY_EXISTS)
-	HashSet *h;
+	HashMap *h;
 	int i;
-	h = HashSetCreate(CAPA,0.5,mod);
+	h = HashMap_Create(SIZE,mod,Person_Eq2);
 	ASSERT_THAT(h != NULL);
-	for(i=0;i<CAPA-2;++i)
+	for(i=0;i<SIZE;++i)
 	{
-		ASSERT_THAT(HashSetInsert(h,i*7) == ERR_OK);
+		ASSERT_THAT(HashMap_Insert(h,&(people[i].id),people+i) == MAP_SUCCESS);
 	}	
-	ASSERT_THAT(HashSetInsert(h,6) == ERR_OK);
-	ASSERT_THAT(HashSetInsert(h,6) == ERR_ALREADY_EXISTS);
-	ASSERT_THAT(HashSetInsert(h,14) == ERR_ALREADY_EXISTS);
-	ASSERT_THAT(HashSetRemove(h,6) == ERR_OK);
-	HashSetDestroy(h);
+	for(i=0;i<2;++i)
+	{
+		ASSERT_THAT(HashMap_Insert(h,&(people[i].id),people+i) == MAP_KEY_DUPLICATE_ERROR);
+	}	
+	HashMap_Destroy(&h,NULL,NULL);
 END_UNIT
 
+/*
 UNIT(HashSetInsertOVERFLOW)
 	HashSet *h;
 	int i;
@@ -201,11 +201,11 @@ END_UNIT
 
 TEST_SUITE(HashSet test)
 	TEST(hashBuild)
-/*
 	TEST(hashBuild_capacityZero)
-	TEST(hashBuild_loadFactorbiggerThenOne)
+	TEST(hashBuild_Null_param)
 	TEST(HashSetInsert_normal)
 	TEST(HashSetInsertALREADY_EXISTS)
+/*
 	TEST(HashSetInsertOVERFLOW)	
 	TEST(HashSetRemoveNOT_FOUND)
 	TEST(HashSetRemoveSuccessful)
