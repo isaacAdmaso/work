@@ -44,7 +44,7 @@ List* List_Create(void)
 	return l;
 }
 /**
- * @brief add a node after _node
+ * @brief add a node after _node (insert after)
  * 
  * @param _node 
  * @param _data 
