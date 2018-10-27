@@ -275,10 +275,11 @@ Map_Result HashMap_Remove(HashMap* _map, const void* _searchKey, void** _pValue)
 	for(;begin != end ;begin = ListItr_Next(begin))
 	{
 		checkData = ListItr_Get(begin);
-		if(_map->m_keysEqualFunc(checkData->m_key,(void*)_searchKey))
+		if(_map->m_keysEqualFunc(checkData->m_key,data.m_key))
 		{
 			checkData = (pair*)ListItr_Remove(begin);
-			_pValue = checkData->m_data;
+			*_pValue = checkData->m_data;
+			--_map->m_noItems;
 			return MAP_SUCCESS;
 		}
 	}

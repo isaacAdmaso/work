@@ -15,7 +15,7 @@ LOGSOURCES=Zlog/config.c\
 		Zlog/Ztime.c\
 		Zlog/zlog.c \
 		
-.PHONY:dynamicDS loggerDS staticDS schedulerDS
+.PHONY:dynamicDS loggerDS staticDS schedulerDS clean
 
 libs: staticDS dynamicDS loggerDS schedulerDS
 
@@ -38,3 +38,6 @@ loggerDS: ../lib/libLOGGER.so
 schedulerDS: ../lib/libSCH.so
 ../lib/libSCH.so:
 	gcc $(CFLAGS) -shared $(SCHSOURCES) -fPIC -o ../lib/libSCH.so
+
+clean:
+	-rm -R ./ *.{out,o} depends log.txt
