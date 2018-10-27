@@ -1,169 +1,220 @@
-#include <stdio.h>
-
-#include "mu_test.h"
 #include "HashMap.h"
+#include "person.h"
+#include "mu_test.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "logger.h"
 
-#define SIZE 15
-
-/**********************************************************************************************
-											Function
-**********************************************************************************************/
-int keyArr[] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
-int arr2[] = {3,6,9,12,15,18,21,24,27,30,33,36,39,42,45};
+#define SIZE 100
 
 
-Map_Result FillHash (HashMap* _map)
+static size_t mod(const void* _null)
 {
+	return *(int*)_null % SIZE ;
+}
+
+
+UNIT(hashBuild)
+	HashMap *h;
+
+	h = HashMap_Create(6,mod,Person_Eq2);
+	ASSERT_THAT(h != NULL);
+	HashMap_Destroy(&h,NULL,NULL);
+END_UNIT
+UNIT(hashBuild_capacityZero)
+	HashMap *h;
+	h = HashMap_Create(0,mod,Person_Eq2);
+	ASSERT_THAT(NULL == h);
+END_UNIT
+
+UNIT(hashBuild_Null_param)
+	HashMap *h;
+	h = HashMap_Create(53,NULL,Person_Eq2);
+	ASSERT_THAT(NULL == h);
+	h = HashMap_Create(53,mod,NULL);
+	ASSERT_THAT(NULL == h);
+END_UNIT
+
+UNIT(HashSetInsert_normal)
+	HashMap *h;
+	h = HashMap_Create(SIZE,mod,Person_Eq2);
+	ASSERT_THAT(NULL != h);
+	ASSERT_THAT(HashMap_Insert(h,&(people[0].id),&people[0]) == MAP_SUCCESS);
+	ASSERT_THAT(HashMap_Insert(h,&(people[1].id),&people[1]) == MAP_SUCCESS);
+	HashMap_Destroy(&h,NULL,NULL);
+END_UNIT
+
+UNIT(HashSetInsertALREADY_EXISTS)
+	HashMap *h;
 	int i;
-	
-	for (i=0; i<SIZE; ++i)
+	h = HashMap_Create(SIZE,mod,Person_Eq2);
+	ASSERT_THAT(h != NULL);
+	for(i=0;i<SIZE;++i)
 	{
-		if( HashMap_Insert(_map, (void*)&keyArr[i], (void*)&arr2[i]) != MAP_SUCCESS)
-		{
-			return MAP_OVERFLOW_ERROR;
-		}
-	}
-	
-	return MAP_SUCCESS;
-}
+		ASSERT_THAT(HashMap_Insert(h,&(people[i].id),people+i) == MAP_SUCCESS);
+	}	
+	for(i=0;i<2;++i)
+	{
+		ASSERT_THAT(HashMap_Insert(h,&(people[i].id),people+i) == MAP_KEY_DUPLICATE_ERROR);
+	}	
+	HashMap_Destroy(&h,NULL,NULL);
+END_UNIT
 
-
-Map_Result RemoveHash (HashMap* _map)
-{
+/*
+UNIT(HashSetInsertOVERFLOW)
+	HashSet *h;
 	int i;
-	
-	for (i=0; i<SIZE-5; ++i)
+	h = HashSetCreate(CAPA,0.5,mod);
+	ASSERT_THAT(h != NULL);
+	for(i=0;i<CAPA;++i)
 	{
-		if( HashMap_Remove(_map, (void*)&keyArr[i], (void*)&arr2[i]) != MAP_SUCCESS)
-		{
-			return MAP_OVERFLOW_ERROR;
-		}
+		ASSERT_THAT(HashSetInsert(h,i*3) == ERR_OK);
+	}	
+	ASSERT_THAT(HashSetInsert(h,7) == ERR_OVERFLOW);
+	HashSetDestroy(h);
+END_UNIT
+
+
+UNIT(HashSetRemoveSuccessful)
+	HashSet *h;
+	h = HashSetCreate(CAPA,0.5,mod);
+	ASSERT_THAT(h != NULL);
+	ASSERT_THAT(HashSetInsert(h,6) == ERR_OK);
+	ASSERT_THAT(HashSetInsert(h,55) == ERR_OK);
+	ASSERT_THAT(HashSetRemove(h,6) == ERR_OK);
+	ASSERT_THAT(HashSetRemove(h,55) == ERR_OK);
+	HashSetDestroy(h);
+END_UNIT
+
+UNIT(HashSetRemoveNOT_FOUND)
+	HashSet *h;
+	h = HashSetCreate(CAPA,0.5,mod);
+	ASSERT_THAT(h != NULL);
+	ASSERT_THAT(HashSetInsert(h,6) == ERR_OK);
+	ASSERT_THAT(HashSetInsert(h,55) == ERR_OK);
+	ASSERT_THAT(HashSetRemove(h,6) == ERR_OK);
+	ASSERT_THAT(HashSetRemove(h,33) == ERR_NOT_FOUND);
+	HashSetDestroy(h);
+END_UNIT
+
+UNIT(HashSetdoesContains)
+	HashSet *h;
+	h = HashSetCreate(CAPA,0.5,mod);
+	ASSERT_THAT(h != NULL);
+	ASSERT_THAT(HashSetInsert(h,6) == ERR_OK);
+	ASSERT_THAT(HashSetInsert(h,55) == ERR_OK);
+	ASSERT_THAT(HashSetInsert(h,102) == ERR_OK);
+	ASSERT_THAT(HashSetContains(h,6) != 0);
+	ASSERT_THAT(HashSetContains(h,102) != 0);
+	ASSERT_THAT(HashSetContains(h,55) != 0);
+	HashSetDestroy(h);	
+END_UNIT
+
+UNIT(HashSetNOTContains)
+	HashSet *h;
+	h = HashSetCreate(CAPA,0.5,mod);
+	ASSERT_THAT(h != NULL);
+	ASSERT_THAT(HashSetInsert(h,6) == ERR_OK);
+	ASSERT_THAT(HashSetInsert(h,55) == ERR_OK);
+	ASSERT_THAT(HashSetInsert(h,102) == ERR_OK);
+	ASSERT_THAT(HashSetContains(h,15) == 0);
+	ASSERT_THAT(HashSetContains(h,12) == 0);
+	ASSERT_THAT(HashSetContains(h,6) != 0);
+	HashSetDestroy(h);
+END_UNIT
+
+UNIT(HashSetSizeCheck)
+	HashSet *h;
+	int i;
+	int arr[]={34,54,65,23,87,11,90,78,45,33,59};
+	h = HashSetCreate(CAPA,0.5,mod);
+	ASSERT_THAT(h != NULL);
+	for(i=0;i<CAPA;++i)
+	{
+		ASSERT_THAT(HashSetInsert(h,arr[i]) == ERR_OK);
+		ASSERT_THAT(HashSetSize(h) == (i+1));
+		
 	}
-	
-	return MAP_SUCCESS;
-}
-
-
-
-size_t Hashfunc (const void* _key)
-{
-	const int num = *(int*)_key;
-	
-	return (num + 10);
-}
-
-
-int EqualityFunc (void* _firstKey,void* _secondKey)
-{
-	const int num1 = *(int*)_firstKey;
-	const int num2 = *(int*)_secondKey;
-	
-	return (num1 == num2);
-}
-
-
-
-int ActionFunction (const void* _key, void* _value, void* _context)
-{
-	const int key = *(int*)_key;
-	const int value = *(int*)_value;
-	
-	printf ("Key = %d, Value = %d\n",key, value);
-	
-	return 0;
-}
-
-
-
-UNIT (hash_insert)
-	int key1=1, key2=2, key3=3, value1=3, value2=6, value3=9, context = 100;
-	HashMap* map;
-	ASSERT_THAT ((map = HashMap_Create(4,Hashfunc,EqualityFunc)) != NULL);
-	ASSERT_THAT(HashMap_Insert(map, (void*)&key1, (void*)&value1) == MAP_SUCCESS);
-	ASSERT_THAT(HashMap_Insert(map, (void*)&key2, (void*)&value2) == MAP_SUCCESS);
-	ASSERT_THAT(HashMap_Insert(map, (void*)&key3, (void*)&value3) == MAP_SUCCESS);
-	HashMap_ForEach(map, ActionFunction, (void*)&context);
-	HashMap_Destroy(&map,NULL,NULL);
+	for(i=0;i<CAPA;++i)
+	{
+		ASSERT_THAT(HashSetRemove(h,arr[i]) == ERR_OK);
+		ASSERT_THAT(HashSetSize(h) == (CAPA-1-i));
+	}
+	HashSetDestroy(h);
 END_UNIT
 
 
 
-
-UNIT (hash_remove)
-	int key1=1, key2=2, key3=3, value1=3, value2=6, value3=9, context = 100;
-	int* value = &value3;
-	HashMap* map;
-	ASSERT_THAT ((map = HashMap_Create(4,Hashfunc,EqualityFunc)) != NULL);
-	ASSERT_THAT(HashMap_Insert(map, (void*)&key1, (void*)&value1) == MAP_SUCCESS);
-	ASSERT_THAT(HashMap_Insert(map, (void*)&key2, (void*)&value2) == MAP_SUCCESS);
-	ASSERT_THAT(HashMap_Insert(map, (void*)&key3, (void*)&value3) == MAP_SUCCESS);
-	ASSERT_THAT(HashMap_Remove(map, (void*)&key1, (void**)&value) == MAP_SUCCESS);
-	ASSERT_THAT(*value == value1);
-	HashMap_ForEach(map, ActionFunction, (void*)&context);
-	HashMap_Destroy(&map,NULL,NULL);
-
+UNIT(HashSetStatisticsNoInsert)
+	HashSet *h;
+	size_t maxCollisionsEver;
+	float averageCollisions;
+	h = HashSetCreate(3,0.5,mod);
+	ASSERT_THAT(h != NULL);
+	ASSERT_THAT(HashSetStatistics(h,&maxCollisionsEver,&averageCollisions) == ERR_OK);
+	ASSERT_THAT(maxCollisionsEver == 0);
+	ASSERT_THAT(averageCollisions == 0);
+	HashSetDestroy(h);
 END_UNIT
 
+UNIT(HashSetStatisticscheck)
+	HashSet *h;
+	int i;
+	size_t maxCollisionsEver;
+	float averageCollisions;
+	h = HashSetCreate(CAPA,0.5,mod);
+	ASSERT_THAT(h != NULL);
+	for(i=0;i<CAPA;++i)
+	{
+		ASSERT_THAT(HashSetInsert(h,i+1) == ERR_OK);
+		
+	}
+	ASSERT_THAT(HashSetSize(h) == CAPA);
+	ASSERT_THAT(HashSetInsert(h,134) == ERR_OVERFLOW);
+	ASSERT_THAT(HashSetStatistics(h,&maxCollisionsEver,&averageCollisions) == ERR_OK);
+	HashSetForEach(h);
+	HashSetDestroy(h);
+END_UNIT	
 
+UNIT(HashSetStatisticscheck2)
+	HashSet *h;
+	int i;
+	size_t maxCollisionsEver;
+	float averageCollisions;
+	h = HashSetCreate(CAPA,0.5,mod);
+	ASSERT_THAT(h != NULL);
+	for(i=0;i<CAPA;++i)
+	{
+		ASSERT_THAT(HashSetInsert(h,i*SIZE) == ERR_OK);
+		
+	}
+	ASSERT_THAT(HashSetSize(h) == CAPA);
+	ASSERT_THAT(HashSetInsert(h,4) == ERR_OVERFLOW);
+	ASSERT_THAT(HashSetStatistics(h,&maxCollisionsEver,&averageCollisions) == ERR_OK);
+	ASSERT_THAT(maxCollisionsEver != 0);
+	ASSERT_THAT(averageCollisions != 0);
+	ASSERT_THAT(HashSetRemove(h,SIZE) == ERR_OK);
+	ASSERT_THAT(HashSetContains(h,2*SIZE) != 0);
+	HashSetDestroy(h);
+END_UNIT	
+*/
 
-
-UNIT (hash_find)
-	int key1=1, key2=2, key3=3, value1=3, value2=6, value3=9, context = 100;
-	int* value;
-	HashMap* map;
-	ASSERT_THAT ((map = HashMap_Create(4,Hashfunc,EqualityFunc)) != NULL);
-	ASSERT_THAT(HashMap_Insert(map, (void*)&key1, (void*)&value1) == MAP_SUCCESS);
-	ASSERT_THAT(HashMap_Insert(map, (void*)&key2, (void*)&value2) == MAP_SUCCESS);
-	ASSERT_THAT(HashMap_Insert(map, (void*)&key3, (void*)&value3) == MAP_SUCCESS);
-	ASSERT_THAT(HashMap_Remove(map, (void*)&key3, (void**)&value) == MAP_SUCCESS);
-	ASSERT_THAT(HashMap_Remove(map, (void*)&key1, (void**)&value1) == MAP_SUCCESS);
-	ASSERT_THAT(HashMap_Find(map, (void*)&key2, (void**)&value) == MAP_SUCCESS);
-	ASSERT_THAT(HashMap_Find(map, (void*)&key3, (void**)&value) == MAP_KEY_NOT_FOUND_ERROR);
-	ASSERT_THAT(HashMap_Size(map) == 1);
-	HashMap_ForEach(map, ActionFunction, (void*)&context);
-	HashMap_Destroy(&map,NULL,NULL);
-END_UNIT
-
-
-
-UNIT (hash_ReHash)
-	int context = 100;
-	HashMap* map;
-	ASSERT_THAT ((map = HashMap_Create(4,Hashfunc,EqualityFunc)) != NULL);
-	ASSERT_THAT(FillHash(map) == MAP_SUCCESS);
-	HashMap_ForEach(map, ActionFunction, (void*)&context);
-	printf("\nReHash Function\n");
-	ASSERT_THAT(HashMap_Rehash(map, 2) == MAP_SUCCESS);
-	HashMap_ForEach(map, ActionFunction, (void*)&context);
-	ASSERT_THAT(RemoveHash(map) == MAP_OVERFLOW_ERROR);
-	printf("\nAfter Remove\n");
-	HashMap_ForEach(map, ActionFunction, (void*)&context);
-	HashMap_Destroy(&map,NULL,NULL);
-END_UNIT
-
-
-
-
-TEST_SUITE(Hash)
-	TEST(hash_insert)
-	
-	TEST(hash_remove)
-	
-	TEST(hash_find)
-	
-	TEST(hash_ReHash)
-END_SUITE	
-
-
-
-
-
-
-
-
-
-
-
-
-
+TEST_SUITE(HashSet test)
+	TEST(hashBuild)
+	TEST(hashBuild_capacityZero)
+	TEST(hashBuild_Null_param)
+	TEST(HashSetInsert_normal)
+	TEST(HashSetInsertALREADY_EXISTS)
+/*
+	TEST(HashSetInsertOVERFLOW)	
+	TEST(HashSetRemoveNOT_FOUND)
+	TEST(HashSetRemoveSuccessful)
+	TEST(HashSetdoesContains)
+	TEST(HashSetNOTContains)
+	TEST(HashSetSizeCheck)
+	TEST(HashSetStatisticsNoInsert)
+	TEST(HashSetStatisticscheck)
+	TEST(HashSetStatisticscheck2)
+*/
+END_SUITE
 

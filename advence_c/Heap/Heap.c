@@ -1,5 +1,6 @@
-#include<stdlib.h>
-#include<stdio.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <assert.h>
 #include "Heap.h"
 
 #define MAGIC 8952214
@@ -126,6 +127,7 @@ Vector* Heap_Destroy(Heap** _heap)
 		(*_heap)->m_magic = -1;
 		vec = (*_heap)->m_vec;
 		free(*_heap);
+		_heap = NULL;
 	}
 	return vec;
 }
@@ -141,7 +143,6 @@ Vector* Heap_Destroy(Heap** _heap)
  */
 Heap_Result Heap_Insert(Heap* _heap, void* _element)
 {
-	size_t itemNum;
 	Vector_Result error = VECTOR_SUCCESS;
 
 	if(IS_INVALID(_heap))
@@ -153,9 +154,7 @@ Heap_Result Heap_Insert(Heap* _heap, void* _element)
 	{
 		return HEAP_REALLOCATION_FAILED;
 	}
-	itemNum = Vector_Size(_heap->m_vec);
-	++(_heap->m_heap_size);
-	HeapifyUp(_heap,itemNum-1);
+	HeapifyUp(_heap,(_heap->m_heap_size)++);
 	return HEAP_SUCCESS;
 	
 }
@@ -220,7 +219,7 @@ size_t Heap_Size(const Heap* _heap)
 {
 	if(IS_INVALID(_heap))
 	{
-		return -1;
+		return 0;
 	}
 	return _heap->m_heap_size;
 } 
@@ -246,9 +245,30 @@ size_t Heap_ForEach(const Heap* _heap,ActionFunction _act, void* _context)
  * @param[in] _vector - vector to sort.
  * @param[in] _pfLess
  */
-/*
 void Heap_Sort(Vector* _vec, LessThanComparator _pfLess)
-
+{
+	Heap* tempH = Heap_Build(_vec,_pfLess);
+	Vector *vec = Vector_Create(Heap_Size(tempH),2);
+	Vector_Result error = VECTOR_UNINITIALIZED_ERROR;
+	int i,size;
+	void* tempIt = NULL;
+	
+	if(!tempH)
+		return;
+	size = Heap_Size(tempH);
+	for(i = 0;size > i;++i)
+	{
+		error = Vector_Append(vec,Heap_Extract(tempH));
+		assert(error == VECTOR_SUCCESS);
+	}
+	for(i = 0;size > i;++i)
+	{
+		Vector_Get(vec,i,&tempIt);
+		Vector_Append(_vec,tempIt);
+	}
+	Vector_Destroy(&vec,NULL);
+}
+/*
 void HeapPrint(const Heap* _heap)
 {
 	if(IS_INVALID(_heap))
@@ -256,19 +276,6 @@ void HeapPrint(const Heap* _heap)
 		return ;
 	}
 	VectorPrint(_heap->m_vec);
-}
-int main(){
-	int  i;
-	int arr[]={1,2,3,4,5,36,77,81,29,120};
-	Vector *v=VectorCreate(2,2);
-	Heap *h;
-	for (i = 0; i < sizeof(arr)/sizeof(arr[0]); ++i)
-	{
-		VectorAdd(v,arr[i]);
-	}
-	h = HeapBuild(v);
-	HeapPrint(h);
-	return 0;
 }
 */
 

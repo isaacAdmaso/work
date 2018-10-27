@@ -2,7 +2,7 @@
 TARGET = HeapTestMU.out
 LIBS = ADS
 
-.PHONY: run clean gdb val
+.PHONY: run clean gdb val mklib
 
 # General compilation flags
 
@@ -28,7 +28,7 @@ LIB_OBJ = $(LIB_SRC:.c=.o)
 
 # The default command, compile all the sources
 $(TARGET): $(OBJECTS) libs
-	$(CC) $(OBJECTS) -o $(TARGET)  -L$(LIB_PATH) -lADS
+	$(CC) $(OBJECTS) -o $(TARGET) -Wl,-rpath=$(LIB_PATH) -L$(LIB_PATH) -lADS 
 
 libADS.a: $(LIB_OBJ) #let's link library files into a static library
 	ar rcs $(LIB_PATH)/libADS.a $(LIB_OBJ)
@@ -42,7 +42,10 @@ include depends
 depends:
 	$(CC) -MM -I$(INC_DIR) $(SOURCES) $(LIB_SRC) > depends
 
-libs: libADS.a
+libs: mklib libADS.a
+
+mklib:
+	mkdir -p $(LIB_PATH)
 
 clean:
 	-rm $(TARGET) *.o depends

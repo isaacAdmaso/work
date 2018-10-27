@@ -40,4 +40,11 @@ schedulerDS: ../lib/libSCH.so
 	gcc $(CFLAGS) -shared $(SCHSOURCES) -fPIC -o ../lib/libSCH.so
 
 clean:
-	-rm -R ./ *.{out,o} depends log.txt
+	find . -type f -name '*.o' -delete
+	find . -type f -name '*.out' -delete
+	find . -type f -name 'depends' -delete
+	find . -type f -name 'log.txt' -delete
+
+cleanlib:clean
+	rm ../lib/*.so
+	rm ../lib/*.a

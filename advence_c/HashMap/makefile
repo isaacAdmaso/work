@@ -2,7 +2,7 @@
 TARGET = HashMapTest.out
 LIBS = ADS
 
-.PHONY: run clean gdb lib
+.PHONY: run clean gdb mklib val
 
 # General compilation flags
 
