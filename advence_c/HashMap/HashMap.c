@@ -31,8 +31,9 @@ typedef struct Destroy_Pair_Func
 		Destroy m_valDestroy;
 	}Destroy_Pair_Func;
 
-static int GetNumber(int _number);/*next prime number*/
+static size_t GetNumber(size_t _number);/*next prime number*/
 
+static void Hash_Init(HashMap* _map,size_t _primeN, HashFunction _hashFunc, EqualityFunction _keysEqualFunc);
 /** 
  * @brief Create a new hash map with given capcity and key characteristics.
  * @param[in] _capacity - Expected max capacity 
@@ -44,7 +45,7 @@ static int GetNumber(int _number);/*next prime number*/
 HashMap* HashMap_Create(size_t _capacity, HashFunction _hashFunc, EqualityFunction _keysEqualFunc)
 {
     HashMap *h;
-	int primeN; 
+	size_t primeN; 
 	
 	/*parameter check*/
 	if(_capacity <= MININPUT || NULL == _hashFunc || NULL == _keysEqualFunc)
@@ -64,11 +65,7 @@ HashMap* HashMap_Create(size_t _capacity, HashFunction _hashFunc, EqualityFuncti
 		free(h);
 		return NULL;
 	}
-    h->m_size = primeN;
-	h->m_noItems = 0;
-	h->m_hashFunc = _hashFunc;
-	h->m_keysEqualFunc = _keysEqualFunc;
-	h->m_magic = MAGIC;
+    Hash_Init(h,primeN,_hashFunc,_keysEqualFunc);
 	return h;
 }
 
@@ -114,6 +111,7 @@ void HashMap_Destroy(HashMap** _map, void (*_keyDestroy)(void* _key), void (*_va
 	{
 		return;
 	}
+	(*_map)->m_magic = 0;
 	mapSize = (*_map)->m_size;
 	d_p_f.m_keyDestroy = _keyDestroy;
 	d_p_f.m_valDestroy = _valDestroy;
@@ -149,7 +147,7 @@ size_t HashMap_Size(const HashMap* _map)
 
 
 
-static int IsPrime(int _n)
+static size_t IsPrime(size_t _n)
 {
     int i;
 
@@ -162,7 +160,7 @@ static int IsPrime(int _n)
     return 1;
 }
 
-static int GetNumber(int _number)
+static size_t GetNumber(size_t _number)
 {
 	while (1)
     {
@@ -448,6 +446,14 @@ Map_Stats HashMap_GetStatistics(const HashMap* _map)
 	
 }
 
+static void Hash_Init(HashMap* _map,size_t _primeN, HashFunction _hashFunc, EqualityFunction _keysEqualFunc)
+{
+	_map->m_size = _primeN;
+	_map->m_noItems = 0;
+	_map->m_hashFunc = _hashFunc;
+	_map->m_keysEqualFunc = _keysEqualFunc;
+	_map->m_magic = MAGIC;	
+}
 #endif /* NDEBUG */
 
 
