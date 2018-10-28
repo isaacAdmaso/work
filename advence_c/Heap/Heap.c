@@ -20,65 +20,8 @@ typedef struct pair
 	void* m_val;
 }pair;
 
-static void MaxHeapify(Heap* _heap,size_t _index)
-{
-	pair leftC,rightC,parent,*largest;
-
-	leftC.m_idx = 2*_index+1;
-	rightC.m_idx = 2*_index+2;
-	parent.m_idx = _index;
-	Vector_Get(_heap->m_vec,parent.m_idx,&(parent.m_val));
-
-	if(leftC.m_idx < _heap->m_heap_size)
-	{
-		Vector_Get(_heap->m_vec,leftC.m_idx,&leftC.m_val);
-		if(_heap->m_compere(parent.m_val,leftC.m_val))
-		{
-			largest = &leftC;
-		}else
-		{
-			largest = &parent;
-		}
-	}else 
-	{
-		largest = &parent;
-	}
-	if(rightC.m_idx < _heap->m_heap_size)
-	{
-		Vector_Get(_heap->m_vec,rightC.m_idx,&rightC.m_val);
-		if(_heap->m_compere(leftC.m_val,rightC.m_val) && _heap->m_compere(parent.m_val,rightC.m_val))
-		{
-			largest = &rightC;
-		}
-	}
-	if (largest != &parent)
-	{
-		Vector_Get(_heap->m_vec,largest->m_idx,&(largest->m_val));
-		Vector_Set(_heap->m_vec,parent.m_idx,largest->m_val);
-		Vector_Set(_heap->m_vec,largest->m_idx,parent.m_val);
-		MaxHeapify(_heap,largest->m_idx);
-	}
-}
-
-void HeapifyUp(Heap* _heap,size_t _index)
-{
-	pair _idxValP,parent;
-
-	parent.m_idx = (_index - 1)/2;
-	_idxValP.m_idx = _index;
-	if(0 < _index && _index < _heap->m_heap_size)
-	{
-		Vector_Get(_heap->m_vec,parent.m_idx,&(parent.m_val));
-		Vector_Get(_heap->m_vec,_idxValP.m_idx,&(_idxValP.m_val));
-
-		if(_heap->m_compere(parent.m_val,_idxValP.m_val))
-		{
-			Vector_Set(_heap->m_vec,parent.m_idx,_idxValP.m_val);
-			Vector_Set(_heap->m_vec,_idxValP.m_idx,parent.m_val);
-			HeapifyUp(_heap,parent.m_idx);
-		}
-	} 
-}		
+static void MaxHeapify(Heap* _heap,size_t _index);
+void HeapifyUp(Heap* _heap,size_t _index);
 /**  
  * @brief Apply a heap policy over a Vector container.  
  * @param[in] _vector - Vector that holds the elements, must be initialized
@@ -268,6 +211,62 @@ void Heap_Sort(Vector* _vec, LessThanComparator _pfLess)
 	}
 	Vector_Destroy(&vec,NULL);
 }
+
+static void MaxHeapify(Heap* _heap,size_t _index)
+{
+	pair leftC,rightC,parent,*largest;
+
+	leftC.m_idx = 2*_index+1;
+	rightC.m_idx = 2*_index+2;
+	parent.m_idx = _index;
+	Vector_Get(_heap->m_vec,parent.m_idx,&(parent.m_val));
+	largest = &parent;
+
+	if(leftC.m_idx < _heap->m_heap_size)
+	{
+		Vector_Get(_heap->m_vec,leftC.m_idx,&leftC.m_val);
+		if(_heap->m_compere(parent.m_val,leftC.m_val))
+		{
+			largest = &leftC;
+	
+		}
+	}	
+	if(rightC.m_idx < _heap->m_heap_size)
+	{
+		Vector_Get(_heap->m_vec,rightC.m_idx,&rightC.m_val);
+		if(_heap->m_compere(leftC.m_val,rightC.m_val) && _heap->m_compere(parent.m_val,rightC.m_val))
+		{
+			largest = &rightC;
+		}
+	}
+	if (largest != &parent)
+	{
+		Vector_Get(_heap->m_vec,largest->m_idx,&(largest->m_val));
+		Vector_Set(_heap->m_vec,parent.m_idx,largest->m_val);
+		Vector_Set(_heap->m_vec,largest->m_idx,parent.m_val);
+		MaxHeapify(_heap,largest->m_idx);
+	}
+}
+
+void HeapifyUp(Heap* _heap,size_t _index)
+{
+	pair _idxValP,parent;
+
+	parent.m_idx = (_index - 1)/2;
+	_idxValP.m_idx = _index;
+	if(0 < _index && _index < _heap->m_heap_size)
+	{
+		Vector_Get(_heap->m_vec,parent.m_idx,&(parent.m_val));
+		Vector_Get(_heap->m_vec,_idxValP.m_idx,&(_idxValP.m_val));
+
+		if(_heap->m_compere(parent.m_val,_idxValP.m_val))
+		{
+			Vector_Set(_heap->m_vec,parent.m_idx,_idxValP.m_val);
+			Vector_Set(_heap->m_vec,_idxValP.m_idx,parent.m_val);
+			HeapifyUp(_heap,parent.m_idx);
+		}
+	} 
+}		
 /*
 void HeapPrint(const Heap* _heap)
 {
