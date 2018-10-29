@@ -7,28 +7,27 @@
 #include <unistd.h>
 #include <stdio.h>
 
-#define MAX 256
-/*
+#define MAX 32
 void sigint_handler(int sig)
 {
-    pid_t pid = getpid();
-	printf("\nin process %d\n",pid);
+	printf("\nin process \n");
     fflush(0);
 }
-*/
+/*
 void sigint_handler(int _sig,siginfo_t *_siginfo,void* _null)
 {
     printf("\nin process %ld\n",(long)_siginfo->si_pid);
     fflush(0);
     kill(_siginfo->si_pid,SIGUSR1);
 }
+*/
 
 int main(int argc, char const *argv[])
 {
     pid_t pid = getpid();
 	struct sigaction sa;
     int parent,n,child;
-    extern char *optarg;
+   /* extern char *optarg;
 	extern int optind;
     
     while ((n = getopt(argc, argv, "d:p:")) != -1)
@@ -46,11 +45,11 @@ int main(int argc, char const *argv[])
 			break;
 		}
 
-    }
-	sa.sa_sigaction = &sigint_handler;
+    }*/
+	sa.sa_handler = sigint_handler;
 	sa.sa_flags = SA_SIGINFO;
 	sigemptyset(&sa.sa_mask);
-
+    printf("\ninside main\n");
     n = fork();
     if(n < 0)
     {
@@ -59,17 +58,20 @@ int main(int argc, char const *argv[])
     
     else if(n > 0)
     {
+        sleep(1);
         pause();
         if (sigaction(SIGUSR1, &sa, NULL) == -1) 
         {
 		    perror("sigaction");
             exit(1);
         }   
+        printf("\ninside of Parent\n");
         
     }
     
     else
     {
+        printf("\ninside child\n");
         kill(pid,SIGUSR1);
         pause();
         if (sigaction(SIGUSR1, &sa, NULL) == -1) 
