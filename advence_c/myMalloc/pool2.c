@@ -8,34 +8,36 @@
 
 typedef struct Inode
 {
-    void* m_Real_prev;
+    struct Inode* m_Real_prev;
     size_t m_size;
     void* m_iBuffer;
-    struct Inode *m_next;
-    struct Inode *m_prev;
+    struct Inode* m_prev;
+    struct Inode* m_next;
+
 }Inode;
 
 struct Pool
 {
     size_t m_magic;
-    size_t m_totBufleft;/**check if needded.. */
+    /*check if needded.. */
+    size_t m_totBufleft;
     Inode* m_buffer;
 };
 
 
 static void Inode_Init(Pool* _pool,size_t _bufSize)
 {
-    _pool->m_buffer->m_Real_prev = NULL;
+    _pool->m_buffer->m_Real_prev = _pool->m_buffer;
     _pool->m_buffer->m_size = _bufSize;
-    _pool->m_buffer->m_next = _pool->m_buffer->m_next = NULL;
+    _pool->m_buffer->m_iBuffer = (_pool->m_buffer + 3*sizeof(char*));
 }
 
 static void  Pool_Init(Pool* _pool,size_t _size)
 {
     _pool->m_totBufleft = AVG_BUFF;
-    _pool->m_magic = MAGIC;
-    _pool->m_buffer = (_pool+1);
+    _pool->m_buffer = (Inode*)(_pool+1);
     Inode_Init(_pool,_size);
+    _pool->m_magic = MAGIC;
 }
 /**
  * @brief create "Pool" of memory get 2 parm 
@@ -51,7 +53,7 @@ Pool* Pool_Create(size_t _bufSize)
     {
         return NULL;
     }
-    size = sizeof(Pool)+_bufSize*sizeof(char)+sizeof(Inode) +AVG_BUFF*sizeof(size_t);
+    size = sizeof(Pool)+_bufSize*sizeof(char) + (1 + AVG_BUFF)*sizeof(Inode);
     pol = malloc(size);
     if(NULL == pol)
     {
@@ -79,13 +81,13 @@ void Pool_Destroy(Pool* _pool)
 
 static Inode* Split(Inode *_node,size_t _size)
 {
-    Inode* newNode = (Inode*)(_node->m_iBuffer + _size);
+    Inode* newNode = (Inode*)((char*)_node->m_iBuffer + _size);
 
+    newNode->m_Real_prev = _node;
     newNode->m_size = _node->m_size -(_size + sizeof(Inode));
     _node->m_size = _size;
-    newNode->m_iBuffer = (char**)(newNode + 1);
-    newNode->m_next = _node->m_next;
-    newNode->m_prev = _node->m_prev;
+    newNode->m_iBuffer = (newNode + 1);
+   
     return newNode;
 }
 
