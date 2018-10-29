@@ -58,27 +58,28 @@ int main(int argc, char const *argv[])
     
     else if(n > 0)
     {
-        sleep(1);
-        pause();
         if (sigaction(SIGUSR1, &sa, NULL) == -1) 
         {
 		    perror("sigaction");
             exit(1);
         }   
+        pause();
+        kill(n,SIGUSR1);
+
         printf("\ninside of Parent\n");
         
     }
-    
     else
     {
-        printf("\ninside child\n");
-        kill(pid,SIGUSR1);
-        pause();
         if (sigaction(SIGUSR1, &sa, NULL) == -1) 
         {
 	    	perror("sigaction");
 	    	exit(1);
 	    }
+        printf("\ninside child\n");
+        sleep(1);
+        kill(pid,SIGUSR1);
+        pause();
     }
     return 0;
 }

@@ -4,10 +4,13 @@
 #include <errno.h>
 #include <signal.h>
 
+#define MAX 32
+
+
 void sigint_handler(int sig)
 {
 	/*printf("\nAhhh! SIGINT!\n") - printf is not async safe*/
-    write(0,"\nAhhh! SIGINT!\n",16);
+    write(0,"\nAhhh! SIGINT!\n",MAX);
 }
 
 int main(void)
