@@ -1,4 +1,4 @@
-CFLAGS=-I../include -I../include/includeLogger -I../include/sch -g
+CFLAGS=-I../include -I../include/includeLogger -I../include/sch -ansi -pedantic -Wall -Werror -g
 DSSOURCES=genericDbLnkLst/list.c \
 		genericDbLnkLst/list_func.c \
 		HashMap/HashMap.c \

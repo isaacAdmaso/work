@@ -4,7 +4,6 @@
 #include <getopt.h>
 #include <string.h>
 #include <stdlib.h>
-#include <signal.h>
 #include <unistd.h>
 #include <wait.h>
 #include <stdio.h>
@@ -13,8 +12,6 @@
 
 int main(int argc, char *argv[])
 {
-    pid_t pid = getpid();
-	struct sigaction sa;
     /*
     char readBuf[MAX],buf[] = "Balance factors can be kept up-to-date by knowing the previous balance factors and the change in height\
      it is not necessary to know the absolute height. For holding the AVL balance information in the traditional way\
@@ -27,7 +24,7 @@ int main(int argc, char *argv[])
 /*
     char readBuf[MAX] = "\0",*buf[] = {"MSG0","MSG1","MSG2","MSG3","MSG4","MSG5","MSG6","MSG7","MSG8","MSG9","MSG10","MSG11"};
   */
-    int i,vFlag = 0,numOfMSG = 0,cid,n,pWorkSim = 0,cWorkSim = 0,sizeToRead = 0,fd[2],readSize = 0;
+    int i,vFlag = 0,numOfMSG = 0,cid,n,pWorkSim = 0,cWorkSim = 0,sizeToRead = 0,fd[2];
     extern char *optarg;
 	extern int optind;
     
