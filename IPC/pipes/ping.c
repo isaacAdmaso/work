@@ -1,93 +1,70 @@
-#ifndef _XOPEN_SOURCE 
-#define _XOPEN_SOURCE  500
-#endif
-#include <getopt.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <wait.h>
-#include <stdio.h>
-#include <sys/stat.h> 
-#include <sys/types.h>
-#include <fcntl.h> 
-#define ET 1000
-#define MAX 128
-#define PATH "./MyFifo"
+
+#include "pipo.h" 
+#define STRPARM "dn:cvf:s:"
+
 
 int main(int argc, char *argv[])
 {
     char*buf[] = {"MSG0","MSG1","MSG2","MSG3","MSG4","MSG5","MSG6","MSG7","MSG8","MSG9","MSG10","MSG11"};
-
     FILE* temp = NULL;
-    char fileN[MAX];
-    int i,delete = 0,numOfMSG = 0,create = 0,op,vFlag = 0,sWorkSim,fd;
-    extern char *optarg;
-	extern int optind;
+    int fd,i;   
+    Input_Op inputOp = {0};
     
-    while ((op = getopt(argc, argv, "dn:cvf:s:")) != -1)
+    
+    Init(&inputOp,argc,argv);
+    Get_Op_Prm(&inputOp,STRPARM);
+    if (inputOp.m_create)
     {
-		switch (op) 
-        {
-		case 'd':
-            delete = 1;
-			break;
-		case 'n':
-            numOfMSG = atoi(optarg);
-			break;
-        case 'c':
-            create = 1;
-			break;
-        case 'v':
-            vFlag = 1;
-			break;
-        case 'f':
-            strcpy(fileN,optarg);
-			break;
-        case 's':
-            sWorkSim = atoi(optarg);
-			break;
-        case '?':
-			break;
-		}
-    }
-
-    if (create)
-    {
-        if (vFlag)
+        if (inputOp.m_vFlag)
         {
            printf("\ncreate Named Pipe \n");
         }
-        if((temp = fopen(PATH,"w")) != NULL)
+        if((temp = fopen(inputOp.m_fileN,"w")) != NULL)
         {
             fclose(temp);
             perror("already exist");
+            return 1;
         }
-        if(mkfifo(PATH,0666))
+        if(mkfifo(inputOp.m_fileN,MODE))
         {
             perror("make fifo");
+            return 1;
         }
     }
 
-    fd = open(PATH, O_WRONLY); 
+    if (inputOp.m_vFlag)
+    {
+        printf("open fifo");
+    }
+    fd = open(inputOp.m_fileN, O_WRONLY); 
+    if(fd == -1)
+    {
+        if (inputOp.m_vFlag)
+        {
+           perror("open fifo");
+        }
+        return 1;
+    }
     
 
-    for(i = 0;i < numOfMSG;++i)
+    for(i = 0;i < inputOp.m_numToRead;++i)
     {
         printf("\nsleep write\n");
-        usleep(sWorkSim*ET);
+        usleep(inputOp.m_sWorkSim*ET);
         write(fd,buf[i],strlen(buf[i]));
         printf("\nTo-Write %ld\n",strlen(buf[i]));
+        PrintPid();
         printf("\nTo-Write %s\n",buf[i]);
     }
     close(fd);
 
-    if(delete)
+    if(inputOp.m_delete)
     {
-        if (vFlag)
+        if (inputOp.m_vFlag)
         {
-           printf("\nNamed Pipe %s deleted\n",fileN);
+           printf("\nNamed Pipe %s deleted\n",inputOp.m_fileN);
         }
-        remove(PATH);
+        remove(inputOp.m_fileN);
     }
     return 0;
 }
