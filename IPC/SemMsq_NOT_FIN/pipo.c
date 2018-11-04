@@ -14,7 +14,7 @@
 
 
 
-void Init(Input_Op* _inStc,int _argc, char *_argv[])
+static void Init(Input_Op* _inStc,int _argc, char *_argv[])
 {
     _inStc->m_argv = _argv;
     _inStc->m_fileN = DEF;
@@ -26,11 +26,13 @@ void Init(Input_Op* _inStc,int _argc, char *_argv[])
     _inStc->m_sWorkSim = 0;
     _inStc->m_eof = 0;
 }
-void Get_Op_Prm(Input_Op* _input,char* _str)
+void Get_Op_Prm(Input_Op* _input,char* _str,int _argc, char *_argv[])
 {
     int op = -1;
     extern char *optarg;
 	extern int optind;
+
+    Init(_input,_argc,_argv);
 
     while ((op = getopt(_input->m_argc, _input->m_argv, _str)) != -1)
     {
@@ -77,7 +79,7 @@ void Key_Init(Input_Op* _op,key_t* _key )
     {
         if((*_key = ftok(_op->m_fileN, KEY_ID)) == -1)
         {
-            perror("ftok");
+            perror("\nftok\n");
             exit(1);
         }
     }

@@ -44,8 +44,7 @@ typedef struct Input_Op
     int m_eof;
 }Input_Op;
 
-void Init(Input_Op* _inStc,int _argc, char *_argv[]);
-void Get_Op_Prm(Input_Op* _input,char* _str);
+void Get_Op_Prm(Input_Op* _input,int _argc, char *_argv[],char* _str);
 void PrintPid();
 void Key_Init(Input_Op* _op,key_t* key );
 int Str_Msg_Send(MymsgBuf* _msgBuf,MSQID _msqid,int _vFlag);

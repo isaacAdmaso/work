@@ -72,15 +72,18 @@ int main(int argc, char *argv[])
         if (semop(semId, &semDown, 1) == -1)
         {
             semctl(semId, 0, IPC_RMID);
+            perror("\nsemOP down\n");
+            return 1;
         }
         printf("\nMessage num %d\n",i+1);
         if (semop(semId, &semUP, 1) == -1)
         {
             semctl(semId, 0, IPC_RMID);
+            perror("\nsemOP up\n");
             return 1;
         }
         usleep(sleep);
     }
-
+    PRINT_V(verb,"\nfin\n");
     return 0;
 }

@@ -57,19 +57,19 @@ int main(int argc, char *argv[])
         perror("semget");
         return 1;
     }
-    if(pause)
+    if(resume)
     {
-        PRINT_V(verb,"\npause\n");
-        if (semop(semId, &semDown, 1) == -1)
+        PRINT_V(verb,"\nresume\n");
+        if (semop(semId, &semUP, 1) == -1)
         {
             semctl(semId, 0, IPC_RMID);
             return 1;
         }
     }
-    if(resume)
+    if(pause)
     {
-        PRINT_V(verb,"\nresume\n");
-        if (semop(semId, &semUP, 1) == -1)
+        PRINT_V(verb,"\npause\n");
+        if (semop(semId, &semDown, 1) == -1)
         {
             semctl(semId, 0, IPC_RMID);
             return 1;
@@ -85,6 +85,7 @@ int main(int argc, char *argv[])
         }
 
     }
+    PRINT_V(verb,"\nfin\n");
 
     return 0;
 }
