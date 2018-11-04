@@ -1,4 +1,17 @@
-#include "pingpong.h"
+#include "PingPong.h"
+#include <unistd.h>
+#include <fcntl.h>
+#include <getopt.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include <sys/sem.h>
+#include <time.h>
+
 
 
 void Init(Input_Op* _inStc,int _argc, char *_argv[])
@@ -67,7 +80,6 @@ void Key_Init(Input_Op* _op,key_t* _key )
             perror("ftok");
             exit(1);
         }
-        
     }
     else
     {
@@ -100,16 +112,17 @@ int Str_Msg_Send(MymsgBuf* _msgBuf,int _msqid,int _vFlag)
 
     return 1;
 }
-int Str_Msg_Send(MSQID _msqid,MymsgBuf* _msgBuf)
+int Str_Msg_Res(MSQID _msqid,MymsgBuf* _msgBuf)
 {
     if(msgrcv(_msqid, _msgBuf, sizeof (_msgBuf->m_mBufId), 0, 0) == -1)
     {
         perror("msgrcv");
-        exit(1);
+        return 0;
     }
     PrintPid();
-    printf("\nRec srt: %s from PID: %d\n",msgBuf.m_mBufId.m_msg,msgBuf.m_mBufId.m_pid);
+    printf("\nRec srt: %s from PID: %d\n",_msgBuf->m_mBufId.m_msg,_msgBuf->m_mBufId.m_pid);
     fflush(0);
+    return 1;
 }
 int  Msq_Init(int *_msqid ,key_t _key)
 {
@@ -118,4 +131,65 @@ int  Msq_Init(int *_msqid ,key_t _key)
         return 0;
     }
     return 1;
+}
+/**semaphore */
+
+union semun {
+    int val;
+    struct semid_ds *buf;
+    unsigned short *array;
+};
+
+int InitSem(key_t key, int nsems)  /* key from ftok() */
+{
+    int i;
+    union semun arg;
+    struct semid_ds buf;
+    struct sembuf sb;
+    int semid,e,ready;
+
+    semid = semget(key, nsems, IPC_CREAT | IPC_EXCL | 0666);
+
+    if (semid >= 0) { /* we got it first */
+        sb.sem_op = 1; sb.sem_flg = 0;
+        arg.val = 1;
+
+        printf("press return\n"); getchar();
+
+        for(sb.sem_num = 0; sb.sem_num < nsems; sb.sem_num++) { 
+            /* do a semop() to "free" the semaphores. */
+            /* this sets the sem_otime field, as needed below. */
+            if (semop(semid, &sb, 1) == -1) {
+                e = errno;
+                semctl(semid, 0, IPC_RMID); /* clean up */
+                errno = e;
+                return -1; /* error, check errno */
+            }
+        }
+
+    } else if (errno == EEXIST) { /* someone else got it first */
+        ready = 0;
+
+        semid = semget(key, nsems, 0); /* get the id */
+        if (semid < 0) return semid; /* error, check errno */
+
+        /* wait for other process to initialize the semaphore: */
+        arg.buf = &buf;
+        for(i = 0; (i < MAX_RETRIES) && !ready; i++) {
+            semctl(semid, nsems-1, IPC_STAT, arg);
+            if (arg.buf->sem_otime != 0) {
+                ready = 1;
+            } else {
+                sleep(1);
+            }
+        }
+        if (!ready) {
+            errno = ETIME;
+            return -1;
+        }
+    } else {
+        return semid; /* error, check errno */
+    }
+
+    return semid;
 }    

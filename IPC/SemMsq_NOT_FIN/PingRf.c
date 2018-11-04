@@ -1,16 +1,3 @@
-/*
- *	Author:				Alex Katz
- *  Creation date:		14.03.2012 (H9-Y21) 
- *  Last modification:	02.09.2012
- * 	Description: 
- * 		MessageQueue PingPong with multiple readers and writers
- * 		Uses special message type as Registrar for Ping processes
- *  	The Registrar acts as a semaphore with each Ping writing a message on startup and removing it prior to exit
- *		At least one Ping has to be run before any Pong
- * 
- * 
- */ 
-/* for SYSV IPC getopt & usleep */
 #ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE 500
 #endif
@@ -24,9 +11,7 @@
 #include <sys/msg.h>
 #include <errno.h>
 #include <time.h>
-/*
- * UI messages
- */
+
 const char USAGE[]	="Usage: %s [-c] [-d] [-v] [-f name] [-n number of messages] [-s msec]\n";
 const char ERR_FTOK[]	="ERROR getting key for %s!\n";
 const char ERR_MSGGET[]	="ERROR getting queue %s = 0x%8x!\n";
@@ -40,14 +25,9 @@ const char ECHO_DEL[]	="MSGQUE %s = %x marked for deletion\n";
 const char ECHO_REG[]	="REGISTER with pid = %d\n";
 const char ECHO_UNREG[]	="deREGISTER with pid = %d\n";
 
-/*
- * Defaults
- */
 #define MSG_NUM_DEFAULT 16
 
-/*
- * Common definitions
- */
+
 #include "PingPong.h"
 
 /*
@@ -103,7 +83,7 @@ int main(int argc, char **argv)
 			break;
 		default: /* '?' */
 			fprintf(stderr, USAGE, argv[0]);
-			return EXIT_FAILURE;
+			return 1;
 		}
 	}
 
@@ -111,13 +91,13 @@ int main(int argc, char **argv)
 /*  make the key */
 	if (-1 == (msgKey = ftok(msqName, 1))) {
 		fprintf(stderr, ERR_FTOK, msqName);
-		return errno;
+		return 1;
 	}
 
 /*  create or open message queue */
 	if (-1 == (mQ = msgget(msgKey, createMQ))) {
 		fprintf(stderr, ERR_MSGGET, msqName, msgKey);
-		return errno;
+		return 1;
 	}
 
 /*  register Ping with the message queue */

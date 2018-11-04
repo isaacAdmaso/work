@@ -18,56 +18,14 @@ int main(int argc, char *argv[])
 
     PRINT_V((inputOp.m_vFlag),("ftok"));
     Key_Init(&inputOp,&key);
-/*
-    if(strcmp(inputOp.m_fileN,DEF))
-    {
-        if((key = ftok(inputOp.m_fileN, KEY_ID)) == -1)
-        {
-            perror("ftok");
-            exit(1);
-        }
 
-    }
-    else
-    {
-        if((key = ftok(KEY_PATE, KEY_ID)) == -1)
-        {
-            perror("ftok");
-            exit(1);
-        }
-    }
-*/
     PRINT_V(inputOp.m_vFlag,"msgget");
     Msq_Init(&msqid,key);
-/**struct chanel key 
-     * 
-    if ((msqid = msgget(key,MODE | IPC_CREAT)) == -1)
-    {
-        perror("msgget");
-        exit(1);
-    }
-*/
 
     while(1)
     {   
         PRINT_V((inputOp.m_vFlag),"\nEnter lines of text, ^D to quit:\n");
-    /*
-        if(fgets(msgBuf.m_mBufId.m_msg, MAX, stdin) == NULL)
-        {
-            break;
-        }
-
-        numOfBytes = strlen(msgBuf.m_mBufId.m_msg);
-        if(msgBuf.m_mBufId.m_msg[numOfBytes - 1] == '\n')
-        {
-            msgBuf.m_mBufId.m_msg[numOfBytes - 1] = '\0';
-        }
-        PRINT_V((inputOp.m_vFlag),"msgsnd");
-        if(msgsnd(msqid, &msgBuf, numOfBytes + 1, IPC_NOWAIT) == -1)
-        {
-            perror("msgsnd");
-        }
-    */
+    
         if(!Str_Msg_Send(&msgBuf,msqid,inputOp.m_vFlag))
         {
             return 1;

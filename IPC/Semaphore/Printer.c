@@ -48,13 +48,13 @@ int main(int argc, char *argv[])
 		}
     }
 
-    PRINT_V(verb,"ftok");
+    PRINT_V(verb,"\nftok\n");
     if((key = ftok(KEY_PATE, KEY_ID)) == -1)
     {
         fprintf(stderr,"ftok");
         return 1;
     }
-    PRINT_V(verb,"semget");
+    PRINT_V(verb,"\nsemget\n");
     if((semId = semget(key,1,MODE)) == -1)
     {
         perror("semget");
