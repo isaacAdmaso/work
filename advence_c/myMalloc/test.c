@@ -15,7 +15,9 @@ int main()
     printf("%d\n",*intPtr);
     printf("%d\n",*--intPtr);
     printf("%d\n",*--intPtr);
+    /*
     MyFree(p,(void*)intPtr);
+    */
     Pool_Destroy(p);
     return 0;
 }

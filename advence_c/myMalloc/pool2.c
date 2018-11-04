@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-#define DLT  sizeof(void*)
+#define DLT  3*sizeof(void*)
 #define MAGIC 12432132
 #define IS_INVALID(P) (NULL == (P) || (P)->m_magic != MAGIC)
 
@@ -27,9 +27,12 @@ struct Pool
 
 static void Inode_Init(Pool* _pool,size_t _bufSize)
 {
-    _pool->m_buffer->m_Real_prev = _pool->m_buffer;
-    _pool->m_buffer->m_size = _bufSize;
-    _pool->m_buffer->m_iBuffer = (_pool->m_buffer + 3*sizeof(char*));
+    _pool->m_buffer->m_Real_prev = NULL;
+    _pool->m_buffer->m_size = _bufSize; 
+    _pool->m_buffer->m_iBuffer = _pool->m_buffer->m_iBuffer;
+    _pool->m_buffer->m_next = _pool->m_buffer->m_prev = NULL; 
+
+    /*(_pool->m_buffer + 3*sizeof(void*))*/
 }
 
 static void  Pool_Init(Pool* _pool,size_t _size)
@@ -53,7 +56,7 @@ Pool* Pool_Create(size_t _bufSize)
     {
         return NULL;
     }
-    size = sizeof(Pool)+_bufSize*sizeof(char) + (1 + AVG_BUFF)*sizeof(Inode);
+    size = sizeof(Pool) + _bufSize + (1 + AVG_BUFF)*sizeof(Inode);
     pol = malloc(size);
     if(NULL == pol)
     {
@@ -79,21 +82,21 @@ void Pool_Destroy(Pool* _pool)
     free(_pool);
 }
 
-static Inode* Split(Inode *_node,size_t _size)
+static void Split(Inode *_node,size_t _size)
 {
-    Inode* newNode = (Inode*)((char*)_node->m_iBuffer + _size);
+    Inode* newNode = (Inode*)((char**)_node->m_iBuffer + _size);
 
-    newNode->m_Real_prev = _node;
     newNode->m_size = _node->m_size -(_size + sizeof(Inode));
+    newNode->m_Real_prev = _node;
+    newNode->m_next = _node->m_next;
+    newNode->m_prev = _node->m_prev;
     _node->m_size = _size;
-    newNode->m_iBuffer = (newNode + 1);
-   
-    return newNode;
+    _node->m_Real_prev = NULL;
 }
 
-static void* FindFirstFree(Pool* _pool,size_t _size)
+static Inode* FindFirstFree(Pool* _pool,size_t _size)
 {
-    Inode *cur = &(_pool->m_buffer) ;
+    Inode *cur = _pool->m_buffer ;
     
     while ((cur->m_next != NULL) && (cur->m_size >= _size))
     {
@@ -106,15 +109,16 @@ static void* FindFirstFree(Pool* _pool,size_t _size)
             cur->m_next->m_prev = cur->m_prev;
             cur->m_prev->m_next = cur->m_next;
         }
-        _pool->m_totBufleft -=_size;
-        return (void*)cur->m_iBuffer;
+        --(_pool->m_totBufleft);
+        cur->m_Real_prev = NULL;
+        return cur;
 
     }
     else if(cur->m_size > _size + sizeof(Inode) + DLT)
     {
-        cur = Split(cur , _size);
-        _pool->m_totBufleft -=(_size + sizeof(Inode));
-        return (void*)cur->m_iBuffer;
+        Split(cur , _size);
+        --(_pool->m_totBufleft);
+        return cur;
     }
     return NULL;
 }
@@ -128,7 +132,7 @@ static void* FindFirstFree(Pool* _pool,size_t _size)
  */
 void* MyMalloc(Pool* _pool,size_t _size)
 {
-    void* newNode;
+    Inode* newNode;
 
     if(IS_INVALID(_pool) || 0 == _size)
     {
@@ -137,7 +141,7 @@ void* MyMalloc(Pool* _pool,size_t _size)
     
     newNode = FindFirstFree(_pool,_size);
 
-    return newNode; 
+    return newNode->m_iBuffer; 
 }
 /**
  * @brief return bufsize to pool
