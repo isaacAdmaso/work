@@ -18,26 +18,32 @@
 #define STRPARM "vcdf:n:s:"
 
 
+typedef struct regbuf
+{
+	long	m_type;
+	int 	m_procID;
+} regbuf;
+
 int main(int argc, char *argv[])
 {
-    key_t key = {0};
-    MSQID msqid = 0;
-    MymsgBuf msgBuf;
-    Input_Op inputOp = {0};
-    int semaId;
+    key_t key;
+    int msgQ;
+    regbuf reg;
+    pid_t pid = getpid();
 
 
-    Init(&inputOp,argc,argv);
-    Get_Op_Prm(&inputOp,STRPARM);
-    msgBuf.m_type = TYPE;
-    msgBuf.m_mBufId.m_pid = getpid();
-    PRINT_V((inputOp.m_vFlag),("ftok"));
-    Key_Init(&inputOp,&key);
-
-    PRINT_V(inputOp.m_vFlag,"msgget");
-    Msq_Init(&msqid,key);
-    semaId = InitSem(key,2);
-
+    if((key = ftok(".", 1)) == -1)
+    {
+        perror("\nftok\n");
+        return 1;
+    }
+    if((msgQ = msgget(key, 0666)) == -1)
+    {
+        perror("\nmsgget\n");
+        return 1;
+    }
+    reg.m_type = 7;
+    reg.m_procID = pid;
     return 0;
 
     
