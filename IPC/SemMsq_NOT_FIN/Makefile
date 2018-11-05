@@ -2,11 +2,11 @@ CC=gcc
 CFLAGS=-g -ansi -pedantic -Werror -Wall -D_XOPEN_SOURCE=500
 LDFLAGS=-g
 
-all: Ping Pong
+all: PingRf PongRf
 
-Ping.o: Ping.c PingPong.h
+PingRf.o: PingRf.c PingPongRf.h
 
-Pong.o: Pong.c PingPong.h
+PongRf.o: PongRf.c PingPongRf.h
 
 clean:
-	rm -f *.o Ping Pong
+	rm -f *.o PingRf PongRf

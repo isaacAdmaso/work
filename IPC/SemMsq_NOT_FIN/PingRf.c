@@ -28,7 +28,7 @@ const char ECHO_UNREG[]	="deREGISTER with pid = %d\n";
 #define MSG_NUM_DEFAULT 16
 
 
-#include "PingPong.h"
+#include "PingPongRf.h"
 
 /*
  * Registrar message

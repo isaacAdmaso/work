@@ -25,7 +25,7 @@
 #include <errno.h>
 #include <time.h>
 
-#include "PingPong.h"
+#include "PingPongRf.h"
 
 const char USAGE[]		="Usage: %s [-v] [-f name] [-s msec]\n";
 const char ERR_FTOK[]	="ERROR getting key for %s!\n";
