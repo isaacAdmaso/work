@@ -95,13 +95,13 @@ ADTErr QueueInsert(Queue *_queue, int  _item)
 	{
 		return ERR_NOT_INITIALIZED;
 	}
-	sem_wait(_queue->m_empty);
-	pthread_mutex_lock(_queue->m_myMutex);
+	sem_wait(&(_queue->m_empty));
+	pthread_mutex_lock(&(_queue->m_myMutex));
 	_queue->m_items[_queue->m_tail]=_item;
 	_queue->m_nItems+=1;
 	_queue->m_tail=(_queue->m_tail+1)%(_queue->m_size);
-	pthread_mutex_unlock(_queue->m_myMutex);
-	sem_post(_queue->m_full);
+	pthread_mutex_unlock(&(_queue->m_myMutex));
+	sem_post(&(_queue->m_full));
 	return ERR_OK;
 }
 
@@ -111,13 +111,13 @@ ADTErr QueueRemove(Queue *_queue, int *_item)
 	{
 		return ERR_NOT_INITIALIZED;
 	}
-	sem_wait(_queue->m_full);
-	pthread_mutex_lock(_queue->m_myMutex);
+	sem_wait(&(_queue->m_full));
+	pthread_mutex_lock(&(_queue->m_myMutex));
 	*_item=_queue->m_items[_queue->m_head];
 	_queue->m_head = (_queue->m_head+1)%_queue->m_size;
 	_queue->m_nItems-=1;
-	pthread_mutex_unlock(_queue->m_myMutex);
-	sem_post(_queue->m_empty);
+	pthread_mutex_unlock(&(_queue->m_myMutex));
+	sem_post(&(_queue->m_empty));
 	return ERR_OK;
 }
 
