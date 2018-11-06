@@ -30,4 +30,4 @@ gdb: $(TARGET)
 	gdb -q ./$(TARGET)
 
 val: $(TARGET)
-	valgrind -q --leak-check=full -v ./$(TARGET) -s 5 -n 99 -v -c3 -p1 -q 5
+	valgrind -q --leak-check=full -v ./$(TARGET) 
