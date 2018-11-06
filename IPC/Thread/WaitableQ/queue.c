@@ -117,7 +117,7 @@ ADTErr QueueRemove(Queue *_queue, int *_item)
 	_queue->m_head = (_queue->m_head+1)%_queue->m_size;
 	_queue->m_nItems-=1;
 	pthread_mutex_unlock(_queue->m_myMutex);
-	sem_post(_queue`->m_empty);
+	sem_post(_queue->m_empty);
 	return ERR_OK;
 }
 
