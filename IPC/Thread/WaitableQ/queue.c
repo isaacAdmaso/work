@@ -1,9 +1,17 @@
-#include "Queue.h"
-#include<stdlib.h>
-#include<stdio.h>
-#include<stddef.h>
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 500
+#endif 
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <semaphore.h>
+#include <pthread.h>
 
-#define MAGIC 3567978
+
+#include "Queue.h"
+#define MAGIC 3567978123
 #define IS_INVALID(q) (((q) == NULL) || (q)->m_magic != MAGIC)
 
 struct Queue
@@ -15,7 +23,20 @@ struct Queue
     size_t  m_head;    /* Index of head */
     size_t  m_tail;    /* Index of tail */
     size_t  m_nItems;
+	sem_t m_empty;
+	sem_t m_full;
+    pthread_mutex_t m_myMutex;
 };
+
+
+static void QueueInit(Queue* _newQueue,size_t _size)
+{
+	_newQueue->m_size=_size + 1;
+	_newQueue->m_head=0;
+	_newQueue->m_tail=0;
+	_newQueue->m_nItems=0;
+	_newQueue->m_magic=MAGIC;	
+}
 
 Queue* QueueCreate(size_t _size)
 {
@@ -30,17 +51,31 @@ Queue* QueueCreate(size_t _size)
 	{
 		return NULL;
 	}
-	newQueue ->m_items = (int*)malloc((_size+1)*sizeof(int));
+	newQueue ->m_items = (int*)malloc((_size + 1)*sizeof(int));
 	if (newQueue ->m_items == NULL)
 	{
 		free(newQueue);
 		return NULL;
 	}
-	newQueue->m_magic=MAGIC;
-	newQueue->m_size=_size+1;
-	newQueue->m_head=0;
-	newQueue->m_tail=0;
-	newQueue->m_nItems=0;
+	if(pthread_mutex_init(&(newQueue->m_myMutex),NULL))
+	{
+		free(newQueue ->m_items);
+		free(newQueue);
+		return NULL;	
+	}
+	if(sem_init(&(newQueue->m_empty), 0, _size))
+    {
+        free(newQueue ->m_items);
+		free(newQueue);
+		return NULL;	
+    }
+	if(sem_init(&(newQueue->m_full), 0, 0))
+    {
+        free(newQueue ->m_items);
+		free(newQueue);
+		return NULL;
+    }
+	QueueInit(newQueue,_size);	
 	return newQueue;
 }
 	
@@ -60,13 +95,13 @@ ADTErr QueueInsert(Queue *_queue, int  _item)
 	{
 		return ERR_NOT_INITIALIZED;
 	}
-	if(_queue->m_nItems==_queue->m_size-1)
-	{
-		return ERR_OVERFLOW;
-	}
+	sem_wait(_queue->m_empty);
+	pthread_mutex_lock(_queue->m_myMutex);
 	_queue->m_items[_queue->m_tail]=_item;
 	_queue->m_nItems+=1;
 	_queue->m_tail=(_queue->m_tail+1)%(_queue->m_size);
+	pthread_mutex_unlock(_queue->m_myMutex);
+	sem_post(_queue->m_full);
 	return ERR_OK;
 }
 
@@ -76,13 +111,13 @@ ADTErr QueueRemove(Queue *_queue, int *_item)
 	{
 		return ERR_NOT_INITIALIZED;
 	}
-	if(_queue->m_nItems==0)
-	{
-		return ERR_UNDERFLOW;
-	}
+	sem_wait(_queue->m_full);
+	pthread_mutex_lock(_queue->m_myMutex);
 	*_item=_queue->m_items[_queue->m_head];
 	_queue->m_head = (_queue->m_head+1)%_queue->m_size;
 	_queue->m_nItems-=1;
+	pthread_mutex_unlock(_queue->m_myMutex);
+	sem_post(_queue`->m_empty);
 	return ERR_OK;
 }
 
