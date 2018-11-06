@@ -21,7 +21,7 @@ Queue* QueueCreate(size_t _size)
 {
 	Queue* newQueue = NULL;
 	
-	if(_size==0)
+	if(!_size)
 	{
 		return NULL;
 	}

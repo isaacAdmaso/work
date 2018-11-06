@@ -23,8 +23,8 @@ const char ECHO_REMOVE[]	    ="\nthread #%ld Remove succesfully\n";
 typedef struct S_data
 {
     Queue* m_myQ;
-    sem_t *m_empty,*m_full;
-    pthread_mutex_t *m_myMutex;
+    sem_t m_empty,m_full;
+    pthread_mutex_t m_myMutex;
     int m_nOfItems;
     int m_sleepTime,m_count;
 
@@ -39,12 +39,12 @@ void* Producers_func(void* _sData)
 
     for(i = 0;i < data->m_nOfItems;++i)
     {
-        sem_wait(data->m_empty);
-        pthread_mutex_lock(data->m_myMutex);
+        sem_wait(&(data->m_empty));
+        pthread_mutex_lock(&(data->m_myMutex));
         QueueInsert(data->m_myQ,MAX);
         fprintf(stdout,ECHO_INSERT,id);
-        pthread_mutex_unlock(data->m_myMutex);
-        sem_post(data->m_full);
+        pthread_mutex_unlock(&(data->m_myMutex));
+        sem_post(&(data->m_full));
         data->m_count++;
         usleep(data->m_sleepTime);
     }
@@ -59,14 +59,14 @@ void* Consumers_func(void* _sData)
 
     for(;;)
     {
-        sem_wait(data->m_full);
-        pthread_mutex_lock(data->m_myMutex);
+        sem_wait(&(data->m_full));
+        pthread_mutex_lock(&(data->m_myMutex));
         QueueRemove(data->m_myQ,&max);
         fprintf(stdout,ECHO_REMOVE,id);
-        pthread_mutex_unlock(data->m_myMutex);
-        sem_post(data->m_empty);
-        usleep(data->m_sleepTime);
+        pthread_mutex_unlock(&(data->m_myMutex));
+        sem_post(&(data->m_empty));
         data->m_count++;
+        usleep(data->m_sleepTime);
     }
     return NULL;
 }
@@ -74,9 +74,9 @@ void* Consumers_func(void* _sData)
 void Data_Init(S_data* _thData,sem_t* _empty,sem_t* _full,Queue* _myQ
                 ,int _nOfItems,int _sleepTime,pthread_mutex_t* _myMutex)
 {
-    _thData->m_empty = _empty;
-    _thData->m_full = _full;
-    _thData->m_myMutex = _myMutex;
+    _thData->m_empty = *_empty;
+    _thData->m_full = *_full;
+    _thData->m_myMutex = *_myMutex;
     _thData->m_myQ = _myQ;
     _thData->m_nOfItems = rand()%_nOfItems + 1;
     _thData->m_sleepTime = rand()%_sleepTime; 
