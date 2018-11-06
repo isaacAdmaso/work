@@ -85,8 +85,8 @@ void Data_Init(S_data* _thData,sem_t* _empty,sem_t* _full,Queue* _myQ
 
 int main(int argc, char *argv[])
 {
-    int opt = -1,verbose = 0,consumers = MAX,producers = MAX,nOfItems = MAX,sleepTime = 0,i;
-    size_t qSize = MAX/2,totSize;
+    int opt = -1,verbose = 0,consumers = MAX/2,producers = MAX/2,nOfItems = MAX,sleepTime = MAX,i;
+    size_t qSize = MAX/2,totSize = MAX;
     Queue* myQ = NULL;
     pthread_t* thArr;
     S_data *thDataArr;
@@ -144,7 +144,6 @@ int main(int argc, char *argv[])
         fprintf(stderr, "\nError malloc\n");
         return 1;
     }
-    ;
     srand (time(0));
     for(i = 0;i < producers;++i)
     {
