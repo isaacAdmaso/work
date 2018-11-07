@@ -100,15 +100,20 @@ void   QueueDestroy(Queue *_queue)
 
 ADTErr QueueInsert(Queue *_queue, int  _item)
 {
+	//Syncronizing
 	if(IS_INVALID(_queue) ||NULL == _queue->m_items) 
 	{
 		return ERR_NOT_INITIALIZED;
 	}
 	sem_wait(&(_queue->m_empty));
 	pthread_mutex_lock(&(_queue->m_myMutex));
+
+//Logic
 	_queue->m_items[_queue->m_tail]=_item;
 	_queue->m_nItems+=1;
 	_queue->m_tail=(_queue->m_tail+1)%(_queue->m_size);
+
+//Syncronizing
 	pthread_mutex_unlock(&(_queue->m_myMutex));
 	sem_post(&(_queue->m_full));
 	return ERR_OK;

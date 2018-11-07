@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
         pthread_cond_destroy(&(send.m_W_cond));
         pthread_cond_destroy(&(send.m_R_cond));
 
-        printf("\nend of %d iteration\n",j+1);  
+        printf("\nend of #%d iteration\n",j+1);  
     } 
     free(readers); 
 
