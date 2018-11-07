@@ -178,5 +178,6 @@ int main(int argc, char *argv[])
     QueuePrint(myQ);
     free(thArr);
     free(thDataArr);
+    QueueDestroy(myQ);
     return 0;
 }

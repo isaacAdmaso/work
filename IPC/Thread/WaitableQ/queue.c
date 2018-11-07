@@ -10,6 +10,7 @@
 #include <pthread.h>
 
 
+#include "list.h"
 #include "Queue.h"
 #define MAGIC 3567978123
 #define IS_INVALID(q) (((q) == NULL) || (q)->m_magic != MAGIC)
@@ -26,6 +27,7 @@ struct Queue
 	sem_t m_empty;
 	sem_t m_full;
     pthread_mutex_t m_myMutex;
+	List* m_cancelThrQ;
 };
 
 
@@ -35,7 +37,7 @@ static void QueueInit(Queue* _newQueue,size_t _size)
 	_newQueue->m_head=0;
 	_newQueue->m_tail=0;
 	_newQueue->m_nItems=0;
-	_newQueue->m_magic=MAGIC;	
+	_newQueue->m_magic=MAGIC;
 }
 
 Queue* QueueCreate(size_t _size)
@@ -75,6 +77,12 @@ Queue* QueueCreate(size_t _size)
 		free(newQueue);
 		return NULL;
     }
+	if(!(newQueue->m_cancelThrQ = List_Create()))
+	{
+		free(newQueue ->m_items);
+		free(newQueue);
+		return NULL;
+	}
 	QueueInit(newQueue,_size);	
 	return newQueue;
 }
@@ -85,6 +93,7 @@ void   QueueDestroy(Queue *_queue)
 	{	
 		_queue->m_magic=0;
 		free(_queue->m_items);
+		List_Destroy(&(_queue->m_cancelThrQ),NULL);
 		free(_queue);	
 	}
 }	 
