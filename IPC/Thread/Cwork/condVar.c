@@ -44,8 +44,8 @@ void *WriteMsg(void* _msg)
         pthread_cond_wait(&(msg->m_W_cond), &(msg->m_myMutex));
     }
     strcpy(msg->m_msg,LETTER);
-    pthread_cond_broadcast(&(msg->m_R_cond));
     pthread_mutex_unlock(&(msg->m_myMutex)); 
+    pthread_cond_broadcast(&(msg->m_R_cond));
     return NULL;
 }
 

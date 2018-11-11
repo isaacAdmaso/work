@@ -92,16 +92,24 @@ int    QueueIsEmpty(const Queue *_queue)
 	{
 		return 1;
 	}
-	return _queue->m_nItems==0;
+	return _queue->m_nItems == 0;
+}
+int QueueSize(const Queue *_queue)
+{
+	if(IS_INVALID(_queue))
+	{
+		return 0;
+	}
+	return _queue->m_nItems;
 }
 void   QueuePrint(const Queue *_queue)
 {	
-	size_t i,numItems=_queue->m_nItems;
+	size_t i,numItems;
 	if(IS_INVALID(_queue))
 	{
 		return ;
 	}
-
+	numItems =_queue->m_nItems;
 	for(i=0;i<numItems;++i)
 	{
 		printf("%d,",_queue->m_items[(_queue->m_head+i)%_queue->m_size]);
