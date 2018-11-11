@@ -31,6 +31,7 @@ typedef struct s_optVar
 
 typedef struct CntrsData
 {
+	pthread_barrier_t*	m_pb;
 	int*				m_countArr;
 	int					m_numItrs;
 	int					m_idx;
@@ -38,6 +39,7 @@ typedef struct CntrsData
 
 typedef struct SumData
 {
+	pthread_barrier_t*	m_pb;
 	int*				m_countArr;
 	int					m_numCntrs;
 } SumData;	
