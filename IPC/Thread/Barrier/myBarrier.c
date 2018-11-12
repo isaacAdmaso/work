@@ -9,6 +9,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdint.h>
+
+#include "myBarrier.h"
 #define handle_error_en(en, msg) \
         do { errno = en; perror(msg); return 1; } while (0)
 
@@ -18,9 +20,8 @@
 #define IS_INVALID(B)  (((B) == NULL) || ((B)->m_magic != MAGIC) )
 
 
-typedef  void (*_doSomeThing)(void*);
 
-typedef struct Barrier
+struct Barrier
 {
     pthread_mutex_t m_myMutex;
     pthread_cond_t  m_cond_var;
@@ -30,88 +31,109 @@ typedef struct Barrier
     size_t          m_outThreadCounter;
     size_t          m_nBatch;
     int             m_isExit;  
-}Barrier_t;
+};
 
-Barrier_t* Barrier_Init(size_t _numberOfThread)
+Barrier_t* Barrier_Create(size_t _numberOfThread)
 {
     Barrier_t* barrier;
     int error;
     
-    barrier = calloc(_numberOfThread,sizeof Barrier_t);
+    barrier = calloc(1,sizeof (Barrier_t));
     if(!barrier)
     {
         perror("barrier calloc ");
         return NULL;
     }
 
-    if(error = pthread_mutex_init(&(barrier->m_myMutex),NULL))
+    if((error = pthread_mutex_init(&(barrier->m_myMutex),NULL)))
 	{
 		perror("pthread_mutex_init");
 		free(barrier);
 		return NULL;	
 	}
-	if(error = pthread_cond_init(&(barrier->m_cond_var),NULL))
+	if((error = pthread_cond_init(&(barrier->m_cond_var),NULL)))
 	{
-		perror(error, "pthread_cond_init");
+		perror("pthread_cond_init");
 		free(barrier);
 		return NULL;
 	}
     barrier->m_capacity = _numberOfThread;
-    barrier->m_threadCounter = 0;
+    barrier->m_inThreadCounter = 0;
+    barrier->m_outThreadCounter = 0;
     barrier->m_nBatch = 0;
     barrier->m_isExit = 1;
     barrier->m_magic = MAGIC;
     return barrier;
 }
-
-int Barrier_Wait(Barrier_t* _barrier,_doSomeThing _toDo,void* _context)
+static int Barrier_In(Barrier_t* _barrier)
 {
-    int error,group = 0;
+    int error,id;
 
-    if(error = pthread_mutex_lock(&(_barrier->m_myMutex)))
+    if((error = pthread_mutex_lock(&(_barrier->m_myMutex))))
     {
         handle_error_en(error, "pthread_mutex_barrier LOCK");
     }
-    ++_barrier->m_inThreadCounter;
+    id = ++(_barrier->m_inThreadCounter);
     
-    while ((((_barrier->m_inThreadCounter / _barrier->m_capacity) =! _barrier->m_nBatch) ||
-        !(_barrier->m_inThreadCounter % _barrier->m_capacity)) && _barrier->m_isExit)
+    while ((((id/ _barrier->m_capacity) != _barrier->m_nBatch) ||
+        !(id % _barrier->m_capacity)) && _barrier->m_isExit)
     {
         pthread_cond_wait(&(_barrier->m_cond_var),&(_barrier->m_myMutex)); 
     }
-    if (!(_barrier->m_inThreadCounter % _barrier->m_capacity)) 
+    if (!(id % _barrier->m_capacity)) 
     {
         pthread_cond_broadcast(&(_barrier->m_cond_var));
         _barrier->m_isExit = 0;
     }
-    if(error = pthread_mutex_unlock(&(_barrier->m_myMutex)))
+    if((error = pthread_mutex_unlock(&(_barrier->m_myMutex))))
     {
         handle_error_en(error, "pthread_mutex_barrier UNLOCK");
     }
-    if(_toDo)
-    {
-        _toDo(_context);
-    }
-    if(error = pthread_mutex_lock(&(_barrier->m_myMutex)))
+    return 0;
+}
+
+static int Barrier_Out(Barrier_t* _barrier)
+{
+    int error,id;
+
+    if((error = pthread_mutex_lock(&(_barrier->m_myMutex))))
     {
         handle_error_en(error, "pthread_mutex_barrier LOCK");
     }
-    ++(_barrier->m_outThreadCounter);
-    while (!(_barrier->m_outThreadCounter % _barrier->m_capacity))
+    id = ++(_barrier->m_outThreadCounter);
+    while (!(id % _barrier->m_capacity))
     {
         pthread_cond_wait(&(_barrier->m_cond_var),&(_barrier->m_myMutex)); 
     }
-    if (!(_barrier->m_outThreadCounter % _barrier->m_capacity)) 
+    if (!(id % _barrier->m_capacity)) 
     {
         _barrier->m_isExit = 1;
         ++(_barrier->m_nBatch);
         pthread_cond_broadcast(&(_barrier->m_cond_var));
     }
-    if(error = pthread_mutex_unlock(&(_barrier->m_myMutex)))
+    if((error = pthread_mutex_unlock(&(_barrier->m_myMutex))))
     {
         handle_error_en(error, "pthread_mutex_barrier UNLOCK");
     }
     return 0;
+
+}
+
+
+int Barrier_Wait(Barrier_t* _barrier,_doSomeThing _toDo,void* _context)
+{
+    int error;
+
+    error = Barrier_In(_barrier);
+   
+    if(_toDo)
+    {
+        _toDo(_context);
+    }
+
+    error = Barrier_Out(_barrier);
+
+    return error+error;
 }
 
 

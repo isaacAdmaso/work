@@ -9,6 +9,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdint.h>
+#include "myBarrier.h"
 
 #define NUM_OF_COUNTERS	10
 #define NUM_OF_ITERS	1
