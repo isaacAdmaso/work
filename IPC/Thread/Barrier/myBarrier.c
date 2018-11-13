@@ -67,20 +67,19 @@ Barrier_t* Barrier_Create(size_t _numberOfThread)
 }
 static int Barrier_In(Barrier_t* _barrier)
 {
-    int error,id;
+    int error,id,batch;
 
     if((error = pthread_mutex_lock(&(_barrier->m_myMutex))))
     {
         handle_error_en(error, "pthread_mutex_barrier LOCK");
     }
-    id = ++(_barrier->m_inThreadCounter);
-    
-    while ((((id/ _barrier->m_capacity) != _barrier->m_nBatch) ||
-        !(id % _barrier->m_capacity)) && _barrier->m_isExit)
+    id = (++(_barrier->m_inThreadCounter)) % _barrier->m_capacity;
+    batch = _barrier->m_inThreadCounter / _barrier->m_capacity;
+    while (((batch != _barrier->m_nBatch) ||  id) && _barrier->m_isExit)
     {
         pthread_cond_wait(&(_barrier->m_cond_var),&(_barrier->m_myMutex)); 
     }
-    if (!(id % _barrier->m_capacity)) 
+    if (!id) 
     {
         pthread_cond_broadcast(&(_barrier->m_cond_var));
         _barrier->m_isExit = 0;
@@ -100,17 +99,14 @@ static int Barrier_Out(Barrier_t* _barrier)
     {
         handle_error_en(error, "pthread_mutex_barrier LOCK");
     }
-    id = ++(_barrier->m_outThreadCounter);
-    while (!(id % _barrier->m_capacity))
+    id = (++_barrier->m_outThreadCounter)  % _barrier->m_capacity;
+    while (id)
     {
         pthread_cond_wait(&(_barrier->m_cond_var),&(_barrier->m_myMutex)); 
     }
-    if (!(id % _barrier->m_capacity)) 
-    {
-        _barrier->m_isExit = 1;
-        ++(_barrier->m_nBatch);
-        pthread_cond_broadcast(&(_barrier->m_cond_var));
-    }
+    ++(_barrier->m_nBatch);
+    _barrier->m_isExit = 1;
+    pthread_cond_broadcast(&(_barrier->m_cond_var));
     if((error = pthread_mutex_unlock(&(_barrier->m_myMutex))))
     {
         handle_error_en(error, "pthread_mutex_barrier UNLOCK");

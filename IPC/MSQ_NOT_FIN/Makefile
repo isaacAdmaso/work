@@ -4,9 +4,9 @@ LDFLAGS=-g
 
 all: ping pong
 
-ping.o: ping2.c pingpong.h
+ping: ping2.c pingpong.h
 
-pong.o: pong2.c pingpong.h
+pong: pong2.c pingpong.h
 
 clean:
 	rm -f *.o ping pong
