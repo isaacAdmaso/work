@@ -45,7 +45,7 @@ void Bucket_Destroy(Bucket_t* _bucket,ElementDestroy _keyDestroy,ElementDestroy 
  * 
  * @warning key must be unique and destinct
  */
-Map_Result Bucket_Insert(void* _key ,void* _value ,Bucket_t*  _bucket ,EqualityFunction1 _keysEqualFunc);
+Map_Result Bucket_Insert(void* _key ,void* _value ,Bucket_t**  _bucket ,EqualityFunction1 _keysEqualFunc);
 
 /**
  * @brief Remove a key-value pair from the hash map

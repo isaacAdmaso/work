@@ -37,6 +37,7 @@ struct HashMap
 static size_t GetNumber(size_t _number);			/*next prime number*/
 static void Hash_Mutex_Pool_Init(size_t _nThread,Lock_t **_myMutexPool,size_t *_size);
 static void Hash_Init(HashMap* _map,size_t _primeN, HashFunction _hashFunc, EqualityFunction _keysEqualFunc);
+static Map_Result ReHashLoop(HashMap *_map,Bucket_t** _oldHash,size_t _hashOldSize);
 static size_t HashIdx(HashMap* _map,const void* _key);
 static size_t HashMutexIdx(HashMap* _map,size_t _idx);
 
@@ -57,7 +58,7 @@ HashMap* HashMap_Create(size_t _capacity, size_t _nThread, HashFunction _hashFun
 	size_t primeN; 
 	
 	/*parameter check*/
-	if(_capacity <= MININPUT || !_hashFunc || !_keysEqualFunc)
+	if(_capacity <= MININPUT || !_hashFunc || !_keysEqualFunc || !_nThread)
 	{
 		return NULL;
 	}
@@ -151,7 +152,7 @@ size_t HashMap_Size(const HashMap* _map)
  * 
  * @warning key must be unique and destinct
  */
-Map_Result HashMap_Insert(HashMap* _map, const void* _key, const void* _value)
+Map_Result HashMap_Insert(HashMap* _map, void* _key, void* _value)
 {
 	size_t idx;
 	int error;
@@ -168,13 +169,13 @@ Map_Result HashMap_Insert(HashMap* _map, const void* _key, const void* _value)
 		return MAP_KEY_NULL_ERROR;
 	}
 	
+	idx = HashIdx(_map,_key);
 	mutexIdx = HashMutexIdx(_map,idx);
-	mutexPtr = &(_map->m_myMutexPool[mutexIdx].m_lock);
+	mutexPtr = &(_map->m_myMutexPool[mutexIdx]);
 	pthread_mutex_lock(&(mutexPtr->m_lock));
 
-	idx = HashIdx(_map,_key);
 	
-	error = Bucket_Insert(_key,_value,_map->m_items[idx],_map->m_keysEqualFunc);
+	error = Bucket_Insert(_key,_value,&(_map->m_items[idx]),_map->m_keysEqualFunc);
 
 	++_map->m_noItems;
 	pthread_mutex_unlock(&(mutexPtr->m_lock));
@@ -213,11 +214,11 @@ Map_Result HashMap_Remove(HashMap* _map, const void* _searchKey, void** _pValue)
 		return MAP_KEY_NULL_ERROR;
 	}
 
+	idx = HashIdx(_map,_searchKey);
 	mutexIdx = HashMutexIdx(_map,idx);
-	mutexPtr = &(_map->m_myMutexPool[mutexIdx].m_lock);
+	mutexPtr = &(_map->m_myMutexPool[mutexIdx]);
 	pthread_mutex_lock(&(mutexPtr->m_lock));
 
-	idx = HashIdx(_map,_searchKey);
 
 	error = Bucket_Remove(_map->m_items[idx],_searchKey,_pValue);
 	if(error == MAP_SUCCESS)
@@ -290,17 +291,17 @@ static Map_Result ReHashLoop(HashMap *_map,Bucket_t** _oldHash,size_t _hashOldSi
 
 	for(i = 0; i < _hashOldSize; ++i)
     {
-		if((_oldBucketSize = Bucket_Size(_oldHash + i)))
+		if((_oldBucketSize = Bucket_Size(_oldHash[i])))
 		{
 			for(j = 0;j < _oldBucketSize; ++j)
 			{
-				key = Bucket_Get_First_Key(_oldHash + i);
+				key = Bucket_Get_First_Key(_oldHash[i]);
 				assert(key);
-				assert(Bucket_Remove(_oldHash + i,key,dataHolder) == MAP_SUCCESS) ;
+				assert(Bucket_Remove(_oldHash[i],key,dataHolder) == MAP_SUCCESS) ;
 				assert(dataHolder);
 				assert(HashMap_Insert(_map,key,dataHolder) == MAP_SUCCESS);
 			}
-			Bucket_Destroy(_oldHash + i,NULL,NULL);
+			Bucket_Destroy(_oldHash[i],NULL,NULL);
 		}
 	}
 	return MAP_SUCCESS;
@@ -337,11 +338,11 @@ Map_Result HashMap_Find(const HashMap* _map, const void* _key, void** _pValue)
 	{
 		return MAP_KEY_NULL_ERROR;
 	}
-	mutexIdx = HashMutexIdx(_map,idx);
-	mutexPtr = &(_map->m_myMutexPool[mutexIdx].m_lock);
+	idx = HashIdx((HashMap*)_map,_key);
+	mutexIdx = HashMutexIdx((HashMap*)_map,idx);
+	mutexPtr = &(_map->m_myMutexPool[mutexIdx]);
 	pthread_mutex_lock(&(mutexPtr->m_lock));
 
-	idx = HashIdx(_map,_key);
 	error = Bucket_Find(_map->m_items[idx],_key,_pValue);
 
 	pthread_mutex_unlock(&(mutexPtr->m_lock));

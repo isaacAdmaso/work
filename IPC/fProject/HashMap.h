@@ -82,7 +82,7 @@ Map_Result HashMap_Rehash(HashMap *_map, size_t newCapacity);
  * 
  * @warning key must be unique and destinct
  */
-Map_Result HashMap_Insert(HashMap* _map, const void* _key, const void* _value);
+Map_Result HashMap_Insert(HashMap* _map, void* _key, void* _value);
 
 
 /** 

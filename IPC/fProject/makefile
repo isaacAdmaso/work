@@ -20,7 +20,7 @@ CFLAGS += -I$(INC_DIR)
 
 
 # All .c files in this directory are my sources
-SOURCES = ConcurrentHashMap.c bucket.c HashMapTest.c
+SOURCES = ConcurrentHashMap.c bucket.c HashMapTest.c person.c
 #LIB_SRC = HashMap.c
 # All .o files in this directory are my objects
 OBJECTS = $(SOURCES:.c=.o)

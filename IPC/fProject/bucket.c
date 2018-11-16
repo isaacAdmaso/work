@@ -122,15 +122,15 @@ void Bucket_Destroy(Bucket_t* _bucket,ElementDestroy _keyDestroy,ElementDestroy 
  * 
  * @warning key must be unique and destinct
  */
-Map_Result Bucket_Insert(void* _key,void* _value,Bucket_t*  _bucket,EqualityFunction _keysEqualFunc)
+Map_Result Bucket_Insert(void* _key,void* _value,Bucket_t**  _bucket,EqualityFunction _keysEqualFunc)
 {
 	pair *data,*checkData;
 	ListItr begin, end;
 
 
-	if(IS_INVALID(_bucket))
+	if(IS_INVALID(*_bucket))
 	{
-		if(!(_bucket = Bucket_Create(_keysEqualFunc)))
+		if(!(*_bucket = Bucket_Create(_keysEqualFunc)))
 		{
 			return MAP_ALLOCATION_ERROR;
 		}
@@ -143,8 +143,8 @@ Map_Result Bucket_Insert(void* _key,void* _value,Bucket_t*  _bucket,EqualityFunc
 	data->m_key = _key;
 	data->m_data =_value;
 
-	begin = ListItr_Begin(_bucket->m_list);
-	end = ListItr_End(_bucket->m_list);
+	begin = ListItr_Begin((*_bucket)->m_list);
+	end = ListItr_End((*_bucket)->m_list);
 
 	for(;begin != end ;begin = ListItr_Next(begin))
 	{
@@ -156,7 +156,7 @@ Map_Result Bucket_Insert(void* _key,void* _value,Bucket_t*  _bucket,EqualityFunc
 		}
 	}
 
-	List_PushTail(_bucket->m_list,(void*)data);
+	List_PushTail((*_bucket)->m_list,(void*)data);
 	return MAP_SUCCESS;
 }
 
