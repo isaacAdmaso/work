@@ -176,9 +176,9 @@ static size_t GetNumber(size_t _number)
  * @param[in] _value - The value to associate with the key 
  * @return Success indicator
  * @retval  MAP_SUCCESS	on success
- * @retval  MAP_KEY_DUPLICATE_ERROR	if key alread present in the map
+ * @retval  MAP_KEY_DUPLICATE_ERROR	if key allread present in the map
  * @retval  MAP_KEY_NULL_ERROR
- * @retval  MAP_ALLOCATION_ERROR on failer to allocate key-value pair
+ * @retval  MAP_ALLOCATION_ERROR on failure to allocate key-value pair
  * @retval  MAP_UNINITIALIZED_ERROR
  * 
  * @warning key must be unique and destinct
@@ -187,9 +187,6 @@ Map_Result HashMap_Insert(HashMap* _map, const void* _key, const void* _value)
 {
 	pair *data,*checkData;
 	size_t idx;
-	/*
-	Map_Result error = MAP_OVERFLOW_ERROR;
-	*/
 	ListItr begin, end;
 	
 
@@ -203,8 +200,7 @@ Map_Result HashMap_Insert(HashMap* _map, const void* _key, const void* _value)
 		return MAP_KEY_NULL_ERROR;
 	}
 
-	data = (pair*)malloc(sizeof(pair));
-	if(NULL == data)
+	if(!(data = (pair*)malloc(sizeof(pair))))
 	{
 		return MAP_ALLOCATION_ERROR;
 	}
@@ -295,12 +291,13 @@ Map_Result HashMap_Rehash(HashMap *_map, size_t newCapacity)
 	pair* dataHlder;
 	ListItr begin, end,cur;
     List** m_NewData = NULL;
-    size_t old_size = _map->m_size;
+    size_t old_size;
 
 	if(IS_INVALID(_map) || 0 == newCapacity)
 	{
-		return MAP_ALLOCATION_ERROR;
+		return MAP_UNINITIALIZED_ERROR;
 	}
+	old_size = _map->m_size;
 	m_NewData = _map->m_items;
     _map->m_items = (List**)malloc(newCapacity * sizeof(List*));
     if(NULL == _map->m_items)
@@ -342,7 +339,7 @@ Map_Result HashMap_Rehash(HashMap *_map, size_t newCapacity)
 Map_Result HashMap_Find(const HashMap* _map, const void* _key, void** _pValue)
 {
 	size_t idx;
-	pair  *checkData,*data = malloc(sizeof(pair));
+	pair  *checkData,*data ;
 	ListItr begin, end;
 
 	if(IS_INVALID(_map) || NULL ==  _pValue)
@@ -354,6 +351,7 @@ Map_Result HashMap_Find(const HashMap* _map, const void* _key, void** _pValue)
 	{
 		return MAP_KEY_NULL_ERROR;
 	}
+	data = malloc(sizeof(pair));
 	data->m_key = (void*)_key;
 	idx = HashIdx((HashMap*)_map,data);
 
@@ -391,7 +389,10 @@ size_t HashMap_ForEach(const HashMap* _map, KeyValueActionFunction _action, void
 	size_t count = 0, size;
 	int i;
 
-	assert(NULL !=_action);
+	if(IS_INVALID(_map) || NULL == _action)
+	{
+		return MAP_UNINITIALIZED_ERROR;
+	}
 	size = _map->m_size;
 	for(i = 0; i < size; ++i)
     {

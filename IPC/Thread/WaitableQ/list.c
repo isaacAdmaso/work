@@ -204,7 +204,7 @@ size_t List_Size(const List* _list)
 void List_Destroy(List** _pList, void (*_elementDestroy)(void* _item))
 {
 	Node *nodePtrToFree;
-	if(NULL == _pList || IS_INVALID(*_pList))
+	if(!_pList || IS_INVALID(*_pList))
 	{
 		return;
 	}
@@ -212,7 +212,7 @@ void List_Destroy(List** _pList, void (*_elementDestroy)(void* _item))
 	while ((*_pList)->m_head.m_next != &((*_pList)->m_tail))
 	{
 		nodePtrToFree = (*_pList)->m_head.m_next;
-		if(NULL != _elementDestroy)
+		if( _elementDestroy)
 		{
 			_elementDestroy(nodePtrToFree->m_item);
 		}

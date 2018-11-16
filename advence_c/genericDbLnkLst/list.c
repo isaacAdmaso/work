@@ -31,7 +31,7 @@ struct List
 List* List_Create(void)
 {
 	List* l = (List*)malloc(sizeof(List));
-	if(NULL == l)
+	if(!l)
 	{
 		return NULL;
 	}
@@ -55,7 +55,7 @@ static List_Result NodeCreate(Node *_node, void* _data)
 	Node *newNode;
 		
 	newNode =(Node*)malloc(sizeof(Node));
-	if (newNode == NULL)
+	if (!newNode)
 	{
 		return LIST_ALLOCATION_ERROR;
 	}
@@ -77,7 +77,7 @@ static List_Result NodeDestroy(Node *_node,void** _data)
 {
 	Node *dataHolder;
 
-	if( NULL == _data || NULL == _node )
+	if( !_data || !_node )
 	{
 		return LIST_NULL_ELEMENT_ERROR;
 	}
@@ -122,7 +122,7 @@ List_Result List_PushHead(List* _list, void* _item)
  */
 List_Result List_PushTail(List* _list, void* _item)
 {
-	if(IS_INVALID(_list) || NULL == _item)
+	if(IS_INVALID(_list) || !_item)
 	{
 		return LIST_UNINITIALIZED_ERROR;
 	}
@@ -141,7 +141,7 @@ List_Result List_PushTail(List* _list, void* _item)
  */
 List_Result List_PopHead(List* _list, void** _pItem)
 {
-	if(IS_INVALID(_list) || _pItem == NULL )
+	if(IS_INVALID(_list) || !_pItem )
 	{
 		return LIST_UNINITIALIZED_ERROR;
 	}
@@ -162,11 +162,11 @@ List_Result List_PopHead(List* _list, void** _pItem)
 List_Result List_PopTail(List* _list, void** _pItem)
 {
 
-	if(IS_INVALID(_list) || _pItem == NULL)
+	if(IS_INVALID(_list) || !_pItem)
 	{
 		return LIST_UNINITIALIZED_ERROR;
 	}
-	if(_list->m_tail.m_prev==&(_list->m_head))
+	if(_list->m_tail.m_prev == &(_list->m_head))
 	{
 		return LIST_UNDERFLOW_ERROR;
 	}
@@ -186,7 +186,7 @@ size_t List_Size(const List* _list)
 	if(IS_INVALID(_list))
 		return 0;
 	
-	for (p =_list->m_head.m_next,count=0;p->m_next != NULL;p=p->m_next,++count)
+	for (p =_list->m_head.m_next,count=0;p->m_next;p = p->m_next,++count)
 	{}
 	return count;
 }
@@ -204,7 +204,7 @@ size_t List_Size(const List* _list)
 void List_Destroy(List** _pList, void (*_elementDestroy)(void* _item))
 {
 	Node *nodePtrToFree;
-	if(NULL == _pList || IS_INVALID(*_pList))
+	if(!_pList || IS_INVALID(*_pList))
 	{
 		return;
 	}
@@ -212,7 +212,7 @@ void List_Destroy(List** _pList, void (*_elementDestroy)(void* _item))
 	while ((*_pList)->m_head.m_next != &((*_pList)->m_tail))
 	{
 		nodePtrToFree = (*_pList)->m_head.m_next;
-		if(NULL != _elementDestroy)
+		if(_elementDestroy)
 		{
 			_elementDestroy(nodePtrToFree->m_item);
 		}
@@ -262,7 +262,6 @@ int ListItr_Equals(const ListItr _a, const ListItr _b)
 {
 	Node *_aNode = (Node*)_a,*_bNode = (Node*)_b;
 	
-    assert(NULL != _a && NULL != _b); 
 	return _aNode == _bNode;
 }
 /** 
@@ -273,7 +272,7 @@ ListItr ListItr_Next(ListItr _itr)
 {
 	Node* node = (Node*)_itr;
 
-	if( NULL == _itr)
+	if(!node)
 		return NULL;
 	return (ListItr)node->m_next;
 }
@@ -285,7 +284,7 @@ ListItr ListItr_Prev(ListItr _itr)
 {
 	Node* node = (Node*)_itr;
 
-	if( NULL == _itr || NULL == node->m_prev )
+	if( !node || !(node->m_prev) )
 		return NULL;
 	
 	return (ListItr)node->m_prev;
@@ -301,7 +300,7 @@ void* ListItr_Get(ListItr _itr)
 {
 	Node* node = (Node*)_itr;
 
-	if( NULL == _itr)
+	if( !node)
 		return NULL;
 	return node->m_item;
 }
@@ -312,12 +311,11 @@ void* ListItr_Get(ListItr _itr)
  */
 void* ListItr_Set(ListItr _itr, void* _element)
 {
-	Node *node;
+	Node *node = (Node*)_itr;
 	void* itemR = NULL;
 
-	if( NULL == _itr || NULL == _element)
+	if( !node || !_element)
 		return NULL;
-	node = (Node*)_itr;
 	itemR = node->m_item;
 	node->m_item = _element;
 
@@ -333,7 +331,7 @@ ListItr ListItr_InsertBefore(ListItr _itr, void* _element)
 	Node* node = (Node*)_itr;
 	List_Result  error = LIST_UNINITIALIZED_ERROR;
 
-	if( NULL == _itr || NULL == _element || NULL == node->m_prev)
+	if( !node || !_element || !node->m_prev)
 		return NULL;
 	error = NodeCreate(node->m_prev,_element);
 	if(LIST_SUCCESS != error)
@@ -353,7 +351,7 @@ void* ListItr_Remove(ListItr _itr)
 	void *item = NULL;
 	List_Result error = LIST_UNINITIALIZED_ERROR;
 
-	if(NULL == _itr || NULL == node->m_next)
+	if(!node || !(node->m_next))
 		return NULL;
 	error = NodeDestroy(node,&item);
 	if(LIST_SUCCESS != error)
