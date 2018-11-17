@@ -199,17 +199,17 @@ Map_Result HashMap_Insert(HashMap* _map, void* _key, void* _value)
 Map_Result HashMap_Remove(HashMap* _map, const void* _searchKey, void** _pValue)
 {
 	size_t idx;
-	int error;
+	int error = -1;
 	size_t mutexIdx;
 	Lock_t* mutexPtr;
 	
 
-	if(IS_INVALID(_map) || NULL ==  _pValue)
+	if(IS_INVALID(_map) || !_pValue)
 	{
 		return MAP_UNINITIALIZED_ERROR;
 	}
 	
-	if(NULL == _searchKey)
+	if(!_searchKey)
 	{
 		return MAP_KEY_NULL_ERROR;
 	}
@@ -250,14 +250,14 @@ static void UnLock_All(Lock_t* _lockPool,size_t _nLocks)
 }
 /** 
  * @brief Adjust map capacity and rehash all key/value pairs
- * @param[in] _map - exisiting map
+ * @param[in] _map - existing map
  * @param[in] _newCapacity - new capacity shall be rounded to nearest larger prime number.
  * @return MAP_SUCCESS or MAP_ALLOCATION_ERROR
  */
 Map_Result HashMap_Rehash(HashMap *_map, size_t _newCapacity)
 {
     Bucket_t** oldHash = NULL;
-    size_t hashOldSize,newPrimeCapacity;
+	size_t hashOldSize,newPrimeCapacity,nItems;
 	Map_Result error;
 
 	if(IS_INVALID(_map) || !_newCapacity)
@@ -265,7 +265,7 @@ Map_Result HashMap_Rehash(HashMap *_map, size_t _newCapacity)
 		return MAP_UNINITIALIZED_ERROR;
 	}
 	Lock_All(_map->m_myMutexPool,_map->m_nMutexes);
-
+	nItems = _map->m_noItems; /**<-because  im using insert func that update noItems */
 	hashOldSize = _map->m_size;
 	oldHash = _map->m_items;
 	newPrimeCapacity = GetNumber(_newCapacity);
@@ -277,7 +277,7 @@ Map_Result HashMap_Rehash(HashMap *_map, size_t _newCapacity)
     }
 	_map->m_size = newPrimeCapacity;
 	error = ReHashLoop(_map,oldHash,hashOldSize);
-    
+    _map->m_noItems = nItems; 
 	UnLock_All(_map->m_myMutexPool,_map->m_nMutexes);
 	return error;
 }
@@ -286,7 +286,7 @@ static Map_Result ReHashLoop(HashMap *_map,Bucket_t** _oldHash,size_t _hashOldSi
 {
 	int i,j;
 	void *dataHolder = NULL,*key = NULL;
-	size_t _oldBucketSize;
+	size_t _oldBucketSize,newBucketidx;
 
 
 	for(i = 0; i < _hashOldSize; ++i)
@@ -297,9 +297,10 @@ static Map_Result ReHashLoop(HashMap *_map,Bucket_t** _oldHash,size_t _hashOldSi
 			{
 				key = Bucket_Get_First_Key(_oldHash[i]);
 				assert(key);
-				assert(Bucket_Remove(_oldHash[i],key,dataHolder) == MAP_SUCCESS) ;
+				assert(Bucket_Remove(_oldHash[i],key,&dataHolder) == MAP_SUCCESS);
 				assert(dataHolder);
-				assert(HashMap_Insert(_map,key,dataHolder) == MAP_SUCCESS);
+				newBucketidx = HashIdx(_map,key);
+				assert(Bucket_Insert(key,dataHolder,&(_map->m_items[newBucketidx]),_map->m_keysEqualFunc) == MAP_SUCCESS);
 			}
 			Bucket_Destroy(_oldHash[i],NULL,NULL);
 		}

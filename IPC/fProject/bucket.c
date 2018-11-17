@@ -222,7 +222,7 @@ size_t Bucket_Size(Bucket_t* _bucket)
  */
 Map_Result Bucket_Find(const Bucket_t* _bucket, const void* _key, void** _pValue)
 {
-	pair  *checkData,*data ;
+	pair  *checkData;
 	ListItr begin, end;
 
 
@@ -233,8 +233,7 @@ Map_Result Bucket_Find(const Bucket_t* _bucket, const void* _key, void** _pValue
 		checkData = ListItr_Get(begin);
 		if(_bucket->m_keysEqualFunc(checkData->m_key,(void*)_key))
 		{
-			data = (pair*)ListItr_Remove(begin);
-			_pValue = data->m_data;
+			_pValue = checkData->m_data;
 			return MAP_SUCCESS;
 		}
 	}
