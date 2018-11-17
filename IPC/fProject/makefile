@@ -1,5 +1,5 @@
 # this is my target
-TARGET = HashMapTest.out
+TARGET = ConcurrentHashMapTest.out
 LIBS = ADS
 
 .PHONY: run clean gdb mklib val
@@ -9,7 +9,7 @@ LIBS = ADS
 # The compiler will be gcc("CC" is MAKE variable)
 CC = gcc
 # The compiler flags will be... ("CFLAGS" is MAKE variable)
-CFLAGS = -ansi -pedantic -Wall -Werror -g -c
+CFLAGS = -ansi -pedantic -Wall -Werror -g 
 # The debugger flags will be... ("LDFLAGS" is MAKE variable)
 LDFLAGS = -g -pthread -D_XOPEN_SOURCE = 500
 
@@ -20,7 +20,7 @@ CFLAGS += -I$(INC_DIR)
 
 
 # All .c files in this directory are my sources
-SOURCES = ConcurrentHashMap.c bucket.c HashMapTest.c person.c
+SOURCES = ConcurrentHashMap.c bucket.c ConcurrentHashMapTest.c person.c
 #LIB_SRC = HashMap.c
 # All .o files in this directory are my objects
 OBJECTS = $(SOURCES:.c=.o)
@@ -28,7 +28,7 @@ OBJECTS = $(SOURCES:.c=.o)
 
 # The default command, compile all the sources
 $(TARGET): $(OBJECTS) 
-	$(CC) $(OBJECTS) -o $(TARGET) -Wl,-rpath=$(LIB_PATH) -L$(LIB_PATH) -lADS 
+	$(CC) $(OBJECTS) -o $(TARGET) -Wl,-rpath=$(LIB_PATH) -L$(LIB_PATH) -lADS -lpthread
 
 #libADS.a: $(LIB_OBJ) #let's link library files into a static library
 #	ar rcs $(LIB_PATH)/libADS.a $(LIB_OBJ)
