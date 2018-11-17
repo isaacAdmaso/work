@@ -225,7 +225,10 @@ Map_Result Bucket_Find(const Bucket_t* _bucket, const void* _key, void** _pValue
 	pair  *checkData;
 	ListItr begin, end;
 
-
+	if(IS_INVALID(_bucket))
+	{
+		return MAP_KEY_NOT_FOUND_ERROR;
+	}
 	begin = ListItr_Begin(_bucket->m_list);
 	end = ListItr_End(_bucket->m_list);
 	for(;begin != end ;begin = ListItr_Next(begin))

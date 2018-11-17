@@ -1,253 +1,179 @@
 #include <stdio.h>
-
 #include "HashMap.h"
 #include "mu_test.h"
 
-# define NUM_OF_TEST 100
+int keyArr[6] = {1,2,3,4,5,1};
+int valArr[5] = {1,2,3,4,5};
 
-size_t HashFunc1(const void* _key)
+size_t HashFunc(const void* _key)
 {
-	return *(int*)_key * 17;
+	size_t res;
+	const int* key = _key;
+	
+	res =  ((*key) * 2) -1;
+	return res;
 }
 
 
-int EqualityFunc1(void* _firstKey,void* _secondKey)
+int EqualityFunc(void* _firstKey,void* _secondKey)
 {
-	return (*(int*)_firstKey == *(int*)_secondKey);
+	const int *first = _firstKey, *second = _secondKey;
+	return (*first == *second);
 }
 
-
-int	KeyValueActionFunc1(const void* _key, void* _value, void* _context)
+int	ActionFunc(const void* _key, void* _value, void* _context)
 {
-	return 0;
+	const int *key = _key, *val = _value;
+	
+	printf("key: %d, value: %d\n", *key, *val);
+	return 1;
 }
 
-void KeyValInit(int* key, int* value, size_t size)
-{
-	int i;
-
-	for(i = 0 ; i < size ; ++i)
-	{
-		key[i] = i;
-		value[i] = i;
-	}
-}
-
-
-/*************************************************************************/
-
-UNIT(error_tests)
+UNIT(nulls)
+	int* val;
+	HashMap* map = NULL;
 	
-	HashMap* map;
-	Map_Result status;
-	int key, value, *ptrVal;
-
-	map = HashMap_Create(0,1, HashFunc1, EqualityFunc1);
-	ASSERT_THAT(map == NULL);
+	map = HashMap_Create(0,1, HashFunc, EqualityFunc);
+	ASSERT_THAT(NULL == map);
 	
-	map = HashMap_Create(4,1, NULL, EqualityFunc1);
-	ASSERT_THAT(map == NULL);
+	map = HashMap_Create(5,1, NULL, EqualityFunc);
+	ASSERT_THAT(NULL == map);
 	
-	map = HashMap_Create(3,1, HashFunc1, NULL);
-	ASSERT_THAT(map == NULL);
+	map = HashMap_Create(5,1, HashFunc, NULL);
+	ASSERT_THAT(NULL == map);
 	
-
-	map = HashMap_Create(7,1, HashFunc1, EqualityFunc1);
-
-
-
-	status = HashMap_Rehash(NULL, 8);
-	ASSERT_THAT(status == MAP_UNINITIALIZED_ERROR);
-
-	status = HashMap_Rehash(map, 0);
-	ASSERT_THAT(status == MAP_UNINITIALIZED_ERROR);
-
-	status = HashMap_Insert(map, NULL, &value);
-	ASSERT_THAT(status == MAP_KEY_NULL_ERROR);
-
-	status = HashMap_Insert(NULL, &key, &value);
-	ASSERT_THAT(status == MAP_UNINITIALIZED_ERROR);
-
-	status = HashMap_Remove(map, NULL, (void**)&ptrVal);
-	ASSERT_THAT(status == MAP_KEY_NULL_ERROR);
-
-	status = HashMap_Remove(NULL, &key, (void**)&ptrVal);
-	ASSERT_THAT(status == MAP_UNINITIALIZED_ERROR);
-
-	status = HashMap_Remove(map, &key, (void**)&ptrVal);
-	ASSERT_THAT(status == MAP_KEY_NOT_FOUND_ERROR);
-
+	map = HashMap_Create(5,1, HashFunc, EqualityFunc);
+	ASSERT_THAT(NULL != map);	
+	
+	ASSERT_THAT(HashMap_Insert(NULL, keyArr + 0, valArr + 0) == MAP_UNINITIALIZED_ERROR);
+	/*ASSERT_THAT(HashMap_Insert(map, keyArr + 0, NULL) == MAP_UNINITIALIZED_ERROR);*/
+	ASSERT_THAT(HashMap_Insert(map, NULL, valArr + 0) == MAP_KEY_NULL_ERROR);
+	ASSERT_THAT(HashMap_Insert(map, keyArr + 0, valArr + 0) == MAP_SUCCESS);
+	ASSERT_THAT(HashMap_Insert(map, keyArr + 5, valArr + 1) == MAP_KEY_DUPLICATE_ERROR);
+	
 	HashMap_Destroy(&map, NULL, NULL);
-
-
-	status = HashMap_Remove(map, &key, (void**)&ptrVal);
-	ASSERT_THAT(status == MAP_UNINITIALIZED_ERROR);
-
-	status = HashMap_Insert(map, &key, &value);
-	ASSERT_THAT(status == MAP_UNINITIALIZED_ERROR);
-
-	status = HashMap_Rehash(map, 5);
-	ASSERT_THAT(status == MAP_UNINITIALIZED_ERROR);
-
+	ASSERT_THAT(HashMap_Insert(map, keyArr + 1, valArr + 1) == MAP_UNINITIALIZED_ERROR);
+	
+	ASSERT_THAT(HashMap_Remove(map, keyArr + 0, (void**)&val) == MAP_UNINITIALIZED_ERROR);
+	
+	map = HashMap_Create(5,1, HashFunc, EqualityFunc);
+	ASSERT_THAT(NULL != map);
+	ASSERT_THAT(HashMap_Insert(map, keyArr + 0, valArr + 0) == MAP_SUCCESS);
+	
+	ASSERT_THAT(HashMap_Remove(NULL, keyArr + 5, (void**)&val) == MAP_UNINITIALIZED_ERROR);
+	ASSERT_THAT(HashMap_Remove(map, keyArr + 0, NULL) == MAP_UNINITIALIZED_ERROR);
+	ASSERT_THAT(HashMap_Remove(map, NULL, (void**)&val) == MAP_KEY_NULL_ERROR);
+	ASSERT_THAT(HashMap_Remove(map, keyArr + 2, (void**)&val) == MAP_KEY_NOT_FOUND_ERROR);
+	
+	ASSERT_THAT(HashMap_Find(NULL, keyArr + 5, (void**)&val) == MAP_UNINITIALIZED_ERROR);
+	ASSERT_THAT(HashMap_Find(map, keyArr + 5, NULL) == MAP_UNINITIALIZED_ERROR);
+	ASSERT_THAT(HashMap_Find(map, NULL, (void**)&val) == MAP_KEY_NULL_ERROR);
+	ASSERT_THAT(HashMap_Find(map, keyArr + 4, (void**)&val) == MAP_KEY_NOT_FOUND_ERROR);
+	
+	ASSERT_THAT(HashMap_Size(NULL) == 0);
+	ASSERT_THAT(HashMap_ForEach(NULL, ActionFunc, NULL) == MAP_UNINITIALIZED_ERROR);
+	ASSERT_THAT(HashMap_ForEach(map, NULL, NULL) == MAP_UNINITIALIZED_ERROR);
+	
+	HashMap_Destroy(&map, NULL, NULL);
+	
+	ASSERT_THAT(HashMap_Find(map, keyArr + 5, (void**)&val) == MAP_UNINITIALIZED_ERROR);
+	ASSERT_THAT(HashMap_Size(map) == 0);
+	ASSERT_THAT(HashMap_ForEach(map, ActionFunc, NULL) == MAP_UNINITIALIZED_ERROR);	
 END_UNIT
 
-UNIT(normal_tests)
+UNIT(insert_remove_find_size_foreach)
+	int* val;
+	HashMap* map = NULL;
 	
-	HashMap* map;
-	Map_Result status;
-	int key = 7, value = 8, *ptrVal;
-
-	map = HashMap_Create(7,1, HashFunc1, EqualityFunc1);
-	ASSERT_THAT(map != NULL);
+	map = HashMap_Create(5,1, HashFunc, EqualityFunc);
+	ASSERT_THAT(NULL != map);
 	
-	status = HashMap_Insert(map, &key, &value);
-	ASSERT_THAT(status == MAP_SUCCESS);
-
-	status = HashMap_Remove(map, &key, (void**)&ptrVal);
-	ASSERT_THAT(*ptrVal == value);
-	ASSERT_THAT(status == MAP_SUCCESS);
-
-	key = 9;
-
-	status = HashMap_Remove(map, &key, (void**)&ptrVal);
-	ASSERT_THAT(status == MAP_KEY_NOT_FOUND_ERROR);
-
-	status = HashMap_Rehash(map, 8);
-	ASSERT_THAT(status == MAP_SUCCESS);
-
-
-	HashMap_Destroy(&map, NULL, NULL);
-
+	ASSERT_THAT(HashMap_Insert(map, keyArr + 0, valArr + 0) == MAP_SUCCESS);
+	ASSERT_THAT(HashMap_Size(map) == 1);
+	ASSERT_THAT(HashMap_Insert(map, keyArr + 1, valArr + 1) == MAP_SUCCESS);
+	ASSERT_THAT(HashMap_Size(map) == 2);
+	
+	ASSERT_THAT(HashMap_ForEach(map, ActionFunc, NULL) == 2);
+	
+	ASSERT_THAT(HashMap_Remove(map, keyArr + 1, (void**)&val) == MAP_SUCCESS);
+	ASSERT_THAT(*val == 2);
+	ASSERT_THAT(HashMap_Size(map) == 1);
+	
+	ASSERT_THAT(HashMap_ForEach(map, ActionFunc, NULL) == 1);
+	
+	ASSERT_THAT(HashMap_Find(map, keyArr + 1, (void**)&val) == MAP_KEY_NOT_FOUND_ERROR);
+	
+	ASSERT_THAT(HashMap_Insert(map, keyArr + 1, valArr + 1) == MAP_SUCCESS);
+	ASSERT_THAT(HashMap_Size(map) == 2);
+	ASSERT_THAT(HashMap_Insert(map, keyArr + 2, valArr + 2) == MAP_SUCCESS);
+	ASSERT_THAT(HashMap_Size(map) == 3);
+	
+	ASSERT_THAT(HashMap_ForEach(map, ActionFunc, NULL) == 3);
+	
+	ASSERT_THAT(HashMap_Find(map, keyArr + 5, (void**)&val) == MAP_SUCCESS);
+	printf("\n%d\n",*val);
+	ASSERT_THAT(*val == 1);	
+	ASSERT_THAT(HashMap_Find(map, keyArr + 1, (void**)&val) == MAP_SUCCESS);
+	ASSERT_THAT(*val == 2);
+	
+	ASSERT_THAT(HashMap_Remove(map, keyArr + 2, (void**)&val) == MAP_SUCCESS);
+	ASSERT_THAT(*val == 3);
+	ASSERT_THAT(HashMap_Size(map) == 2);
+	
+	ASSERT_THAT(HashMap_Remove(map, keyArr + 5, (void**)&val) == MAP_SUCCESS);
+	ASSERT_THAT(*val == 1);
+	ASSERT_THAT(HashMap_Size(map) == 1);
+	
+	ASSERT_THAT(HashMap_Remove(map, keyArr + 1, (void**)&val) == MAP_SUCCESS);
+	ASSERT_THAT(*val == 2);
+	ASSERT_THAT(HashMap_Size(map) == 0);
+	
+	ASSERT_THAT(HashMap_ForEach(map, ActionFunc, NULL) == 0);
+	
+	HashMap_Destroy(&map, NULL, NULL);			
 END_UNIT
 
-UNIT(multiple_insert_rehash)
+UNIT(rehash)
+	HashMap* map = NULL;
 	
-	HashMap* map;
-	Map_Result status;
-	int i, key[NUM_OF_TEST], value[NUM_OF_TEST];
-
-	map = HashMap_Create(7,1, HashFunc1, EqualityFunc1);
-
-	KeyValInit(key, value, NUM_OF_TEST);
+	map = HashMap_Create(5,1, HashFunc, EqualityFunc);
+	ASSERT_THAT(NULL != map);
 	
-	for(i = 0 ; i < NUM_OF_TEST ; ++i)
-	{
-		status = HashMap_Insert(map, &key[i], &value[i]);
-		ASSERT_THAT(status == MAP_SUCCESS);
-	}
-
-	for(i = 0 ; i < NUM_OF_TEST ; ++i)
-	{
-		status = HashMap_Rehash(map, 8 + i);
-		ASSERT_THAT(status == MAP_SUCCESS);
-	}
-
+	ASSERT_THAT(HashMap_Insert(map, keyArr + 0, valArr + 0) == MAP_SUCCESS);
+	ASSERT_THAT(HashMap_Insert(map, keyArr + 1, valArr + 1) == MAP_SUCCESS);
+	ASSERT_THAT(HashMap_Insert(map, keyArr + 2, valArr + 2) == MAP_SUCCESS);
+	ASSERT_THAT(HashMap_Insert(map, keyArr + 3, valArr + 3) == MAP_SUCCESS);
+	ASSERT_THAT(HashMap_Insert(map, keyArr + 4, valArr + 4) == MAP_SUCCESS);
+	
+	ASSERT_THAT(HashMap_ForEach(map, ActionFunc, NULL) == 5);	
+	
+	ASSERT_THAT(HashMap_Rehash(map, 6) == MAP_SUCCESS);
+	
+	ASSERT_THAT(HashMap_ForEach(map, ActionFunc, NULL) == 5);
+	
 	HashMap_Destroy(&map, NULL, NULL);
-
 END_UNIT
 
-UNIT(multiple_remove_check_value)
-	
-	HashMap* map;
-	Map_Result status;
-	int i, key[NUM_OF_TEST], value[NUM_OF_TEST], *ptrVal;
-
-	map = HashMap_Create(7,1, HashFunc1, EqualityFunc1);
-
-	KeyValInit(key, value, NUM_OF_TEST);
-	
-	for(i = 0 ; i < NUM_OF_TEST ; ++i)
-	{
-		status = HashMap_Insert(map, &key[i], &value[i]);
-	}
-
-	for(i = 0 ; i < NUM_OF_TEST ; ++i)
-	{
-		status = HashMap_Remove(map, &key[i], (void**)&ptrVal);
-		ASSERT_THAT(status == MAP_SUCCESS);
-		ASSERT_THAT(*ptrVal == i);
-	}
-
-	for(i = 0 ; i < NUM_OF_TEST ; ++i)
-	{
-		status = HashMap_Insert(map, &key[i], &value[i]);
-	}
-		
-	status = HashMap_Rehash(map, 20);
-
-	for(i = 0 ; i < NUM_OF_TEST ; ++i)
-	{
-		status = HashMap_Remove(map, &key[i], (void**)&ptrVal);
-		ASSERT_THAT(status == MAP_SUCCESS);
-		ASSERT_THAT(*ptrVal == i);
-	}
-
-	HashMap_Destroy(&map, NULL, NULL);
-
-END_UNIT
-
-UNIT(size_find_check)
-	
-	HashMap* map;
-	Map_Result status;
-	int i, key[NUM_OF_TEST], value[NUM_OF_TEST], *ptrVal = &i;
-
-	map = HashMap_Create(7,1, HashFunc1, EqualityFunc1);
-
-	KeyValInit(key, value, NUM_OF_TEST);
-	
-	for(i = 0 ; i < NUM_OF_TEST ; ++i)
-	{
-		HashMap_Insert(map, &key[i], &value[i]);
-		ASSERT_THAT(HashMap_Size(map) == i + 1);
-	}
-
-	for(i = 0 ; i < NUM_OF_TEST ; ++i)
-	{
-		status = HashMap_Find(map, &key[i], (void**)&ptrVal);
-		ASSERT_THAT(status == MAP_SUCCESS);
-		ASSERT_THAT(*ptrVal == value[i]);
-	}
-
-	for(i = 0 ; i < 7 ; ++i)
-	{
-		HashMap_Remove(map, &key[i], (void**)&ptrVal);
-		ASSERT_THAT(HashMap_Size(map) == NUM_OF_TEST - i - 1);
-	}
-
-	for(i = 0 ; i < 7 ; ++i)
-	{
-		HashMap_Insert(map, &key[i], &value[i]);
-		
-		ASSERT_THAT(HashMap_Size(map) == NUM_OF_TEST - 7 + i + 1);
-	}
-	HashMap_Rehash(map, 8 + i);
-	ASSERT_THAT(HashMap_Size(map) == NUM_OF_TEST);
-		
-
-	for(i = 0 ; i < NUM_OF_TEST ; ++i)
-	{
-		status = HashMap_Find(map, &key[i], (void**)&ptrVal);
-		ASSERT_THAT(status == MAP_SUCCESS);
-		printf("\nptrVal %d key %d\n",*ptrVal,key[i]);
-		ASSERT_THAT(*ptrVal == value[i]);
-		/*
-	*/
-	}
-
-
-	HashMap_Destroy(&map, NULL, NULL);
-
-END_UNIT
-
-
-TEST_SUITE(framework test)
-
-	TEST(error_tests)
-	TEST(normal_tests)
-	TEST(multiple_insert_rehash)
-	TEST(multiple_remove_check_value)
-	TEST(size_find_check)
-
+TEST_SUITE(hash_tests)
+	TEST(nulls)
+	TEST(insert_remove_find_size_foreach)
+	TEST(rehash)
 END_SUITE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

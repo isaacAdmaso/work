@@ -335,7 +335,7 @@ Map_Result HashMap_Find(const HashMap* _map, const void* _key, void** _pValue)
 		return MAP_UNINITIALIZED_ERROR;
 	}
 	
-	if(NULL == _key)
+	if(!_key)
 	{
 		return MAP_KEY_NULL_ERROR;
 	}
