@@ -10,7 +10,7 @@
 #include "mu_test.h"
 
 
-#define NTHREAD 50
+#define NTHREAD 2
 
 int keyArr[6] = {1,2,3,4,5,1};
 int valArr[5] = {1,2,3,4,5};
@@ -71,10 +71,10 @@ void* ThreadRemove(void*_contex)
 */
 	if(HashMap_Remove(map, keyArr + i, (void**)val) == MAP_SUCCESS)
 	{
-		if(val)
-		{
-			printf("\nremove success: key %d value %d\n",keyArr[i],*val);
-		}
+		/*
+		printf("\nremove success: key %d value %d\n",keyArr[i],*val);
+	*/
+		printf("\nremove success\n");
 	}
 	else
 	{
@@ -97,11 +97,16 @@ UNIT(Multithread)
 	/*
 	HashMap_ForEach(map, ActionFunc, NULL);
     */
+	for (i = 0; i < NTHREAD/2; ++i)
+    {
+
+       	pthread_join(tArr[i], NULL);
+    }
 	for (i = NTHREAD/2;i < NTHREAD;++i)
     {
         pthread_create(&tArr[i], NULL,ThreadRemove ,(void*)map);
     }
-	for (i = 0; i < NTHREAD; ++i)
+	for (i = NTHREAD/2; i < NTHREAD; ++i)
     {
 
        	pthread_join(tArr[i], NULL);
