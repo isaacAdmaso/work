@@ -14,13 +14,13 @@ CFLAGS = -ansi -pedantic -Wall -Werror -g
 LDFLAGS = -g -pthread -D_XOPEN_SOURCE = 500
 
 # Include directory
-INC_DIR = ../../include
-LIB_PATH= ../../lib
+INC_DIR = ../../../include
+LIB_PATH= ../../../lib
 CFLAGS += -I$(INC_DIR)
 
 
 # All .c files in this directory are my sources
-SOURCES = ConcurrentHashMap.c bucket.c HashMapTest.c person.c
+SOURCES = ConcurrentHashMap.c bucket.c HashMapTest.c
 #LIB_SRC = HashMap.c
 # All .o files in this directory are my objects
 OBJECTS = $(SOURCES:.c=.o)
