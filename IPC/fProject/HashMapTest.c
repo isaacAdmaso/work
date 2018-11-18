@@ -3,7 +3,7 @@
 #include "HashMap.h"
 #include "mu_test.h"
 
-# define NUM_OF_TEST 10000
+# define NUM_OF_TEST 1000
 
 size_t HashFunc1(const void* _key)
 {

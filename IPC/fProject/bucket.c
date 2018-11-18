@@ -67,7 +67,7 @@ static int Destroy_Pair(void* _element, void* _destryStruct)
 
 	if(!nodeData)
 	{
-		return 0;/**is NULL data allowed? */
+		return 0;
 	}
 	d_p_f->m_keyDestroy(nodeData->m_key);
 	d_p_f->m_valDestroy(nodeData->m_data);
