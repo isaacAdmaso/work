@@ -45,19 +45,24 @@ void Bucket_Destroy(Bucket_t* _bucket,ElementDestroy _keyDestroy,ElementDestroy 
  * 
  * @warning key must be unique and destinct
  */
-Map_Result Bucket_Insert(void* _key ,void* _value ,Bucket_t**  _bucket ,EqualityFunction1 _keysEqualFunc);
+ /*TODO BUCKET STATUS  */
+Map_Result Bucket_Insert(Bucket_t**  _bucket, const void* _key, const void* _value, EqualityFunction1 _keysEqualFunc);
 
 /**
  * @brief Remove a key-value pair from the hash map
  * and return value to _pValue
  * 
  */
+
+/*TODO upsert*/
+ 
 Map_Result Bucket_Remove(Bucket_t* _bucket, const void* _searchKey, void** _pValue);
 
 /**
  * @brief for rehash
  * 
  */
+ /*TODO pop(keyRt,valueRt) */
 void* Bucket_Get_First_Key(Bucket_t* _bucket);
 
 /** 

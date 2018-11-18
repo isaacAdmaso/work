@@ -175,7 +175,7 @@ Map_Result HashMap_Insert(HashMap* _map, void* _key, void* _value)
 	pthread_mutex_lock(&(mutexPtr->m_lock));
 
 	
-	error = Bucket_Insert(_key,_value,&(_map->m_items[idx]),_map->m_keysEqualFunc);
+	error = Bucket_Insert(&(_map->m_items[idx]),_key,_value,_map->m_keysEqualFunc);
 
 	++_map->m_noItems;
 	pthread_mutex_unlock(&(mutexPtr->m_lock));
@@ -213,7 +213,7 @@ Map_Result HashMap_Remove(HashMap* _map, const void* _searchKey, void** _pValue)
 	{
 		return MAP_KEY_NULL_ERROR;
 	}
-
+	/*TODO lock func*/
 	idx = HashIdx(_map,_searchKey);
 	mutexIdx = HashMutexIdx(_map,idx);
 	mutexPtr = &(_map->m_myMutexPool[mutexIdx]);
@@ -379,8 +379,9 @@ size_t HashMap_ForEach(const HashMap* _map, KeyValueActionFunction _action, void
 	return count;
 }
 
+/**/
 
-static size_t HashIdx(HashMap* _map,const void* _key)
+static /* read about inline */size_t HashIdx(HashMap* _map,const void* _key)
 {
 	return (_map->m_hashFunc(_key))%_map->m_size;
 }

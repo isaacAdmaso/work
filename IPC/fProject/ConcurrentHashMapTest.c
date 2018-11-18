@@ -10,7 +10,7 @@
 #include "mu_test.h"
 
 
-#define NTHREAD 2
+#define NTHREAD 10
 
 int keyArr[6] = {1,2,3,4,5,1};
 int valArr[5] = {1,2,3,4,5};
@@ -43,7 +43,9 @@ int	ActionFunc(const void* _key, void* _value, void* _context)
 void* ThreadInsert(void*_contex)
 {
 	HashMap* map = (HashMap*)_contex; 
+	/* init i */
 	static int i;
+	
 	/*
 	HashMap_ForEach(map, ActionFunc, NULL);
 	*/
@@ -69,11 +71,11 @@ void* ThreadRemove(void*_contex)
 /*
 	HashMap_ForEach(map, ActionFunc, NULL);
 */
-	if(HashMap_Remove(map, keyArr + i, (void**)val) == MAP_SUCCESS)
+	if(HashMap_Remove(map, keyArr + i, (void**)&val) == MAP_SUCCESS)
 	{
-		/*
+		
 		printf("\nremove success: key %d value %d\n",keyArr[i],*val);
-	*/
+
 		printf("\nremove success\n");
 	}
 	else

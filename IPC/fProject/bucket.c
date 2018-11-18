@@ -22,7 +22,7 @@ struct Bucket_t
 	size_t 				m_magic;/**to change to size_t */
 }; 
 
-
+/**/
 typedef struct pair
 {
 	void* m_key;
@@ -122,7 +122,7 @@ void Bucket_Destroy(Bucket_t* _bucket,ElementDestroy _keyDestroy,ElementDestroy 
  * 
  * @warning key must be unique and destinct
  */
-Map_Result Bucket_Insert(void* _key,void* _value,Bucket_t**  _bucket,EqualityFunction _keysEqualFunc)
+Map_Result Bucket_Insert(Bucket_t**  _bucket, const void* _key, const void* _value, EqualityFunction1 _keysEqualFunc)
 {
 	pair *data,*checkData;
 	ListItr begin, end;
@@ -140,12 +140,12 @@ Map_Result Bucket_Insert(void* _key,void* _value,Bucket_t**  _bucket,EqualityFun
 	{
 		return MAP_ALLOCATION_ERROR;
 	}
-	data->m_key = _key;
-	data->m_data =_value;
+	data->m_key = (void*)_key;
+	data->m_data =(void*)_value;
 
 	begin = ListItr_Begin((*_bucket)->m_list);
 	end = ListItr_End((*_bucket)->m_list);
-
+/*listitr find first*/
 	for(;begin != end ;begin = ListItr_Next(begin))
 	{
 		checkData = ListItr_Get(begin);
@@ -155,7 +155,7 @@ Map_Result Bucket_Insert(void* _key,void* _value,Bucket_t**  _bucket,EqualityFun
 			return MAP_KEY_DUPLICATE_ERROR;
 		}
 	}
-
+/*לבדוק ש הpush */
 	List_PushTail((*_bucket)->m_list,(void*)data);
 	return MAP_SUCCESS;
 }
@@ -177,7 +177,7 @@ Map_Result Bucket_Remove(Bucket_t* _bucket, const void* _searchKey, void** _pVal
 	
 	begin = ListItr_Begin(_bucket->m_list);
 	end = ListItr_End(_bucket->m_list);
-
+	/*itereq func || */
 	for(;begin != end ;begin = ListItr_Next(begin))
 	{
 		checkData = ListItr_Get(begin);
@@ -185,6 +185,7 @@ Map_Result Bucket_Remove(Bucket_t* _bucket, const void* _searchKey, void** _pVal
 		{
 			checkData = (pair*)ListItr_Remove(begin);
 			*_pValue = checkData->m_data;
+			/*free pair*/
 			return MAP_SUCCESS;
 		}
 	}
