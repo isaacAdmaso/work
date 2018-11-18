@@ -228,7 +228,7 @@ Map_Result Bucket_Find(const Bucket_t* _bucket, const void* _key, void** _pValue
 	pair  *checkData;
 	ListItr begin, end;
 
-	if(IS_INVALID(_bucket))
+	if(IS_INVALID(_bucket)|| !_pValue)
 	{
 		return MAP_KEY_NOT_FOUND_ERROR;
 	}
@@ -277,4 +277,18 @@ size_t Bucket_ForEach(const Bucket_t* _bucket, KeyValueActionFunction _action, v
 }
 
 
+/**
+ * insert if not exist else update
+*/
+Map_Result Bucket_Upsert(Bucket_t**  _bucket, const void* _key,void* _value, EqualityFunction1 _keysEqualFunc,UpdateFunction _action)
+{
+	void* rtVal = NULL;
+
+
+	if(IS_INVALID(*_bucket)|| !_action || (Bucket_Remove(*_bucket,_key,&rtVal)))
+	{
+		return (Bucket_Insert(_bucket,_key,_value,_keysEqualFunc));
+	}
+	return Bucket_Insert(_bucket,_key,_action(_value,rtVal),_keysEqualFunc);
+}
 

@@ -295,7 +295,7 @@ static Map_Result ReHashLoop(HashMap *_map,Bucket_t** _oldHash,size_t _hashOldSi
 		{
 			for(j = 0;j < _oldBucketSize; ++j)
 			{
-				key = Bucket_Get_First_Key(_oldHash[i]);
+				key = Bucket_Get_First_Key(_oldHash[i]);/**->TODO GET_FIRST_PAIR(*bucket,*_key,*_data)*/
 				assert(key);
 				assert(Bucket_Remove(_oldHash[i],key,&dataHolder) == MAP_SUCCESS);
 				assert(dataHolder);

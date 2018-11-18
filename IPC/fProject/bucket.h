@@ -13,12 +13,13 @@
 
 #include <stddef.h>
 #include "list_functions.h" /**bucket functions */
-#include "HashMap.h"
+#include "HashMap.h"/*don't need to know HashMap--generic use*/
 
 
 typedef struct Bucket_t Bucket_t;   /** declaration of bucket type */
 typedef void (*ElementDestroy)(void* _item);
 typedef int (*EqualityFunction1)(void *_firstKey, void *_secondKey);
+typedef void* (*UpdateFunction)(void *_firstItem, void *_secondItem);
 
 /**
  * @brief return pointer of new bucket 
@@ -47,6 +48,11 @@ void Bucket_Destroy(Bucket_t* _bucket,ElementDestroy _keyDestroy,ElementDestroy 
  */
  /*TODO BUCKET STATUS  */
 Map_Result Bucket_Insert(Bucket_t**  _bucket, const void* _key, const void* _value, EqualityFunction1 _keysEqualFunc);
+
+/**
+ * insert if not exist else update
+*/
+Map_Result Bucket_Upsert(Bucket_t**  _bucket, const void* _key,void* _value, EqualityFunction1 _keysEqualFunc,UpdateFunction _action);
 
 /**
  * @brief Remove a key-value pair from the hash map
