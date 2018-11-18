@@ -1,10 +1,10 @@
 # this is my target
-TARGET = ConcurrentHashMapTest.out
+TARGET = HashMapTest.out
 LIBS = ADS
 
 .PHONY: run clean gdb mklib val
 
-# General compilation flags
+# General compilation flags Concurrent
 
 # The compiler will be gcc("CC" is MAKE variable)
 CC = gcc
@@ -20,7 +20,7 @@ CFLAGS += -I$(INC_DIR)
 
 
 # All .c files in this directory are my sources
-SOURCES = ConcurrentHashMap.c bucket.c ConcurrentHashMapTest.c person.c
+SOURCES = ConcurrentHashMap.c bucket.c HashMapTest.c person.c
 #LIB_SRC = HashMap.c
 # All .o files in this directory are my objects
 OBJECTS = $(SOURCES:.c=.o)

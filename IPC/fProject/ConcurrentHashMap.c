@@ -300,7 +300,7 @@ static Map_Result ReHashLoop(HashMap *_map,Bucket_t** _oldHash,size_t _hashOldSi
 				assert(Bucket_Remove(_oldHash[i],key,&dataHolder) == MAP_SUCCESS);
 				assert(dataHolder);
 				newBucketidx = HashIdx(_map,key);
-				assert(Bucket_Insert(key,dataHolder,&(_map->m_items[newBucketidx]),_map->m_keysEqualFunc) == MAP_SUCCESS);
+				assert(Bucket_Insert(&(_map->m_items[newBucketidx]),key,dataHolder,_map->m_keysEqualFunc) == MAP_SUCCESS);
 			}
 			Bucket_Destroy(_oldHash[i],NULL,NULL);
 		}
