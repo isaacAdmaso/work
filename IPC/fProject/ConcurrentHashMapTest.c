@@ -44,11 +44,17 @@ void* ThreadInsert(void*_contex)
 {
 	HashMap* map = (HashMap*)_contex; 
 	static int i;
+	/*
 	HashMap_ForEach(map, ActionFunc, NULL);
+	*/
 	i++;
 	if (HashMap_Insert(map, keyArr + i,valArr + i) == MAP_SUCCESS)
 	{
-		printf("\ninsert success\n");
+		printf("\ninsert success: key %d value %d\n",keyArr[i],valArr[i]);
+	}
+	else
+	{
+		printf("\ninsert not succeed: key %d value %d\n",keyArr[i],valArr[i]);
 	}
 	printf("\n out insert\n");
 	return NULL;
@@ -60,10 +66,19 @@ void* ThreadRemove(void*_contex)
 	HashMap* map = (HashMap*)_contex; 
 	i++;
 
+/*
 	HashMap_ForEach(map, ActionFunc, NULL);
+*/
 	if(HashMap_Remove(map, keyArr + i, (void**)val) == MAP_SUCCESS)
 	{
-		printf("\nremove success\n");
+		if(val)
+		{
+			printf("\nremove success: key %d value %d\n",keyArr[i],*val);
+		}
+	}
+	else
+	{
+		printf("\nremove not succeed: key %d value %d\n",keyArr[i],*val);
 	}
 	printf("\n out remove\n");
 	return NULL; 
@@ -79,8 +94,10 @@ UNIT(Multithread)
     {
         pthread_create(&tArr[i], NULL,ThreadInsert ,(void*)map );
     }
+	/*
 	HashMap_ForEach(map, ActionFunc, NULL);
-    for (i = NTHREAD/2;i < NTHREAD;++i)
+    */
+	for (i = NTHREAD/2;i < NTHREAD;++i)
     {
         pthread_create(&tArr[i], NULL,ThreadRemove ,(void*)map);
     }
