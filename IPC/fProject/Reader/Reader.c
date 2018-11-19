@@ -1,5 +1,5 @@
 /**
- * @file Reader.c
+ * @file Reader.c ping
  * @brief   process image ,manage input
  * @version 0.1
  * @date 2018-11-19
@@ -13,15 +13,17 @@
 #include <fcntl.h>
 #include <dlfcn.h>
 #include "logger.h"
-#define MODULE "MODULE"
-
 #include "MyMsq"
+#include "Reader.h"
+#include "Parser.h"
 
+#define OUTPUT "./"
+#define MODULE "MODULE"
 #define MAX 1024
 #define TYPE 1
+#define INPUTFNAME "./file.txt"
+#define REG 
 
-
-typedef void* (*PtrFunc)(char* _lineCDR);
 
 
 /**argv[0] is input file path,
@@ -32,39 +34,55 @@ typedef void* (*PtrFunc)(char* _lineCDR);
  * argv[5] is size of struct after parse
  * 
  */
-int main(int argc, char const *argv[])
+
+/*
+int Reader(char *_inFp ,msq_t _msq)
+*/
+int main()
 {
     FILE *inFp,*outFp;
     char outputPath[MAX];
     char lineCDR[MAX];
     char placeSave[MAX];
-    void *handle,*parsRt;
-    size_t sendSize;
+    void *handle;
+/*
+    ,*parsRt;
     PtrFunc Parser_Func;
-    msq_t msg;
+ */
+    size_t sendSize;
+    msq_t msq;
 
+
+
+
+    msq = Msq_CrInit("../",C_PERMIS);
+    Msq_Register("start",REG);
+/*
     Zlog_Init("Confile.txt");
     ZLOG("last",LOG_TRACE,"hope will work");
-
-    inFp  = fopen(argv[0],"r");
-    snprintf(outputPath,MAX,"%s/%d",argv[1],getpid());
+*/
+    inFp  = fopen(_inFp,"r");
+    snprintf(outputPath,MAX,"%s/%d",OUTPUT,getpid());
     outFp = fopen(outputPath,"w");
 
     if(!inFp || !outFp)
     {
+  /*
         ZLOG("last",LOG_TRACE,"hope will work");
+    */
         perror("\nfailed to open File\n");
         exit(-1);
     }
-    /**TODO check open */
-    handle = dlopen(argv[2], RTLD_LAZY);
-    Parser_Func = (PtrFunc) dlsym(handle, argv[3]);
-
-    msg = atoi(argv[4]);
-    sendSize = (size_t)atoi(argv[5]);
-    /*
-    ZLOG("last",LOG_TRACE,"hope will work");
+    /**TODO check open 
+     *
+        handle = dlopen(argv[3], RTLD_LAZY);
+        Parser_Func = (PtrFunc) dlsym(handle, PFUNC);
+    sendSize = (size_t)atoi(SIZE_ST);
     */
+    sendSize = Cdr_Size();
+/*
+    ZLOG("last",LOG_TRACE,"hope will work");
+  */
     while(!feof(inFp))
 	{
         
@@ -72,14 +90,16 @@ int main(int argc, char const *argv[])
         { 
             break ;
         }
-        parsRt = Parser_Func(lineCDR);
-        Msq_Send(msg,TYPE,parsRt,sendSize);
+        handle = Parser1(lineCDR);
+        Msq_Send(msg,TYPE,parsRt,sendSize*sizeof(char));
         snprintf(placeSave,MAX,"%d|%d",(int)inFp,(int)ftell(inFp));
         write(outFp, placeSave,strlen(placeSave));
 
     }
+    /*
     Zlog_Destroy();
     dlclose(handle);
+    */
     fclose(inFp);
     fclose(outFp);
     return 0;

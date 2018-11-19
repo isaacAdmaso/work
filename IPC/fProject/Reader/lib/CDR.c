@@ -152,3 +152,7 @@ void Print_Cdr(void* _cdr)
     printf("\n%ld\n",cdr->m_UPLOAD);
     printf("\n%s\n",cdr->m_otherMCC);
 }
+size_t Cdr_Size()
+{
+    return sizeof(Cdr_t);
+}

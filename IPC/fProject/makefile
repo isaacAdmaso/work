@@ -1,29 +1,20 @@
-CFLAGS=-I../../include  -ansi -pedantic -Wall -Werror -g
-DSSOURCES=../../genericDbLnkLst/list.c \
-		../../genericDbLnkLst/list_func.c \
-		DataStorage/{bucket.c,ConcurrentHashMap.c} \
+CFLAGS=-ansi -pedantic -Wall -Werror -g
+DSSOURCES=Reader/lib/{CDR.c,Parser.c}
 
 
-LOGSOURCES=../../Zlog/config.c\
-		../../Zlog/LogFile.c\
-		../../Zlog/Ztime.c\
-		../../Zlog/zlog.c \
-
-
-libs: dynamicDS loggerDS msqDS
+.PHONY:dynamicDS
 
 
 
+libs: dynamicDS 
+dynamicDS: dynamicDS.so
+dynamicDS.so:
+	gcc $(CFLAGS) -shared $(DSSOURCES) -fPIC -o dynamicDS.so
 
-mklib:
-	mkdir -p $(LIB_PATH)
+
+
+
+
 
 clean:
-	find . -type f -name '*.o' -delete
-	find . -type f -name '*.out' -delete
-	find . -type f -name 'depends' -delete
-	find . -type f -name 'log.txt' -delete
-
-cleanlib:clean
-	rm ../lib/*.so
-	rm ../lib/*.a
+	rm ../lib/*.so log.txt
