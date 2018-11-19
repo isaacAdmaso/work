@@ -13,6 +13,8 @@
 #include <fcntl.h>
 #include <dlfcn.h>
 #include "logger.h"
+#define MODULE "MODULE"
+
 #include "MyMsq"
 
 #define MAX 1024
@@ -40,19 +42,17 @@ int main(int argc, char const *argv[])
     size_t sendSize;
     PtrFunc Parser_Func;
     msq_t msg;
-/*
+
+    Zlog_Init("Confile.txt");
     ZLOG("last",LOG_TRACE,"hope will work");
-*/
-    /**TODO check open */
+
     inFp  = fopen(argv[0],"r");
     snprintf(outputPath,MAX,"%s/%d",argv[1],getpid());
     outFp = fopen(outputPath,"w");
 
     if(!inFp || !outFp)
     {
-        /*
         ZLOG("last",LOG_TRACE,"hope will work");
-        */
         perror("\nfailed to open File\n");
         exit(-1);
     }
@@ -78,6 +78,7 @@ int main(int argc, char const *argv[])
         write(outFp, placeSave,strlen(placeSave));
 
     }
+    Zlog_Destroy();
     dlclose(handle);
     fclose(inFp);
     fclose(outFp);

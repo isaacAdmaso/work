@@ -36,6 +36,7 @@ void* Parser1(char* _lineCDR)
     }
     return cdr;
 }
+/*
 int main()
 {
     char line[256] = "23423|21345|235|1234|1235|1253|2135|1234|2134|789|3673";
@@ -48,3 +49,4 @@ int main()
 
     return 0;
 }
+*/
