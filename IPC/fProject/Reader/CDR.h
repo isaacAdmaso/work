@@ -43,7 +43,8 @@ void Cdr_Destroy(void* _cdr);
  */
 int Cdr_Set(void* _cdr,char _fieldToUpdate,void* _value);
 
-
+/**for debug */
+void Print_Cdr(void* _cdr);
 
 
 #endif /*__CDR_H__*/

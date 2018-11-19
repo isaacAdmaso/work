@@ -8,6 +8,7 @@
  * 
  */
 #include "CDR.h"
+#include <stdio.h> /**<-delete after debug */
 #include <stdlib.h>
 #include <string.h>
 
@@ -132,4 +133,22 @@ int Cdr_Set(void* _cdr,char _fieldToUpdate,void* _value)
             break;
     }
     return 1;
+}
+
+
+void Print_Cdr(void* _cdr)
+{
+    Cdr_t* cdr = (Cdr_t*)_cdr;
+
+    printf("\n%s\n",cdr->m_IMEI);
+    printf("\n%s\n",cdr->m_IMSI);
+    printf("\n%s\n",cdr->m_MSISDN);
+    printf("\n%s\n",cdr->m_otherMSISDN);
+    printf("\n%s\n",cdr->m_MCC);
+    printf("\n%s\n",cdr->m_CallType);
+    printf("\n%s\n",cdr->m_DATE);
+    printf("\n%ld\n",cdr->m_Duration);
+    printf("\n%ld\n",cdr->m_DOWNLOAD);
+    printf("\n%ld\n",cdr->m_UPLOAD);
+    printf("\n%s\n",cdr->m_otherMCC);
 }
