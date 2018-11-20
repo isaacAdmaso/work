@@ -11,10 +11,6 @@
 #define __READER_H__
 
 
-#define MSG_TYPE_PING		  5
-#define MSG_TYPE_REGISTRAR	  7
-#define MSG_TYPE_PONG	  	  9
-
 
 typedef void* (*PtrFunc)(char* _lineCDR);
 

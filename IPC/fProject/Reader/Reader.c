@@ -6,27 +6,28 @@
  * 
  * @copyright Copyright (c) 2018
  * 
+    #include "logger.h"
+    #include <dlfcn.h>
  */
-#include <stdio.h>
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <dlfcn.h>
-#include "logger.h"
-#include "MyMsq"
+#include "MyMsq.h"
+#include "test.h"
 #include "Reader.h"
 #include "Parser.h"
 
-#define OUTPUT "./"
-#define MODULE "MODULE"
+#define OUTPUT "./log.txt"
+#define INFILE "./file.txt"
 #define MAX 1024
-#define TYPE 1
-#define INPUTFNAME "./file.txt"
-#define REG 
 
 
 
 /**argv[0] is input file path,
+#define MODULE "MODULE"
+#define INPUTFNAME "./file.txt"
  * argv[1] output path Dir,
  * argv[2] parser dynemic lib,
  * argv[3] parser function name
@@ -41,7 +42,6 @@ int Reader(char *_inFp ,msq_t _msq)
 int main()
 {
     FILE *inFp,*outFp;
-    char outputPath[MAX];
     char lineCDR[MAX];
     char placeSave[MAX];
     void *handle;
@@ -55,15 +55,16 @@ int main()
 
 
 
-    msq = Msq_CrInit("../",C_PERMIS);
-    Msq_Register("start",REG);
+    msq = Msq_CrInit(MSGQUE_NAME_DEFAULT,C_PERMIS);
 /*
+    Msq_Register(msq,MSG_TYPE_REGISTRAR);
     Zlog_Init("Confile.txt");
+    char outputPath[MAX];
+    snprintf(outputPath,MAX,"%s",OUTPUT);
     ZLOG("last",LOG_TRACE,"hope will work");
 */
-    inFp  = fopen(_inFp,"r");
-    snprintf(outputPath,MAX,"%s/%d",OUTPUT,getpid());
-    outFp = fopen(outputPath,"w");
+    inFp  = fopen(INFILE,"r");
+    outFp = fopen(OUTPUT,"w");
 
     if(!inFp || !outFp)
     {
@@ -86,15 +87,17 @@ int main()
     while(!feof(inFp))
 	{
         
-        if(!(read(inFp,lineCDR,MAX))) 
-        { 
-            break ;
-        }
+        fgets(lineCDR,MAX,inFp);
         handle = Parser1(lineCDR);
-        Msq_Send(msg,TYPE,parsRt,sendSize*sizeof(char));
-        snprintf(placeSave,MAX,"%d|%d",(int)inFp,(int)ftell(inFp));
-        write(outFp, placeSave,strlen(placeSave));
-
+        Print_Cdr(handle);
+        Msq_Send(msq,MSG_TYPE_READ,handle,sendSize);
+        sprintf(placeSave,"%p |%d\n",(void*)inFp,(int)ftell(inFp));
+        fputs(placeSave,outFp);
+        
+		if(feof(inFp))
+		{
+			break;
+		}
     }
     /*
     Zlog_Destroy();
