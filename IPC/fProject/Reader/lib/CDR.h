@@ -43,6 +43,24 @@ void Cdr_Destroy(void* _cdr);
  */
 int Cdr_Set(void* _cdr,char _fieldToUpdate,void* _value);
 
+/**
+ * @brief get CDR struct fields by char identifier 
+ * IMEI             -I
+ * IMSI             -i
+ * MSISDN           -M
+ * otherMSISDN      -m
+ * MCC              -C
+ * CallType         -T
+ * DATE             -D
+ * Duration         -d
+ * DOWNLOAD         -l
+ * UPLOAD           -p
+ * otherMCC         -c
+ * 
+ * return 1 on success -1 else
+ */
+int Cdr_Get(void* _cdr,char _fieldToUpdate,void** _value);
+
 /**for debug */
 void Print_Cdr(void* _cdr);
 

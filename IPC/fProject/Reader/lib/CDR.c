@@ -135,6 +135,68 @@ int Cdr_Set(void* _cdr,char _fieldToUpdate,void* _value)
     return 1;
 }
 
+/**
+ * @brief get CDR struct fields by char identifier 
+ * IMEI             -I
+ * IMSI             -i
+ * MSISDN           -M
+ * otherMSISDN      -m
+ * MCC              -C
+ * CallType         -T
+ * DATE             -D
+ * Duration         -d
+ * DOWNLOAD         -l
+ * UPLOAD           -p
+ * otherMCC         -c
+ * 
+ */
+int Cdr_Get(void* _cdr,char _fieldToUpdate,void** _value)
+{
+    Cdr_t* cdr = (Cdr_t*)_cdr; 
+    
+    if(IS_INVALID(cdr) || !_value)
+    {
+        return -1;
+    }
+    switch (_fieldToUpdate)
+    {
+        case 'I':
+            *(char**)_value  = cdr->m_IMEI;
+            break;
+        case 'i':
+            *(char**)_value =cdr->m_IMSI;
+            break;
+        case 'M':
+            *(char**)_value = cdr->m_MSISDN;
+            break;
+        case 'm':
+            *(char**)_value = cdr->m_otherMSISDN;
+            break;
+        case 'C':
+            *(char**)_value = cdr->m_MCC;
+            break;
+        case 'T':
+            *(char**)_value = cdr->m_CallType;
+            break;
+        case 'D':
+            *(char**)_value = cdr->m_DATE;
+            break;
+        case 'd':
+            *(size_t*)_value = cdr->m_Duration;
+            break;
+        case 'l':
+            *(size_t*)_value = cdr->m_DOWNLOAD;
+            break;
+        case 'p':
+            *(size_t*)_value = (cdr->m_UPLOAD);
+            break;
+        case 'c':
+            *(char**)_value = cdr->m_otherMCC;
+            break;
+    }
+    return 1;
+}
+
 
 void Print_Cdr(void* _cdr)
 {
