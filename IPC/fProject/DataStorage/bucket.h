@@ -13,13 +13,23 @@
 
 #include <stddef.h>
 #include "list_functions.h" /**bucket functions */
-#include "HashMap.h"/*don't need to know HashMap--generic use*/
 
+typedef enum Bucket_Result {
+	Bucket_SUCCESS = 0,
+	Bucket_UNINITIALIZED_ERROR, 		/**< Uninitialized Bucket error 	*/
+	Bucket_KEY_NULL_ERROR, 			/**< Key was null 				*/
+	Bucket_KEY_DUPLICATE_ERROR, 		/**< Duplicate key error 		*/
+	Bucket_KEY_NOT_FOUND_ERROR, 		/**< Key not found 				*/
+	Bucket_ALLOCATION_ERROR, 			/**< Allocation error 	 		*/
+	Bucket_OVERFLOW_ERROR				/**< NEED TO USE RE_HASH FUNC*/
+} Bucket_Result;
 
 typedef struct Bucket_t Bucket_t;   /** declaration of bucket type */
 typedef void (*ElementDestroy)(void* _item);
 typedef int (*EqualityFunction1)(void *_firstKey, void *_secondKey);
-typedef void* (*UpdateFunction)(void *_firstItem, void *_secondItem);
+typedef void* (*UpdateFunction1)(void *_firstItem, void *_secondItem);
+typedef int	(*KeyValueActionFunction1)(const void* _key, void* _value, void* _context);
+
 
 /**
  * @brief return pointer of new bucket 
@@ -47,12 +57,12 @@ void Bucket_Destroy(Bucket_t* _bucket,ElementDestroy _keyDestroy,ElementDestroy 
  * @warning key must be unique and destinct
  */
  /*TODO BUCKET STATUS  */
-Map_Result Bucket_Insert(Bucket_t**  _bucket, const void* _key, const void* _value, EqualityFunction1 _keysEqualFunc);
+Bucket_Result Bucket_Insert(Bucket_t**  _bucket, const void* _key, const void* _value, EqualityFunction1 _keysEqualFunc);
 
 /**
  * insert if not exist else update
 */
-Map_Result Bucket_Upsert(Bucket_t**  _bucket, const void* _key,void* _value, EqualityFunction1 _keysEqualFunc,UpdateFunction _action);
+int Bucket_Upsert(Bucket_t**  _bucket, const void* _key,void* _value, EqualityFunction1 _keysEqualFunc,UpdateFunction1 _action);
 
 /**
  * @brief Remove a key-value pair from the hash map
@@ -62,7 +72,7 @@ Map_Result Bucket_Upsert(Bucket_t**  _bucket, const void* _key,void* _value, Equ
 
 /*TODO upsert*/
  
-Map_Result Bucket_Remove(Bucket_t* _bucket, const void* _searchKey, void** _pValue);
+Bucket_Result Bucket_Remove(Bucket_t* _bucket, const void* _searchKey, void** _pValue);
 
 /**
  * @brief for rehash
@@ -80,13 +90,13 @@ size_t Bucket_Size(Bucket_t* _bucket);
  * @brief Find a value by key
  * 
  */
-Map_Result Bucket_Find(const Bucket_t* _bucket, const void* _key, void** _pValue);
+Bucket_Result Bucket_Find(const Bucket_t* _bucket, const void* _key, void** _pValue);
 
 /**
  * @brief do  KeyValueActionFunction on each item
  * 
  */
-size_t Bucket_ForEach(const Bucket_t* _bucket, KeyValueActionFunction _action, void* _context);
+size_t Bucket_ForEach(const Bucket_t* _bucket, KeyValueActionFunction1 _action, void* _context);
 
 
 

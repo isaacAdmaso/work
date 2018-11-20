@@ -9,7 +9,6 @@
 #include <unistd.h>
 
 #include "bucket.h"
-#include "HashMap.h"
 #include "list_functions.h"
 
 #define MAGIC 			192032874
@@ -18,7 +17,7 @@
 struct Bucket_t
 {
 	List* 				m_list;
-	EqualityFunction 	m_keysEqualFunc;
+	EqualityFunction1 	m_keysEqualFunc;
 	size_t 				m_magic;
 }; 
 
@@ -40,7 +39,7 @@ typedef struct DestroyPairFunc_t
  * @brief create bucket using doubly linked list 
  * 
  */
-Bucket_t* Bucket_Create(EqualityFunction _keysEqualFunc)
+Bucket_t* Bucket_Create(EqualityFunction1 _keysEqualFunc)
 {
 	Bucket_t*  bucket = NULL;
 
@@ -113,15 +112,15 @@ void Bucket_Destroy(Bucket_t* _bucket,ElementDestroy _keyDestroy,ElementDestroy 
  * @param[in] _key - key to serve as index 
  * @param[in] _value - The value to associate with the key 
  * @return Success indicator
- * @retval  MAP_SUCCESS	on success
- * @retval  MAP_KEY_DUPLICATE_ERROR	if key allread present in the map
- * @retval  MAP_KEY_NULL_ERROR
- * @retval  MAP_ALLOCATION_ERROR on failure to allocate key-value pair
- * @retval  MAP_UNINITIALIZED_ERROR
+ * @retval  Bucket_SUCCESS	on success
+ * @retval  Bucket_KEY_DUPLICATE_ERROR	if key allread present in the Bucket
+ * @retval  Bucket_KEY_NULL_ERROR
+ * @retval  Bucket_ALLOCATION_ERROR on failure to allocate key-value pair
+ * @retval  Bucket_UNINITIALIZED_ERROR
  * 
  * @warning key must be unique and destinct
  */
-Map_Result Bucket_Insert(Bucket_t**  _bucket, const void* _key, const void* _value, EqualityFunction1 _keysEqualFunc)
+Bucket_Result Bucket_Insert(Bucket_t**  _bucket, const void* _key, const void* _value, EqualityFunction1 _keysEqualFunc)
 {
 	pair *data,*checkData;
 	ListItr begin, end;
@@ -131,13 +130,13 @@ Map_Result Bucket_Insert(Bucket_t**  _bucket, const void* _key, const void* _val
 	{
 		if(!(*_bucket = Bucket_Create(_keysEqualFunc)))
 		{
-			return MAP_ALLOCATION_ERROR;
+			return Bucket_ALLOCATION_ERROR;
 		}
 	}
 
 	if(!(data = (pair*)malloc(sizeof(pair))))
 	{
-		return MAP_ALLOCATION_ERROR;
+		return Bucket_ALLOCATION_ERROR;
 	}
 	data->m_key = (void*)_key;
 	data->m_data =(void*)_value;
@@ -151,30 +150,30 @@ Map_Result Bucket_Insert(Bucket_t**  _bucket, const void* _key, const void* _val
 		if(_keysEqualFunc(checkData->m_key,data->m_key))
 		{
 			free(data);
-			return MAP_KEY_DUPLICATE_ERROR;
+			return Bucket_KEY_DUPLICATE_ERROR;
 		}
 	}
 	if((List_PushTail((*_bucket)->m_list,(void*)data)))
 	{
 		free(data);
-		return MAP_ALLOCATION_ERROR;
+		return Bucket_ALLOCATION_ERROR;
 	}
-	return MAP_SUCCESS;
+	return Bucket_SUCCESS;
 }
 
 /**
- * @brief Remove a key-value pair from the hash map
+ * @brief Remove a key-value pair from the hash Bucket
  * and return value to _pValue
  * 
  */
-Map_Result Bucket_Remove(Bucket_t* _bucket, const void* _searchKey, void** _pValue)
+Bucket_Result Bucket_Remove(Bucket_t* _bucket, const void* _searchKey, void** _pValue)
 {
 	pair *checkData;
 	ListItr begin, end;
 
 	if(IS_INVALID(_bucket))
 	{
-		return MAP_KEY_NOT_FOUND_ERROR;
+		return Bucket_KEY_NOT_FOUND_ERROR;
 	}
 	
 	begin = ListItr_Begin(_bucket->m_list);
@@ -188,10 +187,10 @@ Map_Result Bucket_Remove(Bucket_t* _bucket, const void* _searchKey, void** _pVal
 			checkData = (pair*)ListItr_Remove(begin);
 			*_pValue = checkData->m_data;
 			free(checkData);
-			return MAP_SUCCESS;
+			return Bucket_SUCCESS;
 		}
 	}
-	return MAP_KEY_NOT_FOUND_ERROR;
+	return Bucket_KEY_NOT_FOUND_ERROR;
 }
 
 void* Bucket_Get_First_Key(Bucket_t* _bucket)
@@ -223,14 +222,14 @@ size_t Bucket_Size(Bucket_t* _bucket)
  * @brief Find a value by key
  * 
  */
-Map_Result Bucket_Find(const Bucket_t* _bucket, const void* _key, void** _pValue)
+Bucket_Result Bucket_Find(const Bucket_t* _bucket, const void* _key, void** _pValue)
 {
 	pair  *checkData;
 	ListItr begin, end;
 
 	if(IS_INVALID(_bucket)|| !_pValue)
 	{
-		return MAP_KEY_NOT_FOUND_ERROR;
+		return Bucket_KEY_NOT_FOUND_ERROR;
 	}
 	begin = ListItr_Begin(_bucket->m_list);
 	end = ListItr_End(_bucket->m_list);
@@ -240,17 +239,17 @@ Map_Result Bucket_Find(const Bucket_t* _bucket, const void* _key, void** _pValue
 		if(_bucket->m_keysEqualFunc(checkData->m_key,(void*)_key))
 		{
 			*_pValue = checkData->m_data;
-			return MAP_SUCCESS;
+			return Bucket_SUCCESS;
 		}
 	}
-	return MAP_KEY_NOT_FOUND_ERROR;
+	return Bucket_KEY_NOT_FOUND_ERROR;
 }
 
 /**
  * @brief do  KeyValueActionFunction on each item
  * 
  */
-size_t Bucket_ForEach(const Bucket_t* _bucket, KeyValueActionFunction _action, void* _context)
+size_t Bucket_ForEach(const Bucket_t* _bucket, KeyValueActionFunction1 _action, void* _context)
 {
 	ListItr begin, end,cur;
 	pair* dataHolder;
@@ -280,15 +279,20 @@ size_t Bucket_ForEach(const Bucket_t* _bucket, KeyValueActionFunction _action, v
 /**
  * insert if not exist else update
 */
-Map_Result Bucket_Upsert(Bucket_t**  _bucket, const void* _key,void* _value, EqualityFunction1 _keysEqualFunc,UpdateFunction _action)
+int Bucket_Upsert(Bucket_t**  _bucket, const void* _key,void* _value, EqualityFunction1 _keysEqualFunc,UpdateFunction1 _action)
 {
 	void* rtVal = NULL;
 
-
-	if(IS_INVALID(*_bucket)|| !_action || (Bucket_Remove(*_bucket,_key,&rtVal)))
+	if(IS_INVALID(*_bucket)|| !_action)
 	{
-		return (Bucket_Insert(_bucket,_key,_value,_keysEqualFunc));
+		return -1;
 	}
-	return Bucket_Insert(_bucket,_key,_action(_value,rtVal),_keysEqualFunc);
+	if((Bucket_Remove(*_bucket,_key,&rtVal)))
+	{
+		Bucket_Insert(_bucket,_key,_value,_keysEqualFunc);
+		return 1;
+	}
+	Bucket_Insert(_bucket,_key,_action(_value,rtVal),_keysEqualFunc);
+	return 0; 
 }
 

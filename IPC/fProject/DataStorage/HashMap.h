@@ -35,6 +35,8 @@ typedef size_t (*HashFunction)(const void* _key);
 typedef int (*EqualityFunction)(void* _firstKey, void* _secondKey);
 typedef int	(*KeyValueActionFunction)(const void* _key, void* _value, void* _context);
 typedef void (*Destroy)(void* _item);
+typedef void* (*UpdateFunction)(void *_firstItem, void *_secondItem);/**for upsert */
+
 
 
 /** 
@@ -84,6 +86,11 @@ Map_Result HashMap_Rehash(HashMap *_map, size_t newCapacity);
  */
 Map_Result HashMap_Insert(HashMap* _map, void* _key, void* _value);
 
+/**
+ * @brief insert if not exist else update
+ * 
+ */
+Map_Result HashMap_Upsert(HashMap* _map, void* _key, void* _value,UpdateFunction _update);
 
 /** 
  * @brief Remove a key-value pair from the hash map.

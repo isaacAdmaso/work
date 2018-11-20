@@ -32,12 +32,13 @@ int main()
     msq_t msq;
 
 
-    msq = Msq_CrInit(MSGQUE_NAME_DEFAULT,PERMIS);
+    msq = Msq_CrInit(MSGQUE_NAME_DEFAULT,0);
     sendSize = Cdr_Size();
     handle = malloc(sendSize);
 
     Msq_Receive(msq,MSG_TYPE_READ,handle,sendSize);
     Print_Cdr(handle);
+    printf("\n%ld,%d\n",Msq_Nmsgs(msq),msq);
 
     return 0;
 }

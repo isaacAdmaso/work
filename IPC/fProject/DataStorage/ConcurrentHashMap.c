@@ -44,6 +44,7 @@ static size_t HashMutexIdx(HashMap* _map,size_t _idx);
 
 
 
+
 /** 
  * @brief Create a new hash map with given capcity and key characteristics.
  * @param[in] _capacity - Expected max capacity 
@@ -183,6 +184,42 @@ Map_Result HashMap_Insert(HashMap* _map, void* _key, void* _value)
 	return error;
 }
 
+/**
+ * insert if not exist else update
+*/
+Map_Result HashMap_Upsert(HashMap* _map, void* _key, void* _value,UpdateFunction _update)
+{
+	size_t idx;
+	int error;
+	size_t mutexIdx;
+	Lock_t* mutexPtr;
+
+	if(IS_INVALID(_map))
+	{
+		return MAP_UNINITIALIZED_ERROR;
+	}
+	
+	if(!_key)
+	{
+		return MAP_KEY_NULL_ERROR;
+	}
+	
+	idx = HashIdx(_map,_key);
+	mutexIdx = HashMutexIdx(_map,idx);
+	mutexPtr = &(_map->m_myMutexPool[mutexIdx]);
+	pthread_mutex_lock(&(mutexPtr->m_lock));
+
+	
+	error = Bucket_Upsert(&(_map->m_items[idx]),_key,_value,_map->m_keysEqualFunc,_update);
+	if(error == 1)
+	{
+		++_map->m_noItems;
+	}
+	pthread_mutex_unlock(&(mutexPtr->m_lock));
+
+	return error;
+}
+
 /** 
  * @brief Remove a key-value pair from the hash map.
  * @param[in] _map - Hash map to remove pair from, must be initialized
@@ -297,10 +334,10 @@ static Map_Result ReHashLoop(HashMap *_map,Bucket_t** _oldHash,size_t _hashOldSi
 			{
 				key = Bucket_Get_First_Key(_oldHash[i]);/**->TODO GET_FIRST_PAIR(*bucket,*_key,*_data)*/
 				assert(key);
-				assert(Bucket_Remove(_oldHash[i],key,&dataHolder) == MAP_SUCCESS);
+				assert(Bucket_Remove(_oldHash[i],key,&dataHolder) == Bucket_SUCCESS);
 				assert(dataHolder);
 				newBucketidx = HashIdx(_map,key);
-				assert(Bucket_Insert(&(_map->m_items[newBucketidx]),key,dataHolder,_map->m_keysEqualFunc) == MAP_SUCCESS);
+				assert(Bucket_Insert(&(_map->m_items[newBucketidx]),key,dataHolder,_map->m_keysEqualFunc) == Bucket_SUCCESS);
 			}
 			Bucket_Destroy(_oldHash[i],NULL,NULL);
 		}

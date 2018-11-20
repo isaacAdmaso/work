@@ -55,7 +55,7 @@ int main()
 
 
 
-    msq = Msq_CrInit(MSGQUE_NAME_DEFAULT,C_PERMIS);
+    msq = Msq_CrInit(MSGQUE_NAME_DEFAULT,1);
 /*
     Msq_Register(msq,MSG_TYPE_REGISTRAR);
     Zlog_Init("Confile.txt");
@@ -103,6 +103,8 @@ int main()
     Zlog_Destroy();
     dlclose(handle);
     */
+    printf("\n%ld,%d\n",Msq_Nmsgs(msq),msq);
+
     fclose(inFp);
     fclose(outFp);
     return 0;
