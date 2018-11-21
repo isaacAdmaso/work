@@ -10,6 +10,11 @@
 #ifndef __PARSER_H__
 #define __PARSER_H__
 
+#define STR_CDR_ORDER    "IiMmCTDdlpc"
+#define FORMATE_CDR_SZ        12
+
+
+
 void* Parser1(char* _lineCDR);
 
 

@@ -10,8 +10,12 @@
 #ifndef __CDR_H__
 #define __CDR_H__
 #include <stddef.h>
-
-
+/**call Type convention */
+#define MOC         "MOC"
+#define MTC         "MTC"
+#define SMSMO       "SMS-MO"
+#define SMSMT      "SMS-MT"
+#define GPRS        "GPRS"
 
 /**
  * @brief Create ,and return struct CDR ptr   

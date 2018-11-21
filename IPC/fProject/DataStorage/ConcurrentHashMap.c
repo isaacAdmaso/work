@@ -1,7 +1,7 @@
 #ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE 500
 #endif
-#include "HashMap.h"
+#include "HashMapC.h"
 #include "bucket.h"
 #include <stdlib.h>
 #include <pthread.h>

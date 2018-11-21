@@ -11,17 +11,15 @@
 #include "Parser.h"
 #include <string.h>
 
-#define STR_CDR_ORDER    "IiMmCTDdlpc"
 #define FORMATETKN       "|"
-#define FORMATESZ        12
 
 
 void* Parser1(char* _lineCDR)
 {
     void* cdr = NULL;
-    char *field;
+    void *field;
     int i = 0;
-    char inputOrder[FORMATESZ] = STR_CDR_ORDER;
+    char inputOrder[FORMATE_CDR_SZ] = STR_CDR_ORDER;
     const char s[2] = FORMATETKN;
 
     if(!(cdr = Cdr_Create()))

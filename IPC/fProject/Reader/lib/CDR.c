@@ -24,8 +24,8 @@
 
 typedef struct Cdr_t
 {
-    char    m_IMEI[MAX_NAME_SIZE];
-    char    m_IMSI[MAX_ID_SIZE];
+    char    m_OPB[MAX_NAME_SIZE];
+    char    m_2OPB[MAX_NAME_SIZE];
     char    m_MSISDN[MAX_ID_SIZE];
     char    m_otherMSISDN[MAX_ID_SIZE];
     char    m_MCC[MNC_SIZE];
@@ -99,10 +99,10 @@ int Cdr_Set(void* _cdr,char _fieldToUpdate,void* _value)
     switch (_fieldToUpdate)
     {
         case 'I':
-            strcpy(cdr->m_IMEI,(char*)_value);
+            strcpy(cdr->m_OPB,(char*)_value);
             break;
         case 'i':
-            strcpy(cdr->m_IMSI,(char*)_value);
+            strcpy(cdr->m_2OPB,(char*)_value);
             break;
         case 'M':
             strcpy(cdr->m_MSISDN,(char*)_value);
@@ -161,16 +161,16 @@ int Cdr_Get(void* _cdr,char _fieldToUpdate,void** _value)
     switch (_fieldToUpdate)
     {
         case 'I':
-            *(char**)_value  = cdr->m_IMEI;
+            *(char**)_value  = cdr->m_OPB; /**op id */
             break;
         case 'i':
-            *(char**)_value =cdr->m_IMSI;
+            *(char**)_value =cdr->m_2OPB;/**other op id */
             break;
         case 'M':
-            *(char**)_value = cdr->m_MSISDN;
+            *(char**)_value = cdr->m_MSISDN;/**my id  */
             break;
         case 'm':
-            *(char**)_value = cdr->m_otherMSISDN;
+            *(char**)_value = cdr->m_otherMSISDN;/**other id */
             break;
         case 'C':
             *(char**)_value = cdr->m_MCC;
@@ -182,13 +182,13 @@ int Cdr_Get(void* _cdr,char _fieldToUpdate,void** _value)
             *(char**)_value = cdr->m_DATE;
             break;
         case 'd':
-            *(size_t*)_value = cdr->m_Duration;
+            *(size_t**)_value = &(cdr->m_Duration);
             break;
         case 'l':
-            *(size_t*)_value = cdr->m_DOWNLOAD;
+            *(size_t**)_value = &(cdr->m_DOWNLOAD);
             break;
         case 'p':
-            *(size_t*)_value = (cdr->m_UPLOAD);
+            *(size_t**)_value = &(cdr->m_UPLOAD);
             break;
         case 'c':
             *(char**)_value = cdr->m_otherMCC;
@@ -198,12 +198,13 @@ int Cdr_Get(void* _cdr,char _fieldToUpdate,void** _value)
 }
 
 
+/**for debug */
 void Print_Cdr(void* _cdr)
 {
     Cdr_t* cdr = (Cdr_t*)_cdr;
 
-    printf("\n%s\n",cdr->m_IMEI);
-    printf("\n%s\n",cdr->m_IMSI);
+    printf("\n%s\n",cdr->m_OPB);
+    printf("\n%s\n",cdr->m_2OPB);
     printf("\n%s\n",cdr->m_MSISDN);
     printf("\n%s\n",cdr->m_otherMSISDN);
     printf("\n%s\n",cdr->m_MCC);
@@ -214,6 +215,7 @@ void Print_Cdr(void* _cdr)
     printf("\n%ld\n",cdr->m_UPLOAD);
     printf("\n%s\n",cdr->m_otherMCC);
 }
+
 size_t Cdr_Size()
 {
     return sizeof(Cdr_t);
