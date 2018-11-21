@@ -84,7 +84,7 @@ int Manager_Upsert(Manager_t* _manager,void* _cdr)
 {
     void *sobj1 = NULL,*sobj2 = NULL,*cdr = NULL;
     char *_key1,*_key2;
-    int delSobj2 = 0;
+    int delSobj2 = 0,delSobj1 = 1;
     
     if(IS_INVALID(_manager))
         return 0;
@@ -110,19 +110,25 @@ int Manager_Upsert(Manager_t* _manager,void* _cdr)
         Sobj_Destroy(sobj2);
         return 0;
     }
-
-    if(delSobj2)
+    else if(1 == delSobj2)
     {
         Sobj_Destroy(sobj2);
     }
     else
     {
         Sobj_Get(sobj2,'m',(void**)&_key2);
-        HashMap_Upsert(_manager->m_subDS.m_hashMap,_key2,sobj2,SuUpdateFunction);
+        delSobj2 = HashMap_Upsert(_manager->m_subDS.m_hashMap,_key2,sobj2,SuUpdateFunction);
+        if(!delSobj2)
+        {
+            Sobj_Destroy(sobj2);
+        }
     }
     Sobj_Get(sobj1,'m',(void**)&_key1);
-    HashMap_Upsert(_manager->m_subDS.m_hashMap,_key1,sobj1,SuUpdateFunction);
-    
+    delSobj1 = HashMap_Upsert(_manager->m_subDS.m_hashMap,_key1,sobj1,SuUpdateFunction);
+    if(!delSobj1)
+    {
+        Sobj_Destroy(sobj1);
+    }
     return 1; 
 }
 
@@ -224,3 +230,10 @@ static int CdrtoSobj(void* _cdr, void* _sobj1, void* _sobj2)
     Sobj_Set(_sobj2,sobj2Update,upAmount); 
     return 0;
 }    
+
+
+void Manager_Print(Manager_t* _manager)
+{
+    HashMap_ForEach((_manager->m_subDS.m_hashMap),Print_Sobj,NULL);
+}
+int (*KeyValueActionFunction1)(const void *_key, void *_value, void *_context);

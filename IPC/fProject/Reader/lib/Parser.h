@@ -10,7 +10,7 @@
 #ifndef __PARSER_H__
 #define __PARSER_H__
 
-#define STR_CDR_ORDER    "IiMmCTDdlpc"
+#define STR_CDR_ORDER    "TIiMmCDdlpc"
 #define FORMATE_CDR_SZ        12
 
 

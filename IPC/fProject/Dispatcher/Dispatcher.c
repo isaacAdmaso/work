@@ -24,9 +24,6 @@
 
 
 
-/*
-int Reader(char *_inFp ,msq_t _msq)
-*/
 int main()
 {
     void *handle;
@@ -38,23 +35,14 @@ int main()
     msq = Msq_CrInit(MSGQUE_NAME_DEFAULT,0);
     sendSize = Cdr_Size();
     handle = malloc(sendSize);
-
-    assert((manager = Manager_Create()));
+    manager = Manager_Create();
+    assert(manager);
     
     Msq_Receive(msq,MSG_TYPE_READ,handle,sendSize);
     Manager_Upsert(manager,handle);
+    Manager_Print(manager);
+
 
 
     return 0;
 }
-
-/*debug
-    char *strField;
-    size_t szField;
-
-    Print_Cdr(handle);
-    Cdr_Get(handle,'I',(void**)&strField);
-    Cdr_Get(handle,'d',(void**)&szField);
-    printf("\n%s | %ld\n",strField,szField);
-    printf("\n%ld,%d\n",Msq_Nmsgs(msq),msq);
-*/

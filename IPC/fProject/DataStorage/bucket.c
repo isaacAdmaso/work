@@ -267,7 +267,7 @@ size_t Bucket_ForEach(const Bucket_t* _bucket, KeyValueActionFunction1 _action, 
 		cur = begin;
 		begin = ListItr_Next(begin);
 		dataHolder = (pair*)ListItr_Get(cur);
-		if(!(_action(dataHolder->m_key,dataHolder->m_data,_context)))
+		if(!(_action(dataHolder->m_key, dataHolder->m_data, _context)))
 		{
 			break;
 		}
@@ -283,11 +283,7 @@ int Bucket_Upsert(Bucket_t**  _bucket, const void* _key,void* _value, EqualityFu
 {
 	void* rtVal = NULL;
 
-	if(IS_INVALID(*_bucket)|| !_action)
-	{
-		return -1;
-	}
-	if((Bucket_Remove(*_bucket,_key,&rtVal)))
+	if(IS_INVALID(*_bucket)|| !_action || (Bucket_Remove(*_bucket,_key,&rtVal)))
 	{
 		Bucket_Insert(_bucket,_key,_value,_keysEqualFunc);
 		return 1;

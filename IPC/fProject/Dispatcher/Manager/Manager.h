@@ -34,7 +34,8 @@ void Manager_Destroy(Manager_t* _manager);
 int Manager_Upsert(Manager_t* _manager,void* _cdr);
 
 
-
+/**for debug */
+void Manager_Print(Manager_t* _manager);
 
 
 #endif /*__MANAGER_H__*/

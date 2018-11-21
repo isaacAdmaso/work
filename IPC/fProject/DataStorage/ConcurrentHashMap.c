@@ -211,7 +211,7 @@ Map_Result HashMap_Upsert(HashMap* _map, void* _key, void* _value,UpdateFunction
 
 	
 	error = Bucket_Upsert(&(_map->m_items[idx]),_key,_value,_map->m_keysEqualFunc,_update);
-	if(error == 1)
+	if(error)
 	{
 		++_map->m_noItems;
 	}

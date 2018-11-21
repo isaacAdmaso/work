@@ -203,16 +203,16 @@ void Print_Cdr(void* _cdr)
 {
     Cdr_t* cdr = (Cdr_t*)_cdr;
 
-    printf("\n%s\n",cdr->m_OPB);
-    printf("\n%s\n",cdr->m_2OPB);
-    printf("\n%s\n",cdr->m_MSISDN);
-    printf("\n%s\n",cdr->m_otherMSISDN);
-    printf("\n%s\n",cdr->m_MCC);
-    printf("\n%s\n",cdr->m_CallType);
-    printf("\n%s\n",cdr->m_DATE);
-    printf("\n%ld\n",cdr->m_Duration);
     printf("\n%ld\n",cdr->m_DOWNLOAD);
     printf("\n%ld\n",cdr->m_UPLOAD);
+    printf("\n%s\n",cdr->m_MSISDN);
+    printf("\n%s\n",cdr->m_OPB);
+    printf("\n%s\n",cdr->m_CallType);
+    printf("\n%s\n",cdr->m_2OPB);
+    printf("\n%s\n",cdr->m_otherMSISDN);
+    printf("\n%s\n",cdr->m_MCC);
+    printf("\n%s\n",cdr->m_DATE);
+    printf("\n%ld\n",cdr->m_Duration);
     printf("\n%s\n",cdr->m_otherMCC);
 }
 

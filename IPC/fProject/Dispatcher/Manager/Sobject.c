@@ -249,14 +249,17 @@ void* SuUpdateFunction(void *_firstItem, void *_secondItem)
     sub1->m_Download                +=  sub2->m_Download;            
     sub1->m_Upload                  +=  sub2->m_Upload;
 
-    return (void*)_firstItem;
+    return (void*)_secondItem;
 }
 
 /**for debug */
-void Print_Sobj(void* _sobj)
+int Print_Sobj(const void* _key,void* _sobj,void* _contex)
 {
     Sobj_t* subscriber = (Sobj_t*)_sobj;
 
+    printf("\n%ld\n", subscriber->m_Download);
+    printf("\n%ld\n", subscriber->m_Upload);
+    printf("\n%s\n",  subscriber->m_MSISDN);
     printf("\n%s\n",  subscriber->m_OpId);
     printf("\n%ld\n", subscriber->m_MyOp.m_OutDuration);
     printf("\n%ld\n", subscriber->m_MyOp.m_InDuration);
@@ -266,8 +269,7 @@ void Print_Sobj(void* _sobj)
     printf("\n%ld\n", subscriber->m_OtherOp.m_InDuration);
     printf("\n%ld\n", subscriber->m_OtherOp.m_OutSMS);
     printf("\n%ld\n", subscriber->m_OtherOp.m_InSMS);
-    printf("\n%ld\n", subscriber->m_Download);
-    printf("\n%ld\n", subscriber->m_Upload);
+    return 1;
 }
 
 void Destroy_Key(void* _key)

@@ -78,7 +78,8 @@ void* SuUpdateFunction(void *_firstItem, void *_secondItem);
 
 
 /**for debug */
-void Print_Sobj(void* _sobj);
+int Print_Sobj(const void* _key,void* _sobj,void* _contex);
+
 void Destroy_Key(void* _key);
 
 
