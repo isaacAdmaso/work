@@ -41,7 +41,7 @@ int main()
     Msq_Receive(msq,MSG_TYPE_READ,handle,sendSize);
     Manager_Upsert(manager,handle);
     Manager_Print(manager);
-
+    printf("\nend of line\n");
 
 
     return 0;

@@ -25,14 +25,15 @@
 
 
 
-/**argv[0] is input file path,
+/**
 #define MODULE "MODULE"
 #define INPUTFNAME "./file.txt"
+ * argv[0] is input file path,
  * argv[1] output path Dir,
  * argv[2] parser dynemic lib,
  * argv[3] parser function name
- * argv[4] is message queue id
- * argv[5] is size of struct after parse
+ * argv[4]  message queue id
+ * argv[5]  size of struct after parse
  * 
  */
 
@@ -88,16 +89,17 @@ int main()
 	{
         
         fgets(lineCDR,MAX,inFp);
+		if(feof(inFp))
+		{
+			break;
+		}
         handle = Parser1(lineCDR);
         Print_Cdr(handle);
         Msq_Send(msq,MSG_TYPE_READ,handle,sendSize);
         sprintf(placeSave,"%p |%d\n",(void*)inFp,(int)ftell(inFp));
         fputs(placeSave,outFp);
+        lineCDR[0] = '\0';
         
-		if(feof(inFp))
-		{
-			break;
-		}
     }
     /*
     Zlog_Destroy();

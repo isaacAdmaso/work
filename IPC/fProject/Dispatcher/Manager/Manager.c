@@ -100,7 +100,6 @@ int Manager_Upsert(Manager_t* _manager,void* _cdr)
         return 0;
     }
     
-
     memcpy(cdr,_cdr,Cdr_Size());
 
     if(-1 == (delSobj2 = CdrtoSobj(cdr,sobj1,sobj2)))
