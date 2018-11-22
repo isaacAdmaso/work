@@ -15,76 +15,55 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include "MyMsq.h"
-#include "test.h"
+#include "Trigger.h"
 #include "Reader.h"
 #include "Parser.h"
 
-#define OUTPUT "./log.txt"
-#define INFILE "./file.txt"
-#define MAX 1024
+#define MAX_LINE        1024
+#define MAX_FNAME       256
+#define MAX_LOGG        256
+#define INFILE      "./file.txt"
+#define OUTPUT      "/log.txt"
+
 
 
 
 /**
-#define MODULE "MODULE"
-#define INPUTFNAME "./file.txt"
- * argv[0] is input file path,
- * argv[1] output path Dir,
- * argv[2] parser dynemic lib,
- * argv[3] parser function name
- * argv[4]  message queue id
- * argv[5]  size of struct after parse
+ * argv[0]  message queue id
+ * argv[1] = INFILE is input file path,
+ * argv[2] = OUTPUT output path Dir,
+ * argv[3]  size of struct after parse
+ * argv[4] parser dynemic lib,
+ * argv[5] parser function name
  * 
  */
-
-/*
-int Reader(char *_inFp ,msq_t _msq)
-*/
-int main()
+int main(int argc, char *argv[])
 {
     FILE *inFp,*outFp;
-    char lineCDR[MAX];
-    char placeSave[MAX];
+    char lineCDR[MAX_LINE];
+    char placeSave[MAX_LOGG];
     void *handle;
-/*
-    ,*parsRt;
-    PtrFunc Parser_Func;
- */
     size_t sendSize;
     msq_t msq;
+    sleep(10);
+    inFp  = fopen(argv[1],"r");
+    outFp = fopen(argv[2],"w");
+    
+    if(-1 == (msq = Msq_CrInit(argv[0],0)))
+    {
+        perror("\nfailed to conect MSQ\n");
+        exit(-1);
+    }
 
-
-
-
-    msq = Msq_CrInit(MSGQUE_NAME_DEFAULT,1);
-/*
-    Msq_Register(msq,MSG_TYPE_REGISTRAR);
-    Zlog_Init("Confile.txt");
-    char outputPath[MAX];
-    snprintf(outputPath,MAX,"%s",OUTPUT);
-    ZLOG("last",LOG_TRACE,"hope will work");
-*/
-    inFp  = fopen(INFILE,"r");
-    outFp = fopen(OUTPUT,"w");
 
     if(!inFp || !outFp)
     {
-  /*
-        ZLOG("last",LOG_TRACE,"hope will work");
-    */
         perror("\nfailed to open File\n");
         exit(-1);
     }
-    /**TODO check open 
-     *
-        handle = dlopen(argv[3], RTLD_LAZY);
-        Parser_Func = (PtrFunc) dlsym(handle, PFUNC);
-    sendSize = (size_t)atoi(SIZE_ST);
-    */
+    
     sendSize = Cdr_Size();
-/*
-    ZLOG("last",LOG_TRACE,"hope will work");
-  */
+
     while(!feof(inFp))
 	{
         
@@ -96,18 +75,46 @@ int main()
         handle = Parser1(lineCDR);
         Print_Cdr(handle);
         Msq_Send(msq,MSG_TYPE_READ,handle,sendSize);
-        sprintf(placeSave,"%p |%d\n",(void*)inFp,(int)ftell(inFp));
+        sprintf(placeSave,"%s|%ld\n",argv[1],(unsigned long)ftell(inFp));
         fputs(placeSave,outFp);
-        lineCDR[0] = '\0';
         
     }
-    /*
+    
+    fclose(inFp);
+    fclose(outFp);
+    return -1;
+}
+
+/*
+#define MODULE "MODULE"
+#define INPUTFNAME "./file.txt"
+int Reader(char *_inFp ,msq_t _msq)
+*/
+/*
+    ,*parsRt;
+    PtrFunc Parser_Func;
+ */
+/*
+    Msq_Register(msq,MSG_TYPE_REGISTRAR);
+    Zlog_Init("Confile.txt");
+    char outputPath[MAX];
+    snprintf(outputPath,MAX,"%s",OUTPUT);
+    ZLOG("last",LOG_TRACE,"hope will work");
+*/
+
+/*
+        ZLOG("last",LOG_TRACE,"hope will work");
+    */
+   /**TODO check open 
+     *
+        handle = dlopen(argv[3], RTLD_LAZY);
+        Parser_Func = (PtrFunc) dlsym(handle, PFUNC);
+    sendSize = (size_t)atoi(SIZE_ST);
+    */
+   /*
+    ZLOG("last",LOG_TRACE,"hope will work");
+  */
+ /*
     Zlog_Destroy();
     dlclose(handle);
     */
-    printf("\n%ld,%d\n",Msq_Nmsgs(msq),msq);
-
-    fclose(inFp);
-    fclose(outFp);
-    return 0;
-}
