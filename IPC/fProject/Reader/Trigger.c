@@ -12,10 +12,10 @@
 
 
 
-#define OUTPUT      "/./log.txt"
-#define INFILE      "/./file.txt"
-#define DIRPATH     "/./"
-#define EXECUTABLE  "/./Reader.out"
+#define OUTPUT      "./log.txt"
+#define INFILE      "./file.txt"
+#define DIRPATH     "./"
+#define EXECUTABLE  "./Reader.out"
 #define BUFF        16
 #define SIZE        4
 
@@ -24,7 +24,8 @@
 
 /**
 static void TriggerRun(char readerInput[SIZE][MAX],char *executable, char newenviron[][1]);
- * argv[0]  message queue id
+ * argv[0]  executabe
+ * argv[1]  message queue id
  * argv[1]  input file path,
  * argv[2]  output path Dir,
  * argv[3]  size of struct after parse
@@ -36,9 +37,10 @@ static void TriggerRun(char readerInput[SIZE][MAX],char *executable, char newenv
 
 int main()
 {
-    char *newargv[] = { MSGQUE_NAME_DEFAULT, INFILE, DIRPATH, NULL };
+    char *newargv[] = { EXECUTABLE, INFILE, OUTPUT, MSGQUE_NAME_DEFAULT,NULL };
     char *newenviron[] = { NULL };
     msq_t msq;
+    int n;
 
     msq = Msq_CrInit(MSGQUE_NAME_DEFAULT,1);
     if(msq == -1)
@@ -48,8 +50,17 @@ int main()
     }
     printf("\nin trigget\n");
     fflush(stdout);
-
-    execve(EXECUTABLE, newargv, newenviron);
+    n = fork();
+    if(n < 0)
+    {
+        perror("\nERROR fork()\n");
+    }
+    if (n == 0)
+    {
+        execve(EXECUTABLE, newargv, newenviron);
+        perror("execve"); /* execve() only returns on error */
+        exit(EXIT_FAILURE);
+    }
     return 0;
 
 }

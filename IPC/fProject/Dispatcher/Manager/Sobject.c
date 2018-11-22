@@ -257,10 +257,10 @@ int Print_Sobj(const void* _key,void* _sobj,void* _contex)
 {
     Sobj_t* subscriber = (Sobj_t*)_sobj;
 
-    printf("\n%ld\n", subscriber->m_Download);
-    printf("\n%ld\n", subscriber->m_Upload);
     printf("\n%s\n",  subscriber->m_MSISDN);
     printf("\n%s\n",  subscriber->m_OpId);
+    printf("\n%ld\n", subscriber->m_Download);
+    printf("\n%ld\n", subscriber->m_Upload);
     printf("\n%ld\n", subscriber->m_MyOp.m_OutDuration);
     printf("\n%ld\n", subscriber->m_MyOp.m_InDuration);
     printf("\n%ld\n", subscriber->m_MyOp.m_OutSMS);

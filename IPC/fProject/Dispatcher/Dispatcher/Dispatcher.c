@@ -17,8 +17,8 @@
 #include "MyMsq.h"
 #include "test.h"
 #include "Manager.h"
+#define MSGQUE_NAME_DEFAULT1       "../../"
 
-#define MAXTST 64
 
 
 
@@ -32,7 +32,10 @@ int main()
     Manager_t* manager;
 
     
-    msq = Msq_CrInit(MSGQUE_NAME_DEFAULT,0);
+    if(-1 ==(msq = Msq_CrInit(MSGQUE_NAME_DEFAULT1,0)))
+    {
+        return 1;
+    }
     sendSize = Cdr_Size();
     handle = malloc(sendSize);
     manager = Manager_Create();

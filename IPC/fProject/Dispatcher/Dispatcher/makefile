@@ -13,22 +13,22 @@ CFLAGS = -ansi -pedantic -Wall -Werror -g
 LDFLAGS = -g -pthread -D_XOPEN_SOURCE = 500
 
 # Include directory
-INC_DIR  = ../MsqM
-INC_DIR1 = ../
-INC_DIR2 = ../Reader/lib
-INC_DIR3 = ../DataStorage
-INC_DIR4 = ./Manager
-INC_DIR5 = ../../../include
-LIB_PATH = ../../../lib
+INC_DIR  = ../../MsqM
+INC_DIR1 = ../../
+INC_DIR2 = ../../Reader/lib
+INC_DIR3 = ../../DataStorage
+INC_DIR4 = ../Manager
+INC_DIR5 = ../../../../include
+LIB_PATH = ../../../../lib
 CFLAGS += -I$(INC_DIR) -I$(INC_DIR1) -I$(INC_DIR2)
 CFLAGS += -I$(INC_DIR3) -I$(INC_DIR4)
 CFLAGS += -I$(INC_DIR5)
 
 
 # All .c files in this directory are my sources
-SOURCES  = ../Reader/lib/CDR.c 		../MsqM/MyMsq.c Dispatcher.c 
-SOURCES += ../DataStorage/bucket.c 	../DataStorage/ConcurrentHashMap.c
-SOURCES += ./Manager/Manager.c  	./Manager/Sobject.c
+SOURCES  = ../../Reader/lib/CDR.c 		../../MsqM/MyMsq.c Dispatcher.c 
+SOURCES += ../../DataStorage/bucket.c 	../../DataStorage/ConcurrentHashMap.c
+SOURCES += ../Manager/Manager.c  	../Manager/Sobject.c
 #LIB_SRC = HashMap.c
 # All .o files in this directory are my objects
 OBJECTS = $(SOURCES:.c=.o)
@@ -57,10 +57,10 @@ depends:
 
 clean:
 	-rm $(TARGET) *.o depends 
-	find . -type f -name '*.o' -delete
-	find . -type f -name '*.out' -delete
-	find . -type f -name 'depends' -delete
-	find . -type f -name 'log.txt' -delete
+	find ../ -type f -name '*.o' -delete
+	find ../ -type f -name '*.out' -delete
+	find ../ -type f -name 'depends' -delete
+	find ../ -type f -name 'log.txt' -delete
 run:  $(TARGET)
 	 ./$(TARGET)
 

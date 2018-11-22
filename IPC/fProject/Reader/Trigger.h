@@ -12,7 +12,7 @@
 
 #include "CDR.h"/**for printing and debug*/
 
-#define MSGQUE_NAME_DEFAULT       "../"
+#define MSGQUE_NAME_DEFAULT       "../../"
 #define MSGQUE_REGISTRAR	      "REGISTRAR"
 #define MSG_TYPE_READ		      5
 #define MSG_TYPE_REGISTRAR	      7

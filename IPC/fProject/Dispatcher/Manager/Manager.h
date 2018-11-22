@@ -10,6 +10,8 @@
  * 
  */
 
+#define MAX_OP_BRAND_SIZE   64
+
 typedef struct Manager_t Manager_t;
 
 

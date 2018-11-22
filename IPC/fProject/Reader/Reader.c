@@ -23,7 +23,7 @@
 #define MAX_FNAME       256
 #define MAX_LOGG        256
 #define INFILE      "./file.txt"
-#define OUTPUT      "/log.txt"
+#define OUTPUT      "./log.txt"
 
 
 
@@ -45,11 +45,11 @@ int main(int argc, char *argv[])
     void *handle;
     size_t sendSize;
     msq_t msq;
-    sleep(10);
+
     inFp  = fopen(argv[1],"r");
     outFp = fopen(argv[2],"w");
     
-    if(-1 == (msq = Msq_CrInit(argv[0],0)))
+    if(-1 == (msq = Msq_CrInit(argv[3],0)))
     {
         perror("\nfailed to conect MSQ\n");
         exit(-1);
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
     
     fclose(inFp);
     fclose(outFp);
-    return -1;
+    exit(EXIT_SUCCESS);
 }
 
 /*
