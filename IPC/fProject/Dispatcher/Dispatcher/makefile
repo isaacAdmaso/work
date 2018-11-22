@@ -36,7 +36,7 @@ OBJECTS = $(SOURCES:.c=.o)
 
 # The default command, compile all the sources
 $(TARGET): $(OBJECTS) 
-	$(CC) $(OBJECTS) -o $(TARGET) -Wl,-rpath=$(LIB_PATH) -L$(LIB_PATH) -lADS -lpthread
+	$(CC) -c $(OBJECTS) -o $(TARGET) -Wl,-rpath=$(LIB_PATH) -L$(LIB_PATH) -lADS -lpthread
 
 #libADS.a: $(LIB_OBJ) #let's link library files into a static library
 #	ar rcs $(LIB_PATH)/libADS.a $(LIB_OBJ)

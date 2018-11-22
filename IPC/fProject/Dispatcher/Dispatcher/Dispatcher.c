@@ -8,44 +8,102 @@
  * @copyright Copyright (c) 2018
  * 
  */
-#include <assert.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+
+#include "Dispatcher.h"
 #include "MyMsq.h"
-#include "test.h"
+#include "CDR.h"/**for  Cdr_Size*/
 #include "Manager.h"
-#define MSGQUE_NAME_DEFAULT1       "../../"
+
+
+#define MAGIC           80734624128
+#define IS_INVALID(D)   ((NULL == (D)) || (D)->m_magic != MAGIC)
 
 
 
 
+struct Dispatcher_t
+{
+    int             m_Msq;
+    Manager_t*      m_SubM;/**TODO Manager_t** */
+    size_t          m_magic;
+};
 
+/**
+ * @brief create dispatcher 
+ * 
+ */
+Dispatcher_t* Dispatcher_Create(char* _msqName)
+{
+    Dispatcher_t* dispatch = NULL;
+    msq_t msq;
 
-int main()
+    msq = Msq_CrInit(_msqName,0);
+    if(msq == -1)
+    {
+        perror("\nMSQ INIT\n");
+        return NULL;
+    }
+    if(!(dispatch = calloc(1,sizeof(Dispatcher_t))))
+    {
+        return NULL;
+    }
+    dispatch->m_Msq = msq;
+    if(!(dispatch->m_SubM = Manager_Create()))
+    {
+        free(dispatch);
+        return NULL;
+    }
+    dispatch->m_magic = MAGIC;
+   
+    return dispatch;
+
+}
+
+/**
+ * @brief  destroy dispatcher
+ * 
+ */
+void Dispatcher_Destroy(Dispatcher_t* _dispatch)
+{
+
+    if(IS_INVALID(_dispatch))
+    {
+        return;
+    }
+    _dispatch->m_magic = 0;
+    Manager_Destroy(_dispatch->m_SubM);
+    free(_dispatch);
+    
+}
+
+/**
+ * @brief dispatch
+ * 
+ */
+void* Dispatcher_Run(void* _dispatch)
 {
     void *handle;
     size_t sendSize;
-    msq_t msq;
-    Manager_t* manager;
+    Dispatcher_t* dispatch = (Dispatcher_t*)_dispatch; 
 
-    
-    if(-1 ==(msq = Msq_CrInit(MSGQUE_NAME_DEFAULT1,0)))
+
+    if(IS_INVALID(dispatch))
     {
-        return 1;
+        return NULL;
     }
+    
     sendSize = Cdr_Size();
     handle = malloc(sendSize);
-    manager = Manager_Create();
-    assert(manager);
     
-    Msq_Receive(msq,MSG_TYPE_READ,handle,sendSize);
-    Manager_Upsert(manager,handle);
-    Manager_Print(manager);
+    Msq_Receive(dispatch->m_Msq,MSG_TYPE_READ,handle,sendSize);
+    Manager_Upsert(dispatch->m_SubM,handle);
+    Manager_Print(dispatch->m_SubM);
     printf("\nend of line\n");
-
-
-    return 0;
+    return (void*)((intptr_t)(1));
 }

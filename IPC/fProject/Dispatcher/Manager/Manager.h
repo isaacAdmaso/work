@@ -9,8 +9,9 @@
  * @copyright Copyright (c) 2018
  * 
  */
-
+#include "HashMapC.h"
 #define MAX_OP_BRAND_SIZE   64
+
 
 typedef struct Manager_t Manager_t;
 

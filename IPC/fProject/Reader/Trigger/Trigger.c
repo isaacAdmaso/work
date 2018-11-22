@@ -1,3 +1,12 @@
+/**
+ * @file Trigger.c
+ * @brief 
+ * @version 0.1
+ * @date 2018-11-22
+ * 
+ * @copyright Copyright (c) 2018
+ * 
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,19 +20,83 @@
 #include "Trigger.h"
 
 
-
-#define OUTPUT      "./log.txt"
-#define INFILE      "./file.txt"
-#define DIRPATH     "./"
-#define EXECUTABLE  "./Reader.out"
-#define BUFF        16
-#define SIZE        4
+#define MAGIC           80746224908
+#define IS_INVALID(T)   ((NULL == (T)) || (T)->m_magic != MAGIC)
 
 
+
+struct Trigger_t
+{
+    char    m_Executabe[MFNSIZE];
+    char    m_InFile[MFNSIZE];
+    char    m_OutFile[MFNSIZE];
+    char    m_MsqName[MFNSIZE];
+    char    m_Nenviron[MFNSIZE]; 
+    size_t  m_magic;  
+};
 
 
 /**
-static void TriggerRun(char readerInput[SIZE][MAX],char *executable, char newenviron[][1]);
+ * @brief create Trigger
+ * 
+ */
+Trigger_t* Trigger_Create(char* _executabe, char* _inFile, char* _outFile, char* _msqName, char* _nEnviron)
+{
+    Trigger_t* trigger = NULL;
+    msq_t msq;
+
+    msq = Msq_CrInit(_msqName,0);
+    if(msq == -1)
+    {
+        perror("\nMSQ INIT\n");
+        return NULL;
+    }
+    if(!(trigger = calloc(1,sizeof(Trigger_t))))
+    {
+        return NULL;
+    }
+    
+    strcpy(trigger->m_Executabe,_executabe);
+    strcpy(trigger->m_InFile,   _inFile);
+    strcpy(trigger->m_OutFile,  _outFile);
+    strcpy(trigger->m_MsqName,  _msqName);
+    strcpy(trigger->m_Nenviron, _nEnviron);
+    
+    trigger->m_magic = MAGIC;
+    return trigger;
+}
+
+/**
+ * @brief free _trigger  
+ * 
+ */
+void  Trigger_Destory(Trigger_t* _trigger)
+{
+    if(IS_INVALID(_trigger))
+    {
+        return;
+    }
+    _trigger->m_magic = 0;
+    free(_trigger);
+}
+
+/**set process's arguments */
+static int TriggerToExSTR(Trigger_t* _trigger, char** newargv, char** newenviron)
+{
+
+    if(IS_INVALID(_trigger))
+    {
+        return 0;
+    }
+    
+    newenviron[0] = _trigger->m_Nenviron;
+    newargv[0]    = _trigger->m_Executabe;
+    newargv[1]    = _trigger->m_InFile;
+    newargv[2]    = _trigger->m_OutFile;
+    newargv[3]    = _trigger->m_MsqName;
+    return 1;
+}
+/**
  * argv[0]  executabe
  * argv[1]  message queue id
  * argv[1]  input file path,
@@ -35,21 +108,21 @@ static void TriggerRun(char readerInput[SIZE][MAX],char *executable, char newenv
  * 
  */
 
-int main()
+void* Triger_Run(void* _trigger)
 {
-    char *newargv[] = { EXECUTABLE, INFILE, OUTPUT, MSGQUE_NAME_DEFAULT,NULL };
+    char *newargv[] = { NULL, NULL, NULL, NULL, NULL };
     char *newenviron[] = { NULL };
-    msq_t msq;
     int n;
+    Trigger_t* trigger = (Trigger_t*)_trigger;
 
-    msq = Msq_CrInit(MSGQUE_NAME_DEFAULT,1);
-    if(msq == -1)
+    if(IS_INVALID(trigger))
     {
-        perror("\nMSQ INIT\n");
-        return -1;
+        return NULL;
     }
+    TriggerToExSTR(trigger,newargv,newenviron);
     printf("\nin trigget\n");
     fflush(stdout);
+
     n = fork();
     if(n < 0)
     {
