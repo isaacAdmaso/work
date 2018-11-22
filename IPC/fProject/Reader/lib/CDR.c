@@ -7,10 +7,10 @@
  * @copyright Copyright (c) 2018
  * 
  */
-#include "CDR.h"
 #include <stdio.h> /**<-delete after debug */
 #include <stdlib.h>
 #include <string.h>
+#include "CDR.h"
 
 #define MAX_ID_SIZE         16          /**<-for alignment + 1 */
 #define MAX_NAME_SIZE       64

@@ -130,7 +130,7 @@ void* Triger_Run(void* _trigger)
     }
     if (n == 0)
     {
-        execve(EXECUTABLE, newargv, newenviron);
+        execve(newargv[0], newargv, newenviron);
         perror("execve"); /* execve() only returns on error */
         exit(EXIT_FAILURE);
     }

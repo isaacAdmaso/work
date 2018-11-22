@@ -12,16 +12,13 @@
 
 #include "CDR.h"/**for printing and debug*/
 
-#define MSGQUE_NAME_DEFAULT       "../../"
+
 #define MSGQUE_REGISTRAR	      "REGISTRAR"
 #define MSG_TYPE_READ		      5
 #define MSG_TYPE_REGISTRAR	      7
 #define MSG_TYPE_DISPATCH  	      9
 #define MAX                       1024
-#define OUTPUT                    "./log.txt"
-#define INFILE                    "./file.txt"
 #define DIRPATH                   "./"
-#define EXECUTABLE                "./Reader.out"
 #define BUFF                      16
 #define MFNSIZE                   256
 

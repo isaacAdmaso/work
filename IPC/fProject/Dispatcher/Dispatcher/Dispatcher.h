@@ -13,7 +13,6 @@
 
 
 
-#define MSGQUE_NAME_DEFAULT "../../"
 #define MSGQUE_REGISTRAR	"REGISTRAR"
 
 /* The values of message types are imporant - the registrar MUST be between other two */
