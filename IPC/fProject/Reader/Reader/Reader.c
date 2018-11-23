@@ -64,7 +64,6 @@ int main(int argc, char *argv[])
 			break;
 		}
         handle = Parser1(lineCDR);
-        Print_Cdr(handle);
         Msq_Send(msq,MSG_TYPE_READ,handle,sendSize);
         sprintf(placeSave,"%s|%ld\n",argv[1],(unsigned long)ftell(inFp));
         fputs(placeSave,outFp);

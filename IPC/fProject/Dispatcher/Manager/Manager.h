@@ -20,7 +20,7 @@ typedef struct Manager_t Manager_t;
  * @brief create DS manager and link with "DS"s  
  * 
  */
-Manager_t* Manager_Create();
+Manager_t* Manager_Create(size_t _capacity,size_t _nThreads);
 
 
 /**

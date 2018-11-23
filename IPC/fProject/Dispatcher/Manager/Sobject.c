@@ -232,7 +232,7 @@ int SuEqualityFunction(void* _firstKey, void* _secondKey)
  */
 void* SuUpdateFunction(void *_firstItem, void *_secondItem)
 {
-    Sobj_t *sub1 = (Sobj_t*)_firstItem,*sub2 = (Sobj_t*)_secondItem; 
+    Sobj_t *sub1 = (Sobj_t*)_secondItem,*sub2 = (Sobj_t*)_firstItem; 
     
     if(IS_INVALID(sub1) || IS_INVALID(sub2))
     {
@@ -249,7 +249,7 @@ void* SuUpdateFunction(void *_firstItem, void *_secondItem)
     sub1->m_Download                +=  sub2->m_Download;            
     sub1->m_Upload                  +=  sub2->m_Upload;
 
-    return (void*)_secondItem;
+    return (void*)sub1;
 }
 
 /**for debug */
@@ -257,18 +257,18 @@ int Print_Sobj(const void* _key,void* _sobj,void* _contex)
 {
     Sobj_t* subscriber = (Sobj_t*)_sobj;
 
-    printf("\n%s\n",  subscriber->m_MSISDN);
-    printf("\n%s\n",  subscriber->m_OpId);
-    printf("\n%ld\n", subscriber->m_Download);
-    printf("\n%ld\n", subscriber->m_Upload);
-    printf("\n%ld\n", subscriber->m_MyOp.m_OutDuration);
-    printf("\n%ld\n", subscriber->m_MyOp.m_InDuration);
-    printf("\n%ld\n", subscriber->m_MyOp.m_OutSMS);
-    printf("\n%ld\n", subscriber->m_MyOp.m_InSMS);
-    printf("\n%ld\n", subscriber->m_OtherOp.m_OutDuration);
-    printf("\n%ld\n", subscriber->m_OtherOp.m_InDuration);
-    printf("\n%ld\n", subscriber->m_OtherOp.m_OutSMS);
-    printf("\n%ld\n", subscriber->m_OtherOp.m_InSMS);
+    printf("\n1  -%s\n",  subscriber->m_MSISDN);
+    printf("\n2  -%s\n",  subscriber->m_OpId);
+    printf("\n3  -%ld\n", subscriber->m_Download);
+    printf("\n4  -%ld\n", subscriber->m_Upload);
+    printf("\n5  -%ld\n", subscriber->m_MyOp.m_OutDuration);
+    printf("\n6  -%ld\n", subscriber->m_MyOp.m_InDuration);
+    printf("\n7  -%ld\n", subscriber->m_MyOp.m_OutSMS);
+    printf("\n8  -%ld\n", subscriber->m_MyOp.m_InSMS);
+    printf("\n9  -%ld\n", subscriber->m_OtherOp.m_OutDuration);
+    printf("\n10 -%ld\n", subscriber->m_OtherOp.m_InDuration);
+    printf("\n11 -%ld\n", subscriber->m_OtherOp.m_OutSMS);
+    printf("\n12 -%ld\n", subscriber->m_OtherOp.m_InSMS);
     return 1;
 }
 

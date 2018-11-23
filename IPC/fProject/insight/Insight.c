@@ -9,6 +9,7 @@
  */
 #include <pthread.h>
 #include <stdio.h>      /*for debug(perror)*/
+#include <unistd.h>
 #include <stdlib.h>     /*calloc*/
 #include "Trigger.h"
 #include "Dispatcher.h"
@@ -18,6 +19,7 @@
 #define INFILE                  "./file.txt"
 #define OUTPUT                  "./log.txt"
 #define MSGQUE_NAME_DEFAULT     "."
+#define CAPACITY                50
 #define NTHREAD                 6
 
 
@@ -35,10 +37,11 @@ int main()
     int             i;
 
     trigger     = Trigger_Create(executable,inFile,outFile,msqName,NULL);
-    dispatch    = Dispatcher_Create(msqName);
+    dispatch    = Dispatcher_Create(msqName,CAPACITY,NTHREAD);
 
 
     Trigger_Run(trigger);
+    sleep(1);
 
     threadDispatchers = (pthread_t*)calloc(NTHREAD, sizeof(pthread_t));
 	if (!threadDispatchers)
@@ -53,7 +56,7 @@ int main()
     {
        	pthread_join(threadDispatchers[i], NULL);
     }
-    
+    Dispatcher_Print(dispatch);
     return 0;
 }
 

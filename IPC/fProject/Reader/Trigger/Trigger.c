@@ -120,8 +120,6 @@ void* Trigger_Run(void* _trigger)
         return NULL;
     }
     TriggerToExSTR(trigger,newargv,newenviron);
-    printf("\nin trigget\n");
-    fflush(stdout);
 
     n = fork();
     if(n < 0)

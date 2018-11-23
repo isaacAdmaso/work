@@ -14,8 +14,6 @@
 #include "CDR.h"
 #include "Sobject.h"
 #include "Manager.h"
-#define CAPACITY            50
-#define NTHREAD             20
 #define MAGIC               923758619
 #define IS_INVALID(M) ((NULL == (M)) || (M)->m_magic != MAGIC)
 
@@ -42,7 +40,7 @@ static int CdrtoSobj(void* _cdr, void* _sobj1, void* _sobj2);
  * @brief create DS manager and link with "DS"s  
  * 
  */
-Manager_t* Manager_Create()
+Manager_t* Manager_Create(size_t _capacity,size_t _nThreads)
 {
     Manager_t* manager = NULL;
 
@@ -50,7 +48,7 @@ Manager_t* Manager_Create()
     {
         return NULL;
     }
-    if(!((manager->m_subDS.m_hashMap) = HashMap_Create(CAPACITY,NTHREAD,SuHashFunction,SuEqualityFunction)))
+    if(!((manager->m_subDS.m_hashMap) = HashMap_Create(_capacity,_nThreads,SuHashFunction,SuEqualityFunction)))
     {
         free(manager);
         return NULL;
@@ -128,6 +126,7 @@ int Manager_Upsert(Manager_t* _manager,void* _cdr)
     {
         Sobj_Destroy(sobj1);
     }
+    Cdr_Destroy(cdr);
     return 1; 
 }
 

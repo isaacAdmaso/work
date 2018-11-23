@@ -38,7 +38,7 @@ struct Dispatcher_t
  * @brief create dispatcher 
  * 
  */
-Dispatcher_t* Dispatcher_Create(char* _msqName)
+Dispatcher_t* Dispatcher_Create(char* _msqName,size_t _capacity,size_t _nThreads)
 {
     Dispatcher_t* dispatch = NULL;
     msq_t msq;
@@ -54,7 +54,7 @@ Dispatcher_t* Dispatcher_Create(char* _msqName)
         return NULL;
     }
     dispatch->m_Msq = msq;
-    if(!(dispatch->m_SubM = Manager_Create()))
+    if(!(dispatch->m_SubM = Manager_Create(_capacity,_nThreads)))
     {
         free(dispatch);
         return NULL;
@@ -92,18 +92,25 @@ void* Dispatcher_Run(void* _dispatch)
     size_t sendSize;
     Dispatcher_t* dispatch = (Dispatcher_t*)_dispatch; 
 
-
     if(IS_INVALID(dispatch))
     {
         return NULL;
     }
-    
     sendSize = Cdr_Size();
+
     handle = malloc(sendSize);
-    
-    Msq_Receive(dispatch->m_Msq,MSG_TYPE_READ,handle,sendSize);
-    Manager_Upsert(dispatch->m_SubM,handle);
-    Manager_Print(dispatch->m_SubM);
-    printf("\nend of line\n");
+    while(Msq_Nmsgs(dispatch->m_Msq))
+    {
+        Msq_Receive(dispatch->m_Msq,MSG_TYPE_READ,handle,sendSize);
+        Manager_Upsert(dispatch->m_SubM,handle);
+        printf("\nend of msg\n");
+
+    }
+    free(handle);
     return (void*)((intptr_t)(1));
+}
+
+void Dispatcher_Print(Dispatcher_t* _disp)
+{
+    Manager_Print(_disp->m_SubM);
 }
