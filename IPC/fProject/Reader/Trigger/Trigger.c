@@ -108,7 +108,7 @@ static int TriggerToExSTR(Trigger_t* _trigger, char** newargv, char** newenviron
  * 
  */
 
-void* Triger_Run(void* _trigger)
+void* Trigger_Run(void* _trigger)
 {
     char *newargv[] = { NULL, NULL, NULL, NULL, NULL };
     char *newenviron[] = { NULL };

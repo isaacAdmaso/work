@@ -13,12 +13,12 @@ CFLAGS = -ansi -pedantic -Wall -Werror -g
 LDFLAGS = -g -pthread -D_XOPEN_SOURCE = 500
 
 # Include directory
-INC_DIR  = ../../MsqM
-INC_DIR1 = ../../
-INC_DIR2 = ../../Reader/lib
+INC_DIR  = ../../Reader/lib
+INC_DIR1 = ../../MsqM
+INC_DIR2 = ../../../../include
 INC_DIR3 = ../../DataStorage
 INC_DIR4 = ../Manager
-INC_DIR5 = ../../../../include
+INC_DIR5 = .
 LIB_PATH = ../../../../lib
 CFLAGS += -I$(INC_DIR) -I$(INC_DIR1) -I$(INC_DIR2)
 CFLAGS += -I$(INC_DIR3) -I$(INC_DIR4)
@@ -26,9 +26,9 @@ CFLAGS += -I$(INC_DIR5)
 
 
 # All .c files in this directory are my sources
-SOURCES  = ../../Reader/lib/CDR.c 		../../MsqM/MyMsq.c Dispatcher.c 
+SOURCES  = ../../Reader/lib/CDR.c 	../../MsqM/MyMsq.c
 SOURCES += ../../DataStorage/bucket.c 	../../DataStorage/ConcurrentHashMap.c
-SOURCES += ../Manager/Manager.c  	../Manager/Sobject.c
+SOURCES += ../Manager/Manager.c  	../Manager/Sobject.c  ./Dispatcher.c 
 #LIB_SRC = HashMap.c
 # All .o files in this directory are my objects
 OBJECTS = $(SOURCES:.c=.o)
@@ -36,7 +36,7 @@ OBJECTS = $(SOURCES:.c=.o)
 
 # The default command, compile all the sources
 $(TARGET): $(OBJECTS) 
-	$(CC) -c $(OBJECTS) -o $(TARGET) -Wl,-rpath=$(LIB_PATH) -L$(LIB_PATH) -lADS -lpthread
+	$(CC)  $(OBJECTS) -o $(TARGET) -Wl,-rpath=$(LIB_PATH) -L$(LIB_PATH) -lADS -lpthread
 
 #libADS.a: $(LIB_OBJ) #let's link library files into a static library
 #	ar rcs $(LIB_PATH)/libADS.a $(LIB_OBJ)

@@ -8,8 +8,8 @@
  * 
  */
 
-#include "../Reader/Trigger/Trigger.h"
-#include "../Dispatcher/Dispatcher/Dispatcher.h"
+#include "Trigger.h"
+#include "Dispatcher.h"
 
 
 #define EXECUTABLE              "./Reader.out"

@@ -10,14 +10,13 @@
 #ifndef __TRIGGER_H__
 #define __TRIGGER_H__
 
-#include "CDR.h"/**for printing and debug*/
+
 
 
 #define MSGQUE_REGISTRAR	      "REGISTRAR"
 #define MSG_TYPE_READ		      5
 #define MSG_TYPE_REGISTRAR	      7
 #define MSG_TYPE_DISPATCH  	      9
-#define MAX                       1024
 #define DIRPATH                   "./"
 #define BUFF                      16
 #define MFNSIZE                   256
@@ -52,7 +51,7 @@ void  Trigger_Destory(Trigger_t* _trigger);
  * argv[5]  parser function name
  * 
  */
-void* Triger_Run(void* _trigger);
+void* Trigger_Run(void* _trigger);
 
 
 #endif /*__TRIGGER_H__*/

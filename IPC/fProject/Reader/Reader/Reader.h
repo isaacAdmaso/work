@@ -9,6 +9,13 @@
  */
 #ifndef __READER_H__
 #define __READER_H__
+#include "CDR.h"/**for size of CDR object*/
+
+
+#define MAX_LINE        1024
+#define MAX_FNAME       256
+#define MSG_TYPE_READ		      5
+
 
 
 

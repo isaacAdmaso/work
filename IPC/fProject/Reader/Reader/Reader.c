@@ -15,33 +15,24 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include "MyMsq.h"
-#include "Trigger.h"
 #include "Reader.h"
 #include "Parser.h"
-
-#define MAX_LINE        1024
-#define MAX_FNAME       256
-#define MAX_LOGG        256
-#define INFILE      "./file.txt"
-#define OUTPUT      "./log.txt"
 
 
 
 
 /**
- * argv[0]  message queue id
+ * argv[0]  executable 
  * argv[1] = INFILE is input file path,
  * argv[2] = OUTPUT output path Dir,
- * argv[3]  size of struct after parse
- * argv[4] parser dynemic lib,
- * argv[5] parser function name
+ * argv[3]  message queue id
  * 
  */
 int main(int argc, char *argv[])
 {
     FILE *inFp,*outFp;
     char lineCDR[MAX_LINE];
-    char placeSave[MAX_LOGG];
+    char placeSave[MAX_FNAME];
     void *handle;
     size_t sendSize;
     msq_t msq;
@@ -49,7 +40,7 @@ int main(int argc, char *argv[])
     inFp  = fopen(argv[1],"r");
     outFp = fopen(argv[2],"w");
     
-    if(-1 == (msq = Msq_CrInit(argv[3],0)))
+    if(-1 == (msq = Msq_CrInit(argv[3],1)))
     {
         perror("\nfailed to conect MSQ\n");
         exit(-1);
@@ -67,7 +58,7 @@ int main(int argc, char *argv[])
     while(!feof(inFp))
 	{
         
-        fgets(lineCDR,MAX,inFp);
+        fgets(lineCDR,MAX_LINE,inFp);
 		if(feof(inFp))
 		{
 			break;
