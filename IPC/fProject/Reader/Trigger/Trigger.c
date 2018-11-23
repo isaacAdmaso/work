@@ -31,7 +31,7 @@ struct Trigger_t
     char    m_InFile[MFNSIZE];
     char    m_OutFile[MFNSIZE];
     char    m_MsqName[MFNSIZE];
-    char    m_Nenviron[MFNSIZE]; 
+    char*   m_Nenviron; 
     size_t  m_magic;  
 };
 
@@ -45,7 +45,7 @@ Trigger_t* Trigger_Create(char* _executabe, char* _inFile, char* _outFile, char*
     Trigger_t* trigger = NULL;
     msq_t msq;
 
-    msq = Msq_CrInit(_msqName,0);
+    msq = Msq_CrInit(_msqName,1);
     if(msq == -1)
     {
         perror("\nMSQ INIT\n");
@@ -60,7 +60,7 @@ Trigger_t* Trigger_Create(char* _executabe, char* _inFile, char* _outFile, char*
     strcpy(trigger->m_InFile,   _inFile);
     strcpy(trigger->m_OutFile,  _outFile);
     strcpy(trigger->m_MsqName,  _msqName);
-    strcpy(trigger->m_Nenviron, _nEnviron);
+    trigger->m_Nenviron = _nEnviron;
     
     trigger->m_magic = MAGIC;
     return trigger;

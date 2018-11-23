@@ -22,8 +22,8 @@ CFLAGS += -I$(INC_DIR) -I$(INC_DIR1) -I$(INC_DIR2) -I$(INC_DIR3)
 
 
 # All .c files in this directory are my sources
-SOURCES2 = ../lib/CDR.c ../lib/Parser.c ../Reader/Reader.c ../../MsqM/MyMsq.c
 SOURCES = Trigger.c ../../MsqM/MyMsq.c
+SOURCES2 = ../lib/CDR.c ../lib/Parser.c ../Reader/Reader.c ../../MsqM/MyMsq.c
 #LIB_SRC = HashMap.c
 # All .o files in this directory are my objects
 OBJECTS = $(SOURCES:.c=.o)
@@ -32,7 +32,7 @@ OBJECTS2 = $(SOURCES2:.c=.o)
 
 # The default command, compile all the sources
 $(TARGET): $(OBJECTS) $(TARGET2)
-	$(CC) -c  $(OBJECTS) -o $(TARGET) 
+	$(CC)   $(OBJECTS) -c -o $(TARGET) 
 
 $(TARGET2): $(OBJECTS2) 
 	$(CC) $(OBJECTS2) -o $(TARGET2) 
