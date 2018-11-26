@@ -9,6 +9,7 @@
  */
 #include "CDR.h"
 #include "Parser.h"
+#include <stdio.h>
 #include <string.h>
 
 #define FORMATETKN       "|"
@@ -17,19 +18,20 @@
 void* Parser1(char* _lineCDR)
 {
     void* cdr = NULL;
-    void *field;
+    char *field;
     int i = 0;
-    char inputOrder[FORMATE_CDR_SZ] = STR_CDR_ORDER;
+    size_t formatLength;
+    char inputOrder[] = STR_CDR_ORDER;
     const char s[2] = FORMATETKN;
 
     if(!(cdr = Cdr_Create()))
         return NULL;
     
+    formatLength = strlen(STR_CDR_ORDER);
     field = strtok(_lineCDR, s);
-    while( field != NULL ) 
+    for(i = 0; i < formatLength;++i) 
     {
         Cdr_Set(cdr,inputOrder[i],field);
-        ++i;
         field = strtok(NULL, s);
     }
     return cdr;

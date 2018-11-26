@@ -11,23 +11,26 @@
 #include <stdio.h>      /*for debug(perror)*/
 #include <unistd.h>
 #include <stdlib.h>     /*calloc*/
-#include "Trigger.h"
 #include "Dispatcher.h"
+#include "query.h"
+#include "Trigger.h"
 
 
 #define EXECUTABLE              "./Reader"
 #define INFILE                  "./file.txt"
 #define OUTPUT                  "./log.txt"
+#define QOUTPUT                 "./logQ.txt"
 #define MSGQUE_NAME_DEFAULT     "."
 #define CAPACITY                50
-#define NTHREAD                 6
+#define NTHREAD                 1
 
 
 
 
 int main()
 {
-	pthread_t*		threadDispatchers;	        
+	pthread_t       *threadDispatchers;	
+    Query_t         *query              = NULL;
     Trigger_t       *trigger            = NULL;
     Dispatcher_t    *dispatch           = NULL;
     char            executable[]        = EXECUTABLE;
@@ -38,6 +41,7 @@ int main()
 
     trigger     = Trigger_Create(executable,inFile,outFile,msqName,NULL);
     dispatch    = Dispatcher_Create(msqName,CAPACITY,NTHREAD);
+    query       = Query_Create(Dispatcher_ManagerPtr(dispatch));
 
 
     Trigger_Run(trigger);
@@ -56,7 +60,10 @@ int main()
     {
        	pthread_join(threadDispatchers[i], NULL);
     }
-    Dispatcher_Print(dispatch);
+    Query_GetAll_Subscriber(query,QOUTPUT);
+    Trigger_Destory(trigger);
+    Query_Destroy(query);
+    Dispatcher_Destroy(dispatch);
     return 0;
 }
 

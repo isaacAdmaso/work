@@ -1,13 +1,16 @@
-CC = gcc -ansi -pedantic -Wall -Werror -g -I../../MsqM -I../../Dispatcher/Manager -I../../../../include -I../../DataStorage -I../../Reader/lib -I../../Reader/Reader -I../../Reader/Trigger -I../../Dispatcher/Dispatcher -I../ -pthread -D_XOPEN_SOURCE=500   -Wl,-rpath=../../../../lib -L../../../../lib -lADS -lpthread 
+CC = gcc -ansi -pedantic -Wall -Werror -g -I../../QueryManager -I../../MsqM -I../../Dispatcher/Manager -I../../../../include -I../../DataStorage -I../../Reader/lib -I../../Reader/Reader -I../../Reader/Trigger -I../../Dispatcher/Dispatcher -I../ -pthread -D_XOPEN_SOURCE=500   -Wl,-rpath=../../../../lib -L../../../../lib -lADS -lpthread 
 # The compiler flags will be... ("CFLAGS" is MAKE variable)
 CFLAGS = -ansi -pedantic -Wall -Werror -g  
 # The debugger flags will be... ("LDFLAGS" is MAKE variable)
 LDFLAGS = -g -pthread -D_XOPEN_SOURCE = 500 
 
-.PHONY: Insight Insight.o Dispatcher.o Trigger.o
+.PHONY: Insight Insight.o Dispatcher.o Trigger.o QueryManager.o
 
-Insight:CDR.o Parser.o MyMsq.o Sobject.o bucket.o ConcurrentHashMap.o Manager.o Dispatcher.o Trigger.o ../Insight.c 
-	$(CC) ../Insight.c CDR.o Parser.o MyMsq.o Sobject.o bucket.o ConcurrentHashMap.o Manager.o Dispatcher.o Trigger.o -Wl,-rpath=../../../../lib -L../../../../lib -lADS -lpthread -o $@ 
+Insight:CDR.o Parser.o MyMsq.o Sobject.o bucket.o ConcurrentHashMap.o Manager.o Dispatcher.o Trigger.o QueryManager.o ../Insight.c 
+	$(CC) ../Insight.c CDR.o Parser.o MyMsq.o Sobject.o bucket.o ConcurrentHashMap.o Manager.o Dispatcher.o Trigger.o QueryManager.o -Wl,-rpath=../../../../lib -L../../../../lib -lADS -lpthread -o $@ 
+
+QueryManager.o:Manager.o ../../QueryManager/query.c	../../QueryManager/query.h
+	$(CC) -c ../../QueryManager/query.c  Manager.o -o QueryManager.o
 
 Dispatcher.o:MyMsq.o CDR.o Manager.o  ../../Dispatcher/Dispatcher/Dispatcher.c ../../Dispatcher/Dispatcher/Dispatcher.h
 	$(CC) -c ../../Dispatcher/Dispatcher/Dispatcher.c  MyMsq.o CDR.o Manager.o 
@@ -38,6 +41,12 @@ Parser.o:../../Reader/lib/Parser.c ../../Reader/lib/Parser.h
 
 CDR.o:../../Reader/lib/CDR.c ../../Reader/lib/CDR.h
 	$(CC) -c ../../Reader/lib/CDR.c
+include depends
+
+# Compile the sources, going over the c.files and create new file with list of the h.files that need to be included to each c.file.
+# In the next time, if there where no changes in the h.files thet are needed, the depends file will be exist so the include will go to the file instead of build new one. 
+depends:
+	$(CC) -MM ../Insight.c CDR.o Parser.o MyMsq.o Sobject.o bucket.o ConcurrentHashMap.o Manager.o Dispatcher.o Trigger.o -Wl,-rpath=../../../../lib -L../../../../lib -lADS -lpthread -o $@   > depends
 
 
 clean:

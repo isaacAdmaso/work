@@ -42,8 +42,7 @@ void Dispatcher_Destroy(Dispatcher_t* _dispatch);
 void* Dispatcher_Run(void* _dispatch);
 
 
-/*for debug*/
-void Dispatcher_Print(Dispatcher_t* _disp);
+void* Dispatcher_ManagerPtr(Dispatcher_t* _disp);
 
 
 

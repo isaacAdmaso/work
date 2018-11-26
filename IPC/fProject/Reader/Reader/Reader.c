@@ -67,7 +67,6 @@ int main(int argc, char *argv[])
         Msq_Send(msq,MSG_TYPE_READ,handle,sendSize);
         sprintf(placeSave,"%s|%ld\n",argv[1],(unsigned long)ftell(inFp));
         fputs(placeSave,outFp);
-        
     }
     
     fclose(inFp);

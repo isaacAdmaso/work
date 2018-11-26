@@ -10,6 +10,7 @@
 #ifndef __SOBJECT_H__
 #define __SOBJECT_H__
 
+#define MAX_LINE 1024
 
 /**
  * @brief Create ,and return struct sub ptr   
@@ -76,9 +77,11 @@ int SuEqualityFunction(void* _firstKey, void* _secondKey);
  */
 void* SuUpdateFunction(void *_firstItem, void *_secondItem);
 
-
-/**for debug */
-int Print_Sobj(const void* _key,void* _sobj,void* _contex);
+/**
+ * @brief create line and write it in _context
+ * 
+ */
+int Sobj_PutLine(const void* _key,void* _sobj,void* _contex);
 
 void Destroy_Key(void* _key);
 

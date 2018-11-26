@@ -8,12 +8,13 @@
  * @copyright Copyright (c) 2018
  * 
  */
+#include "HashMapC.h"
+#include "Manager.h"
+#include "Sobject.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "HashMapC.h"
 #include "CDR.h"
-#include "Sobject.h"
-#include "Manager.h"
 #define MAGIC               923758619
 #define IS_INVALID(M) ((NULL == (M)) || (M)->m_magic != MAGIC)
 
@@ -71,6 +72,45 @@ void Manager_Destroy(Manager_t* _manager)
     /** ? */
     HashMap_Destroy(&(_manager->m_subDS.m_hashMap),Destroy_Key,Sobj_Destroy);   
     free(_manager); 
+}
+
+
+/**
+ * @brief for Query 
+ * 
+ */
+int Manager_Get_One( Manager_t* _manager, const void* _key, FILE* _line)
+{
+    void* sobj = NULL;
+     
+
+    if(IS_INVALID(_manager) || !_key)
+    {
+        return 0;
+    }    
+    if(HashMap_Find(_manager->m_subDS.m_hashMap,_key,&sobj))
+    {
+        return 0;
+    }
+    if(!Sobj_PutLine(_key,sobj,(void*)_line))
+    {
+        return 0;
+    }
+    return 1;
+}
+
+/**
+ * @brief for Query
+ * 
+ */
+int Manager_Get_Group(Manager_t* _manager,FILE* _outFile)
+{
+    if(IS_INVALID(_manager))
+    {
+        return 0;
+    }  
+    HashMap_ForEach((_manager->m_subDS.m_hashMap),Sobj_PutLine,_outFile);
+    return 1;
 }
 
 
@@ -229,9 +269,3 @@ static int CdrtoSobj(void* _cdr, void* _sobj1, void* _sobj2)
     return 0;
 }    
 
-
-void Manager_Print(Manager_t* _manager)
-{
-    HashMap_ForEach((_manager->m_subDS.m_hashMap),Print_Sobj,NULL);
-}
-int (*KeyValueActionFunction1)(const void *_key, void *_value, void *_context);

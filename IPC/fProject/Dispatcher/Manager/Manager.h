@@ -9,8 +9,9 @@
  * @copyright Copyright (c) 2018
  * 
  */
+#include <stdio.h>
 #include "HashMapC.h"
-#define MAX_OP_BRAND_SIZE   64
+
 
 
 typedef struct Manager_t Manager_t;
@@ -35,6 +36,18 @@ void Manager_Destroy(Manager_t* _manager);
  * 
  */
 int Manager_Upsert(Manager_t* _manager,void* _cdr);
+
+/**
+ * @brief for Query 
+ * 
+ */
+int Manager_Get_One(Manager_t* _manager,const void* _key, FILE* _line);
+
+/**
+ * @brief for Query
+ * 
+ */
+int Manager_Get_Group(Manager_t* _manager,FILE* _outFile);
 
 
 /**for debug */

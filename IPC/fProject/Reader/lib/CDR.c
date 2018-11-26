@@ -25,7 +25,7 @@
 typedef struct Cdr_t
 {
     char    m_OPB[MAX_NAME_SIZE];
-    char    m_2OPB[MAX_NAME_SIZE];
+    char    m_IMEI[MAX_NAME_SIZE];
     char    m_MSISDN[MAX_ID_SIZE];
     char    m_otherMSISDN[MAX_ID_SIZE];
     char    m_MCC[MNC_SIZE];
@@ -75,17 +75,17 @@ void Cdr_Destroy(void* _cdr)
 
 /**
  * @brief set CDR struct fields by char identifier 
- * IMEI             -I
- * IMSI             -i
+ * MCC              -I
+ * otherMCC         -i
  * MSISDN           -M
  * otherMSISDN      -m
- * MCC              -C
- * CallType         -T
+ * operator brand   -C
+ * IMEI             -c
  * DATE             -D
+ * CallType         -T
  * Duration         -d
  * DOWNLOAD         -l
  * UPLOAD           -p
- * otherMCC         -c
  * 
  */
 int Cdr_Set(void* _cdr,char _fieldToUpdate,void* _value)
@@ -99,10 +99,10 @@ int Cdr_Set(void* _cdr,char _fieldToUpdate,void* _value)
     switch (_fieldToUpdate)
     {
         case 'I':
-            strcpy(cdr->m_OPB,(char*)_value);
+            strcpy(cdr->m_MCC,(char*)_value);
             break;
         case 'i':
-            strcpy(cdr->m_2OPB,(char*)_value);
+            strcpy(cdr->m_otherMCC,(char*)_value);
             break;
         case 'M':
             strcpy(cdr->m_MSISDN,(char*)_value);
@@ -111,7 +111,10 @@ int Cdr_Set(void* _cdr,char _fieldToUpdate,void* _value)
             strcpy(cdr->m_otherMSISDN,(char*)_value);
             break;
         case 'C':
-            strcpy(cdr->m_MCC,(char*)_value);
+            strcpy(cdr->m_OPB,(char*)_value);
+            break;
+        case 'c':
+            strcpy(cdr->m_IMEI,(char*)_value);
             break;
         case 'T':
             strcpy(cdr->m_CallType,(char*)_value);
@@ -127,9 +130,6 @@ int Cdr_Set(void* _cdr,char _fieldToUpdate,void* _value)
             break;
         case 'p':
             cdr->m_UPLOAD = atoi((char*)_value);
-            break;
-        case 'c':
-            strcpy(cdr->m_otherMCC,(char*)_value);
             break;
     }
     return 1;
@@ -161,10 +161,10 @@ int Cdr_Get(void* _cdr,char _fieldToUpdate,void** _value)
     switch (_fieldToUpdate)
     {
         case 'I':
-            *(char**)_value  = cdr->m_OPB; /**op id */
+            *(char**)_value = cdr->m_MCC; /**op id */
             break;
         case 'i':
-            *(char**)_value =cdr->m_2OPB;/**other op id */
+            *(char**)_value = cdr->m_otherMCC;/**other op id */
             break;
         case 'M':
             *(char**)_value = cdr->m_MSISDN;/**my id  */
@@ -173,7 +173,10 @@ int Cdr_Get(void* _cdr,char _fieldToUpdate,void** _value)
             *(char**)_value = cdr->m_otherMSISDN;/**other id */
             break;
         case 'C':
-            *(char**)_value = cdr->m_MCC;
+            *(char**)_value  = cdr->m_OPB;
+            break;
+        case 'c':
+            *(char**)_value =cdr->m_IMEI;
             break;
         case 'T':
             *(char**)_value = cdr->m_CallType;
@@ -190,9 +193,6 @@ int Cdr_Get(void* _cdr,char _fieldToUpdate,void** _value)
         case 'p':
             *(size_t**)_value = &(cdr->m_UPLOAD);
             break;
-        case 'c':
-            *(char**)_value = cdr->m_otherMCC;
-            break;
     }
     return 1;
 }
@@ -203,17 +203,17 @@ void Print_Cdr(void* _cdr)
 {
     Cdr_t* cdr = (Cdr_t*)_cdr;
 
-    printf("\n%ld\n",cdr->m_DOWNLOAD);
-    printf("\n%ld\n",cdr->m_UPLOAD);
-    printf("\n%s\n",cdr->m_MSISDN);
-    printf("\n%s\n",cdr->m_OPB);
-    printf("\n%s\n",cdr->m_CallType);
-    printf("\n%s\n",cdr->m_2OPB);
-    printf("\n%s\n",cdr->m_otherMSISDN);
-    printf("\n%s\n",cdr->m_MCC);
-    printf("\n%s\n",cdr->m_DATE);
-    printf("\n%ld\n",cdr->m_Duration);
-    printf("\n%s\n",cdr->m_otherMCC);
+    printf("\nT %s\n",cdr->m_CallType);
+    printf("\nI %s\n",cdr->m_MCC);
+    printf("\ni %s\n",cdr->m_otherMCC);
+    printf("\nM %s\n",cdr->m_MSISDN);
+    printf("\nm %s\n",cdr->m_otherMSISDN);
+    printf("\nC %s\n",cdr->m_OPB);
+    printf("\nc %s\n",cdr->m_IMEI);
+    printf("\nD %s\n",cdr->m_DATE);
+    printf("\nd %ld\n",cdr->m_Duration);
+    printf("\nl %ld\n",cdr->m_DOWNLOAD);
+    printf("\np %ld\n",cdr->m_UPLOAD);
 }
 
 size_t Cdr_Size()

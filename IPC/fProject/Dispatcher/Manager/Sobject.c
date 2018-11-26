@@ -15,8 +15,7 @@
 #define MAGIC               8123564234
 #define IS_INVALID(O)       ((NULL == (O)) || ((O)->m_magic != MAGIC))
 #define MAX_ID_SIZE         16          /**<-for alignment + 1 */
-#define MAX_OPID_SIZE       64
-#define ID                  6
+#define ID                  8
 
 typedef struct OpUse_t
 {
@@ -28,10 +27,10 @@ typedef struct OpUse_t
 
 typedef struct Sobj_t
 {
-    char        m_OpId[MAX_OPID_SIZE];
     OpUse_t     m_MyOp;
     OpUse_t     m_OtherOp;
     char        m_MSISDN[MAX_ID_SIZE];
+    char        m_OpId[ID];
     size_t      m_Download;
     size_t      m_Upload;
     size_t      m_magic;
@@ -207,14 +206,17 @@ int Sobj_Get(void* _sobj,char _fieldToUpdate,void** _value)
  */
 size_t SuHashFunction(const void* _key)
 {
-    char key[ID];
-    size_t idx = 0;
-
-    strncpy(key,(char*)_key,ID);
-    key[ID-1] = '\0';
-    idx = atoi(_key);
-    
-    return idx;
+    char* key = (char*)_key;
+    size_t hash = 5381;
+  
+    while (*key)
+    {
+        hash = ((hash << 5) + hash) ^ *key++;
+    }
+    return hash;
+    /*
+    return (size_t)atoi(_key);
+*/
 }
 
 /**
@@ -223,7 +225,17 @@ size_t SuHashFunction(const void* _key)
  */
 int SuEqualityFunction(void* _firstKey, void* _secondKey)
 {
-    return (strcmp((const char*)_firstKey,(const char*)_secondKey)) ? 0:1;
+    char *key1 = (char*)_firstKey,*key2 = (char*)_secondKey;
+
+    while(*key1)
+    {
+        if(*key1 != *key2)
+            return 0;
+        ++key1;
+        ++key2;
+    }
+
+    return 1;
 }
 
 /**
@@ -252,26 +264,27 @@ void* SuUpdateFunction(void *_firstItem, void *_secondItem)
     return (void*)sub1;
 }
 
-/**for debug */
-int Print_Sobj(const void* _key,void* _sobj,void* _contex)
+/**for debug
+ * and query
+ */
+int Sobj_PutLine(const void* _key,void* _sobj,void* _contex)
 {
     Sobj_t* subscriber = (Sobj_t*)_sobj;
+    char line[MAX_LINE];
 
-    printf("\n1  -%s\n",  subscriber->m_MSISDN);
-    printf("\n2  -%s\n",  subscriber->m_OpId);
-    printf("\n3  -%ld\n", subscriber->m_Download);
-    printf("\n4  -%ld\n", subscriber->m_Upload);
-    printf("\n5  -%ld\n", subscriber->m_MyOp.m_OutDuration);
-    printf("\n6  -%ld\n", subscriber->m_MyOp.m_InDuration);
-    printf("\n7  -%ld\n", subscriber->m_MyOp.m_OutSMS);
-    printf("\n8  -%ld\n", subscriber->m_MyOp.m_InSMS);
-    printf("\n9  -%ld\n", subscriber->m_OtherOp.m_OutDuration);
-    printf("\n10 -%ld\n", subscriber->m_OtherOp.m_InDuration);
-    printf("\n11 -%ld\n", subscriber->m_OtherOp.m_OutSMS);
-    printf("\n12 -%ld\n", subscriber->m_OtherOp.m_InSMS);
-    return 1;
+    if(IS_INVALID(subscriber) || !_contex)
+    {
+        return 0;
+    }
+    sprintf(line,"MSISDN:%s,MCC:%s,Download:%ld,Upload:%ld,MyOutDuration:%ld,MyInDuration:%ld,MyOutSMS:%ld,MyInSMS:%ld,OtrOutDuration:%ld,OtrInDuration:%ld,OtrOutSMS:%ld,OtrInSMS:%ld\n",\
+    subscriber->m_MSISDN,subscriber->m_OpId,subscriber->m_Download,subscriber->m_Upload,\
+    subscriber->m_MyOp.m_OutDuration,subscriber->m_MyOp.m_InDuration,\
+    subscriber->m_MyOp.m_OutSMS,subscriber->m_MyOp.m_InSMS,subscriber->m_OtherOp.m_OutDuration,\
+    subscriber->m_OtherOp.m_InDuration,subscriber->m_OtherOp.m_OutSMS,subscriber->m_OtherOp.m_InSMS);
+    return  fprintf((FILE*)_contex,"%s",line);
 }
 
+/**for debug */
 void Destroy_Key(void* _key)
 {
     return;

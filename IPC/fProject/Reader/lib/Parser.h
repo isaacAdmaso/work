@@ -9,9 +9,10 @@
  */
 #ifndef __PARSER_H__
 #define __PARSER_H__
+#include <string.h>
 
-#define STR_CDR_ORDER    "TIiMmCDdlpc"
-#define FORMATE_CDR_SZ        12
+
+#define STR_CDR_ORDER    "TdIiMmCcDlp"/**order of fields in cdr line */
 
 
 

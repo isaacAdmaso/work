@@ -78,6 +78,7 @@ void Dispatcher_Destroy(Dispatcher_t* _dispatch)
     }
     _dispatch->m_magic = 0;
     Manager_Destroy(_dispatch->m_SubM);
+    Msq_Destroy(_dispatch->m_Msq);
     free(_dispatch);
     
 }
@@ -103,14 +104,17 @@ void* Dispatcher_Run(void* _dispatch)
     {
         Msq_Receive(dispatch->m_Msq,MSG_TYPE_READ,handle,sendSize);
         Manager_Upsert(dispatch->m_SubM,handle);
-        printf("\nend of msg\n");
 
     }
     free(handle);
     return (void*)((intptr_t)(1));
 }
 
-void Dispatcher_Print(Dispatcher_t* _disp)
+void *Dispatcher_ManagerPtr(Dispatcher_t* _disp)
 {
-    Manager_Print(_disp->m_SubM);
+    if(IS_INVALID(_disp))
+    {
+        return NULL;
+    }
+    return (void*)_disp->m_SubM;
 }
