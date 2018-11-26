@@ -91,7 +91,7 @@ int Query_Get_Subscriber(Query_t* _query,char* _msisdn,char* fileName)
         return 0;
     }
     GeTime(buf);
-    fwrite(buf,1,sizeof(buf),outFp);
+    fprintf(outFp,"%s",buf);
 
     return Manager_Get_One(_query->m_Manager,_msisdn,outFp);
 }

@@ -20,7 +20,8 @@
 #define INFILE                  "./file.txt"
 #define OUTPUT                  "./log.txt"
 #define QOUTPUT                 "./logQ.txt"
-#define MSGQUE_NAME_DEFAULT     "."
+#define QOUTPUQ                 "./logq.txt"
+#define MSGQUE_NAME_DEFAULT     "../../../"
 #define CAPACITY                50
 #define NTHREAD                 1
 
@@ -45,8 +46,7 @@ int main()
 
 
     Trigger_Run(trigger);
-    sleep(1);
-
+    
     threadDispatchers = (pthread_t*)calloc(NTHREAD, sizeof(pthread_t));
 	if (!threadDispatchers)
 	{
@@ -60,6 +60,7 @@ int main()
     {
        	pthread_join(threadDispatchers[i], NULL);
     }
+    Query_Get_Subscriber(query,"1230",QOUTPUQ);
     Query_GetAll_Subscriber(query,QOUTPUT);
     Trigger_Destory(trigger);
     Query_Destroy(query);

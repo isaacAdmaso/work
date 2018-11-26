@@ -51,7 +51,12 @@ depends:
 
 clean:
 	rm *.o
+	rm Insight
+	rm depends
+	rm logQ.txt
+	rm Reader
 	rm *.out
+
 run:  Insight
 	 ./Insight
 
