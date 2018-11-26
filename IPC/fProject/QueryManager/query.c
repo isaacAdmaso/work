@@ -80,6 +80,7 @@ int Query_Get_Subscriber(Query_t* _query,char* _msisdn,char* fileName)
 {
     FILE *outFp;
     char buf[64];
+    int rtVal;
 
 
     if(IS_INVALID(_query))
@@ -93,7 +94,9 @@ int Query_Get_Subscriber(Query_t* _query,char* _msisdn,char* fileName)
     GeTime(buf);
     fprintf(outFp,"%s",buf);
 
-    return Manager_Get_One(_query->m_Manager,_msisdn,outFp);
+    rtVal = Manager_Get_One(_query->m_Manager,_msisdn,outFp);
+    fclose(outFp);
+    return rtVal; 
 }
 
 /**
@@ -104,6 +107,7 @@ int Query_GetAll_Subscriber(Query_t* _query,char* fileName)
 {
     FILE *outFp;
     char buf[64];
+    int rtVal = 0;
 
     if(IS_INVALID(_query))
     {
@@ -115,7 +119,9 @@ int Query_GetAll_Subscriber(Query_t* _query,char* fileName)
     }
     GeTime(buf);
     fprintf(outFp,"%s",buf);
-    return Manager_Get_Group(_query->m_Manager,outFp);
+    rtVal = Manager_Get_Group(_query->m_Manager,outFp);
+    fclose(outFp);
+    return rtVal;
 }
 
 

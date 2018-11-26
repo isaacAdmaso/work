@@ -30,7 +30,7 @@ struct Trigger_t
     char    m_Executabe[MFNSIZE];
     char    m_InFile[MFNSIZE];
     char    m_OutFile[MFNSIZE];
-    char    m_MsqName[MFNSIZE];
+    int     m_MsqId;
     char*   m_Nenviron; 
     size_t  m_magic;  
 };
@@ -40,17 +40,15 @@ struct Trigger_t
  * @brief create Trigger
  * 
  */
-Trigger_t* Trigger_Create(char* _executabe, char* _inFile, char* _outFile, char* _msqName, char* _nEnviron)
+Trigger_t* Trigger_Create(char* _executabe, char* _inFile, char* _outFile, int _msqId, char* _nEnviron)
 {
     Trigger_t* trigger = NULL;
-    msq_t msq;
 
-    msq = Msq_CrInit(_msqName,1);
-    if(msq == -1)
+    if(! _executabe || !_inFile || !_outFile || (-1 ==_msqId))
     {
-        perror("\nMSQ INIT\n");
         return NULL;
     }
+
     if(!(trigger = calloc(1,sizeof(Trigger_t))))
     {
         return NULL;
@@ -59,7 +57,7 @@ Trigger_t* Trigger_Create(char* _executabe, char* _inFile, char* _outFile, char*
     strcpy(trigger->m_Executabe,_executabe);
     strcpy(trigger->m_InFile,   _inFile);
     strcpy(trigger->m_OutFile,  _outFile);
-    strcpy(trigger->m_MsqName,  _msqName);
+    trigger->m_MsqId = _msqId;
     trigger->m_Nenviron = _nEnviron;
     
     trigger->m_magic = MAGIC;
@@ -83,17 +81,19 @@ void  Trigger_Destory(Trigger_t* _trigger)
 /**set process's arguments */
 static int TriggerToExSTR(Trigger_t* _trigger, char** newargv, char** newenviron)
 {
+    char* msq;
 
     if(IS_INVALID(_trigger))
     {
         return 0;
     }
-    
+    msq = malloc(sizeof(int));
+    sprintf(msq,"%d",_trigger->m_MsqId);
     newenviron[0] = _trigger->m_Nenviron;
     newargv[0]    = _trigger->m_Executabe;
     newargv[1]    = _trigger->m_InFile;
     newargv[2]    = _trigger->m_OutFile;
-    newargv[3]    = _trigger->m_MsqName;
+    newargv[3]    = msq;
     return 1;
 }
 /**
@@ -132,6 +132,7 @@ void* Trigger_Run(void* _trigger)
         perror("execve"); /* execve() only returns on error */
         exit(EXIT_FAILURE);
     }
+    free(newargv[3]);
     return 0;
 
 }

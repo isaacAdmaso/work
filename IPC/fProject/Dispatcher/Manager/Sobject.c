@@ -207,6 +207,7 @@ int Sobj_Get(void* _sobj,char _fieldToUpdate,void** _value)
 size_t SuHashFunction(const void* _key)
 {
     char* key = (char*)_key;
+    /*
     size_t hash = 5381;
   
     while (*key)
@@ -214,9 +215,8 @@ size_t SuHashFunction(const void* _key)
         hash = ((hash << 5) + hash) ^ *key++;
     }
     return hash;
-    /*
-    return (size_t)atoi(_key);
 */
+    return (size_t)atol(key);
 }
 
 /**

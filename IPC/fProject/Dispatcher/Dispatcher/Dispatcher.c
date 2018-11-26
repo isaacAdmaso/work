@@ -38,22 +38,19 @@ struct Dispatcher_t
  * @brief create dispatcher 
  * 
  */
-Dispatcher_t* Dispatcher_Create(char* _msqName,size_t _capacity,size_t _nThreads)
+Dispatcher_t* Dispatcher_Create(int _msqId,size_t _capacity,size_t _nThreads)
 {
     Dispatcher_t* dispatch = NULL;
-    msq_t msq;
 
-    msq = Msq_CrInit(_msqName,0);
-    if(msq == -1)
+    if((-1 == _msqId) || !_capacity || !_nThreads)
     {
-        perror("\nMSQ INIT\n");
         return NULL;
     }
     if(!(dispatch = calloc(1,sizeof(Dispatcher_t))))
     {
         return NULL;
     }
-    dispatch->m_Msq = msq;
+    dispatch->m_Msq = _msqId;
     if(!(dispatch->m_SubM = Manager_Create(_capacity,_nThreads)))
     {
         free(dispatch);
@@ -99,14 +96,14 @@ void* Dispatcher_Run(void* _dispatch)
     }
     sendSize = Cdr_Size();
 
-    handle = malloc(sendSize);
-    while(Msq_Nmsgs(dispatch->m_Msq))
+    handle = Cdr_Create();
+    do
     {
         Msq_Receive(dispatch->m_Msq,MSG_TYPE_READ,handle,sendSize);
         Manager_Upsert(dispatch->m_SubM,handle);
 
-    }
-    free(handle);
+    }while(Msq_Nmsgs(dispatch->m_Msq));
+    Cdr_Destroy(handle);
     return (void*)((intptr_t)(1));
 }
 

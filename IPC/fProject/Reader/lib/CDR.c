@@ -26,11 +26,13 @@ typedef struct Cdr_t
 {
     char    m_OPB[MAX_NAME_SIZE];
     char    m_IMEI[MAX_NAME_SIZE];
+    char    m_IMSI[MAX_ID_SIZE];
     char    m_MSISDN[MAX_ID_SIZE];
     char    m_otherMSISDN[MAX_ID_SIZE];
     char    m_MCC[MNC_SIZE];
     char    m_CallType[MAX_CALL_TYPE];
     char    m_DATE[DATE_SIZE];
+    char    m_Time[DATE_SIZE];
     size_t  m_Duration;
     size_t  m_DOWNLOAD;
     size_t  m_UPLOAD;
@@ -83,6 +85,8 @@ void Cdr_Destroy(void* _cdr)
  * IMEI             -c
  * DATE             -D
  * CallType         -T
+ * Time             -t
+ * IMSI             -S
  * Duration         -d
  * DOWNLOAD         -l
  * UPLOAD           -p
@@ -122,6 +126,12 @@ int Cdr_Set(void* _cdr,char _fieldToUpdate,void* _value)
         case 'D':
             strcpy(cdr->m_DATE,(char*)_value);
             break;
+        case 'S':
+            strcpy(cdr->m_IMSI,(char*)_value);
+            break;
+        case 't':
+            strcpy(cdr->m_Time,(char*)_value);
+            break;
         case 'd':
             cdr->m_Duration = atoi((char*)_value);
             break;
@@ -143,6 +153,8 @@ int Cdr_Set(void* _cdr,char _fieldToUpdate,void* _value)
  * otherMSISDN      -m
  * MCC              -C
  * CallType         -T
+ * Time             -t
+ * IMSI             -S
  * DATE             -D
  * Duration         -d
  * DOWNLOAD         -l
@@ -180,6 +192,9 @@ int Cdr_Get(void* _cdr,char _fieldToUpdate,void** _value)
             break;
         case 'T':
             *(char**)_value = cdr->m_CallType;
+            break;
+        case 't':
+            *(char**)_value = cdr->m_Time;
             break;
         case 'D':
             *(char**)_value = cdr->m_DATE;

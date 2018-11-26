@@ -26,7 +26,7 @@ typedef struct Dispatcher_t Dispatcher_t;
  * @brief create dispatcher
  * TODO add int nManagers
  */
-Dispatcher_t* Dispatcher_Create(char* _msqName,size_t _capacity,size_t _nThreads);
+Dispatcher_t* Dispatcher_Create(int _msqId, size_t _capacity, size_t _nThreads);
 
 
 /**

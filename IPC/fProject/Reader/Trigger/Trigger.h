@@ -31,7 +31,7 @@ typedef struct Trigger_t Trigger_t;
  * @brief create Trigger
  * 
  */
-Trigger_t* Trigger_Create(char* _executabe, char* _inFile, char* _outFile,char* _msqName,char* _nEnviron);
+Trigger_t* Trigger_Create(char* _executabe, char* _inFile, char* _outFile,int _msqId,char* _nEnviron);
 
 /**
  * @brief free _trigger  

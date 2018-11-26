@@ -41,7 +41,7 @@ int Manager_Upsert(Manager_t* _manager,void* _cdr);
  * @brief for Query 
  * 
  */
-int Manager_Get_One(Manager_t* _manager,const void* _key, FILE* _line);
+int Manager_Get_One(Manager_t* _manager, void* _key, FILE* _line);
 
 /**
  * @brief for Query

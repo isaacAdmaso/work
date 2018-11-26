@@ -12,7 +12,7 @@
 #include <string.h>
 
 
-#define STR_CDR_ORDER    "TdIiMmCcDlp"/**order of fields in cdr line */
+#define STR_CDR_ORDER    "ScMCITDtdplmi"/**order of fields in cdr line */
 
 
 

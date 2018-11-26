@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     inFp  = fopen(argv[1],"r");
     outFp = fopen(argv[2],"w");
     
-    if(-1 == (msq = Msq_CrInit(argv[3],0)))
+    if(-1 == (msq = atoi(argv[3])))
     {
         perror("\nfailed to conect MSQ\n");
         exit(-1);

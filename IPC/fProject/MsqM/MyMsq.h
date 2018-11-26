@@ -13,8 +13,8 @@
 
 #include <stddef.h>
 #include <sys/ipc.h>
-#define PERMIS      0666
-#define C_PERMIS    0666 | IPC_CREAT | IPC_EXCL
+#define PERMIS      0666    | IPC_CREAT
+#define C_PERMIS    0666 | IPC_CREAT 
 #define PROJ_ID     1
 
 

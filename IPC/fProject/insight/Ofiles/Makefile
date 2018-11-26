@@ -64,7 +64,7 @@ gdb:  Insight
 	 gdb -q ./Insight
 	
 val: Insight
-	valgrind -q --leak-check=full --show-leak-kinds=all --track-origins=yes -v ./Insight
+	valgrind -q -v --leak-check=full --show-leak-kinds=all --track-origins=yes ./Insight
 
 #LIB_PATH = ../../../lib
 #
