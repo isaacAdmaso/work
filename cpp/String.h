@@ -22,7 +22,7 @@ private:
     {
         if(_str)
         {
-            char* temp = new[strlen(_str)+1];
+            char* temp = new char[strlen(_str)+1];
             strcpy(temp,_str);
             return temp;
         }
@@ -33,7 +33,7 @@ public:
     String_t();
     String_t(const char* _str);
     String_t(const String_t& _s);
-    String_t& operator = (const String_t& _s);
+    void operator = (const String_t& _s);
     size_t getLength();
     void setString(const char* _str);
     const char* getString();

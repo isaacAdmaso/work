@@ -9,8 +9,8 @@
  */
 
 #include "String.h"
-#include <string.h>
 #include <iostream>
+#include <string.h>
 
 
 
@@ -29,7 +29,7 @@ String_t::String_t(const char* _str)
 
 String_t::String_t(const String_t& _s)
 {
-    m_str = createFrom(((String_t)_s).getString());
+    m_str = createFrom(_s.m_str);
 }
 
 String_t::~String_t()
@@ -43,9 +43,10 @@ void String_t::operator=(const String_t& _s)
     if(this != &_s)
     {
         delete[] m_str;
-        m_str = createFrom(((String_t)_s).getString());
+        m_str = createFrom(_s.m_str);
     }
 }
+
 
 size_t String_t::getLength()
 {
@@ -59,10 +60,12 @@ void String_t::setString(const char* _str)
     delete[] m_str;
     m_str = createFrom(_str);    
 }
+
 const char* String_t::getString()
 {
     return m_str;
 }
+
 int String_t::cmpString(const String_t& _s)
 {
     int rtVal;
@@ -83,7 +86,6 @@ int String_t::cmpString(const String_t& _s)
 void String_t::printString()
 {
     if (m_str)
-        cout << m_str;
+        std::cout << "\n" << m_str <<"\n";
 }
-
 
