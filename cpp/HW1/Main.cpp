@@ -7,23 +7,24 @@
  * @copyright Copyright (c) 2018
  * 
  */
-#include "String.h"
+#include <stddef.h>
 #include <string.h>
 #include <iostream>
-#include <stddef.h>
+#include "String.h"
+
 
 #define MAX 1024
 
-
-int main()
+int main(int argc, char const *argv[])
 {
+    
+
     size_t len;
     int cmpSval = -2;
-    char rtString[MAX];
 
     
     String_t str1;
-    String_t str2("yitshak");
+    String_t str2("hslfkgnls");
     String_t& str4 = str2; 
     String_t str3(str4);
 
@@ -34,13 +35,11 @@ int main()
 
     std::cout << len;
 
-    str4.setString("admaso");
+    str4.setString("sodkgf");
 
-    strcpy(rtString,str2.getString());
+    std::cout << "\n" << str2.getString() << "\n";
 
-    std::cout << "\n" << rtString << "\n";
-
-    cmpSval = str1.cmpString(str4);
+    cmpSval = str4.cmpString(str1);
 
     std::cout  << "\n" << cmpSval << "\n";
 
@@ -49,5 +48,8 @@ int main()
     str3.printString();
     str4.printString();
 
+    std::cout <<"&str2 "<< &str2 << "\n&str4 "<< &str4 << "\n";
+
     return 0;
 }
+

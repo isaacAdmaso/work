@@ -11,29 +11,20 @@
 #define __STRING_H__
 #include <stddef.h>
 #include <string.h>
-#include <iostream>
 
 
 class String_t 
 {
 private:
     char* m_str;
-    char* createFrom(const char* _str)
-    {
-        if(_str)
-        {
-            char* temp = new char[strlen(_str)+1];
-            strcpy(temp,_str);
-            return temp;
-        }
-        return NULL;
-    }
+    char* createFrom(const char* _str);
+
 public:
     ~String_t();
     String_t();
     String_t(const char* _str);
     String_t(const String_t& _s);
-    void operator = (const String_t& _s);
+    String_t& operator = (const String_t& _s);
     size_t getLength();
     void setString(const char* _str);
     const char* getString();

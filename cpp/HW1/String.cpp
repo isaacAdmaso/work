@@ -8,43 +8,58 @@
  * 
  */
 
-#include "String.h"
 #include <iostream>
 #include <string.h>
+#include "String.h"
 
+using namespace std;
 
-
+char* String_t::createFrom(const char* _str)
+{
+    if(_str)
+    {
+        char* temp = new char[strlen(_str)+1];
+        strcpy(temp,_str);
+        return temp;
+    }
+    return NULL;
+}
 
 
 
 String_t::String_t()
 {
     m_str = NULL;
+    cout << "\nCTOR\n";
 }
 
 String_t::String_t(const char* _str)
 {
     m_str = createFrom(_str);
+    cout << "\nCTOR\n";
 }
 
 String_t::String_t(const String_t& _s)
 {
     m_str = createFrom(_s.m_str);
+    cout << "\nCTOR\n";
 }
 
 String_t::~String_t()
 {
     delete[] m_str;
     m_str = NULL;
+    cout << "\nDTOR\n";
 }
 
-void String_t::operator=(const String_t& _s)
+String_t& String_t::operator=(const String_t& _s)
 {
     if(this != &_s)
     {
         delete[] m_str;
         m_str = createFrom(_s.m_str);
     }
+    return *this;
 }
 
 
