@@ -33,7 +33,7 @@ int main(int argc, char const *argv[])
 
     len = str2.getLength();
 
-    std::cout << len;
+    std::cout << "length " <<len;
 
     str4.setString("sodkgf");
 
@@ -41,7 +41,7 @@ int main(int argc, char const *argv[])
 
     cmpSval = str4.cmpString(str1);
 
-    std::cout  << "\n" << cmpSval << "\n";
+    std::cout  << "\ncompare value " << cmpSval << "\n";
 
     str1.printString();
     str2.printString();
