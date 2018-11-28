@@ -22,14 +22,16 @@ char* String_t::createFrom(const char* _str)
         strcpy(temp,_str);
         return temp;
     }
-    return NULL;
+    char* rtVal = new char[1];
+    strcpy(rtVal,"");
+    return rtVal;
 }
 
 
 
 String_t::String_t()
 {
-    m_str = NULL;
+    m_str = createFrom(NULL);
     cout << "\nCTOR\n";
 }
 
@@ -63,11 +65,9 @@ String_t& String_t::operator=(const String_t& _s)
 }
 
 
-size_t String_t::getLength()
+size_t String_t::getLength()const
 {
-    if(m_str)
-        return strlen(m_str);
-    return 0;
+    return strlen(m_str);
 }
 
 void String_t::setString(const char* _str)
@@ -76,31 +76,20 @@ void String_t::setString(const char* _str)
     m_str = createFrom(_str);    
 }
 
-const char* String_t::getString()
+const char* String_t::getString()const
 {
     return m_str;
 }
 
-int String_t::cmpString(const String_t& _s)
+int String_t::cmpString(const String_t& _s)const
 {
     int rtVal;
-    if(m_str && _s.m_str)
-    {
-        return ((rtVal = strcmp(m_str, _s.m_str)) > 0) ? 1: (rtVal == 0) ? 0: -1;
-    }
-    else if (m_str)
-    {
-        return 1;
-    }
-    else 
-    {
-        return -1;
-    }
-
+    
+    return ((rtVal = strcmp(m_str, _s.m_str)) > 0) ? 1: (rtVal == 0) ? 0: -1;
+    
 }
-void String_t::printString()
+void String_t::printString() const
 {
-    if (m_str)
-        std::cout << "\n" << m_str <<"\n";
+    std::cout << "\n" << m_str <<endl;
 }
 

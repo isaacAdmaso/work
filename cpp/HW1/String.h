@@ -25,11 +25,11 @@ public:
     String_t(const char* _str);
     String_t(const String_t& _s);
     String_t& operator = (const String_t& _s);
-    size_t getLength();
+    size_t getLength()const;
     void setString(const char* _str);
-    const char* getString();
-    int cmpString(const String_t& _s);
-    void printString();
+    const char* getString()const;
+    int cmpString(const String_t& _s)const;
+    void printString()const;
 
 };
 
