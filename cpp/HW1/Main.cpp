@@ -11,9 +11,9 @@
 #include <string.h>
 #include <iostream>
 #include "String.h"
+using namespace std;
 
 
-#define MAX 1024
 
 int main(int argc, char const *argv[])
 {
@@ -24,7 +24,7 @@ int main(int argc, char const *argv[])
 
     
     String_t str1;
-    String_t str2("hslfkgnls");
+    String_t str2("Yitshak");
     String_t& str4 = str2; 
     String_t str3(str4);
 
@@ -35,20 +35,50 @@ int main(int argc, char const *argv[])
 
     std::cout << "length " <<len;
 
-    str4.setString("sodkgf");
+    str4.setString("Admaso");
 
-    std::cout << "\n" << str2.getString() << "\n";
+    std::cout << "\n" << str2 << "\n";
 
     cmpSval = str4.cmpString(str1);
 
-    std::cout  << "\ncompare value " << cmpSval << "\n";
+    std::cout  << "compare value " << cmpSval << endl;
 
-    str1.printString();
-    str2.printString();
-    str3.printString();
-    str4.printString();
+    cout << str1;
+    str1.lower();
+    cout << str1;
+    cout << str2;
+    str2.upper();
+    cout << str2;
+    cout <<str4;
+    str2.lower();
+    cout << str2;
+    str4.prepend("str3");
+    cout <<str3;
+    cout <<str4;
+    str4 += str3;
+    str4 += "str3";
 
-    std::cout <<"&str2 "<< &str2 << "\n&str4 "<< &str4 << "\n";
+    cout <<str4;
+    str4.upper();
+    cout <<str4;
+    cout <<str1;
+
+    cout << (str4 < str1) << endl;
+    cout << (str4 >= str2) << endl;
+    cout << (str4 == str2) << endl;
+    cout << (str4 <= str2) << endl;
+    cout << (str4 != str1) << endl;
+    cout << (str4 > str1) << endl;
+    cout << (str4 < str2) << endl;
+    cout << (str4 != str2) << endl;
+    cout << (str4 == str1) << endl;
+    cout <<"contains " <<(str4.contains(str1.getString())) << endl;
+    str4.lower();
+    cout <<"contains " <<(str4.contains(str1.getString())) << endl;
+    cout << (str4[str4.getLength()]) << endl;
+    cout << str4;
+    cout << (str4[str4.getLength() - 3]) << endl;
+    cout << (str4[0]) << endl;
 
     return 0;
 }

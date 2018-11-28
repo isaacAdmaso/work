@@ -10,8 +10,11 @@
 
 #include <iostream>
 #include <string.h>
+#include <stdio.h>
+#include <ctype.h>
 #include "String.h"
 
+#define MAX 1024
 using namespace std;
 
 char* String_t::createFrom(const char* _str)
@@ -32,26 +35,22 @@ char* String_t::createFrom(const char* _str)
 String_t::String_t()
 {
     m_str = createFrom(NULL);
-    cout << "\nCTOR\n";
 }
 
 String_t::String_t(const char* _str)
 {
     m_str = createFrom(_str);
-    cout << "\nCTOR\n";
 }
 
 String_t::String_t(const String_t& _s)
 {
     m_str = createFrom(_s.m_str);
-    cout << "\nCTOR\n";
 }
 
 String_t::~String_t()
 {
     delete[] m_str;
     m_str = NULL;
-    cout << "\nDTOR\n";
 }
 
 String_t& String_t::operator=(const String_t& _s)
@@ -88,8 +87,120 @@ int String_t::cmpString(const String_t& _s)const
     return ((rtVal = strcmp(m_str, _s.m_str)) > 0) ? 1: (rtVal == 0) ? 0: -1;
     
 }
-void String_t::printString() const
+ String_t& String_t::operator+= (const String_t& _s)
+ {
+    char temp[MAX];
+
+    snprintf(temp,MAX,"%s%s",m_str,_s.m_str);
+    delete[]m_str;
+    m_str = createFrom(temp);
+    return *this;
+}
+
+String_t& String_t::operator+= (const char* _str)
 {
-    std::cout << "\n" << m_str <<endl;
+    char temp[MAX];
+
+    snprintf(temp,MAX,"%s%s",m_str,_str);
+    delete[]m_str;
+    m_str = createFrom(temp);
+    return *this;
+}
+
+
+void   String_t::prepend(const String_t& _s)
+{
+    char temp[MAX];
+
+    snprintf(temp,MAX,"%s%s",_s.m_str,m_str);
+    delete[] m_str;
+    m_str = createFrom(temp);
+
+}
+void   String_t::prepend(const char* _str)
+{
+    char temp[MAX];
+
+    snprintf(temp,MAX,"%s%s",_str,m_str);
+    delete[] m_str;
+    m_str = createFrom(temp);
+
+}
+bool     String_t::operator <  (const String_t& _s)const
+{
+    return(strcmp(m_str, _s.m_str) < 0) ? true:false;
+}
+bool     String_t::operator >  (const String_t& _s)const
+{
+    return(strcmp(m_str, _s.m_str) > 0) ? true:false;
+}
+bool     String_t::operator >= (const String_t& _s)const
+{
+    return(strcmp(m_str, _s.m_str) >= 0) ? true:false;
+
+}
+bool     String_t::operator <= (const String_t& _s)const
+{
+    return(strcmp(m_str, _s.m_str) <= 0) ? true:false;
+
+}
+bool     String_t::operator == (const String_t& _s)const
+{
+    return(!strcmp(m_str, _s.m_str)) ? true:false;
+
+}
+bool     String_t::operator != (const String_t& _s)const
+{
+    return(strcmp(m_str, _s.m_str)) ? true:false;
+}
+bool     String_t::contains(const char* _subStr)const
+{
+    return (strstr(m_str,_subStr))?true:false;
+}
+char     String_t::operator [] (size_t _idx)const
+{
+    if(_idx >= strlen(m_str))
+        return '\0';
+    return m_str[_idx];
+}
+void    String_t::upper()
+{
+    char* temp = m_str;
+    int i = 0;
+
+    while(*temp) 
+    {
+        m_str[i] = toupper(*temp);
+        ++i;
+        ++temp;
+    }
+}
+
+void    String_t::lower()
+{
+    char* temp = m_str;
+    int i = 0;
+
+    while(*temp) 
+    {
+        m_str[i] = tolower(*temp);
+        ++i;
+        ++temp;
+    }
+}
+
+istream& operator >> (istream& _os,String_t _s)
+{
+    char tempStr[MAX];
+
+    _os >> tempStr;
+    _s.setString(tempStr);
+    return _os;
+}
+
+ostream&  operator << (ostream& _os,const String_t _s)
+{
+    _os <<"String: "<<_s.getString()<<endl;
+    return _os;
 }
 

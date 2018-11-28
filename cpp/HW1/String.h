@@ -9,8 +9,11 @@
  */
 #ifndef __STRING_H__
 #define __STRING_H__
+#include <iostream>
 #include <stddef.h>
 #include <string.h>
+
+using namespace std;
 
 
 class String_t 
@@ -25,14 +28,30 @@ public:
     String_t(const char* _str);
     String_t(const String_t& _s);
     String_t& operator = (const String_t& _s);
-    size_t getLength()const;
-    void setString(const char* _str);
+    String_t& operator+= (const String_t& _s);
+    String_t& operator+= (const char* _str);
+    bool     operator <  (const String_t& _s)const;
+    bool     operator >  (const String_t& _s)const;
+    bool     operator >= (const String_t& _s)const;
+    bool     operator <= (const String_t& _s)const;
+    bool     operator == (const String_t& _s)const;
+    bool     operator != (const String_t& _s)const;
+    bool     contains(const char* _subStr)const;
+    char     operator [] (size_t _idx)const;
+    size_t      getLength()const;
+    void        setString(const char* _str);
     const char* getString()const;
-    int cmpString(const String_t& _s)const;
-    void printString()const;
+    int         cmpString(const String_t& _s)const;
+    void        upper();
+    void        lower();
+    void        prepend(const String_t& _s);
+    void        prepend(const char* _str);
+    void        printString()const;
 
 };
 
+ostream&  operator << (ostream& _os,const String_t _s);
+istream& operator >> (istream& _is,String_t _s);
 
 
 
