@@ -14,7 +14,6 @@
 #include <ctype.h>
 #include "String.h"
 
-#define MAX 1024
 using namespace std;
 
 char* String_t::createFrom(const char* _str)

@@ -13,6 +13,9 @@
 #include <stddef.h>
 #include <string.h>
 
+#define MAX 1024
+
+
 using namespace std;
 
 

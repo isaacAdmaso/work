@@ -33,11 +33,11 @@ int main(int argc, char const *argv[])
 
     len = str2.getLength();
 
-    std::cout << "length " <<len;
+    std::cout << "length " << len << endl;
 
     str4.setString("Admaso");
 
-    std::cout << "\n" << str2 << "\n";
+    std::cout << str2 << endl;
 
     cmpSval = str4.cmpString(str1);
 
@@ -78,7 +78,7 @@ int main(int argc, char const *argv[])
     cout << (str4[str4.getLength()]) << endl;
     cout << str4;
     cout << (str4[str4.getLength() - 3]) << endl;
-    cout << (str4[0]) << endl;
+    cout << (str4[100]) << endl;
 
     return 0;
 }
