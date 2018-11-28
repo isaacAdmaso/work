@@ -17,69 +17,146 @@ using namespace std;
 
 int main(int argc, char const *argv[])
 {
-    
+    int cont = 1;			// trigger to stop loop	
+	unsigned int option;
+    char inString[MAX];
+    size_t idx;
+    String_t str1, str2;
+	
+	while (cont) 
+    {
+		cout << "Choose option: " << endl;
+		cout << "1: init 2 String_t class object  " << endl;
+		cout << "2: print  " << endl;
+		cout << "3: prepend " << endl;
+		cout << "4:   !=  " << endl;
+		cout << "5:   <   " << endl;
+		cout << "6:   >   " << endl;
+		cout << "7:   >=  " << endl;
+		cout << "8:   <=  " << endl;
+		cout << "9:   ==  " << endl;
+		cout << "10:  []  " << endl;
+		cout << "11: is contains?  " << endl;
+		cout << "12: converts string to upper cases " << endl;
+		cout << "13: converts string to lower cases " << endl;
+		cout << "Any another number - stop " << endl;
 
-    size_t len;
-    int cmpSval = -2;
+		cin >>  option;
+		switch (option) 
+        {
+			case 1:
+        		cout << "insert 1st string " << endl;
+				cin >> inString;
+                str1.setString(inString);
+        		cout << "insert 2nd string " << endl;
+                cin >> inString;
+                str2.setString(inString);
+                break;
+			case 2:
+                cout << str1;
+                cout << str2;
+                break;
+			case 3:
+        		cout << "prepend to 1st " << endl;
+                cin >> inString;
+                str1.prepend(inString);
+                cout << "prepend to 2nd " << endl;
+                cin >> inString;
+                str2.prepend(inString);
+                break;
+            case 4:
+                cout << "1st string " << endl;
+                cin >> inString;
+                str1.setString(inString);
+                cout << "2nd string " << endl;
+                cin >> inString;
+                str2.setString(inString);
+                cout << (str1 != str2) << endl;
+                break;
+            case 5:
+                cout << "1st string " << endl;
+                cin >> inString;
+                str1.setString(inString);
+                cout << "2nd string " << endl;
+                cin >> inString;
+                str2.setString(inString);
+                cout << "1st string < 2nd string "<<(str1 < str2) << endl;
+                break;
+            case 6:
+                cout << "1st string " << endl;
+                cin >> inString;
+                str1.setString(inString);
+                cout << "2nd string " << endl;
+                cin >> inString;
+                str2.setString(inString);
+                cout << "1st string > 2nd string "<<(str1 > str2) << endl;
+                break;
+            case 7:
+                cout << "1st string " << endl;
+                cin >> inString;
+                str1.setString(inString);
+                cout << "2nd string " << endl;
+                cin >> inString;
+                str2.setString(inString);
+                cout << "1st string >= 2nd string "<<(str1 >= str2) << endl;
+                break;
+            case 8:
+                cout << "1st string " << endl;
+                cin >> inString;
+                str1.setString(inString);
+                cout << "2nd string " << endl;
+                cin >> inString;
+                str2.setString(inString);
+                cout << "1st string <= 2nd string "<<(str1 <= str2) << endl;
+                break;
+            case 9:
+                cout << "1st string " << endl;
+                cin >> inString;
+                str1.setString(inString);
+                cout << "2nd string " << endl;
+                cin >> inString;
+                str2.setString(inString);
+                cout << "1st string == 2nd string "<<(str1 == str2) << endl;
+                break;
+            case 10:
+                cout << "1st string " << endl;
+                cin >> inString;
+                str1.setString(inString);
+                cout << "index" << endl;
+                cin >> idx;
+                cout << "char in place: "<< idx << " is:" << str1[idx] << endl;
+                break;
+            case 11:
+                cout << "1st string " << endl;
+                cin >> inString;
+                str1.setString(inString);
+                cout << "2nd string " << endl;
+                cin >> inString;
+                cout << "is 1st string contains 2nd string "<<(str1.contains(inString)) << endl;
+                break;
+            case 12:
+                cout << " string to convert" << endl;
+                cin >> inString;
+                str1.setString(inString);
+                cout <<  str1 << endl;
+                str1.upper();
+                cout << str1 << endl;
+                break;
 
-    
-    String_t str1;
-    String_t str2("Yitshak");
-    String_t& str4 = str2; 
-    String_t str3(str4);
+            case 13:
+                cout << " string to convert" << endl;
+                cin >> inString;
+                str2.setString(inString);
+                cout <<  str1 << endl;
+                str2.lower();
+                cout << str2 << endl;
+                break;
 
-
-    str1 = str2;
-
-    len = str2.getLength();
-
-    std::cout << "length " << len << endl;
-
-    str4.setString("Admaso");
-
-    std::cout << str2 << endl;
-
-    cmpSval = str4.cmpString(str1);
-
-    std::cout  << "compare value " << cmpSval << endl;
-
-    cout << str1;
-    str1.lower();
-    cout << str1;
-    cout << str2;
-    str2.upper();
-    cout << str2;
-    cout <<str4;
-    str2.lower();
-    cout << str2;
-    str4.prepend("str3");
-    cout <<str3;
-    cout <<str4;
-    str4 += str3;
-    str4 += "str3";
-
-    cout <<str4;
-    str4.upper();
-    cout <<str4;
-    cout <<str1;
-
-    cout << (str4 < str1) << endl;
-    cout << (str4 >= str2) << endl;
-    cout << (str4 == str2) << endl;
-    cout << (str4 <= str2) << endl;
-    cout << (str4 != str1) << endl;
-    cout << (str4 > str1) << endl;
-    cout << (str4 < str2) << endl;
-    cout << (str4 != str2) << endl;
-    cout << (str4 == str1) << endl;
-    cout <<"contains " <<(str4.contains(str1.getString())) << endl;
-    str4.lower();
-    cout <<"contains " <<(str4.contains(str1.getString())) << endl;
-    cout << (str4[str4.getLength()]) << endl;
-    cout << str4;
-    cout << (str4[str4.getLength() - 3]) << endl;
-    cout << (str4[100]) << endl;
-
+			default: 
+                cont = 0;	
+                break;
+		}
+	}
     return 0;
 }
 

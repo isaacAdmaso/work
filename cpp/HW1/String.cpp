@@ -100,10 +100,12 @@ int String_t::cmpString(const String_t& _s)const
 String_t& String_t::operator+= (const char* _str)
 {
     char temp[MAX];
-
-    snprintf(temp,MAX,"%s%s",m_str,_str);
-    delete[]m_str;
-    m_str = createFrom(temp);
+    if (_str)
+    {
+        snprintf(temp,MAX,"%s%s",m_str,_str);
+        delete[]m_str;
+        m_str = createFrom(temp);
+    }
     return *this;
 }
 
@@ -121,10 +123,12 @@ void   String_t::prepend(const String_t& _s)
 void   String_t::prepend(const char* _str)
 {
     char temp[MAX];
-
-    snprintf(temp,MAX,"%s%s",_str,m_str);
-    delete[] m_str;
-    m_str = createFrom(temp);
+    if(_str)
+    {
+        snprintf(temp,MAX,"%s%s",_str,m_str);
+        delete[] m_str;
+        m_str = createFrom(temp);
+    }
 
 }
 
@@ -170,6 +174,10 @@ bool     String_t::operator != (const String_t& _s)const
 
 bool     String_t::contains(const char* _subStr)const
 {
+    if(!_subStr)
+    {
+        return false;
+    }
     return (strstr(m_str,_subStr))?true:false;
 }
 
