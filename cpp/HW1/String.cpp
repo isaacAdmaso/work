@@ -115,7 +115,6 @@ void   String_t::prepend(const String_t& _s)
     snprintf(temp,MAX,"%s%s",_s.m_str,m_str);
     delete[] m_str;
     m_str = createFrom(temp);
-
 }
 
 
