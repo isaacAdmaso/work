@@ -84,8 +84,9 @@ int String_t::cmpString(const String_t& _s)const
     int rtVal;
     
     return ((rtVal = strcmp(m_str, _s.m_str)) > 0) ? 1: (rtVal == 0) ? 0: -1;
-    
 }
+
+
  String_t& String_t::operator+= (const String_t& _s)
  {
     char temp[MAX];
@@ -116,6 +117,8 @@ void   String_t::prepend(const String_t& _s)
     m_str = createFrom(temp);
 
 }
+
+
 void   String_t::prepend(const char* _str)
 {
     char temp[MAX];
@@ -125,43 +128,61 @@ void   String_t::prepend(const char* _str)
     m_str = createFrom(temp);
 
 }
+
+
 bool     String_t::operator <  (const String_t& _s)const
 {
     return(strcmp(m_str, _s.m_str) < 0) ? true:false;
 }
+
+
 bool     String_t::operator >  (const String_t& _s)const
 {
     return(strcmp(m_str, _s.m_str) > 0) ? true:false;
 }
+
+
 bool     String_t::operator >= (const String_t& _s)const
 {
     return(strcmp(m_str, _s.m_str) >= 0) ? true:false;
 
 }
+
+
 bool     String_t::operator <= (const String_t& _s)const
 {
     return(strcmp(m_str, _s.m_str) <= 0) ? true:false;
 
 }
+
+
 bool     String_t::operator == (const String_t& _s)const
 {
     return(!strcmp(m_str, _s.m_str)) ? true:false;
 
 }
+
+
 bool     String_t::operator != (const String_t& _s)const
 {
     return(strcmp(m_str, _s.m_str)) ? true:false;
 }
+
+
 bool     String_t::contains(const char* _subStr)const
 {
     return (strstr(m_str,_subStr))?true:false;
 }
+
+
 char     String_t::operator [] (size_t _idx)const
 {
     if(_idx >= strlen(m_str))
         return '\0';
     return m_str[_idx];
 }
+
+
 void    String_t::upper()
 {
     char* temp = m_str;
