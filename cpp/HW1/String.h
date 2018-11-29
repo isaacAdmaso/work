@@ -25,6 +25,7 @@ private:
     char* m_str;
     inline char* createFrom(const char* _str);
 
+
 public:
     ~String_t(){delete[] m_str;/*m_str = NULL; double delete will crash the program*/}  
     String_t(){m_str = createFrom(NULL);}
@@ -51,8 +52,8 @@ public:
     void        prepend(const String_t& _s);
     void        prepend(const char* _str);
     void        printString()const;
-    static bool     caseSens;
     static size_t   capacity;
+    static bool     caseSens;
 
 };
 

@@ -22,7 +22,7 @@ int main(int argc, char const *argv[])
     char inString[MAX];
     size_t idx;
     String_t str1, str2;
-	
+	String_t::caseSens = false;
 	while (cont) 
     {
 		cout << "Choose option: " << endl;

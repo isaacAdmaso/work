@@ -47,8 +47,10 @@ const char* String_t::getString()const
 int String_t::cmpString(const String_t& _s)const
 {
     int rtVal;
-    
-    return ((rtVal = strcmp(m_str, _s.m_str)) > 0) ? 1: (rtVal == 0) ? 0: -1;
+    if(caseSens)
+        return ((rtVal = strcmp(m_str, _s.m_str)) > 0) ? 1: (rtVal == 0) ? 0: -1;
+    return ((rtVal = strcasecmp(m_str, _s.m_str)) > 0) ? 1: (rtVal == 0) ? 0: -1;
+
 }
 
 
@@ -106,34 +108,42 @@ bool     String_t::operator <  (const String_t& _s)const
 
 bool     String_t::operator >  (const String_t& _s)const
 {
-    return(strcmp(m_str, _s.m_str) > 0) ? true:false;
+    if(caseSens)
+        return(strcmp(m_str, _s.m_str) > 0) ? true:false;
+    return (strcasecmp(m_str, _s.m_str) > 0) ? true:false;
 }
 
 
 bool     String_t::operator >= (const String_t& _s)const
 {
-    return(strcmp(m_str, _s.m_str) >= 0) ? true:false;
+    if(caseSens)
+        return(strcmp(m_str, _s.m_str) >= 0) ? true:false;
+    return(strcasecmp(m_str, _s.m_str) >= 0) ? true:false;
 
 }
 
 
 bool     String_t::operator <= (const String_t& _s)const
 {
-    return(strcmp(m_str, _s.m_str) <= 0) ? true:false;
-
+    if(caseSens)
+        return(strcmp(m_str, _s.m_str) <= 0) ? true:false;
+    return(strcasecmp(m_str, _s.m_str) <= 0) ? true:false;
 }
 
 
 bool     String_t::operator == (const String_t& _s)const
 {
-    return(!strcmp(m_str, _s.m_str)) ? true:false;
-
+    if(caseSens)
+        return(!strcmp(m_str, _s.m_str)) ? true:false;
+    return(!strcasecmp(m_str, _s.m_str)) ? true:false;
 }
 
 
 bool     String_t::operator != (const String_t& _s)const
 {
-    return(strcmp(m_str, _s.m_str)) ? true:false;
+    if(caseSens)
+        return(strcmp(m_str, _s.m_str)) ? true:false;
+    return(strcasecmp(m_str, _s.m_str)) ? true:false;
 }
 
 
