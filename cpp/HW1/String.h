@@ -65,8 +65,8 @@ public:
     size_t      getLength()const;
     void        upper();
     void        lower();
-    void        prepend(const String_t& _s);
-    void        prepend(const char* _str);
+    String_t&   prepend(const String_t& _s);
+    String_t&   prepend(const char* _str);
     static void setCaseSens(bool _state){caseSens = _state;}
     static void setCapacity(size_t _capacity){ capacity = _capacity;}
 
@@ -111,6 +111,55 @@ inline int String_t::cmpString(const String_t& _s)const
         return ((rtVal = strcmp(m_str, _s.m_str)) > 0) ? 1: (rtVal == 0) ? 0: -1;
     return ((rtVal = strcasecmp(m_str, _s.m_str)) > 0) ? 1: (rtVal == 0) ? 0: -1;
 
+}
+
+
+inline bool     String_t::operator <  (const String_t& _s)const
+{
+    if(caseSens)
+        return(strcmp(m_str, _s.m_str) < 0) ? true:false;
+    return (strcasecmp(m_str, _s.m_str) < 0) ? true:false;
+}
+
+
+inline bool     String_t::operator >  (const String_t& _s)const
+{
+    if(caseSens)
+        return(strcmp(m_str, _s.m_str) > 0) ? true:false;
+    return (strcasecmp(m_str, _s.m_str) > 0) ? true:false;
+}
+
+
+inline bool     String_t::operator >= (const String_t& _s)const
+{
+    if(caseSens)
+        return(strcmp(m_str, _s.m_str) >= 0) ? true:false;
+    return(strcasecmp(m_str, _s.m_str) >= 0) ? true:false;
+
+}
+
+
+inline bool     String_t::operator <= (const String_t& _s)const
+{
+    if(caseSens)
+        return(strcmp(m_str, _s.m_str) <= 0) ? true:false;
+    return(strcasecmp(m_str, _s.m_str) <= 0) ? true:false;
+}
+
+
+inline bool     String_t::operator == (const String_t& _s)const
+{
+    if(caseSens)
+        return(!strcmp(m_str, _s.m_str)) ? true:false;
+    return(!strcasecmp(m_str, _s.m_str)) ? true:false;
+}
+
+
+inline bool     String_t::operator != (const String_t& _s)const
+{
+    if(caseSens)
+        return(strcmp(m_str, _s.m_str)) ? true:false;
+    return(strcasecmp(m_str, _s.m_str)) ? true:false;
 }
 
 

@@ -76,7 +76,7 @@ String_t& String_t::operator+= (const char* _str)
     char temp[MAX];
     if (_str)
     {
-        m_strlen +=strlen(_str);
+        m_strlen +=strlen(_str) - 1;
         snprintf(temp,MAX,"%s%s",m_str,_str);
         if(m_capacity < m_strlen){
             delete[]m_str;
@@ -89,74 +89,39 @@ String_t& String_t::operator+= (const char* _str)
 }
 
 
-void   String_t::prepend(const String_t& _s)
+String_t&   String_t::prepend(const String_t& _s)
 {
     char temp[MAX];
-
+    m_strlen += _s.m_strlen-1;
     snprintf(temp,MAX,"%s%s",_s.m_str,m_str);
-    delete[] m_str;
-    m_str = createFrom(temp);
+
+    if(m_capacity < m_strlen) {
+        delete[] m_str;
+        createFrom(temp);
+    }else{
+        strcpy(m_str,temp);
+    }
+    return *this;
 }
 
 
-void   String_t::prepend(const char* _str)
+String_t&   String_t::prepend(const char* _str)
 {
     char temp[MAX];
     if(_str)
     {
         snprintf(temp,MAX,"%s%s",_str,m_str);
-        delete[] m_str;
-        m_str = createFrom(temp);
+        m_strlen = strlen(temp)+1;
+        if(m_capacity < m_strlen)   {
+            delete[] m_str;
+            createFrom(temp);
+        }else{
+            strcpy(m_str,temp);
+        }
     }
-
+    return *this;
 }
 
-
-bool     String_t::operator <  (const String_t& _s)const
-{
-    return(strcmp(m_str, _s.m_str) < 0) ? true:false;
-}
-
-
-bool     String_t::operator >  (const String_t& _s)const
-{
-    if(caseSens)
-        return(strcmp(m_str, _s.m_str) > 0) ? true:false;
-    return (strcasecmp(m_str, _s.m_str) > 0) ? true:false;
-}
-
-
-bool     String_t::operator >= (const String_t& _s)const
-{
-    if(caseSens)
-        return(strcmp(m_str, _s.m_str) >= 0) ? true:false;
-    return(strcasecmp(m_str, _s.m_str) >= 0) ? true:false;
-
-}
-
-
-bool     String_t::operator <= (const String_t& _s)const
-{
-    if(caseSens)
-        return(strcmp(m_str, _s.m_str) <= 0) ? true:false;
-    return(strcasecmp(m_str, _s.m_str) <= 0) ? true:false;
-}
-
-
-bool     String_t::operator == (const String_t& _s)const
-{
-    if(caseSens)
-        return(!strcmp(m_str, _s.m_str)) ? true:false;
-    return(!strcasecmp(m_str, _s.m_str)) ? true:false;
-}
-
-
-bool     String_t::operator != (const String_t& _s)const
-{
-    if(caseSens)
-        return(strcmp(m_str, _s.m_str)) ? true:false;
-    return(strcasecmp(m_str, _s.m_str)) ? true:false;
-}
 
 
 bool     String_t::contains(const char* _subStr)const

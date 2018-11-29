@@ -25,6 +25,8 @@ int main(int argc, char const *argv[])
     
 	while (cont) 
     {
+        cout << endl;
+
 		cout << "Choose option: " << endl;
 		cout << "1: init 2 String_t class object  " << endl;
 		cout << "2: print  " << endl;
@@ -40,6 +42,7 @@ int main(int argc, char const *argv[])
 		cout << "12: converts string to upper cases " << endl;
 		cout << "13: converts string to lower cases " << endl;
 		cout << "Any another number - stop " << endl;
+        cout << endl;
 
 		cin >>  option;
 		switch (option) 
@@ -158,6 +161,7 @@ int main(int argc, char const *argv[])
                 cont = 0;	
                 break;
 		}
+        cout << endl;
 	}
     return 0;
 }
