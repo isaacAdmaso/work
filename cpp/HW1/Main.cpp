@@ -80,7 +80,7 @@ int main(int argc, char const *argv[])
                 cout << "2nd string " << endl;
                 cin >> inString;
                 str2.setString(inString);
-                cout << "1st string < 2nd string "<<(str1 < str2) << endl;
+                cout << "1st string < 2nd string: "<<(str1 < str2) << endl;
                 break;
             case 6:
                 cout << "1st string " << endl;
@@ -89,7 +89,7 @@ int main(int argc, char const *argv[])
                 cout << "2nd string " << endl;
                 cin >> inString;
                 str2.setString(inString);
-                cout << "1st string > 2nd string "<<(str1 > str2) << endl;
+                cout << "1st string > 2nd string: "<<(str1 > str2) << endl;
                 break;
             case 7:
                 cout << "1st string " << endl;
@@ -98,7 +98,7 @@ int main(int argc, char const *argv[])
                 cout << "2nd string " << endl;
                 cin >> inString;
                 str2.setString(inString);
-                cout << "1st string >= 2nd string "<<(str1 >= str2) << endl;
+                cout << "1st string >= 2nd string: "<<(str1 >= str2) << endl;
                 break;
             case 8:
                 cout << "1st string " << endl;
@@ -107,7 +107,7 @@ int main(int argc, char const *argv[])
                 cout << "2nd string " << endl;
                 cin >> inString;
                 str2.setString(inString);
-                cout << "1st string <= 2nd string "<<(str1 <= str2) << endl;
+                cout << "1st string <= 2nd string: "<<(str1 <= str2) << endl;
                 break;
             case 9:
                 cout << "1st string " << endl;
@@ -116,7 +116,7 @@ int main(int argc, char const *argv[])
                 cout << "2nd string " << endl;
                 cin >> inString;
                 str2.setString(inString);
-                cout << "1st string == 2nd string "<<(str1 == str2) << endl;
+                cout << "1st string == 2nd string: "<<(str1 == str2) << endl;
                 break;
             case 10:
                 cout << "1st string " << endl;
@@ -132,7 +132,7 @@ int main(int argc, char const *argv[])
                 str1.setString(inString);
                 cout << "2nd string " << endl;
                 cin >> inString;
-                cout << "is 1st string contains 2nd string "<<(str1.contains(inString)) << endl;
+                cout << "is 1st string contains 2nd string: "<<(str1.contains(inString)) << endl;
                 break;
             case 12:
                 cout << " string to convert" << endl;
