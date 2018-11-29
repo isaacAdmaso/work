@@ -8,59 +8,66 @@
  * 
  */
 
-#include <iostream>
 #include <string.h>
+#include <iostream>
 #include <stdio.h>
 #include <ctype.h>
 #include "String.h"
 
 using namespace std;
 
+bool String_t::caseSens = INIT_VAL;
+size_t   String_t::capacity = MIN;
+
 
 String_t& String_t::operator=(const String_t& _s)
 {
     if(this != &_s)
     {
-        delete[] m_str;
-        m_str = createFrom(_s.m_str);
+        if(m_capacity < _s.m_strlen)
+        {
+            delete[] m_str;
+            createFrom(_s.m_str);
+        }
+        strcpy(m_str,_s.m_str);
+        m_strlen = _s.m_strlen;
     }
     return *this;
 }
 
 
-size_t String_t::getLength()const
-{
-    return strlen(m_str);
-}
-
 void String_t::setString(const char* _str)
 {
-    delete[] m_str;
-    m_str = createFrom(_str);    
+    if(_str){
+        m_strlen = strlen(_str) +1;
+        if(m_capacity < m_strlen){
+            delete[] m_str;
+            createFrom(_str);
+        }else{
+            strcpy(m_str,_str);
+        }
+    }else{
+        m_strlen = 1;
+        *m_str ='\0';         
+    }
 }
 
-const char* String_t::getString()const
+
+String_t& String_t::operator+= (const String_t& _s)
 {
-    return m_str;
-}
-
-int String_t::cmpString(const String_t& _s)const
-{
-    int rtVal;
-    if(caseSens)
-        return ((rtVal = strcmp(m_str, _s.m_str)) > 0) ? 1: (rtVal == 0) ? 0: -1;
-    return ((rtVal = strcasecmp(m_str, _s.m_str)) > 0) ? 1: (rtVal == 0) ? 0: -1;
-
-}
-
-
- String_t& String_t::operator+= (const String_t& _s)
- {
-    char temp[MAX];
-
+    char temp[MAX]; 
+    
     snprintf(temp,MAX,"%s%s",m_str,_s.m_str);
-    delete[]m_str;
-    m_str = createFrom(temp);
+    m_strlen +=_s.m_strlen-1;
+
+    if(m_capacity < m_strlen){
+        delete[]m_str;
+        createFrom(temp);
+        return *this;
+
+    }else{
+        strcpy(m_str,temp); 
+    }
     return *this;
 }
 
@@ -69,9 +76,14 @@ String_t& String_t::operator+= (const char* _str)
     char temp[MAX];
     if (_str)
     {
+        m_strlen +=strlen(_str);
         snprintf(temp,MAX,"%s%s",m_str,_str);
-        delete[]m_str;
-        m_str = createFrom(temp);
+        if(m_capacity < m_strlen){
+            delete[]m_str;
+            createFrom(temp);
+        }else{
+            strcpy(m_str,temp);
+        }
     }
     return *this;
 }
