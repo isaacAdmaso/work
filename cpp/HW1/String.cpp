@@ -21,7 +21,7 @@ char* String_t::createFrom(const char* _str)
     if(_str)
     {
         char* temp = new char[strlen(_str)+1];
-        if(!temp)
+        if(temp)
             strcpy(temp,_str);
         return temp;
     }
@@ -185,7 +185,7 @@ bool     String_t::contains(const char* _subStr)const
 char&    String_t::operator [] (size_t _idx)
 {
     size_t len = strlen(m_str);
-    
+
     if(_idx >= len)
         return m_str[len + 1];
     return m_str[_idx];

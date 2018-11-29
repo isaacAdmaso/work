@@ -51,6 +51,8 @@ int main(int argc, char const *argv[])
         		cout << "insert 2nd string " << endl;
                 cin >> inString;
                 str2.setString(inString);
+                str2[4] = 'r';
+                cout << str2;
                 break;
 			case 2:
                 cout << str1;
