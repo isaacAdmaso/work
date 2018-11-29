@@ -41,6 +41,7 @@ public:
     bool     operator != (const String_t& _s)const;
     bool     contains(const char* _subStr)const;
     char     operator [] (size_t _idx)const;
+    char&    operator [] (size_t _idx);
     size_t      getLength()const;
     void        setString(const char* _str);
     const char* getString()const;

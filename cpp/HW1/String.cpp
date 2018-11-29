@@ -21,7 +21,8 @@ char* String_t::createFrom(const char* _str)
     if(_str)
     {
         char* temp = new char[strlen(_str)+1];
-        strcpy(temp,_str);
+        if(!temp)
+            strcpy(temp,_str);
         return temp;
     }
     char* rtVal = new char[1];
@@ -49,7 +50,7 @@ String_t::String_t(const String_t& _s)
 String_t::~String_t()
 {
     delete[] m_str;
-    m_str = NULL;
+    /*m_str = NULL; double delete will crash the program*/
 }
 
 String_t& String_t::operator=(const String_t& _s)
@@ -181,6 +182,14 @@ bool     String_t::contains(const char* _subStr)const
     return (strstr(m_str,_subStr))?true:false;
 }
 
+char&    String_t::operator [] (size_t _idx)
+{
+    size_t len = strlen(m_str);
+    
+    if(_idx >= len)
+        return m_str[len + 1];
+    return m_str[_idx];
+}
 
 char     String_t::operator [] (size_t _idx)const
 {
