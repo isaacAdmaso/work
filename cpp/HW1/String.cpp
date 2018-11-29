@@ -16,42 +16,6 @@
 
 using namespace std;
 
-char* String_t::createFrom(const char* _str)
-{
-    if(_str)
-    {
-        char* temp = new char[strlen(_str)+1];
-        if(temp)
-            strcpy(temp,_str);
-        return temp;
-    }
-    char* rtVal = new char[1];
-    strcpy(rtVal,"");
-    return rtVal;
-}
-
-
-
-String_t::String_t()
-{
-    m_str = createFrom(NULL);
-}
-
-String_t::String_t(const char* _str)
-{
-    m_str = createFrom(_str);
-}
-
-String_t::String_t(const String_t& _s)
-{
-    m_str = createFrom(_s.m_str);
-}
-
-String_t::~String_t()
-{
-    delete[] m_str;
-    /*m_str = NULL; double delete will crash the program*/
-}
 
 String_t& String_t::operator=(const String_t& _s)
 {
