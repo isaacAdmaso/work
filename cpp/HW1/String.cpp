@@ -130,7 +130,10 @@ bool     String_t::contains(const char* _subStr)const
     {
         return false;
     }
-    return (strstr(m_str,_subStr))?true:false;
+    if(caseSens)
+        return (strstr(m_str,_subStr))?true:false;
+    return (strcasestr(m_str,_subStr))?true:false;
+    
 }
 
 char&    String_t::operator [] (size_t _idx)

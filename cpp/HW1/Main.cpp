@@ -19,8 +19,8 @@ int main(int argc, char const *argv[])
 {
     int cont = 1;			// trigger to stop loop	
 	unsigned int option;
-    char inString[MAX];
-    size_t idx;
+    char inString[MAX],testSub[MAX];
+    size_t idx,startCpy,lenCpy;
     String_t str1, str2;
     
 	while (cont) 
@@ -54,8 +54,18 @@ int main(int argc, char const *argv[])
         		cout << "insert 2nd string " << endl;
                 cin >> inString;
                 str2.setString(inString);
-                str2[4] = 'r';
+                strcpy(testSub,str2);
+                cout  << endl<< "test cast String_t to char*: "<< testSub << endl << str2 << endl << endl;
+                cout  << "test substring copy cast "<< endl;
+                cout  <<"enter start and length String_t and explicit char*"<< endl;
+                cin   >> startCpy >> lenCpy;
+                str1 = str2(startCpy,lenCpy);
+                strcpy(testSub ,str2(startCpy,lenCpy));
+
+                cout << testSub<<" :*test char**"<<endl;
+                cout << str1;
                 cout << str2;
+
                 break;
 			case 2:
                 cout << str1;
@@ -137,7 +147,7 @@ int main(int argc, char const *argv[])
                 str1.setString(inString);
                 cout << "2nd string " << endl;
                 cin >> inString;
-                cout << "is 1st string contains 2nd string: "<<(str1.contains(inString)) << endl;
+                cout << "is 1st string contains 2nd string: "<<(char*)((str1.contains(inString))?"yes":"no") << endl;
                 break;
             case 12:
                 cout << " string to convert" << endl;
@@ -161,7 +171,6 @@ int main(int argc, char const *argv[])
                 cont = 0;	
                 break;
 		}
-        cout << endl;
 	}
     return 0;
 }
