@@ -41,18 +41,12 @@ public:
     String_t(const String_t& _s){createFrom(_s.m_str);}
 
     String_t(const String_t& _s,size_t _start,size_t _size){createFrom(_s.m_str,_start,_size);}
-    /** */
-
-    //explicit operator  char*()(int _start, unsigned int len) { return NULL; }
     
-
     int  cmpString(const String_t& _s)const;
 
     const char* getString()const{return m_str;}
     
     void        setString(const char* _str);
-    
-    //String_t operator()(int start, unsigned len){return };
     
     operator   char* () {return m_str;}
 
@@ -82,7 +76,7 @@ public:
 
     char&    operator [] (size_t _idx);
 
-    size_t      getLength()const;
+    size_t      getLength()const{return strlen(m_str);}
 
     void        upper();
 

@@ -6,12 +6,13 @@ CC=g++
 CPPFLAGS= -ansi -pedantic -Wall -Werror  -g 
 
 # Include directory
-INC_DIR=../../include
+INC_DIR=../String
 
 CPPFLAGS += -I$(INC_DIR)
 
 # all .c files in this directory are my sources
 SOURCES=$(wildcard *.cpp)
+SOURCES+=../String/String.cpp
 # all .o files in this directory are my objects
 OBJECTS=$(SOURCES:.cpp=.o)
 
