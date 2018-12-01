@@ -52,6 +52,7 @@ depends:
 clean:
 	rm *.o
 	rm Insight
+	rm Reader
 	rm depends
 	rm logQ.txt
 	rm Reader
