@@ -19,7 +19,7 @@ int main(int argc, char const *argv[])
 {
     int cont = 1;			// trigger to stop loop	
 	unsigned int option;
-    char inString[MAX],testSub[MAX];
+    char inString[MAX],testSub[MAX],*testFail;
     size_t idx,startCpy,lenCpy;
     String_t str1, str2;
     
@@ -54,16 +54,18 @@ int main(int argc, char const *argv[])
         		cout << "insert 2nd string " << endl;
                 cin >> inString;
                 str2.setString(inString);
+                testFail = str2;
                 strcpy(testSub,str2);
-                cout  << endl<< "test cast String_t to char*: "<< testSub << endl << str2 << endl << endl;
-                cout  << "test substring copy cast "<< endl;
-                cout  <<"enter start and length String_t and explicit char*"<< endl;
+                cout  << "test cast String_t to: "<< str2 <<endl<<"char[]:" << testSub << endl <<"char*:"<< testFail << endl;
+                cout  << "test substring  cast "<< endl;
+                cout  <<"enter start and length of substring:"<< endl;
                 cin   >> startCpy >> lenCpy;
                 str1 = str2(startCpy,lenCpy);
-                strcpy(testSub ,str2(startCpy,lenCpy));
+                strcpy(testSub ,(char*)str2(startCpy,lenCpy));
+                testFail = str1;
 
-                cout << testSub<<" :*test char**"<<endl;
-                cout << str1;
+                cout <<" :*test char**"<<endl<< testFail << endl << testSub << endl ;
+                cout  <<" :*test Class"<<endl<< str1  << endl;
                 cout << str2;
 
                 break;

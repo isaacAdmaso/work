@@ -17,62 +17,68 @@ using namespace std;
 
 int main(int argc, char const *argv[])
 {
-    int cont = 1;			// trigger to stop loop	
+    int cont = 1, cont2;			// trigger to stop loop	
 	unsigned int option;
     char inString[MAX];
-    BigNumber num1,num2;
     
 	while (cont) 
     {
-        cout << endl;
-
-		cout << "Choose option: " << endl;
-		cout << "1: init 2 Big numbers " << endl;
-		cout << "2: print  " << endl;
-		cout << "3: check bigger " << endl;
-		cout << "4: check smaller " << endl;
-		cout << "5:   check equal   " << endl;
-		cout << "6:   +   " << endl;
-		
-        cout << endl;
-
-		cin >>  option;
-		switch (option) 
+        cout << "init 2 Big numbers " << endl;
+        cout << "insert 1st Num " << endl;
+        cin >> inString;
+        static BigNumber num1(inString);
+        cout << "insert 2nd Num " << endl;
+        cin >> inString;
+        static BigNumber num2(inString);
+        cout << "the two numbers are:"<< endl;
+        cout << num1<< endl;
+        cout << num2<< endl;
+        cont2 = 1;
+		while(cont2)
         {
-			case 1:
-        		cout << "insert 1st Num " << endl;
-				cin >> inString;
-                num1.setBigNumber(inString);
-        		cout << "insert 2nd Num " << endl;
-                cin >> inString;
-                num2.setBigNumber(inString);
-                cout << num1;
-                cout << num2;
-                break;
-			case 2:
-                cout << num1;
-                cout << num2;
-                break;
-			case 3:
-        		cout << "is first num bigger? " << endl;
-                cout << (num1 > num2)<< endl;
-                break;
-            case 4:
-                cout << "is second num bigger? " << endl;
-                cout << (num1 < num2)<< endl;
-                break;
-            case 5:
-                cout << "is equals " << endl;
-                cout << (num1 == num2)<< endl;
-                break;
-            case 6:
-                cout << " + " << endl;
-                cout << (num1 + num2)<< endl;
-                break;
-			default: 
-                cont = 0;	
-                break;
-		}
+            cout << "Choose option: " << endl;
+		    cout << "1: print  " << endl;
+		    cout << "2: check bigger " << endl;
+		    cout << "3: check smaller " << endl;
+		    cout << "4: check equal   " << endl;
+		    cout << "5: +   " << endl;
+		    cout << "6: new numbers   " << endl;
+		    cout << "Any another number - stop " << endl;
+    
+            cout << endl;
+
+		    cin >>  option;
+		    switch (option) 
+            {
+		    	case 1:
+                    cout << num1<<endl;
+                    cout << num2<<endl;
+                    break;
+		    	case 2:
+            		cout << "is first num bigger? " << endl;
+                    cout << (num1 > num2)<< endl;
+                    break;
+                case 3:
+                    cout << "is second num bigger? " << endl;
+                    cout << (num1 < num2)<< endl;
+                    break;
+                case 4:
+                    cout << "is equals " << endl;
+                    cout << (num1 == num2)<< endl;
+                    break;
+                case 5:
+                    cout << " + " << endl;
+                    cout << (num1 + num2)<< endl;
+                    break;
+                case 6:
+                    cont2 = 0;	
+                    break;
+		    	default:
+                    cont2 = 0;	
+                    cont = 0;	
+                    break;
+		    }
+        }
 	}
     return 0;
 }

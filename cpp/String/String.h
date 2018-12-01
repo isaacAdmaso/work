@@ -32,7 +32,7 @@ private:
 
 
 public:
-    ~String_t(){delete[] m_str;/*m_str = NULL; double delete will crash the program*/}  
+    ~String_t(){delete[] m_str;m_str = NULL; /*double delete will crash the program*/}  
 
     String_t(){createFrom(NULL);}
 

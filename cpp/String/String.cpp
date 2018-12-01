@@ -190,7 +190,7 @@ istream& operator >> (istream& _os,String_t _s)
 
 ostream&  operator << (ostream& _os,const String_t _s)
 {
-    _os <<"String: "<<_s.getString()<<endl;
+    _os <<_s.getString();
     return _os;
 }
 

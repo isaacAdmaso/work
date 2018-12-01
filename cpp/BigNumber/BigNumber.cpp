@@ -27,26 +27,28 @@ istream& operator >> (istream& _os,BigNumber _n)
 
 ostream&  operator << (ostream& _os,const BigNumber _n)
 {
-    _os << "Number: "<< _n.getNumber() <<endl;
+    _os << _n.getNumber();
     return _os;
 }
 
 BigNumber  BigNumber::operator + (const BigNumber& _n){
-    char aStr[MAX];
-    char bStr[MAX];
-    char ans[MAX];
-    int alen, blen,i,carry = 0;
+    char aStr[MAX], bStr[MAX],ans[MAX],*shortString,*longString;
+    int alen, blen,i,sum,carry = 0;
 
     strcpy(aStr,m_number.getString());
     strcpy(bStr,_n.m_number.getString());
-    alen=strlen(strrev(aStr));
-    blen=strlen(strrev(bStr));
+    alen = strlen(strrev(aStr));
+    longString = aStr;
+    blen = strlen(strrev(bStr));
+    shortString = bStr;
     if(alen<blen){
         alen ^= blen;blen ^= alen;alen ^= blen;//swap
+        longString = bStr;
+        shortString = aStr;
     }
     ans[alen+1]=ans[alen]='\0';
-    for(i=0;i<alen;++i){
-        int sum = C2D(aStr[i])+((i<blen) ? C2D(bStr[i]): 0)+carry;
+    for(i = 0;i < alen;++i){
+        sum = C2D(longString[i]) + ((i<blen) ? C2D(shortString[i]): 0)+carry;
         ans[i] = D2C(sum % 10);
         carry = sum / 10;
     }
