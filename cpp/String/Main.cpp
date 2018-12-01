@@ -41,6 +41,8 @@ int main(int argc, char const *argv[])
 		cout << "11: is contains?  " << endl;
 		cout << "12: converts string to upper cases " << endl;
 		cout << "13: converts string to lower cases " << endl;
+		cout << "14: set fag to true " << endl;
+		cout << "15: set fag to  false" << endl;
 		cout << "Any another number - stop " << endl;
         cout << endl;
 
@@ -70,7 +72,7 @@ int main(int argc, char const *argv[])
 
                 break;
 			case 2:
-                cout << str1;
+                cout << str1<< endl;
                 cout << str2;
                 break;
 			case 3:
@@ -169,6 +171,15 @@ int main(int argc, char const *argv[])
                 cout << str2 << endl;
                 break;
 
+            case 14:
+                cout << "case flage - set to case sensitive";
+                String_t::setFlag(true);
+                break;
+            
+            case 15:
+                cout << "case flage - set to case insensitive";
+                String_t::setFlag(false);
+                break;
 			default: 
                 cont = 0;	
                 break;
