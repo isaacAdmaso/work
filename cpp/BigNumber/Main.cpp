@@ -19,6 +19,8 @@ int main(int argc, char const *argv[])
 {
     int cont = 1, cont2;			// trigger to stop loop	
 	unsigned int option;
+    BigNumber num1;
+    BigNumber num2;
     char inString[MAX];
     
 	while (cont) 
@@ -26,10 +28,10 @@ int main(int argc, char const *argv[])
         cout << "init 2 Big numbers " << endl;
         cout << "insert 1st Num " << endl;
         cin >> inString;
-        static BigNumber num1(inString);
+        num1.setBigNumber(inString);
         cout << "insert 2nd Num " << endl;
         cin >> inString;
-        static BigNumber num2(inString);
+        num2.setBigNumber(inString);
         cout << "the two numbers are:"<< endl;
         cout << num1<< endl;
         cout << num2<< endl;

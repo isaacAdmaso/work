@@ -23,6 +23,8 @@ private:
 
     char* strrev(char *str);
     String_t m_number;
+    bool IsSmaller(BigNumber num1, BigNumber num2); 
+
 
 public:
 
@@ -40,6 +42,7 @@ public:
     const String_t getNumber()const{return m_number;}
     void        setBigNumber(const char* _str){m_number.setString(_str);}
     BigNumber  operator + (const BigNumber& _s);
+    BigNumber  operator - (const BigNumber& _s);
 
 
 };
