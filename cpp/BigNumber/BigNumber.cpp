@@ -32,9 +32,9 @@ ostream&  operator << (ostream& _os,const BigNumber _n)
 }
 
 
-bool BigNumber::IsSmaller(BigNumber _num1, BigNumber _num2) 
+bool BigNumber::IsSmaller(char* _num1, char* _num2) 
 { 
-    int n1 = _num1.getNumber().getLength(), n2 = _num2.getNumber().getLength(),i; 
+    int n1 = strlen(_num1), n2 = strlen(_num2),i; 
     char num1,num2;
 
     if (n1 < n2) 
@@ -43,8 +43,8 @@ bool BigNumber::IsSmaller(BigNumber _num1, BigNumber _num2)
     return false; 
   
     for (i = 0; i < n1; i++) {
-        num1 = _num1.getNumber().getString()[i];
-        num2 = _num2.getNumber().getString()[i]; 
+        num1 = _num1[i];
+        num2 = _num2[i]; 
         if (num1 < num2) {
             return true; 
         }  else if (num1 > num2){
@@ -54,7 +54,51 @@ bool BigNumber::IsSmaller(BigNumber _num1, BigNumber _num2)
     return false; 
 } 
 
-BigNumber  BigNumber::operator + (const BigNumber& _n){
+void BigNumber::findDiff(char* _num1, char* _num2,char* _diff)
+{
+    int sub,i,n1,n2,carry;
+    if (IsSmaller(_num1, _num2))
+    {
+        char* temp = _num1;
+        _num1 = _num2;
+        _num2 = temp; 
+    } 
+    n1 = strlen(_num1);
+    n2 = strlen(_num2); 
+    strrev(_num1);
+    strrev(_num2);
+    carry = 0;
+    for (i=0; i<n2; ++i) 
+    { 
+        sub = ((_num1[i]-'0')-(_num2[i]-'0')-carry); 
+        if (sub < 0) 
+        { 
+            sub = sub + 10; 
+            carry = 1; 
+        } 
+        else
+            carry = 0; 
+  
+        _diff[i] = sub + '0'; 
+    } 
+    for (i = n2; i < n1; ++i) 
+    { 
+        sub = ((_num1[i]-'0') - carry); 
+        if (sub < 0) 
+        { 
+            sub = sub + 10; 
+            carry = 1; 
+        } 
+        else
+            carry = 0; 
+              
+        _diff[i] = sub + '0'; 
+    }
+   _diff =  strrev(_diff);
+} 
+
+BigNumber  BigNumber::operator + (const BigNumber& _n)\
+{
     char aStr[MAX], bStr[MAX],ans[MAX],*shortString,*longString;
     int alen, blen,i,sum,carry = 0;
 
@@ -81,8 +125,10 @@ BigNumber  BigNumber::operator + (const BigNumber& _n){
     BigNumber rtVal(strrev(ans));
     return rtVal;
 }
-/*
+
 BigNumber  BigNumber::operator - (const BigNumber& _n){
+return *this;
+}/*
     char aStr[MAX], bStr[MAX],ans[MAX],*shortString,*longString;
     int alen, blen,i,sub,carry = 0,flag = 0;
 

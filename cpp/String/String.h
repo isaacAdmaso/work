@@ -25,6 +25,7 @@ private:
     char* m_str;
     inline void createFrom(const char* _str);
     inline void createFrom(const char* _str,size_t _start,size_t _size);
+    inline unsigned int PoT(unsigned int v);
     size_t m_capacity;
     size_t m_strlen;
     static size_t   capacity;
@@ -32,7 +33,7 @@ private:
 
 
 public:
-    ~String_t(){delete[] m_str;m_str = NULL; /*double delete will crash the program*/}  
+    ~String_t(){delete[] m_str;/*m_str = NULL; double delete will crash the program*/}  
 
     String_t(){createFrom(NULL);}
 
@@ -101,7 +102,7 @@ public:
 };
 
 /**up to (2^32 - 1) */
-inline unsigned int PoT(unsigned int v)
+inline unsigned int String_t::PoT(unsigned int v)
 {
     v--;
     v |= v >> 1;

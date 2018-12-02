@@ -44,7 +44,8 @@ int main(int argc, char const *argv[])
 		    cout << "3: check smaller " << endl;
 		    cout << "4: check equal   " << endl;
 		    cout << "5: +   " << endl;
-		    cout << "6: new numbers   " << endl;
+		    cout << "6: -   " << endl;
+		    cout << "7: new numbers   " << endl;
 		    cout << "Any another number - stop " << endl;
     
             cout << endl;
@@ -73,6 +74,10 @@ int main(int argc, char const *argv[])
                     cout << (num1 + num2)<< endl;
                     break;
                 case 6:
+                    cout << " - " << endl;
+                    cout << (num1 - num2)<< endl;
+                    break;
+                case 7:
                     cont2 = 0;	
                     break;
 		    	default:

@@ -23,7 +23,9 @@ private:
 
     char* strrev(char *str);
     String_t m_number;
-    bool IsSmaller(BigNumber num1, BigNumber num2); 
+    bool IsSmaller(char* num1, char* num2); 
+    void findDiff(char* _num1, char* _num2,char* _diff);
+
 
 
 public:
