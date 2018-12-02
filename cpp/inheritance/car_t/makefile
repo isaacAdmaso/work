@@ -7,12 +7,14 @@ CPPFLAGS= -ansi -pedantic -Wall -Werror  -g
 
 # Include directory
 INC_DIR=../../String
-
+INC_DIR2=../../BigNumber
 CPPFLAGS += -I$(INC_DIR)
+CPPFLAGS += -I$(INC_DIR2)
 
 # all .c files in this directory are my sources
 SOURCES=$(wildcard *.cpp)
 SOURCES+=../../String/String.cpp
+SOURCES+=../../BigNumber/BigNumber.cpp
 # all .o files in this directory are my objects
 OBJECTS=$(SOURCES:.cpp=.o)
 

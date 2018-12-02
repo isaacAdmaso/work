@@ -26,7 +26,7 @@ public:
     Bus_t(int _capacity);
     Bus_t(Bus_t& _bus);
     void setBcapacity(int _bCapacity){(*this).setCapacity(_bCapacity);}
-    int setLine(int _line){return m_line = m_line;}
+    int setLine(int _line){return m_line = _line;}
     int setnSeat(int _seat){return m_seats = _seat;}
     int getLine()const{return m_line;}
     int getnSeat()const{return m_seats;}
