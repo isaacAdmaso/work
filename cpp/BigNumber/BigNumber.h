@@ -21,8 +21,8 @@ class BigNumber
 {
 private:
 
-    char* strrev(char *str);
     String_t m_number;
+    char* strrev(char *str);
     bool IsSmaller(char* num1, char* num2); 
     void findDiff(char* _num1, char* _num2,char* _diff);
 
@@ -30,7 +30,7 @@ private:
 
 public:
 
-    ~BigNumber(){m_number.~String_t();}
+    ~BigNumber(){}
     BigNumber(){}
     BigNumber(const char* _number):m_number(_number){}
     BigNumber(int _number){char temp[sizeof(int) + 1];sprintf(temp,"%d",_number);m_number.setString(temp);}

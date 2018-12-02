@@ -54,14 +54,46 @@ bool BigNumber::IsSmaller(char* _num1, char* _num2)
     return false; 
 } 
 
+
+BigNumber  BigNumber::operator + (const BigNumber& _n)\
+{
+    char aStr[MAX], bStr[MAX],ans[MAX],*shortString,*longString;
+    int alen, blen,i,sum,carry = 0;
+
+    strcpy(aStr,m_number.getString());
+    strcpy(bStr,_n.m_number.getString());
+    alen = strlen(strrev(aStr));
+    longString = aStr;
+    blen = strlen(strrev(bStr));
+    shortString = bStr;
+    if(IsSmaller(longString,shortString)){
+        alen ^= blen;blen ^= alen;alen ^= blen;//swap
+        longString = bStr;
+        shortString = aStr;
+    }
+    ans[alen+1]=ans[alen]='\0';
+    for(i = 0;i < alen;++i){
+        sum = C2D(longString[i]) + ((i<blen) ? C2D(shortString[i]): 0)+carry;
+        ans[i] = D2C(sum % 10);
+        carry = sum / 10;
+    }
+    if(carry){
+        ans[i++]='1';
+    }
+    BigNumber rtVal(strrev(ans));
+    return rtVal;
+}
+
 void BigNumber::findDiff(char* _num1, char* _num2,char* _diff)
 {
-    int sub,i,n1,n2,carry;
+    int sub,i,n1,n2,carry,addMinus = 0;
     if (IsSmaller(_num1, _num2))
     {
         char* temp = _num1;
         _num1 = _num2;
-        _num2 = temp; 
+        _num2 = temp;
+        addMinus = 1;
+          
     } 
     n1 = strlen(_num1);
     n2 = strlen(_num2); 
@@ -94,76 +126,22 @@ void BigNumber::findDiff(char* _num1, char* _num2,char* _diff)
               
         _diff[i] = sub + '0'; 
     }
+   if(addMinus)
+   {
+        _diff[strlen(_diff)] = '-';
+        _diff[strlen(_diff)+1] = '\0';
+   }
    _diff =  strrev(_diff);
 } 
 
-BigNumber  BigNumber::operator + (const BigNumber& _n)\
-{
-    char aStr[MAX], bStr[MAX],ans[MAX],*shortString,*longString;
-    int alen, blen,i,sum,carry = 0;
-
-    strcpy(aStr,m_number.getString());
-    strcpy(bStr,_n.m_number.getString());
-    alen = strlen(strrev(aStr));
-    longString = aStr;
-    blen = strlen(strrev(bStr));
-    shortString = bStr;
-    if(IsSmaller(longString,shortString)){
-        alen ^= blen;blen ^= alen;alen ^= blen;//swap
-        longString = bStr;
-        shortString = aStr;
-    }
-    ans[alen+1]=ans[alen]='\0';
-    for(i = 0;i < alen;++i){
-        sum = C2D(longString[i]) + ((i<blen) ? C2D(shortString[i]): 0)+carry;
-        ans[i] = D2C(sum % 10);
-        carry = sum / 10;
-    }
-    if(carry){
-        ans[i++]='1';
-    }
-    BigNumber rtVal(strrev(ans));
-    return rtVal;
-}
-
 BigNumber  BigNumber::operator - (const BigNumber& _n){
-return *this;
-}/*
-    char aStr[MAX], bStr[MAX],ans[MAX],*shortString,*longString;
-    int alen, blen,i,sub,carry = 0,flag = 0;
-
-    strcpy(aStr,m_number.getString());
-    strcpy(bStr,_n.m_number.getString());
-    alen = strlen(strrev(aStr));
-    longString = aStr;
-    blen = strlen(strrev(bStr));
-    shortString = bStr;
-    if(alen<blen){
-        alen ^= blen;blen ^= alen;alen ^= blen;//swap
-        longString = bStr;
-        shortString = aStr;
-        flag = 1;
-    }
-    ans[alen + 1]=ans[alen]=ans[alen - 1]='\0';
-    for(i = 0;i < alen;++i){
-        sub = C2D(longString[i]) - ((i<blen) ? C2D(shortString[i]): 0) - carry;
-        if(sub < 0)
-        {
-            carry = 1; 
-            sub = - sub;
-        }else{
-            carry = 0;
-        }
-        ans[i] = D2C(sub);
-    }
-    if(flag || carry)
-    {
-        ans[i++]='-';
-    }
-    BigNumber rtVal(strrev(ans));
+    char ans[MAX], num1[MAX],num2[MAX]; 
+    strcpy(num1,m_number.getString());
+    strcpy(num2,_n.m_number.getString());
+    findDiff(num1,num2,ans);
+    BigNumber rtVal(ans);
     return rtVal;
 }
-*/
 char *BigNumber::strrev(char *str)
 {
       char *p1, *p2;
