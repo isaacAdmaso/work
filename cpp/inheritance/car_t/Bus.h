@@ -25,26 +25,26 @@ public:
     Bus_t();
     Bus_t(int _capacity);
     Bus_t(Bus_t& _bus);
-
-    void setLine(int _line){m_line = m_line;}
-    void setnSeat(int _seat){m_seats = _seat;}
+    void setBcapacity(int _bCapacity){(*this).setCapacity(_bCapacity);}
+    int setLine(int _line){return m_line = m_line;}
+    int setnSeat(int _seat){return m_seats = _seat;}
     int getLine()const{return m_line;}
     int getnSeat()const{return m_seats;}
 };
 
-Bus_t::Bus_t():BaseClass()
+inline Bus_t::Bus_t():BaseClass()
 {
     (*this).setName(name);
     m_seats = seats;
 }
 
-Bus_t::Bus_t(int _capacity):BaseClass(_capacity)
+inline Bus_t::Bus_t(int _capacity):BaseClass(_capacity)
 {
     (*this).setName(name);
     m_seats = seats;
 }
 
-Bus_t::Bus_t(Bus_t& _bus):BaseClass(_bus)
+inline Bus_t::Bus_t(Bus_t& _bus):BaseClass(_bus)
 {
     (*this).setName(name);
     m_seats = seats;

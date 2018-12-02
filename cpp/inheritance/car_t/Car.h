@@ -25,25 +25,29 @@ public:
     Car_t();
     Car_t(int _capacity);
     Car_t(const Car_t& _car);
-    void accelerate(int _accelerate){m_speed += _accelerate;}
-    void reduceSpeed(int _speed){m_speed -= _speed;}
+    void setCcapacity(int _cCapacity){(*this).setCapacity(_cCapacity);}
+    int accelerate(int _accelerate){return m_speed += _accelerate;}
+    int reduceSpeed(int _speed){return m_speed -= _speed;}
+    int getSpeed(){return m_speed;}
+    int setSpeed(int _speed){return m_speed = _speed;}
+
 };
 
 
 
-Car_t::Car_t():BaseClass()
+inline Car_t::Car_t():BaseClass()
 {
     (*this).setName(name);
     (*this).m_speed = speed;
 }
 
-Car_t::Car_t(int _capacity):BaseClass(_capacity)
+inline Car_t::Car_t(int _capacity):BaseClass(_capacity)
 {
     (*this).setName(name);
     (*this).m_speed = speed;
 }
 
-Car_t::Car_t(const Car_t& _car):BaseClass(_car)
+inline Car_t::Car_t(const Car_t& _car):BaseClass(_car)
 {
     (*this).setName(name);
     (*this).m_speed = _car.m_speed;
