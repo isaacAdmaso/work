@@ -48,9 +48,8 @@ inline Bus_t::Bus_t(int _capacity):BaseClass(_capacity)
 
 inline Bus_t::Bus_t(Bus_t& _bus):BaseClass(_bus)
 {
-    (*this).setName(name);
-    m_seats = seats;
-    m_line = line;
+    m_seats = _bus.m_seats;
+    m_line =  _bus.m_line;
 }
 
 

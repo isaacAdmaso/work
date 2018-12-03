@@ -49,8 +49,7 @@ inline Car_t::Car_t(int _capacity):BaseClass(_capacity)
 
 inline Car_t::Car_t(const Car_t& _car):BaseClass(_car)
 {
-    (*this).setName(name);
-    (*this).m_speed = _car.m_speed;
+    m_speed = _car.m_speed;
 }
 
 

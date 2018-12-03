@@ -18,11 +18,11 @@ void sigint_handler(int sig)
 
 }
 
-void SigInit(struct sigaction _sa)
+void SigInit(struct sigaction* _sa)
 {
-    _sa.sa_handler = sigint_handler;
-	_sa.sa_flags = SA_RESTART;
-	sigemptyset(&(_sa.sa_mask));
+    _sa->sa_handler = sigint_handler;
+	_sa->sa_flags = SA_RESTART;
+	sigemptyset(&(_sa->sa_mask));
 
 }
 
@@ -52,6 +52,7 @@ int main(int argc, char const *argv[])
 
     }
 */	
+    SigInit(sa);
     n = fork();
     if(n < 0)
     {
@@ -61,7 +62,6 @@ int main(int argc, char const *argv[])
     else if(n > 0)
     {
             /*Parent code*/
-        SigInit(sa);
         pause();
         
         if (sigaction(SIGUSR1, &sa, NULL) == -1) 
@@ -76,7 +76,6 @@ int main(int argc, char const *argv[])
     else
     {
         /*child code*/
-        SigInit(sa);
         kill(pid,SIGUSR1);
         if (sigaction(SIGUSR1, &sa, NULL) == -1) 
         {

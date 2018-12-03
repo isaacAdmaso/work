@@ -12,9 +12,9 @@ CPPFLAGS += -I$(INC_DIR)
 CPPFLAGS += -I$(INC_DIR2)
 
 # all .c files in this directory are my sources
-SOURCES=../../String/String.cpp
-SOURCES+=../../BigNumber/BigNumber.cpp
-SOURCES+=$(wildcard *.cpp)
+#SOURCES=../../String/String.cpp
+#SOURCES+=../../BigNumber/BigNumber.cpp
+SOURCES=$(wildcard *.cpp)
 # all .o files in this directory are my objects
 OBJECTS=$(SOURCES:.cpp=.o)
 
@@ -29,7 +29,7 @@ include depends
 depends:
 	$(CC) -MM -I$(INC_DIR) $(SOURCES) > depends
 
-clean:
+Clean:
 	-rm -f $(TARGET) *.o depends
 	-rm *.out
 	

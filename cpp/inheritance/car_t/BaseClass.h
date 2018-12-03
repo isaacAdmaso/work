@@ -49,7 +49,7 @@ public:
 
     bool            operator <  (const BaseClass& _car)const{return (m_capacity < _car.m_capacity);}
     bool            operator ==  (const BaseClass& _car)const{return (m_Type == _car.m_Type);}
-    const String_t&  getName()const{return m_Type;}
+    const String_t& getName()const{return m_Type;}
     bool            getIsAuto()const{return m_isAuto;}
     int             getCapacity()const{return m_capacity;}
     int             getId()const{return m_Id;}
