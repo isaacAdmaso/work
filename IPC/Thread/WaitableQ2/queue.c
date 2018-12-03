@@ -116,11 +116,11 @@ ADTErr QueueInsert(Queue *_queue, int  _item)
 	/*	Syncronizing
 	Locker(_queue);
 	*/
-	pthread_mutex_lock(&(_queue->m_myMutex));
 	while(!(_queue->m_predicate < _queue->m_size)|| !IS_INVALID(_queue))
 	{
 		pthread_cond_wait(&(_queue->m_cond), &(_queue->m_myMutex));
 	}
+	pthread_mutex_lock(&(_queue->m_myMutex));
 
 	/** Logic*/
 	_queue->m_items[_queue->m_tail]=_item;
@@ -139,7 +139,6 @@ ADTErr QueueInsert(Queue *_queue, int  _item)
 
 ADTErr QueueRemove(Queue *_queue, int *_item)
 {
-	pthread_mutex_lock(&(_queue->m_myMutex));
 	if(IS_INVALID(_queue) ||NULL == _queue->m_items) 
 	{
 		return ERR_NOT_INITIALIZED;
@@ -149,6 +148,7 @@ ADTErr QueueRemove(Queue *_queue, int *_item)
 	{
 		pthread_cond_wait(&(_queue->m_cond), &(_queue->m_myMutex));
 	}
+	pthread_mutex_lock(&(_queue->m_myMutex));
 	/**
 
 	Locker(_queue);

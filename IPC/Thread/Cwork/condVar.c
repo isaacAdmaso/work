@@ -30,7 +30,6 @@ void *WriteMsg(void* _msg)
 {
     Msg_t *msg = _msg;
     
-    pthread_mutex_lock(&(msg->m_myMutex));
     if(msg->m_whileF)
     {
         while (!msg->m_W_predicate)
@@ -43,6 +42,7 @@ void *WriteMsg(void* _msg)
     {
         pthread_cond_wait(&(msg->m_W_cond), &(msg->m_myMutex));
     }
+    pthread_mutex_lock(&(msg->m_myMutex));
     strcpy(msg->m_msg,LETTER);
     pthread_mutex_unlock(&(msg->m_myMutex)); 
     pthread_cond_broadcast(&(msg->m_R_cond));
@@ -54,7 +54,6 @@ void* ReadMsg(void* _msg)
     Msg_t *msg = _msg;
     pthread_t id;
 
-    pthread_mutex_lock(&(msg->m_myMutex));
 
     id = pthread_self();
     msg->m_W_predicate = 1;
@@ -70,6 +69,7 @@ void* ReadMsg(void* _msg)
     {
         pthread_cond_wait(&(msg->m_R_cond), &(msg->m_myMutex));
     }
+    pthread_mutex_lock(&(msg->m_myMutex));
     fprintf(stdout,"%ld -> %s ,",id,msg->m_msg);
 
     pthread_mutex_unlock(&(msg->m_myMutex));

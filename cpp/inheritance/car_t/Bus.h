@@ -36,18 +36,21 @@ inline Bus_t::Bus_t():BaseClass()
 {
     (*this).setName(name);
     m_seats = seats;
+    m_line = line;
 }
 
 inline Bus_t::Bus_t(int _capacity):BaseClass(_capacity)
 {
     (*this).setName(name);
     m_seats = seats;
+    m_line = line;
 }
 
 inline Bus_t::Bus_t(Bus_t& _bus):BaseClass(_bus)
 {
     (*this).setName(name);
     m_seats = seats;
+    m_line = line;
 }
 
 

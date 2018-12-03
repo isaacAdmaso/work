@@ -4,7 +4,7 @@
 #include <getopt.h>
 #include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
+#include <unistd.h>/**for pipe */
 #include <wait.h>
 #include <stdio.h>
 #define ET 1000
@@ -78,11 +78,11 @@ int main(int argc, char *argv[])
         {
         printf("\nChild reads from pipe\n");
         }
+        close(fd[1]);        
         if (vFlag)
         {
         printf("\nClose unused write end\n");
         }
-        close(fd[1]);        
 
 
         while ((n = read(fd[0], readBuf, sizeToRead)) > 0)
@@ -103,11 +103,11 @@ int main(int argc, char *argv[])
         {
         printf("\nParent writes\n");
         }
+        close(fd[0]);
         if (vFlag)
         {
         printf("\nClose unused read end\n");
         }
-        close(fd[0]);
         for(i = 0;i < numOfMSG;++i)
         {
             printf("\nsleep write\n");
