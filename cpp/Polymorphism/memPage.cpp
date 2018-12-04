@@ -39,12 +39,14 @@ size_t  memPage_t::nLeftSize()
 
 size_t  memPage_t::read(void *_buf, size_t _count)
 {
-    size_t cur = getCurrPos();
+    size_t cur = (m_capacity - getCurrPos());
 
-    if(_count > (m_capacity - cur))
-        memManager_t::read(_buf,m_capacity - cur);
+    if(_count > ( cur))
+        return memManager_t::read(_buf,cur);
+    return memManager_t::read(_buf,_count);
     
 }
+/*
 size_t  memPage_t::read(size_t _pos,void *_buf, size_t _count){
 
 }
@@ -54,3 +56,4 @@ size_t  memPage_t::write(void *_buf, size_t _count){
 size_t  memPage_t::write(size_t _pos,void *_buf, size_t _count){
 
 }
+*/

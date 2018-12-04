@@ -43,12 +43,14 @@ public:
     size_t getCapacity(){return m_capacity;}
 
     size_t  read(void *_buf, size_t _count);
+    /*
 
     size_t  read(size_t _pos,void *_buf, size_t _count);
 
     size_t  write(void *_buf, size_t _count);
 
     size_t  write(size_t _pos,void *_buf, size_t _count);
+     */
 };
 
 
