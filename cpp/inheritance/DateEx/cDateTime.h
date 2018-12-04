@@ -22,7 +22,7 @@ public:
 
 inline ostream&  operator << (ostream& _os,const cDateTime_t _w)
 {
-    cout<<"from base Time: " << _w.getTime() << "from base Time: "<<_w.getDate()<< endl;
+    cout<<"from base Time: " << _w.getTime() << endl << "from base Time: "<<_w.getDate()<< endl;
     return _os;
 }
 

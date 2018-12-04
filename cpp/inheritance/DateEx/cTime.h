@@ -21,15 +21,15 @@ private:
     time_t 	m_time_date;
    	struct tm* 	m_current_time;
     static bool formart;
-    char* m_line;
+    char m_line[64];
 public:
-    ~cTime_t(){delete [] m_line;}
-    cTime_t(){m_time_date = time(0); m_current_time = localtime(&m_time_date);m_line = new char[64];}
+    ~cTime_t(){}
+    cTime_t():m_time_date(time(0)), m_current_time(localtime(&m_time_date)){}
 
-    cTime_t(const cTime_t& _w):m_current_time(_w.m_current_time){m_line = new char[64];}
+    cTime_t(const cTime_t& _w):m_current_time(_w.m_current_time){}
     
     inline char* getTime()const;
-    
+    void setFormatT(bool _n){formart = _n;}
     void setTime(){m_time_date = time(0); m_current_time = localtime(&m_time_date);}
     int getHours()const{return   m_current_time->tm_hour;}
     int getMinutes()const{return m_current_time->tm_min;}
@@ -45,10 +45,10 @@ ostream&  operator << (ostream& _os,const cTime_t _w);
 inline char* cTime_t::getTime()const
 {
     if(formart) {
-        strftime(m_line, sizeof m_line, "%H:%M:%S", m_current_time);
+        strftime((char*)m_line, sizeof m_line, "%H:%M:%S", m_current_time);
     }else
-        strftime(m_line, sizeof m_line, "%I:%M:%S  %p", m_current_time);
-    return m_line;
+        strftime((char*)m_line, sizeof m_line, "%I:%M:%S  %p", m_current_time);
+    return (char*)m_line;
 }
 
 inline cTime_t&  cTime_t::operator += (const cTime_t& _w)

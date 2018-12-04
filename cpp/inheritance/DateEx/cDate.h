@@ -20,19 +20,19 @@ private:
     time_t 	m_time_date;
    	struct tm* 	m_current_time;
     static int formart;
-    char* m_line;
+    char m_line[64];
 public:
-    ~cDate_t(){delete[] m_line;}
-    cDate_t():m_time_date(time(0)),m_current_time(localtime(&m_time_date)){m_line = new char[64];}
-    cDate_t(const cDate_t& _w):m_current_time(_w.m_current_time){m_line = new char[64];}
+    ~cDate_t(){}
+    cDate_t():m_time_date(time(0)),m_current_time(localtime(&m_time_date)){}
+    cDate_t(const cDate_t& _w):m_current_time(_w.m_current_time){}
     
     inline char* getDate()const;
-
+    void setFormatD(int _n){formart = _n;}
     void setDate(){m_time_date = time(0); m_current_time = localtime(&m_time_date);}
     int getDay()const{return    m_current_time->tm_mday;}
     int getMon()const{return    m_current_time->tm_mon + 1;}
     int getyear()const{return   m_current_time->tm_year + 1900;}
-    bool isLeap()const{return   (m_current_time->tm_year + 1900)%4 == 0;}
+    bool isLeap()const{return   (m_current_time->tm_year)%4 == 0;}
     cDate_t&  operator + (const cDate_t& _w);
 
 };
@@ -46,18 +46,18 @@ inline char* cDate_t::getDate()const
     switch(formart)
     {
         case 0:
-            strftime(m_line, sizeof m_line, "%d:%b:%Y", m_current_time);
+            strftime((char*)m_line, sizeof m_line, "%d:%b:%Y", m_current_time);
             break;
         case 1:
-            strftime(m_line, sizeof m_line, "%d:%m:%Y", m_current_time);
+            strftime((char*)m_line, sizeof m_line, "%d:%m:%Y", m_current_time);
             break;
         case 2:
-            strftime(m_line, sizeof m_line, "%m:%d:%Y", m_current_time);
+            strftime((char*)m_line, sizeof m_line, "%m:%d:%Y", m_current_time);
             break;
         default:
             break;
     }
-    return m_line;
+    return (char*)m_line;
 }
 
 inline cDate_t&  cDate_t::operator + (const cDate_t& _w)
