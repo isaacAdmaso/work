@@ -9,4 +9,4 @@
  */
 #include "memManager.h"
 
-int  memManager_t::capacity = 6; 
+size_t  memManager_t::capacity = 6; 
