@@ -37,8 +37,8 @@ public:
     void setMemPtr(int _memSize){m_CurrentPtr = (m_StartPos + _memSize);}
     bool isEmpty(){return (m_StartPos+m_size) == m_maxWritten;}
     int  leftSize(){return (m_size - (m_maxWritten - m_StartPos));}
-    int  read(void *_buf, int _count){memcpy(_buf,m_CurrentPtr,_count);m_CurrentPtr += _count;if((int)(m_CurrentPtr) > (int)m_maxWritten){m_maxWritten = m_CurrentPtr;}return _count;}
-    int  read(int _pos,void *_buf, int _count){m_CurrentPtr = m_StartPos + _pos;memcpy(_buf,m_CurrentPtr,_count);m_CurrentPtr += _count;if((int)(m_CurrentPtr) > (int)m_maxWritten){m_maxWritten = m_CurrentPtr;}return _count;}
+    virtual int  read(void *_buf, int _count){memcpy(_buf,m_CurrentPtr,_count);m_CurrentPtr += _count;if((int)(m_CurrentPtr) > (int)m_maxWritten){m_maxWritten = m_CurrentPtr;}return _count;}
+    virtual int  read(int _pos,void *_buf, int _count){m_CurrentPtr = m_StartPos + _pos;memcpy(_buf,m_CurrentPtr,_count);m_CurrentPtr += _count;if((int)(m_CurrentPtr) > (int)m_maxWritten){m_maxWritten = m_CurrentPtr;}return _count;}
 
 };
 
