@@ -39,21 +39,60 @@ size_t  memPage_t::nLeftSize()
 
 size_t  memPage_t::read(void *_buf, size_t _count)
 {
-    size_t cur = (m_capacity - getCurrPos());
+    int cur = (m_capacity - getCurrPos());
+    
+    if(cur < 0)
+        return 0;
 
-    if(_count > ( cur))
+    if(_count >(size_t) cur)
         return memManager_t::read(_buf,cur);
+    
     return memManager_t::read(_buf,_count);
     
 }
+
+size_t  memPage_t::read(size_t _pos,void *_buf, size_t _count)
+{
+    size_t cur = (m_capacity - _pos);
+
+    if(_pos > m_capacity)
+        return 0;
+
+    setCurrPos(_pos);
+    
+    if(_count > (size_t)cur)
+        return memManager_t::read(_buf,cur);
+    
+    return memManager_t::read(_buf,_count);
+}
+
+size_t  memPage_t::write(void *_buf, size_t _count)
+{
+    int cur = (m_capacity - getCurrPos());
+    
+    if(cur < 0)
+        return 0;
+
+    if(_count > (size_t)cur)
+        return memManager_t::write(_buf, cur);
+    
+    return memManager_t::write(_buf, _count);
+
+}
+
+size_t  memPage_t::write(size_t _pos,void *_buf, size_t _count)
+{
+    size_t cur = (m_capacity - _pos);
+
+    if(_pos > m_capacity)
+        return 0;
+
+    setCurrPos(_pos);
+    
+    if(_count > cur)
+        return memManager_t::write(_buf,cur);
+    
+    return memManager_t::write(_buf, _count);
+}
 /*
-size_t  memPage_t::read(size_t _pos,void *_buf, size_t _count){
-
-}
-size_t  memPage_t::write(void *_buf, size_t _count){
-
-}
-size_t  memPage_t::write(size_t _pos,void *_buf, size_t _count){
-
-}
 */
