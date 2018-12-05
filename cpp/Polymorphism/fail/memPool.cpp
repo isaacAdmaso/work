@@ -62,31 +62,33 @@ size_t  memPool_t::read(void *_buf, size_t _count)
 {
     size_t count = 0,i ,realS;
     vector<memPage_t*>::iterator it = m_vec.begin();
+    char* tempBuf = (char*)_buf; 
 
-    for(i = 0;i <= inPage;++i,++it);
+    for(i = 0;i < inPage;++i,++it);
 
     if((realSize() - getCurrPos()) == 0)
         return 0;
 
     count =  (*it)->realSize() - (*it)->getCurrPos();
     if(count >= _count)
-        return (*it)->read(_buf,_count);
+        return (*it)->read(tempBuf,_count);
 
-    (*it)->read(_buf,count);
+    (*it)->read(tempBuf,count);
     _count -= count;
     ++it;
-
+    tempBuf += count;
     for (i = inPage + 1; it != m_vec.end(); ++it, ++i)
     { 
         realS = (*it)->realSize();
         if(_count < realS)
         {
             inPage = i;
-            count += (*it)->read(0,_buf,_count);
+            count += (*it)->read(0,tempBuf,_count);
             break;
         }
-        (*it)->read(0,_buf,realS);
+        (*it)->read(0,tempBuf,realS);
         _count -= realS;
+        tempBuf += realS;
     }
     return count;
 }
@@ -100,27 +102,32 @@ size_t  memPool_t::read(size_t _pos,void *_buf, size_t _count)
 
 size_t  memPool_t::write(const void *_buf, size_t _count)
 {
-    size_t count = 0,i;
+    size_t count = 0,i,n;
     vector<memPage_t*>::iterator it = m_vec.begin();
+    char* tempBuf = (char*)_buf; 
 
-    for(i = 0;i <= inPage;++i,++it);
+    for(i = 0;i < inPage;++i,++it);
 
-    count = (*it)->write(_buf,_count);
+    count = (*it)->write(tempBuf,_count);
+    tempBuf += count;
     ++it;
     for (i = inPage + 1; it != m_vec.end(); ++it, ++i)
     {
         if((_count - count) <= 0)
             break;
-        count += (*it)->write(0,_buf,_count - count);
+        n = (*it)->write(0,tempBuf,_count - count);
+        count += n;
+        tempBuf += n;
     }
     if(count < _count)
     {
         createFrom(_count - count);
+        count += (*it)->write(_buf,_count - count);
     }
-    count += (*(m_vec[++inPage])).write(_buf,_count - count);
     return count;
 
 }
+
 size_t  memPool_t::write(size_t _pos,const void *_buf, size_t _count)
 {
     if(setCurrPos(_pos))

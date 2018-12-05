@@ -6,8 +6,8 @@ CC=g++
 CPPFLAGS= -ansi -pedantic -Wall -Werror  -g 
 
 # Include directory
-INC_DIR=../../String
-INC_DIR2=../../BigNumber
+#INC_DIR=../../String
+#INC_DIR2=../../BigNumber
 CPPFLAGS += -I$(INC_DIR)
 CPPFLAGS += -I$(INC_DIR2)
 

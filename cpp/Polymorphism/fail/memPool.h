@@ -32,9 +32,9 @@ private:
 
 
 public:
-    ~memPool_t();
-    memPool_t(){createFrom();}
-    memPool_t(size_t _pageSize){createFrom(_pageSize);}
+    ~memPool_t(){}
+    memPool_t():inPage(0){createFrom();}
+    memPool_t(size_t _pageSize):inPage(0){createFrom(_pageSize);}
 
     bool setCurrPos(size_t _memSize);
 
@@ -57,14 +57,12 @@ void inline memPool_t::createFrom(void)
 {
     memPage_t* pg = new memPage_t;
 	m_vec.insert(m_vec.end(), pg);
-    inPage = 0;
 }
 
 void inline memPool_t::createFrom(size_t _pageSize)
 {
     memPage_t* pg = new memPage_t(_pageSize);
 	m_vec.insert(m_vec.end(), pg);
-    inPage = 0;
 }
 
 

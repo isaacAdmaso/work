@@ -18,7 +18,11 @@ using namespace std;
 class memManager_t
 {
 private:
-    int m_currPos;
+    char*   m_CurrentPtr;
+    char*   m_StartPos;
+    char*   m_maxWritten;
+    size_t     m_size;
+
     memManager_t& operator = (const memManager_t _m);
     memManager_t( memManager_t& _m){}
 
