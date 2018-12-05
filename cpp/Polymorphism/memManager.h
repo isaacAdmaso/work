@@ -29,13 +29,13 @@ private:
 
 protected:
     virtual ~memManager_t(){delete [] m_StartPos;}
+    virtual bool setCurrPos(size_t _memSize);
 
 public:
     memManager_t(){}
 
     memManager_t(size_t _memSize):m_CurrentPtr(new char[_memSize]),m_StartPos(m_CurrentPtr),m_maxWritten(m_StartPos),m_size(_memSize){}
 
-    virtual void setCurrPos(size_t _memSize){m_CurrentPtr = m_StartPos + _memSize;}
 
     virtual size_t getCurrPos(){return (m_CurrentPtr - m_StartPos);}
 
@@ -44,14 +44,16 @@ public:
     virtual bool isFull(){return (m_StartPos+m_size) == m_maxWritten;}
 
     virtual size_t  nLeftSize(){return (m_size - (m_maxWritten - m_StartPos));}
+
+    virtual size_t  realSize(){return size_t(m_maxWritten - m_StartPos);}
     
     virtual  size_t  read(void *_buf, size_t _count);
     
     virtual  size_t  read(size_t _pos,void *_buf, size_t _count);
 
-    virtual  size_t  write(void *_buf, size_t _count);
+    virtual  size_t  write(const void *_buf, size_t _count);
 
-    virtual  size_t  write(size_t _pos,void *_buf, size_t _count);
+    virtual  size_t  write(size_t _pos,const void *_buf, size_t _count);
 
 };
 

@@ -13,11 +13,11 @@
 size_t memPage_t::capacity = 6;
 
 
-void memPage_t::setCurrPos(size_t _memSize)
+bool memPage_t::setCurrPos(size_t _memSize)
 {
     if(_memSize < m_capacity)
-        memManager_t::setCurrPos(_memSize);
-
+        return memManager_t::setCurrPos(_memSize);
+    return false;
 }
 
 size_t memPage_t::getCurrPos(){
@@ -48,7 +48,6 @@ size_t  memPage_t::read(void *_buf, size_t _count)
         return memManager_t::read(_buf,cur);
     
     return memManager_t::read(_buf,_count);
-    
 }
 
 size_t  memPage_t::read(size_t _pos,void *_buf, size_t _count)
@@ -60,17 +59,17 @@ size_t  memPage_t::read(size_t _pos,void *_buf, size_t _count)
 
     setCurrPos(_pos);
     
-    if(_count > (size_t)cur)
+    if(_count > cur)
         return memManager_t::read(_buf,cur);
     
     return memManager_t::read(_buf,_count);
 }
 
-size_t  memPage_t::write(void *_buf, size_t _count)
+size_t  memPage_t::write(const void *_buf, size_t _count)
 {
     int cur = (m_capacity - getCurrPos());
     
-    if(cur < 0)
+    if(cur <= 0)
         return 0;
 
     if(_count > (size_t)cur)
@@ -80,7 +79,7 @@ size_t  memPage_t::write(void *_buf, size_t _count)
 
 }
 
-size_t  memPage_t::write(size_t _pos,void *_buf, size_t _count)
+size_t  memPage_t::write(size_t _pos,const void *_buf, size_t _count)
 {
     size_t cur = (m_capacity - _pos);
 
@@ -94,5 +93,3 @@ size_t  memPage_t::write(size_t _pos,void *_buf, size_t _count)
     
     return memManager_t::write(_buf, _count);
 }
-/*
-*/
