@@ -21,14 +21,4 @@ public:
     ~TException_t();
 };
 
-TException_t::TException_t()
-{
-}
-
-TException_t::~TException_t()
-{
-}
-
-
-
 #endif //__TEXCEPTIN_H__

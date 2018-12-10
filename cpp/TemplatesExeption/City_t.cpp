@@ -26,16 +26,16 @@ int main()
     int i,n;
     Building_t<int> *bArr;
     Street_t<char*,int> *sArr;
-    const char* str[]={"aaa","bbb","ccc","ddd","hhh","fff"};
+    const char* str[]={"aaa","bbb","ccc","ddd","eee","fff","ggg","hhh"};
 
     cout << "enter number of buildings: "<< endl;
     cin >> n;
     bArr = new Building_t<int>[n];
-    for(i = n;i == 0;--i)
+    for(i = n;i >= 0;--i)
     {
-        bArr[i].setBuildingID(i);
+        bArr[i].setBuildingID(i + 1);
     }
-    cout << "enter number of buildings: "<< endl;
+    cout << "enter number of streets: "<< endl;
     cin >> n;
     sArr = new Street_t<char*,int>[n];
     for(i = 0;i < n;++i)

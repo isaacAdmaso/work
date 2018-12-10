@@ -29,12 +29,8 @@ public:
     void    setCityID(U& _newId){m_id = _newId;}
     U& getCityID(){return m_id;}
     void AddStreet(T& newStreet){street.push_back(newStreet);}
-    T& getStreet(){street.pop_front();}
+    T& getStreet() {street.pop_front();}
 };
-
-
-
-
 
 
 #endif //__CITY_H__
