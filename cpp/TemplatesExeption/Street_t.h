@@ -12,13 +12,16 @@
 #define __STREET_H__
 #include <vector>
 
+using namespace std;
 
-template <class T,class U>
+
+
+template <class U,class T>
 
 class Street_t
 {
 private:
-    vector<class T>   buildings;
+    vector<T>   buildings;
     U               m_id;
 public:
     ~Street_t(){}
