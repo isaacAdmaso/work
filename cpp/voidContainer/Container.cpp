@@ -18,16 +18,16 @@ int main()
 {
     Container_t<int, vector>  	vArr;    
     Container_t<int, list>  	lArr; 
-    int i = 5,i1 = 6,i2 = 7,i3 = 8;
+    int i ;
+    int iArr[] = {1,2,3,4,5,6,7,8,9,0,1,2,18,3,4,6,7,8,9};
 
-    vArr.insertNew(i);
-    lArr.insertNew(i);
-    vArr.insertNew(i1);
-    lArr.insertNew(i1);
-    vArr.insertNew(i2);
-    lArr.insertNew(i2);
-    vArr.insertNew(i3);
-    lArr.insertNew(i3);
+    for(i = 0;i < 18;++i)
+    {
+        vArr.insertNew(iArr[i]);
+        lArr.insertNew(iArr[i]);
+
+    }
+    
 
     cout << vArr.firstItem()<<endl;
     cout << lArr.firstItem()<<endl;
