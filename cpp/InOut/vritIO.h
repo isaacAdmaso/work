@@ -19,6 +19,7 @@ using namespace std;
 
 class virIO_t
 {
+   
 private:
     FILE    *pFile;
     int     status;
@@ -28,6 +29,13 @@ private:
 
     virtual ~virIO_t() = 0;
 public:
+    enum io_state{
+        ok_e, 
+		cant_open_file_e, 
+		bad_access_e,
+		writeErr_e,
+        readErr_e
+    };
     virIO_t():pFile(0),status(0){}
     virIO_t(string _nameF,string mode){openHelper(_nameF,mode);}
     void        setPos(size_t _pos){ fseek(pFile,_pos,SEEK_CUR);}
@@ -55,13 +63,7 @@ public:
     virtual virIO_t&    operator>>(unsigned char _val) = 0;
     virtual virIO_t&    operator<<(unsigned short _val) = 0;
     virtual virIO_t&    operator>>(unsigned short _val) = 0;
-    enum io_state{
-        ok_e, 
-		cant_open_file_e, 
-		bad_access_e,
-		writeErr_e,
-        readErr_e
-    };
+    
 };
 
 virIO_t::~virIO_t()
