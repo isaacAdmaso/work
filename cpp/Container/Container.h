@@ -13,6 +13,7 @@
 #include <algorithm>    // std::find_if
 #include <list>
 #include <vector>
+#include "predicate.h"
 
 using namespace std;
 template<class T,class Container>
@@ -22,7 +23,6 @@ class Container_t
 {
 
     typedef typename Container::iterator	iter_t;
-    typedef  bool (*predicate)(T* _ptr); 
 
 private:
     Container      myContainer;
@@ -39,13 +39,6 @@ private:
             return *(myContainer.begin());
         }
     }
-    struct find_n{
-        T _item;
-        predicate m_func;
-    };
-    struct find_n m_pred;
-
-
 
 public:
     Container_t(){}
@@ -56,23 +49,18 @@ public:
     void    insertNew(T& _item){return myContainer.push_back(&_item);}
     T      firstItem()const {return *(myContainer.front());}
     T      lastItem()const {return  *(myContainer.back());}
-    bool operator ()(T* _ptr)const {return *_ptr > m_pred._item;}
     T*      findItem(T& _item)
     {
-        m_pred._item = _item;
-        m_pred.m_func = operator ();
-        iter_t it = find_if (myContainer.begin(), myContainer.end(), m_pred());
+        iter_t it = find_if (myContainer.begin(), myContainer.end(),  predicate<T>(_item));
         if(it == myContainer.end())
-            return 0;
+            return *(--it);
         return *it;
     }
     T*      eraseItem(T _item)
     {
-        find_n toFind;
-        toFind._item = _item;
-        iter_t it2,it1 = find_if (myContainer.begin(), myContainer.end(), toFind());
+        iter_t it2,it1 = find_if (myContainer.begin(), myContainer.end(), predicate<T>(_item));
         if(it1 == myContainer.end())
-            return 0;
+            return *(--it1);
         it2 = myContainer.erase(it1);
         return *it2;
     }

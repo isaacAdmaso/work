@@ -9,6 +9,7 @@
  */
 #include <iostream>
 #include "Container.h"
+#include "predicate.h"
 
 using namespace std;
 
@@ -31,8 +32,19 @@ int main()
     cout << lArr.firstItem()<<endl;
     cout << vArr.lastItem()<<endl;
     cout << lArr.lastItem()<<endl;
-    
 
+    int f = 7;
+	int* ip = lArr.findItem(f);
+    cout << *ip<<endl;
 
+    f = 18;
+    ip = vArr.findItem(f);
+    cout << *ip<<endl;
+
+    ip = vArr.eraseItem(i);
+    cout << *ip<<endl;
+
+    ip = lArr.eraseItem(i);
+    cout << *ip<<endl;
     return 0;
 }
