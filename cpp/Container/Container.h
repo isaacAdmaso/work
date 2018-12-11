@@ -44,19 +44,19 @@ public:
     Container_t(){}
     ~Container_t(){}
 
-    bool isEmpty(){return myContainer.empty();}
-    size_t nItems(){return myContainer.size();}
+    bool isEmpty()const{return myContainer.empty();}
+    size_t nItems()const{return myContainer.size();}
     void    insertNew(T& _item){return myContainer.push_back(&_item);}
-    T      firstItem()const {return *(myContainer.front());}
-    T      lastItem()const {return  *(myContainer.back());}
-    T*      findItem(T& _item)
+    T       firstItem()const {return *(myContainer.front());}
+    T       lastItem()const {return  *(myContainer.back());}
+    T*      findItem(const T& _item)
     {
         iter_t it = find_if (myContainer.begin(), myContainer.end(),  predicate<T>(_item));
         if(it == myContainer.end())
             return *(--it);
         return *it;
     }
-    T*      eraseItem(T _item)
+    T*      eraseItem(const T _item)
     {
         iter_t it2,it1 = find_if (myContainer.begin(), myContainer.end(), predicate<T>(_item));
         if(it1 == myContainer.end())

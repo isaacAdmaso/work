@@ -46,5 +46,9 @@ int main()
 
     ip = lArr.eraseItem(i);
     cout << *ip<<endl;
+
+
+    cout << vArr.firstItem()<<endl;
+    cout << lArr.firstItem()<<endl;
     return 0;
 }

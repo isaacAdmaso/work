@@ -19,7 +19,7 @@ private:
     T val;
 public:
     ~predicate(){}
-    predicate(T& _item):val(_item){}
+    predicate(const T& _item):val(_item){}
     bool operator ()(T* _ptr) {return *_ptr == val;}
 };
 
