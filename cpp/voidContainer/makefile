@@ -3,7 +3,7 @@ TARGET=main.out
 
 # General compilation flags
 CC=g++
-CPPFLAGS= -pedantic -Wall -Werror  -g #-ansi
+CPPFLAGS= -pedantic -Wall -Werror  -g -ansi
 
 # Include directory
 INC_DIR=../../include
