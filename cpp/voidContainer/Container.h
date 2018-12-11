@@ -18,8 +18,8 @@
 
 using namespace std;
 
-
-template<typename T, template <class...> class tContainer>
+template <typename T, template<typename Ts, class = allocator<Ts>> class tContainer>
+//template<typename T, template <class...> class tContainer>
 class Container_t
 {
 private:
