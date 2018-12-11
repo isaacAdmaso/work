@@ -22,6 +22,7 @@ class Container_t
 {
 
     typedef typename Container::iterator	iter_t;
+    typedef  bool (*predicate)(T* _ptr); 
 
 private:
     Container      myContainer;
@@ -32,16 +33,17 @@ private:
             return *(myContainer.begin());
         if(typeid(myContainer) == typeid(vector<T*>)){
             return *(myContainer[_idx]);
-        }else if(typeid(myContainer) == typeid(list<T*>)){
+        }else {
             iter_t it = myContainer.begin();
-            while(it != myContainer.end()){if(_idx == 0) return *(*it); --_idx; ++it;}
+            while(it != myContainer.end()){if(_idx == 0) return **it; --_idx; ++it;}
             return *(myContainer.begin());
         }
     }
     struct find_n{
         T _item;
-        bool operator ()(T* _ptr)const {return *_ptr > _item;}
+        predicate m_func;
     };
+    struct find_n m_pred;
 
 
 
@@ -52,13 +54,14 @@ public:
     bool isEmpty(){return myContainer.empty();}
     size_t nItems(){return myContainer.size();}
     void    insertNew(T& _item){return myContainer.push_back(&_item);}
-    T*      firstItem(){return myContainer.front();}
-    T*      lastItem(){return myContainer.back();}
+    T      firstItem()const {return *(myContainer.front());}
+    T      lastItem()const {return  *(myContainer.back());}
+    bool operator ()(T* _ptr)const {return *_ptr > m_pred._item;}
     T*      findItem(T& _item)
     {
-        find_n toFind;
-        toFind._item = _item;
-        iter_t it = find_if (myContainer.begin(), myContainer.end(), toFind());
+        m_pred._item = _item;
+        m_pred.m_func = operator ();
+        iter_t it = find_if (myContainer.begin(), myContainer.end(), m_pred());
         if(it == myContainer.end())
             return 0;
         return *it;
