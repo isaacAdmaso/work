@@ -13,18 +13,18 @@
 #include <algorithm>    // std::find_if
 #include <list>
 #include <vector>
+#include <stdexcept>
 #include "predicate.h"
 
 using namespace std;
-template<class T,class Container>
-//template<typename T,template <typename, typename = std::allocator<T*> > class Container>
 
+
+template<typename T, template <class...> class tContainer>
 class Container_t
 {
-
-    typedef typename Container::iterator	iter_t;
-
 private:
+    typedef tContainer<T*> Container;
+    typedef typename Container::iterator	iter_t;
     Container      myContainer;
     Container_t(Container_t& _c){}
     Container_t& operator = (const Container_t _c);

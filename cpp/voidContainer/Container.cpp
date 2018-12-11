@@ -7,6 +7,7 @@
  * @copyright Copyright (c) 2018
  * 
  */
+#include <stdexcept>
 #include <iostream>
 #include "Container.h"
 #include "predicate.h"
@@ -15,8 +16,8 @@ using namespace std;
 
 int main()
 {
-    Container_t<int, vector<int*> >  	vArr;    
-    Container_t<int, list<int*> >  	lArr; 
+    Container_t<int, vector>  	vArr;    
+    Container_t<int, list>  	lArr; 
     int i = 5,i1 = 6,i2 = 7,i3 = 8;
 
     vArr.insertNew(i);
