@@ -16,7 +16,7 @@
 
 
 
-class asciiIO_t: public virIO_t
+class asciiIO_t: virtual public virIO_t
 {
 private:
     string  m_path;
@@ -24,7 +24,7 @@ private:
     FILE        *pFile;
     void    openHelper(string _nameF,string mode);
     template <typename T,typename U> asciiIO_t& opHelperW(T _val,U _format);
-    template <typename T,typename U> asciiIO_t& opHelperR(T _val,U _format);
+    template <typename T,typename U> asciiIO_t& opHelperR(T& _val,U _format);
     asciiIO_t(asciiIO_t& _a){}
     asciiIO_t& operator = (const asciiIO_t _a);
 
@@ -44,16 +44,16 @@ public:
 
     virtual int         getStatus(){return virIO_t::getStatus();}
     virtual ~asciiIO_t(){fclose(pFile);}
-    virtual asciiIO_t&    operator>>(char& _val){return opHelperR<char&, char const*>(_val,ch);}
-    virtual asciiIO_t&    operator>>(short& _val){return opHelperR<short&, char const*>(_val,h);}
-    virtual asciiIO_t&    operator>>(int& _val){return opHelperR<int&, char const*>(_val,d);}
-    virtual asciiIO_t&    operator>>(long& _val){return opHelperR<long&, char const*>(_val,l);}
-    virtual asciiIO_t&    operator>>(float& _val){return opHelperR<float&, char const*>(_val,f);}
-    virtual asciiIO_t&    operator>>(unsigned char& _val){return opHelperR<unsigned char&, char const*>(_val,uch);}
-    virtual asciiIO_t&    operator>>(unsigned short& _val){return opHelperR<unsigned short&, char const*>(_val,uh);}
-    virtual asciiIO_t&    operator>>(unsigned int& _val){return opHelperR<unsigned int&, char const*>(_val,u);}
-    virtual asciiIO_t&    operator>>(unsigned long& _val){return opHelperR<unsigned long&, char const*>(_val,ul);}
-    virtual asciiIO_t&    operator>>(double& _val){return opHelperR<double&, char const*>(_val,f);}
+    virtual asciiIO_t&    operator>>(char& _val){return opHelperR<char, char const*>(_val,ch);}
+    virtual asciiIO_t&    operator>>(short& _val){return opHelperR<short, char const*>(_val,h);}
+    virtual asciiIO_t&    operator>>(int& _val){return opHelperR<int, char const*>(_val,d);}
+    virtual asciiIO_t&    operator>>(long& _val){return opHelperR<long, char const*>(_val,l);}
+    virtual asciiIO_t&    operator>>(float& _val){return opHelperR<float, char const*>(_val,f);}
+    virtual asciiIO_t&    operator>>(unsigned char& _val){return opHelperR<unsigned char, char const*>(_val,uch);}
+    virtual asciiIO_t&    operator>>(unsigned short& _val){return opHelperR<unsigned short, char const*>(_val,uh);}
+    virtual asciiIO_t&    operator>>(unsigned int& _val){return opHelperR<unsigned int, char const*>(_val,u);}
+    virtual asciiIO_t&    operator>>(unsigned long& _val){return opHelperR<unsigned long, char const*>(_val,ul);}
+    virtual asciiIO_t&    operator>>(double& _val){return opHelperR<double, char const*>(_val,f);}
     virtual asciiIO_t&    operator<<(char _val){return opHelperW<char, char const*>(_val,ch);}
     virtual asciiIO_t&    operator<<(short _val){return opHelperW<short, char const*>(_val,h);}
     virtual asciiIO_t&    operator<<(int _val){return opHelperW<int, char const*>(_val,d);}
@@ -94,7 +94,7 @@ template <typename T,typename U> asciiIO_t& asciiIO_t::opHelperW(T _val,U _forma
     return *this;
 }
 
-template <typename T,typename U> asciiIO_t& asciiIO_t::opHelperR(T _val,U _format)
+template <typename T,typename U> asciiIO_t& asciiIO_t::opHelperR(T& _val,U _format)
 {
     try{
         if(0 >= fscanf(pFile,_format,&_val))
