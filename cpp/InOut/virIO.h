@@ -34,7 +34,7 @@ private:
 protected:
     virtual     ~virIO_t() = 0;
     void        setStatus(int _stat){status = _stat;}
-    int         getStatus(){return status;}
+    virtual int         getStatus(){return status;}
     
 public:
     enum io_state{

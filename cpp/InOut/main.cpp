@@ -16,18 +16,23 @@ int main()
 {
     string file1("./file1");
     string file2("./file2");
-    string mode1("a");
+    string mode1("w");
     string mode2("w");
     asciiIO_t  aIO(file1,mode1);
     asciiIO_t  bIO(file2,mode2);
     int 	 ri = 0,i = 5;
     float 	 rf = 0,f = 6.1;
-    char  a = 'a',b = 'b';
+    short  a = 3,b = 7;
+//    char  a = 'a',b = 'b';
 
 
-    bIO << b << i  << f << a;			// Binary file
+    bIO << b << ' ' << i << ' ' << f << ' ' << a;	
+    bIO.setPos(0);		
+    cout <<aIO.getStatus()<<" "<<bIO.getStatus()<<endl;
     bIO >> ri  >> rf  ; 
-    aIO << a << i << f << b;  		// ASCII file ( with blanks )
-    cout <<endl<< ri<<endl<<rf<<endl;
+    aIO << a << i << f << b;  		
+    cout << ri<<" "<<rf<<endl;
+    cout <<aIO.getStatus()<<" "<<bIO.getStatus()<<endl;
+
     return 0;
 }

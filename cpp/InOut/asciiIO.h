@@ -34,13 +34,15 @@ private:
 public:
     asciiIO_t():pFile(0){}
     asciiIO_t(string &_nameF,string &mode){openHelper(_nameF,mode);}
-    void        setPos(size_t _pos){ fseek(pFile,_pos,SEEK_CUR);}
+    void        setPos(size_t _pos){ fseek(pFile,_pos,SEEK_SET);}
     size_t      getPos(){return ftell(pFile);}
     void        openFile(string _nameF,string mode){openHelper(_nameF,mode);}
     string      getPath()const {return m_path;}
     string      getMode()const {return m_mode;}
     size_t      getLength()const {fseek (pFile, 0, SEEK_END); return ftell(pFile);}
 
+
+    virtual int         getStatus(){return virIO_t::getStatus();}
     virtual ~asciiIO_t(){fclose(pFile);}
     virtual asciiIO_t&    operator>>(char& _val){return opHelperR<char&, char const*>(_val,ch);}
     virtual asciiIO_t&    operator>>(short& _val){return opHelperR<short&, char const*>(_val,h);}
@@ -95,7 +97,7 @@ template <typename T,typename U> asciiIO_t& asciiIO_t::opHelperW(T _val,U _forma
 template <typename T,typename U> asciiIO_t& asciiIO_t::opHelperR(T _val,U _format)
 {
     try{
-        if(0 > fscanf(pFile,_format,_val))
+        if(0 >= fscanf(pFile,_format,&_val))
             throw readErr_e;
     }catch(enum virIO_t::io_state ex){
         setStatus(ex);
