@@ -37,45 +37,17 @@ int main()
     rtbIO >> rf >> ri >> ra >> rb >> rach >> rbch;
     cout << name << endl << rbch<< endl << ra<< endl << ri<< endl << rb<< endl << rach<< endl << rf<< endl<< endl;
 
-
     i = 1;f = 3.6;a = 9;b = 11;ach = 'c';bch = 'd';
     string file1("./file1");
     string mode1("w");
     string rmode1("r");
     asciiIO_t  aIO(file1,mode1);
-    aIO << f << ' ' << i << ' ' << a << ' ' << b << ' ' << ach << ' ' ;
-    aIO<< bch;
+    aIO << f << ' ' << ach << ' ' << a << ' ' << b << ' ' << i << ' '<< bch;
     aIO.~asciiIO_t();
     asciiIO_t  rtaIO(file1,rmode1);
-    rtaIO >> rf >> ri >> ra >> rb;
-    rtaIO >> rach;
-    rtaIO >> rbch;
-    cout << rf<< endl << ri<< endl << ra<< endl << rb<< endl << rach<< endl << rbch<< endl;
-
-
-
-
-
-
-
-
-
-
-
+    //rtaIO >> rf >> rach >> ra >> rb >> ri >> rbch;
+    
+    cout << rf<< endl << ri<< endl << ra<< endl << rb<< endl << rach<< endl << rbch<<endl;
 
     return 0;
 }
-    //write
-    //bIO << b << i << f  << a;	
-    //bIO.setPos(0);		
-    //cout <<aIO.getStatus()<<" "<<bIO.getStatus()<<endl;
-    //bIO >> ri  >> rf  ; 
-    //cout << ri<<" "<<rf<<endl;
-    //aIO<< b << ' ' << i << ' ' << f << ' ' << a;  		
-    //aIO.setPos(0);		
-    //aIO >> ri  >> rf  ; 
-    //cout << ri<<" "<<rf<<endl;
-    //cout <<aIO.getStatus()<<" "<<bIO.getStatus()<<endl;
-    //bIO.setPos(0);		
-    //read
-    //asciiIO_t  rtaIO(file1,mode1);
