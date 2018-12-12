@@ -45,7 +45,6 @@ int main()
     aIO << f << ' ' << ach << ' ' << a << ' ' << b << ' ' << i << ' '<< bch;
     aIO.~asciiIO_t();
     asciiIO_t  rtaIO(file1,rmode1);
-    //rtaIO >> rf >> rach >> ra >> rb >> ri >> rbch;
     
     cout << rf<< endl << ri<< endl << ra<< endl << rb<< endl << rach<< endl << rbch<<endl;
 
