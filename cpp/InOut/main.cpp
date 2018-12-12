@@ -16,8 +16,8 @@ int main()
 {
     string file1("./file1");
     string file2("./file2");
-    string mode1("w");
-    string mode2("w");
+    string mode1("w+");
+    string mode2("w+");
     asciiIO_t  aIO(file1,mode1);
     asciiIO_t  bIO(file2,mode2);
     int 	 ri = 0,i = 5;
