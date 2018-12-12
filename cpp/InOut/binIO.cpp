@@ -16,11 +16,13 @@ binIO_t&    binIO_t::operator,(int len)
 {
     switch(m_shiftMode)
     {
-        case 0:
-            fwrite(m_tempBuffPtr,1,len,pFile);
-            break;
         case 1:
-            fread(m_tempBuffPtr,1,len,pFile);
+            if(0 > fwrite(m_tempBuffPtr,1,len,pFile))
+                throw writeErr_e;
+            break;
+        case 0:
+            if( 0 >= fread(m_tempBuffPtr,1,len,pFile))
+                throw readErr_e;
         default:
             break;
     }

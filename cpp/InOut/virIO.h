@@ -41,7 +41,7 @@ public:
     };
     virtual     ~virIO_t() = 0;
     virIO_t():status(0),pFile(0){}
-    virIO_t(string &_nameF,string &mode):status(0){openHelper(_nameF,mode);}
+    virIO_t(string &_nameF,string &mode):status(0),m_path(_nameF),m_mode(mode){openHelper(_nameF,mode);}
 
     void        setStatus(int _stat){status = _stat;}
     virtual int         getStatus(){return status;}
