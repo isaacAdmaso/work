@@ -19,12 +19,8 @@
 class binIO_t: virtual public virIO_t
 {
 private:
-    string  m_path;
-    string  m_mode;
-    FILE        *pFile;
     void*   m_tempBuffPtr;  /**save given buffer for (Read or Write) */
     int     m_shiftMode;      /**0 >> ,1 << */
-    void    openHelper(string _nameF,string mode);
     template <typename T> binIO_t& opHelperW(T& _val);
     template <typename T> binIO_t& opHelperR(T& _val);
     binIO_t(binIO_t& _a){}
@@ -34,17 +30,11 @@ private:
 
 
 public:
-    binIO_t():pFile(0),m_tempBuffPtr(0),m_shiftMode(-1){}
-    binIO_t(string &_nameF,string &mode):m_tempBuffPtr(0),m_shiftMode(-1){openHelper(_nameF,mode);}
-    void        setPos(size_t _pos){ fseek(pFile,_pos,SEEK_SET);}
-    size_t      getPos(){return ftell(pFile);}
-    void        openFile(string _nameF,string mode){openHelper(_nameF,mode);}
-    string      getPath()const {return m_path;}
-    string      getMode()const {return m_mode;}
-    size_t      getLength()const {fseek (pFile, 0, SEEK_END); return ftell(pFile);}
+    binIO_t():m_tempBuffPtr(0),m_shiftMode(-1){}
+    binIO_t(string &_nameF,string &mode):virIO_t(_nameF,mode),m_tempBuffPtr(0),m_shiftMode(-1){}
+   
 
-
-    virtual ~binIO_t()  {fclose(pFile);}
+    virtual ~binIO_t()  {}
     virtual int         getStatus(){return virIO_t::getStatus();}
     virtual binIO_t&    operator>>(char& _val){return opHelperR(_val);}
     virtual binIO_t&    operator>>(short& _val){return opHelperR(_val);}
@@ -71,12 +61,6 @@ public:
     virtual binIO_t&    operator<<(const void* _buff);
 
 };
-
-inline void binIO_t::openHelper(string _nameF,string mode)
-{
-    if(!(pFile  = fopen(_nameF.c_str(),mode.c_str())))
-        throw cant_open_file_e;
-}
 
 template <typename T> binIO_t& binIO_t::opHelperW(T& _val)
 {

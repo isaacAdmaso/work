@@ -7,6 +7,7 @@
  * @copyright Copyright (c) 2018
  * 
  */
+#include <stdio.h>
 #include "virIO.h"
 
-virIO_t::~virIO_t(){}
+virIO_t::~virIO_t(){fclose(pFile);}
