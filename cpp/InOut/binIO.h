@@ -22,9 +22,11 @@ private:
     string  m_path;
     string  m_mode;
     FILE        *pFile;
+    void*   m_tempBuffPtr;  /**save given buffer for (Read or Write) */
+    int     m_shiftMode;      /**0 >> ,1 << */
     void    openHelper(string _nameF,string mode);
-    template <typename T> binIO_t& opHelperW(T& _val,size_t _size,size_t _count);
-    template <typename T> binIO_t& opHelperR(T& _val,size_t _size,size_t _count);
+    template <typename T> binIO_t& opHelperW(T& _val);
+    template <typename T> binIO_t& opHelperR(T& _val);
     binIO_t(binIO_t& _a){}
     binIO_t& operator = (const binIO_t _a);
 
@@ -32,8 +34,8 @@ private:
 
 
 public:
-    binIO_t():pFile(0){}
-    binIO_t(string &_nameF,string &mode){openHelper(_nameF,mode);}
+    binIO_t():pFile(0),m_tempBuffPtr(0),m_shiftMode(-1){}
+    binIO_t(string &_nameF,string &mode):m_tempBuffPtr(0),m_shiftMode(-1){openHelper(_nameF,mode);}
     void        setPos(size_t _pos){ fseek(pFile,_pos,SEEK_SET);}
     size_t      getPos(){return ftell(pFile);}
     void        openFile(string _nameF,string mode){openHelper(_nameF,mode);}
@@ -42,66 +44,53 @@ public:
     size_t      getLength()const {fseek (pFile, 0, SEEK_END); return ftell(pFile);}
 
 
+    virtual ~binIO_t()  {fclose(pFile);}
     virtual int         getStatus(){return virIO_t::getStatus();}
-    virtual ~binIO_t(){fclose(pFile);}
-    virtual binIO_t&    operator>>(char& _val){return opHelperR<char>(_val,sizeof(char),1);}
-    virtual binIO_t&    operator>>(short& _val){return opHelperR<short>(_val,sizeof(short),1);}
-    virtual binIO_t&    operator>>(int& _val){return opHelperR<int>(_val,sizeof(int),1);}
-    virtual binIO_t&    operator>>(long& _val){return opHelperR<long>(_val,sizeof(long),1);}
-    virtual binIO_t&    operator>>(float& _val){return opHelperR<float>(_val,sizeof(float),1);}
-    virtual binIO_t&    operator>>(unsigned char& _val){return opHelperR<unsigned char>(_val,sizeof(char),1);}
-    virtual binIO_t&    operator>>(unsigned short& _val){return opHelperR<unsigned short>(_val,sizeof(short),1);}
-    virtual binIO_t&    operator>>(unsigned int& _val){return opHelperR<unsigned int>(_val,sizeof(int),1);}
-    virtual binIO_t&    operator>>(unsigned long& _val){return opHelperR<unsigned long>(_val,sizeof(long),1);}
-    virtual binIO_t&    operator>>(double& _val){return opHelperR<double>(_val,sizeof(double),1);}
-    virtual binIO_t&    operator<<(char _val){return opHelperW<char>(_val,sizeof(char),1);}
-    virtual binIO_t&    operator<<(short _val){return opHelperW<short>(_val,sizeof(short),1);}
-    virtual binIO_t&    operator<<(int _val){return opHelperW<int>(_val,sizeof(int),1);}
-    virtual binIO_t&    operator<<(long _val){return opHelperW<long>(_val,sizeof(long),1);}
-    virtual binIO_t&    operator<<(float _val){return opHelperW<float>(_val,sizeof(float),1);}
-    virtual binIO_t&    operator<<(unsigned char _val){return opHelperW<unsigned char>(_val,sizeof(char),1);}
-    virtual binIO_t&    operator<<(unsigned short _val){return opHelperW<unsigned short>(_val,sizeof(short),1);}
-    virtual binIO_t&    operator<<(unsigned int _val){return opHelperW<unsigned int>(_val,sizeof(int),1);}
-    virtual binIO_t&    operator<<(unsigned long _val){return opHelperW<unsigned long>(_val,sizeof(long),1);}
-    virtual binIO_t&    operator<<(double _val){return opHelperW<double>(_val,sizeof(double),1);}
-    //virtual binIO_t&    operator,(int len);
+    virtual binIO_t&    operator>>(char& _val){return opHelperR(_val);}
+    virtual binIO_t&    operator>>(short& _val){return opHelperR(_val);}
+    virtual binIO_t&    operator>>(int& _val){return opHelperR(_val);}
+    virtual binIO_t&    operator>>(long& _val){return opHelperR(_val);}
+    virtual binIO_t&    operator>>(float& _val){return opHelperR(_val);}
+    virtual binIO_t&    operator>>(unsigned char& _val){return opHelperR(_val);}
+    virtual binIO_t&    operator>>(unsigned short& _val){return opHelperR(_val);}
+    virtual binIO_t&    operator>>(unsigned int& _val){return opHelperR(_val);}
+    virtual binIO_t&    operator>>(unsigned long& _val){return opHelperR(_val);}
+    virtual binIO_t&    operator>>(double& _val){return opHelperR(_val);}
+    virtual binIO_t&    operator<<(char _val){return opHelperW(_val);}
+    virtual binIO_t&    operator<<(short _val){return opHelperW(_val);}
+    virtual binIO_t&    operator<<(int _val){return opHelperW(_val);}
+    virtual binIO_t&    operator<<(long _val){return opHelperW<long>(_val);}
+    virtual binIO_t&    operator<<(float _val){return opHelperW(_val);}
+    virtual binIO_t&    operator<<(unsigned char _val){return opHelperW(_val);}
+    virtual binIO_t&    operator<<(unsigned short _val){return opHelperW(_val);}
+    virtual binIO_t&    operator<<(unsigned int _val){return opHelperW(_val);}
+    virtual binIO_t&    operator<<(unsigned long _val){return opHelperW(_val);}
+    virtual binIO_t&    operator<<(double _val){return opHelperW(_val);}
+    virtual binIO_t&    operator,(int len);
+    virtual binIO_t&    operator>>(void* _buff);
+    virtual binIO_t&    operator<<(const void* _buff);
+
 };
 
 inline void binIO_t::openHelper(string _nameF,string mode)
 {
-    try{
-        if(!(pFile  = fopen(_nameF.c_str(),mode.c_str())))
-            throw cant_open_file_e;
-    }
-    catch(enum virIO_t::io_state ex){
-        virIO_t::setStatus(ex);
-    }
+    if(!(pFile  = fopen(_nameF.c_str(),mode.c_str())))
+        throw cant_open_file_e;
 }
-//size_t _size,size_t _count
 
-template <typename T> binIO_t& binIO_t::opHelperW(T& _val,size_t _size,size_t _count)
+template <typename T> binIO_t& binIO_t::opHelperW(T& _val)
 {
-    try{
-        if(0 > fwrite(pFile,_val,_size,_count))
-        {
-            throw writeErr_e;
-        }else{
-            fflush(pFile);
-        }
-    }catch(enum virIO_t::io_state ex){
-        setStatus(ex);
-    }
+    if(0 > fwrite(&_val,sizeof(T),1,pFile))
+        throw writeErr_e;
+
     return *this;
 }
 
-template <typename T> binIO_t& binIO_t::opHelperR(T& _val,size_t _size,size_t _count)
+template <typename T> binIO_t& binIO_t::opHelperR(T& _val)
 {
-    try{
-        if(0 >= fread(pFile,_format,&_val))
-            throw readErr_e;
-    }catch(enum virIO_t::io_state ex){
-        setStatus(ex);
-    }
+    if(0 >= fread(&_val,sizeof(T),1,pFile))
+        throw readErr_e;
+
     return *this;
 }
     
