@@ -27,7 +27,7 @@ public:
 
     Token(){}
     ~Token();
-    void Tok(string& _line);
+    vector<string> Tok(string& _line);
 };
 
 

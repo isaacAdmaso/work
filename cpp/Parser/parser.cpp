@@ -26,7 +26,7 @@ void Parser::ParserRun(char* _argv)
 
     while(getline(ququ,m_line))
     {
-        t.Tok(m_line);
+        a.Analyze(t.Tok(m_line));
     }  
 }
 

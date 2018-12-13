@@ -10,15 +10,19 @@
  */
 #ifndef __ANALYZE_H__
 #define __ANALYZE_H__
+#include <vector>
+#include <string>
 
 
 class Analyzer
 {
 private:
+    vector<string> m_tCont;
 
 public:
     Analyzer();
     ~Analyzer();
+    void Analyze(vector<string>);
 };
 
 Analyzer::Analyzer()
