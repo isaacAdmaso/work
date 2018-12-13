@@ -22,7 +22,7 @@ int main()
     int  	    ri = 0,i = 5;
     float       rf = 0,f = 6.1;
     short       ra,rb,a = 3,b = 7;
-    long        rach,rbch,ach = 345678909872,bch = 234567876;
+    char        rach,rbch,ach = 'a',bch = 'b';
 
     char name[16] = "yitshak";
     int  len      = strlen(name);
@@ -37,7 +37,7 @@ int main()
     rtbIO >> rf >> ri >> ra >> rb >> rach >> rbch;
     cout << name << endl << rbch<< endl << ra<< endl << ri<< endl << rb<< endl << rach<< endl << rf<< endl<< endl;
 
-    i = 1;f = 3.6;a = 9;b = 11;ach = 567876543;bch = 34567654;
+    i = 1;f = 3.6;a = 9;b = 11;ach = 'c';bch = 'd';
     string file1("./file1");
     string mode1("w");
     string rmode1("r");
@@ -54,6 +54,12 @@ int main()
     rtaIO >> rbch;
     
     cout << rf<< endl << ri<< endl << ra<< endl << rb<< endl << rach<< endl << rbch<<endl;
+
+
+
+
+
+
 
     return 0;
 }
