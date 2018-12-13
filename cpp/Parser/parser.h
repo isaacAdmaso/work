@@ -10,8 +10,35 @@
 #ifndef __PARSER_H__
 #define __PARSER_H__
 
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include "token.h"
+#include "analyzer.h"
+
+using namespace std;
+
+class Parser
+{
+private:
+    ifstream ququ;
+    string m_line;
+    Token t;
+    Analyzer a;
 
 
+public:
+    enum i_state{
+        ok_e, 
+		cant_open_file_e, 
+		bad_access_e,
+        readErr_e
+    };
+    ~Parser(){}
+    Parser(){}
+    void ParserRun(char* _argv);
+};
 
 
 

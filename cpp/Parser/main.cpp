@@ -8,22 +8,29 @@
  * 
  */
 #include <iostream>
+
 #include "parser.h"
+#include "token.h"
 
 using namespace std;
 
 
+
 int main(int argc, char const *argv[])
 {
-    if(argc > 2)
+    if(argc < 2)
     {
         cout << "ERR:no excutable file!!!";
         return 1;
     }
-    for(int i = 0; i < argc -1; ++i)
+    Parser _p();
+    for(int i = 1;i < argc; ++i)
     {
-        //code//
+        _p.ParserRun(argv[i]);
+
     }
+
+
 
 
     return 0;
