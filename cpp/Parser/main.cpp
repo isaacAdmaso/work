@@ -10,20 +10,20 @@
 #include <iostream>
 
 #include "parser.h"
-#include "token.h"
+//#include "token.h"
 
 using namespace std;
 
 
 
-int main(int argc, char const *argv[])
+int main(int argc, char *argv[])
 {
     if(argc < 2)
     {
         cout << "ERR:no excutable file!!!";
         return 1;
     }
-    Parser _p();
+    Parser _p;
     for(int i = 1;i < argc; ++i)
     {
         _p.ParserRun(argv[i]);

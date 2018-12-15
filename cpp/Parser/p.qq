@@ -1,5 +1,5 @@
 
-int k
+    int   k
 int short ptr
 main
 else const virtual
@@ -24,5 +24,5 @@ private
 })
 if(int i)
 else
-b	bla
+b   bla
 

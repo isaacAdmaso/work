@@ -9,10 +9,11 @@
  */
 #ifndef __TOKEN_H__
 #define __TOKEN_H__
-
-#include <string>
-#include <stack>
+#include <utility> 
 #include <vector>
+#include <iostream>
+#include <string>
+#include <cstring>
 using namespace std;
 
 
@@ -20,21 +21,20 @@ using namespace std;
 class Token
 {
 private:
-    static char delimiter[];
-    vector<string> m_tContainer;
+    vector<pair <int ,string> > m_vec;
+    string m_line;
+    Token(const Token& _t);
+    Token& operator=(const Token& _t);
+    static string delimiter;
+
+
     
 public:
-
     Token(){}
-    ~Token();
-    vector<string> Tok(string& _line);
+    ~Token(){}
+    vector<pair <int ,string> >& Tok(pair <int ,string>& pLine);
 };
 
-
-
-Token::~Token()
-{
-}
 
 
 
