@@ -27,7 +27,7 @@ depends:
 	$(CC) -MM -I$(INC_DIR) $(SOURCES) > depends
 
 clean:
-	-rm -f $(TARGET) *.o depends file1 file2
+	-rm -f $(TARGET) *.o depends 
 	-rm *.out
 	
 run: $(TARGET)
