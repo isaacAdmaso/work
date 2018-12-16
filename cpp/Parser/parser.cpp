@@ -19,10 +19,13 @@ using namespace std;
 
 
 
-   
+const string Parser::parentheses = "{([<" ;  
+
+Parser::~Parser(){}
 
 void Parser::ParserRun(char* _argv)
 {
+    int* parenCountAnalyzer;
     ququ.open(_argv);
     if(!(ququ.is_open()))
         throw cant_open_file_e;
@@ -35,12 +38,15 @@ void Parser::ParserRun(char* _argv)
         if (m_line.empty() || (m_line.length() == 1 && isspace(m_line[0]))) {
             continue;
         }
-        //if(isspace(m_line[m_line.length() - 1 ]))
-        //    m_line[m_line.length() - 1] = '\0';
-        //
         pLine.first = nLine;
         pLine.second = m_line;
         a.Analyze(t.Tok(pLine));
-    }  
+    }
+    parenCountAnalyzer = a.RtParenCount();
+    for(int i = 0;i < 4; ++i){
+        if(parenCountAnalyzer[i] > 0 ){
+            cout << "//error-"<<parenCountAnalyzer[i] << " '"<< parentheses[i]<<"' not closed "<<endl;
+        }
+    }
 }
 

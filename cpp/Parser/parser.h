@@ -24,6 +24,7 @@ class Parser
 private:
     ifstream ququ;
     string m_line;
+    static const string parentheses;
     Token t;
     Analyzer a;
 
@@ -35,7 +36,7 @@ public:
 		bad_access_e,
         readErr_e
     };
-    ~Parser(){}
+    virtual ~Parser();
     Parser(){}
     void ParserRun(char* _argv);
 };

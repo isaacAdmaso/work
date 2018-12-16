@@ -25,7 +25,7 @@ private:
     string m_line;
     Token(const Token& _t);
     Token& operator=(const Token& _t);
-    static string delimiter;
+    static const string delimiter;
 
 
     

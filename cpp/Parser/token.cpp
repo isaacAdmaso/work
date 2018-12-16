@@ -17,7 +17,7 @@
 using namespace std;
 
 
-string  Token::delimiter = " ()[]{};<>=+-*&"; 
+const string  Token::delimiter = " ()[]{};<>=+-*&\r\n\t"; 
 
 
 vector<pair <int ,string> >& Token::Tok(pair <int ,string>& pLine){
@@ -48,7 +48,8 @@ vector<pair <int ,string> >& Token::Tok(pair <int ,string>& pLine){
         if (prev < line.length()){
             temp.first = pLine.first;
             temp.second = line.substr(prev, string::npos);
-            m_vec.push_back(temp);
+            if (!isspace(temp.second[0]))
+                m_vec.push_back(temp);
         }
     }
     return m_vec;
