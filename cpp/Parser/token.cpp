@@ -17,7 +17,7 @@
 using namespace std;
 
 
-const string  Token::delimiter = " ()[]{};<>=+-*&\r\n\t"; 
+const string  Token::delimiter = "\"\' ()[]{};<>=+-*&\r\n\t"; 
 
 
 vector<pair <int ,string> >& Token::Tok(pair <int ,string>& pLine){

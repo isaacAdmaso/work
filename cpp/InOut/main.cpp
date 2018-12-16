@@ -22,7 +22,7 @@ int main()
     int  	    ri = 0,i = 5;
     float       rf = 0,f = 6.1;
     short       ra,rb,a = 3,b = 7;
-    char        rach,rbch,ach = 'a',bch = 'b';
+    long        rach,rbch,ach = 34567,bch = 987654;
 
     char name[16] = "yitshak";
     int  len      = strlen(name);
@@ -37,7 +37,7 @@ int main()
     rtbIO >> rf >> ri >> ra >> rb >> rach >> rbch;
     cout << name << endl << rbch<< endl << ra<< endl << ri<< endl << rb<< endl << rach<< endl << rf<< endl<< endl;
 
-    i = 1;f = 3.6;a = 9;b = 11;ach = 'c';bch = 'd';
+    i = 1;f = 3.6;a = 9;b = 11;ach = 5674832;bch = 29384756;
     string file1("./file1");
     string mode1("w");
     string rmode1("r");

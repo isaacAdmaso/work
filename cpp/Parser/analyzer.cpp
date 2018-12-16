@@ -15,7 +15,7 @@
 
 
 const string Analyzer::TokenString = "{}<>[]()+-";
-char const Analyzer::Predefined_Types[][8] = {"char", "short", "int", "long", "float", "double", "void"};
+char const Analyzer::Predefined_Types[][8] = {"char", "short", "int", "long", "float", "double", "void","string"};
 char const Analyzer::Key_words[][16] = {"if", "else", "for" , "while", "class", "private", "public", "protected", "main", "const", "virtual"};
 char const Analyzer::Operators[][8] = {"++", "--", "==", "->" , "=", "+", "-", "*", "&", "<<", ">>"};
 int  Analyzer::PrTypes = sizeof(Predefined_Types)/sizeof(void*);

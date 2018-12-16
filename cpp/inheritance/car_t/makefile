@@ -27,7 +27,7 @@ $(TARGET): $(OBJECTS)
 include depends
 
 depends:
-	$(CC) -MM -I$(INC_DIR) $(SOURCES) > depends
+	$(CC) -MM -I$(INC_DIR) -I$(INC_DIR2) $(SOURCES) > depends
 
 clean:
 	-rm -f $(TARGET) *.o depends
