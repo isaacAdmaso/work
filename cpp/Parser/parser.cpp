@@ -35,9 +35,9 @@ void Parser::ParserRun(char* _argv)
         if (m_line.empty() || (m_line.length() == 1 && isspace(m_line[0]))) {
             continue;
         }
-        if(isspace(m_line[m_line.length() - 1 ]))
-            m_line[m_line.length() - 1] = '\0';
-        
+        //if(isspace(m_line[m_line.length() - 1 ]))
+        //    m_line[m_line.length() - 1] = '\0';
+        //
         pLine.first = nLine;
         pLine.second = m_line;
         a.Analyze(t.Tok(pLine));

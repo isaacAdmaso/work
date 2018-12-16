@@ -24,6 +24,7 @@ private:
     typedef typename vector<pair <int ,string> >::iterator	iter_t;
     static char Predefined_Types[][8];
     static char Key_words[][16];
+    static char Operators[][8];
 
 public:
     Analyzer(){}
