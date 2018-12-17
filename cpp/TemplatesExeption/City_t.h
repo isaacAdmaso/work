@@ -25,7 +25,7 @@ public:
     ~City_t(){}
     City_t(){}
     City_t(City_t& _s){street = _s.street;m_id = _s.m_id;}
-    City_t&  operator = (const Street_t<T,U>& _s){street = _s.street;}
+    City_t&  operator = (const City_t<T,U>& _s){street = _s.street;}
     void    setCityID(U& _newId){m_id = _newId;}
     U& getCityID(){return m_id;}
     void AddStreet(T& newStreet){street.push_back(newStreet);}

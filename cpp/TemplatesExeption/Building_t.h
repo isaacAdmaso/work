@@ -28,7 +28,7 @@ public:
     Building_t(Building_t& oldB):m_id(++id){ idBuilding = oldB.idBuilding;}
     Building_t&  operator = (const Building_t& _b){idBuilding = _b.idBuilding;}
     void        setBuildingID(T newT) { idBuilding = newT;}
-    T           getBuildingID()const { return idBuilding;}
+    T&          getBuildingID() const{ return idBuilding;}
 };
 
 #endif //__BUILDING_H__
