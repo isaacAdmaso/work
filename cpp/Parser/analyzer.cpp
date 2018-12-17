@@ -34,9 +34,6 @@ void Analyzer::AnalyzerClean(){
     Analyzer::ifFlag = 0;
     Analyzer::plus_minusCounter[0] = 0;
     Analyzer::plus_minusCounter[1] = 0;
-    cTypes.clear();
-    cOper.clear();
-    cKeys.clear();
     m_tCont.clear();
 }
 
@@ -53,7 +50,7 @@ void Analyzer::Analyze(vector<pair <int ,string> >& _tok)
             if(temp.second.compare("main"))
                 cout<<"//line "<<temp.first<<":error, illegal - declaration before 'main'"<<endl;
             firstTok = 0;
-        }else if(temp.second.find_first_of(TokenString) != string::npos){
+        }if(temp.second.find_first_of(TokenString) != string::npos){
             if(typeFlag){
                 cout<<"//line "<<temp.first<<":error, illegal variable name:"<<temp.second<<endl;
                 typeFlag = 0;
@@ -170,13 +167,14 @@ void Analyzer::Analyze(vector<pair <int ,string> >& _tok)
             plus_minusCounter[1] = 0; 
             if(!typeFlag){
                 cout<<"//line "<<temp.first<<":error,"<<temp.second<< " :is not declared"<<endl;
-                typeFlag = 0;
             }else if(isalpha(temp.second[0]) || (temp.second[0] == '_') ){
                 if((m_tCont.find(temp.second)) != m_tCont.end())
                     cout<<"//line "<<temp.first<<":error,"<<temp.second<< " :is not declared"<<endl;
                 m_tCont.insert(temp.second);
+                typeFlag = 0;
             }else{
                 cout<<"//line "<<temp.first<<":error,illegal variable name"<<endl;
+                typeFlag = 0;
             }
         }
     }
