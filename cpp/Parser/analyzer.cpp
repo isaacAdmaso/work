@@ -27,6 +27,19 @@ int  Analyzer::ifFlag = 0;
 int  Analyzer::parenCount[4] = {0};
 int  Analyzer::plus_minusCounter[2] = {0};
 
+
+void Analyzer::AnalyzerClean(){
+    Analyzer::firstTok = 1;
+    Analyzer::typeFlag = 0;
+    Analyzer::ifFlag = 0;
+    Analyzer::plus_minusCounter[0] = 0;
+    Analyzer::plus_minusCounter[1] = 0;
+    cTypes.clear();
+    cOper.clear();
+    cKeys.clear();
+    m_tCont.clear();
+}
+
 void Analyzer::Analyze(vector<pair <int ,string> >& _tok)
 {
     pair <int ,string> temp;

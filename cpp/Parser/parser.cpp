@@ -44,9 +44,12 @@ void Parser::ParserRun(char* _argv)
     }
     parenCountAnalyzer = a.RtParenCount();
     for(int i = 0;i < 4; ++i){
-        if(parenCountAnalyzer[i] > 0 ){
+        if(parenCountAnalyzer[i] > 0 ) 
             cout << "//error-"<<parenCountAnalyzer[i] << " '"<< parentheses[i]<<"' not closed "<<endl;
-        }
+        parenCountAnalyzer[i] = 0;
     }
+    a.AnalyzerClean();
+    ququ.close();
+    cout << endl<<endl;
 }
 

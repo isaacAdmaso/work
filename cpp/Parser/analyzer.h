@@ -32,6 +32,8 @@ private:
     set<string> m_tCont;
     typedef typename vector<pair <int ,string> >::iterator	Viter_t;
     typedef set<string>::iterator iter_t;
+    Analyzer(Analyzer& _a);
+    Analyzer& operator=(Analyzer& _a);
 
 public:
     
@@ -39,6 +41,7 @@ public:
     ~Analyzer(){}
     void Analyze(vector<pair <int ,string> >& _tok);
     int* RtParenCount(){return parenCount;}
+    void AnalyzerClean();
 };
 
 #endif //__ANALYZE_H__
