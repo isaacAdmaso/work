@@ -10,7 +10,7 @@
 
 
 int main(int argc,char* argv[]) { 
-	int sockfd,loop = 1,rtVal; 
+	int sockfd; 
 	Addr addr = {PORT,IP};
 	char msg[MAXLINE]; 
 	struct sockaddr_in	 servaddr; 
@@ -33,9 +33,8 @@ int main(int argc,char* argv[]) {
 
 	InitAdd(&servaddr,&addr);
     
-    rtVal = connect(sockfd,(struct sockaddr *)&servaddr,sizeof(servaddr));
-    if(rtVal < 0){
-        perror ("connect");
+    if((connect(sockfd,(struct sockaddr *)&servaddr,sizeof(servaddr))) < 0){
+        perror ("unable connect");
 		exit(EXIT_FAILURE); 
     }
 	
@@ -43,9 +42,6 @@ int main(int argc,char* argv[]) {
     fgets (msg , MAXLINE , stdin);
 
     Send(sockfd,msg,strlen(msg)+1,cs);
-    printf("enter 0 to stop else run:\n");
-    fflush(stdout);
-    scanf("%d",&loop);
     Rec(sockfd,cs);
 	close(sockfd); 
 
