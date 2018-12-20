@@ -3,7 +3,7 @@ CFLAGS=-g -ansi -pedantic -Werror -Wall
 
 all: client server
 
-client: client.c CS.c
+client: client.c CS.c 
 server: server.c CS.c
 
 clean:
