@@ -36,14 +36,19 @@ int Rec(int sockfd,struct sockaddr_in* addr,CS_t cs){
 
 	buffer[n] = '\0'; 
 	printf("Msg rec : %s\n", buffer); 
+	fflush(stdout);
 	printf("'%s' ip is: '%s'     client port is: %d  n = %d\n",name,inet_ntoa(addr->sin_addr),ntohs(addr->sin_port),n);
-
+	fflush(stdout);
 	return n;
 }
 
 int Send(int sockfd,const char* msg,struct sockaddr_in* addr,CS_t cs){
 	unsigned int len = sizeof(*addr);
-	return sendto(sockfd, msg, strlen(msg),0, (const struct sockaddr *) addr,len); 
+	int n;
+	n = sendto(sockfd, msg, strlen(msg),0, (const struct sockaddr *) addr,len); 
+	printf("ip is: '%s'     client port is: %d  n = %d\n",inet_ntoa(addr->sin_addr),ntohs(addr->sin_port),n);
+
+	return n;
 }
 
 

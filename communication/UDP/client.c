@@ -35,11 +35,13 @@ int main(int argc,char* argv[]) {
 
 	while(loop){
 		printf("enter msg:\n");
+		fflush(stdout);
 		fgets (msg , MAXLINE , stdin);
 		Send(sockfd,msg,&servaddr,cs);
-		Rec(sockfd,&servaddr,cs);
 		printf("enter 0 to stop else run:\n");
+		fflush(stdout);
 		scanf("%d",&loop);
+		Rec(sockfd,&servaddr,cs);
 	}
 	close(sockfd); 
 

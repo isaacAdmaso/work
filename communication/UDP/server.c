@@ -40,9 +40,11 @@ int main(int argc,char* argv[]) {
 
 		Rec(sockfd,&cliaddr,cs); 
 		printf("enter msg:\n");
+		fflush(stdout);
 		fgets (msg , MAXLINE , stdin);
 		Send(sockfd,(const char*) msg,& cliaddr,cs);
 		printf("enter 0 to stop else run:\n");
+		fflush(stdout);
 		scanf("%d",&loop);
 	}
 	close(sockfd); 
