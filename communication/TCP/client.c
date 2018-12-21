@@ -20,6 +20,7 @@ int main(int argc,char* argv[]) {
 		perror("socket creation failed"); 
 		exit(EXIT_FAILURE); 
 	} 
+	printf("socket created with fd: %d\n",sockfd);
 
 	memset(&servaddr, 0, sizeof(servaddr)); 
 
@@ -37,11 +38,12 @@ int main(int argc,char* argv[]) {
         perror ("unable connect");
 		exit(EXIT_FAILURE); 
     }
+	printf("connected to ip: %s\tport: %d\n",inet_ntoa(servaddr.sin_addr),ntohs(servaddr.sin_port));
 	
     printf("enter msg:\n");
     fgets (msg , MAXLINE , stdin);
 
-    Send(sockfd,msg,strlen(msg)+1,cs);
+    Send(sockfd,msg,strlen(msg),cs);
     Rec(sockfd,cs);
 	close(sockfd); 
 

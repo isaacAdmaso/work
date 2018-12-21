@@ -27,7 +27,8 @@ int main(int argc,char* argv[]) {
 		perror("socket creation failed"); 
 		exit(EXIT_FAILURE); 
 	} 
-	
+	printf("socket created with fd: %d\n",sockfd);
+
 	memset(&servaddr, 0, sizeof(servaddr)); 
 	memset(&cliaddr, 0, sizeof(cliaddr)); 
 	
@@ -36,20 +37,22 @@ int main(int argc,char* argv[]) {
 		perror("bind failed"); 
 		exit(EXIT_FAILURE); 
 	} 
+	printf("bind: ip: %s\tport: %d\n",inet_ntoa(servaddr.sin_addr),ntohs(servaddr.sin_port));
+
 	if (listen(sockfd, 1) < 0){
 		perror("bind failed"); 
 		exit(EXIT_FAILURE); 
 	}
-	
+	printf("start listen\n");
 	if ((sockfdOther = accept(sockfd, (struct sockaddr *) &cliaddr, &len)) < 0){
 		perror("bind failed"); 
 		exit(EXIT_FAILURE); 
 	}
-
+	printf("accept connection to ip: %s\tport: %d\n",inet_ntoa(cliaddr.sin_addr),ntohs(cliaddr.sin_port));
 	Rec(sockfdOther,cs); 
 	printf("enter msg:\n");
 	fgets (msg , MAXLINE , stdin);
-	Send(sockfdOther,msg,strlen(msg)+1,cs);
+	Send(sockfdOther,msg,strlen(msg),cs);
 	shutdown(sockfd,0);
 	close(sockfd);
 	return 0; 
