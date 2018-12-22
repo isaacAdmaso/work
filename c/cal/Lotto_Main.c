@@ -1,5 +1,5 @@
 #include "Lotto.h"
-#include<stdlib.h>
+#include<stdlib.h> /**rand srand */
 #include<stdio.h>
 #include <time.h> 
 #define No_of_Guesses 6
