@@ -27,7 +27,7 @@ int main(void)
     for(i = 0;i < 5;++i)
     {
         printf(", %d ",i);
-        fflush(0);
+        fflush(stdout);
         sleep(1);
     }
     /**all errors ==  -1  */
@@ -41,7 +41,7 @@ int main(void)
     for(i = 0;i < 5;++i)
         {
             printf(", %d ",i);
-            fflush(0);
+            fflush(stdout);
             sleep(1);
         }
 	printf("Enter a string:\n");

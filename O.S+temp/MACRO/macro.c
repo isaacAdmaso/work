@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include "list.h"
-#include 
 
 
 int  main (void)
