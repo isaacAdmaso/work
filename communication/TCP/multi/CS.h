@@ -33,7 +33,7 @@ typedef enum CS{ SERVER,CLIENT }CS_t;
 
 void InitAdd(struct sockaddr_in* servaddr,Addr* _addr,int argc,char* argv[]);
 
-void Conn(int* sockfd,struct sockaddr_in* servaddr);
+int Conn(int* sockfd,struct sockaddr_in* servaddr);
 
 int Rec(int sockfd,CS_t cs);
 

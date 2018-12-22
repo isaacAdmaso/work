@@ -16,7 +16,10 @@
 #include <sys/socket.h> 
 #include <arpa/inet.h> 
 #include <netinet/in.h>
+#include <errno.h>
 #include "CS.h" 
+#include "../../errorHandle.h"
+
 
 
 
@@ -46,22 +49,16 @@ int Send(int sockfd,const char* msg,size_t len,CS_t cs){
 	char name[NAMESZ]; 
 
 	n = send(sockfd, msg, len,0); 
-    (cs) ?strcpy(name,"SERVER") :strcpy(name,"CLIENT") ; 
-	printf("my msg is: %s nbyts is: %d\n",msg,n);
+    (!cs) ?strcpy(name,"SERVER") :strcpy(name,"CLIENT") ; 
+	printf("%s msg is: %s nbyts is: %d\n",name,msg,n);
 	return n;
 }
 
 
-void Conn(int* sockfd,struct sockaddr_in* servaddr){
+int Conn(int* sockfd,struct sockaddr_in* servaddr){
 
-	if ( (*sockfd = socket(AF_INET, SOCK_STREAM, 0) ) < 0 ) { 
-				perror("socket creation failed"); 
-				exit(EXIT_FAILURE); 
-	}  
-	printf("socket created with fd: %d\n",*sockfd);
-	if((connect(*sockfd,(struct sockaddr *)servaddr,sizeof(*servaddr))) < 0){
-		perror ("unable connect");
-		exit(EXIT_FAILURE); 
-	}
-	printf("connected to ip: %s\tport: %d\n",inet_ntoa(servaddr->sin_addr),ntohs(servaddr->sin_port));
+	*sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	HANDLE_ERR_EXIT(*sockfd < 3,*sockfd,"create sock");
+
+	return connect(*sockfd,(struct sockaddr *)servaddr,sizeof(*servaddr));
 }

@@ -10,7 +10,6 @@
 
 
 
-#include "CS.h" 
 #include <stdio.h> 
 #include <stdlib.h> 
 #include <time.h> 
@@ -20,17 +19,21 @@
 #include <sys/socket.h> 
 #include <arpa/inet.h> 
 #include <netinet/in.h>
+#include <errno.h>
+#include "CS.h" 
+#include "../../errorHandle.h"
 
 #define MAXAMOUNT   1
 #define DIS         -1
 #define CONN        2
 
+const char clientMsg[] =  "Hello from client #%d\n";
 
 void SeAndRe(int sockfd,int clientN, char* msg,CS_t cs);
 
 
 int main(int argc,char* argv[]) { 
-	int sockfdArr[MAXAMOUNT],i,randomN = -1; 
+	int sockfdArr[MAXAMOUNT],i,randomN = -1,rtVal; 
 	Addr addr = {PORT,IP};
 	char msg[MAXLINE]; 
 	struct sockaddr_in	 servaddr; 
@@ -45,9 +48,14 @@ int main(int argc,char* argv[]) {
     while(1){
         for(i = 0;i < MAXAMOUNT; ++i){
             randomN = rand()%10;
+            printf("\nrandomN:\t%d\n",randomN);
+            fflush(stdout);
             if( (sockfdArr[i] == DIS) ){
                 if(randomN < 3){
-                    Conn(&(sockfdArr[i]),&servaddr);
+                    rtVal = Conn(&(sockfdArr[i]),&servaddr);
+                    HANDLE_ERR_EXIT(rtVal < 0,rtVal,"connection");
+                	printf("connected to ip: %s\tport: %d\n",inet_ntoa(servaddr.sin_addr)
+                        ,ntohs(servaddr.sin_port));
                 }
             }else if( sockfdArr[i] > CONN ){
                 if(randomN < 1){
@@ -62,15 +70,14 @@ int main(int argc,char* argv[]) {
 } 
 
 void SeAndRe(int sockfd,int clientN, char* msg,CS_t cs){
-    snprintf ( msg, MAXLINE, "Hello from client #%d\n",clientN);
+    int rtVal;
+    snprintf ( msg, MAXLINE, clientMsg,clientN);
     fwrite (msg , sizeof(char), strlen(msg), stdout);
-    if(Send(sockfd,msg,strlen(msg),cs) <= 0 ){
-        printf("%d\n",sockfd);
-        perror ("unable to send");
-        exit(EXIT_FAILURE); 
-    }
-    if(Rec(sockfd,cs) < 0 ){
-        perror ("unable to receive");
-        exit(EXIT_FAILURE); 
-    }
+
+    rtVal = Send(sockfd,msg,strlen(msg),cs);
+    HANDLE_ERR_EXIT(rtVal <= 0,rtVal,"send");
+
+    rtVal = Rec(sockfd,cs);
+    HANDLE_ERR_EXIT(rtVal <= 0,rtVal,"receive");
 }
+
