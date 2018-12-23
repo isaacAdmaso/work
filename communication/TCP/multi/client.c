@@ -48,14 +48,13 @@ int main(int argc,char* argv[]) {
     while(1){
         for(i = 0;i < MAXAMOUNT; ++i){
             randomN = rand()%10;
-            printf("\nrandomN:\t%d\n",randomN);
-            fflush(stdout);
             if( (sockfdArr[i] == DIS) ){
                 if(randomN < 3){
                     rtVal = Conn(&(sockfdArr[i]),&servaddr);
-                    HANDLE_ERR_EXIT(rtVal < 0,rtVal,"connection");
-                	printf("connected to ip: %s\tport: %d\n",inet_ntoa(servaddr.sin_addr)
-                        ,ntohs(servaddr.sin_port));
+                    if(!HANDLE_ERR_NO_EXIT(rtVal < 0,rtVal,"connection")){
+                    	printf("connected to ip: %s\tport: %d\n",inet_ntoa(servaddr.sin_addr)
+                            ,ntohs(servaddr.sin_port));
+                    }
                 }
             }else if( sockfdArr[i] > CONN ){
                 if(randomN < 1){

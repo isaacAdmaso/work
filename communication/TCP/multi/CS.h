@@ -29,7 +29,8 @@ typedef struct Addr{
     char    m_ip[16];
 }Addr;
 
-typedef enum CS{ SERVER,CLIENT }CS_t;
+typedef enum Block  { NO_BLOCK,BLOCK }  Block_t;
+typedef enum CS     { SERVER,CLIENT  }  CS_t;
 
 void InitAdd(struct sockaddr_in* servaddr,Addr* _addr,int argc,char* argv[]);
 
@@ -38,6 +39,8 @@ int Conn(int* sockfd,struct sockaddr_in* servaddr);
 int Rec(int sockfd,CS_t cs);
 
 int Send(int sockfd,const char* msg,size_t len,CS_t cs);
+
+int SetSockBlock(int fd, int blocking);
 
 
 #endif /*__CS_H__*/

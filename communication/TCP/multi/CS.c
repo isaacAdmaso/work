@@ -17,6 +17,7 @@
 #include <arpa/inet.h> 
 #include <netinet/in.h>
 #include <errno.h>
+#include <fcntl.h>
 #include "CS.h" 
 #include "errorHandle.h"
 
@@ -38,9 +39,11 @@ int Rec(int sockfd,CS_t cs){
 	char buffer[MAXLINE],name[NAMESZ]; 
     
     n = recv(sockfd, buffer, MAXLINE,0);
-	(cs) ?strcpy(name,"SERVER") :strcpy(name,"CLIENT") ; 
-	buffer[n] = '\0'; 
-	printf("%s Msg rec : %s  nbyts: %d\n",name, buffer,n); 
+	if(n > 0){
+		(!cs) ?strcpy(name,"SERVER") :strcpy(name,"CLIENT") ; 
+		buffer[n] = '\0'; 
+		printf("%s Msg rec : %s  nbyts: %d\n",name, buffer,n); 
+	}
 	return n;
 }
 
@@ -48,17 +51,40 @@ int Send(int sockfd,const char* msg,size_t len,CS_t cs){
 	int n;
 	char name[NAMESZ]; 
 
-	n = send(sockfd, msg, len,0); 
-    (!cs) ?strcpy(name,"SERVER") :strcpy(name,"CLIENT") ; 
-	printf("%s msg is: %s nbyts is: %d\n",name,msg,n);
+	n = send(sockfd, msg, len,0);
+	if(n > 0){
+
+    	(!cs) ?strcpy(name,"SERVER") :strcpy(name,"CLIENT") ; 
+		printf("%s msg is: %s nbyts is: %d\n",name,msg,n);
+	}
 	return n;
 }
 
 
 int Conn(int* sockfd,struct sockaddr_in* servaddr){
+	int n;
 
 	*sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	HANDLE_ERR_EXIT(*sockfd < 3,*sockfd,"create sock");
 
-	return connect(*sockfd,(struct sockaddr *)servaddr,sizeof(*servaddr));
+	n = connect(*sockfd,(struct sockaddr *)servaddr,sizeof(struct sockaddr_in));
+	return n; 
+}
+
+int SetSockBlock(int fd, int blocking)
+{
+	int flags,rtVal;
+
+   	if (fd < 0) 
+   		return 0;
+
+  	flags = fcntl(fd, F_GETFL);
+   	if (HANDLE_ERR_NO_EXIT(flags == -1,flags,"fcntl. F_GETFL."))
+	    return 0;
+
+	flags = blocking ? (flags & ~O_NONBLOCK) : (flags | O_NONBLOCK);
+	rtVal = fcntl(fd, F_SETFL, flags);
+	if (HANDLE_ERR_NO_EXIT(rtVal == -1 ,rtVal,"fcntl F_SETFL."))
+	    return 0;
+	return 1;
 }
