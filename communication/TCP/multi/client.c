@@ -21,7 +21,7 @@
 #include <netinet/in.h>
 #include <errno.h>
 #include "CS.h" 
-#include "../../errorHandle.h"
+#include "errorHandle.h"
 
 #define MAXAMOUNT   1
 #define DIS         -1
@@ -59,7 +59,8 @@ int main(int argc,char* argv[]) {
                 }
             }else if( sockfdArr[i] > CONN ){
                 if(randomN < 1){
-                    close(sockfdArr[i]); 
+                    close(sockfdArr[i]);
+                    sockfdArr[i] = -1; 
                 }else if(randomN < 4){
                     SeAndRe(sockfdArr[i],i, msg, cs);
                 }
@@ -75,9 +76,9 @@ void SeAndRe(int sockfd,int clientN, char* msg,CS_t cs){
     fwrite (msg , sizeof(char), strlen(msg), stdout);
 
     rtVal = Send(sockfd,msg,strlen(msg),cs);
-    HANDLE_ERR_EXIT(rtVal <= 0,rtVal,"send");
+    HANDLE_ERR_EXIT(rtVal < 0,rtVal,"send");
 
     rtVal = Rec(sockfd,cs);
-    HANDLE_ERR_EXIT(rtVal <= 0,rtVal,"receive");
+    HANDLE_ERR_EXIT(rtVal < 0,rtVal,"receive");
 }
 

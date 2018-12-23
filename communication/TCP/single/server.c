@@ -39,11 +39,11 @@ int main(int argc,char* argv[]) {
 	} 
 	printf("bind: ip: %s\tport: %d\n",inet_ntoa(servaddr.sin_addr),ntohs(servaddr.sin_port));
 
-	if (listen(sockfd, 1) < 0){
+	if (listen(sockfd, 1) != 0){
 		perror("bind failed"); 
 		exit(EXIT_FAILURE); 
 	}
-	printf("start listen\n");
+	printf("Listen..........\n");
 	if ((sockfdOther = accept(sockfd, (struct sockaddr *) &cliaddr, &len)) < 0){
 		perror("bind failed"); 
 		exit(EXIT_FAILURE); 
