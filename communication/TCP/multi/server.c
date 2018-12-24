@@ -20,9 +20,9 @@
 #define CLIENTNUM  1000
 
 
-volatile sig_atomic_t got_usr1;
+int got_usr1 = 0;
 void sigusr1_handler(int sig);
-void SigInit(struct sigaction sa);
+void SigInit(struct sigaction* sa);
 void ServerInit(int*  sockfd, struct sockaddr_in* servaddr,int argc,char* argv[]);
 void AddClient(List* list,int sockfd);
 void SendRecv(List* list, char* msg);
@@ -40,12 +40,9 @@ int main(int argc,char* argv[]) {
 	struct sigaction sa;
 	List* list = NULL;
 
-	
-	
-	got_usr1 = 0;
 	list = List_Create();
 
-	SigInit(sa);
+	SigInit(&sa);
 
 	ServerInit(&sockfd,&servaddr,argc,argv);
 
@@ -68,22 +65,20 @@ int main(int argc,char* argv[]) {
 
 void sigusr1_handler(int sig)
 {
-	(void)sig; // silence unused variable warning
-
 	got_usr1 = 1;
 }
 
-void SigInit(struct sigaction sa){
+void SigInit(struct sigaction* sa){
 	int rtVal;
-	sa.sa_handler = sigusr1_handler;
-	sa.sa_flags = 0;
-	rtVal = sigemptyset(&(sa.sa_mask));
+
+	sa->sa_handler = sigusr1_handler;
+	sa->sa_flags = 0;
+	rtVal = sigemptyset(&(sa->sa_mask));
 	HANDLE_ERR_NO_EXIT(rtVal == -1, rtVal, "sigaction");
 
-	rtVal = sigaction(SIGUSR1, &sa, NULL);
+	rtVal = sigaction(SIGINT, sa, NULL);
 	HANDLE_ERR_NO_EXIT(rtVal == -1, rtVal, "sigaction ");
 
-	
 }
 
 void ServerInit(int*  sockfd, struct sockaddr_in* servaddr,int argc,char* argv[]){

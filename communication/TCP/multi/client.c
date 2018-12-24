@@ -111,6 +111,7 @@ void ClientRun(int* sockfd, char* msg,int numC){
     randomN = rand()%10;
     if( *sockfd > CONN ){
         if(randomN < 1){
+            shutdown(*sockfd,0);
             close(*sockfd);
             *sockfd = -1; 
         }else if(randomN < 4){
