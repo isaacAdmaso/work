@@ -165,6 +165,7 @@ void SendRecv(List* list, char* msg){
 			HANDLE_ERR_EXIT(rtBool,rtVal,"send");
 
 		}else if (rtVal == 0){
+			shutdown(tempSocket,0);
 			close(tempSocket);
 			ListItr_Remove(tempItr);
 		}
@@ -180,8 +181,9 @@ void ExitClean(List* list, int* sockfd){
 	eItr = ListItr_End(list);
 	while(!ListItr_Equals(tempItr,eItr)){
 		tempSocket = (intptr_t)ListItr_Get(tempItr);
-		bItr = ListItr_Next(bItr);
+		shutdown(tempSocket,0);
 		close(tempSocket);
+		bItr = ListItr_Next(bItr);
 		ListItr_Remove(tempItr);
 		tempItr = bItr;
 	}
