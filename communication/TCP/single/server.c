@@ -45,7 +45,7 @@ int main(int argc,char* argv[]) {
 	}
 	printf("Listen..........\n");
 	if ((sockfdOther = accept(sockfd, (struct sockaddr *) &cliaddr, &len)) < 0){
-		perror("bind failed"); 
+		perror("accept failed"); 
 		exit(EXIT_FAILURE); 
 	}
 	printf("accept connection to ip: %s\tport: %d\n",inet_ntoa(cliaddr.sin_addr),ntohs(cliaddr.sin_port));

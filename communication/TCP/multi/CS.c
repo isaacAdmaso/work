@@ -24,14 +24,14 @@
 
 
 
-void InitAdd(struct sockaddr_in* servaddr,Addr* _addr,int argc,char* argv[]){
+void InitAdd(struct sockaddr_in* servaddr,Addr* _addr,int argc,char* argv[],CS_t cs){
 	if (argc >= 3){
 		_addr->m_port =  atoi(argv[1]);
 		strcpy(_addr->m_ip,  argv[2]);
 	}
     servaddr->sin_family = AF_INET; 
 	servaddr->sin_port = htons(_addr->m_port); 
-	servaddr->sin_addr.s_addr = inet_addr( _addr->m_ip );
+	servaddr->sin_addr.s_addr = (cs) ? inet_addr( _addr->m_ip ) : INADDR_ANY;
 }
 
 int Rec(int sockfd,CS_t cs){

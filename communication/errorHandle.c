@@ -14,7 +14,7 @@
 
 
 int HandleError(int _cond, int _rtval, char* _msg, char* fileN, int lineN, int _errnoN){
-   /* if(_cond){
+    /*if(_cond){
         printf("Error in: %s\nrtval is: %d\nin file: %s line %d\n",
             _msg,_rtval,fileN,lineN);
         

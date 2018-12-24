@@ -32,7 +32,7 @@ typedef struct Addr{
 typedef enum Block  { NO_BLOCK,BLOCK }  Block_t;
 typedef enum CS     { SERVER,CLIENT  }  CS_t;
 
-void InitAdd(struct sockaddr_in* servaddr,Addr* _addr,int argc,char* argv[]);
+void InitAdd(struct sockaddr_in* servaddr,Addr* _addr,int argc,char* argv[],CS_t cs);
 
 int Conn(int* sockfd,struct sockaddr_in* servaddr);
 

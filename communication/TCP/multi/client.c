@@ -23,7 +23,7 @@
 #include "CS.h" 
 #include "errorHandle.h"
 
-#define MAXAMOUNT   1
+#define MAXAMOUNT   1000
 #define DIS         -1
 #define CONN        2
 
@@ -60,9 +60,11 @@ int main(int argc,char* argv[]) {
 void ClientInit(int* sockfdArr,struct sockaddr_in*	 servaddr,int argc,char* argv[]){
 	Addr addr = {PORT,IP};
     int i;
+	CS_t cs = CLIENT;
+
 
     memset(servaddr, 0, sizeof(*servaddr)); 
-	InitAdd(servaddr,&addr,argc,argv);
+	InitAdd(servaddr,&addr,argc,argv,cs);
     for(i = 0;i < MAXAMOUNT; ++i)
         sockfdArr[i] = DIS;
 

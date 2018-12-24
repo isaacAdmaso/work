@@ -31,6 +31,7 @@ $(TARGET2): $(OBJECTS2)
 clean:
 	-rm -f $(TARGET1) $(TARGET2) *.o #depends
 	-rm *.out
+	-rm ../../errorHandle.o
 	
 
 ##INC_DIR=./

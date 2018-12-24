@@ -17,7 +17,7 @@
 
 
 
-#define CLIENTNUM  1
+#define CLIENTNUM  1000
 
 
 volatile sig_atomic_t got_usr1;
@@ -90,23 +90,25 @@ void ServerInit(int*  sockfd, struct sockaddr_in* servaddr,int argc,char* argv[]
 	int rtVal,optVal = 1;
 	Addr addr = {0,"0"};
 	Block_t nBlock = NO_BLOCK;
+	CS_t cs = SERVER;
+
 
 
 	*sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	HANDLE_ERR_EXIT(*sockfd < 3,*sockfd,"create sock");
 
-	rtVal = SetSockBlock(*sockfd, nBlock);
-	HANDLE_ERR_EXIT(!rtVal,*sockfd,"SetSockBlock");
-
-
 
 	rtVal = setsockopt(*sockfd,SOL_SOCKET,SO_REUSEADDR,&optVal,sizeof(optVal));
 	HANDLE_ERR_EXIT(rtVal < 0,rtVal,"reuse");
+
+	rtVal = SetSockBlock(*sockfd, nBlock);
+	HANDLE_ERR_EXIT(!rtVal,*sockfd,"SetSockBlock");
+
 	printf("socket created with fd: %d\n", *sockfd);
 
 	memset(servaddr, 0, sizeof(*servaddr)); 
 
-	InitAdd(servaddr,&addr,argc,argv);
+	InitAdd(servaddr,&addr,argc,argv,cs);
 	
 	rtVal = bind(*sockfd, (const struct sockaddr *)servaddr, sizeof(*servaddr));
 	HANDLE_ERR_EXIT(rtVal < 0,rtVal,"bind ");
@@ -167,7 +169,7 @@ void SendRecv(List* list, char* msg){
 			rtBool = ((rtVal < 0) && (errno != EAGAIN) && (errno != EWOULDBLOCK));
 			HANDLE_ERR_EXIT(rtBool,rtVal,"send");
 
-		}else{
+		}else if (rtVal == 0){
 			close(tempSocket);
 			ListItr_Remove(tempItr);
 		}
