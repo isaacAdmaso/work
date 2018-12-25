@@ -34,13 +34,18 @@ int main(int argc,char* argv[]) {
 	InitAdd(&servaddr,&addr);
 
 	while(loop){
+
 		printf("enter msg:\n");
 		fflush(stdout);
 		fgets (msg , MAXLINE , stdin);
+		printf("\nto send ?\n");
+		getc(stdin);
 		Send(sockfd,msg,&servaddr,cs);
 		printf("enter 0 to stop else run:\n");
 		fflush(stdout);
 		scanf("%d",&loop);
+		printf("\nto recv?\n");
+		getc(stdin);
 		Rec(sockfd,&servaddr,cs);
 	}
 	close(sockfd); 

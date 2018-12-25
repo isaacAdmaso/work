@@ -37,11 +37,14 @@ int main(int argc,char* argv[]) {
 	} 
 
 	while(loop){
-
+		printf("\nto recv?\n");
+		getc(stdin);
 		Rec(sockfd,&cliaddr,cs); 
 		printf("enter msg:\n");
 		fflush(stdout);
 		fgets (msg , MAXLINE , stdin);
+		printf("\nto send?\n");
+		getc(stdin);
 		Send(sockfd,(const char*) msg,& cliaddr,cs);
 		printf("enter 0 to stop else run:\n");
 		fflush(stdout);
