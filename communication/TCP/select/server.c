@@ -87,7 +87,6 @@ void SigInit(struct sigaction* sa){
 
 	rtVal = sigaction(SIGINT, sa, NULL);
 	HANDLE_ERR_NO_EXIT(rtVal == -1, rtVal, "sigaction ");
-
 }
 
 void ServerInit(int*  sockfd, struct sockaddr_in* servaddr,struct sigaction* sa,List** list,int argc,char* argv[]){
