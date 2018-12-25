@@ -24,7 +24,7 @@
 int got_usr1 = 0;
 void sigusr1_handler(int sig);
 void SigInit(struct sigaction* sa);
-void ServerInit(int*  sockfd, struct sockaddr_in* servaddr,int argc,char* argv[]); /**	struct !!! 	*/
+void ServerInit(int*  sockfd, struct sockaddr_in* servaddr,struct sigaction* sa,List** list,int argc,char* argv[]); /**	struct !!! 	*/
 void AddClient(List* list,int sockfd,fd_set *rfds, int *maxFd);					   /** 	struct		*/
 void SendRecv(List* list, char* msg,fd_set *rfds,fd_set *tempfdSet,int *maxSocket,int act);/**	struct 		*/
 void ExitClean(List* list, int* sockfd);
@@ -44,24 +44,22 @@ int main(int argc,char* argv[]) {
 	fd_set rfds,tempfdSet;
 
 	FD_ZERO(&rfds);
-	list = List_Create();
-	SigInit(&sa);
-	ServerInit(&sockfd,&servaddr,argc,argv);
+	
+	ServerInit(&sockfd,&servaddr,&sa,&list,argc,argv);
 	FD_SET(sockfd,&rfds);
 	maxFd = sockfd;
 
 	while(!got_usr1){
 		tempfdSet = rfds;
 		activity = select(maxFd + 1, &tempfdSet, NULL, NULL, NULL);
-		if(HANDLE_ERR_NO_EXIT(((activity  < 0) && (errno != EINTR)),activity,"select")){
-			
-		}
+		if(HANDLE_ERR_NO_EXIT(((activity  < 0) && (errno != EINTR)),activity,"select"))		break;
 		if(FD_ISSET(sockfd,&tempfdSet)){
  			AddClient(list,sockfd,&rfds,&maxFd);
 			--activity;
 		}
 		SendRecv(list,msg,&rfds,&tempfdSet,&maxFd,activity);
 	}
+
 	ExitClean(list, &sockfd);
 	return 0; 
 } 
@@ -92,13 +90,15 @@ void SigInit(struct sigaction* sa){
 
 }
 
-void ServerInit(int*  sockfd, struct sockaddr_in* servaddr,int argc,char* argv[]){
+void ServerInit(int*  sockfd, struct sockaddr_in* servaddr,struct sigaction* sa,List** list,int argc,char* argv[]){
 	int rtVal,optVal = 1;
 	Addr addr = {0,"0"};
 	Block_t nBlock = NO_BLOCK;
 	CS_t cs = SERVER;
 
 
+	*list = List_Create();
+	SigInit(sa);
 
 	*sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	HANDLE_ERR_EXIT(*sockfd < 3,*sockfd,"create sock");
@@ -204,5 +204,5 @@ void ExitClean(List* list, int* sockfd){
 	List_Destroy(&list,NULL);
 	shutdown(*sockfd,0);
 	close(*sockfd);
-	printf("\nall resources closed\n");
+	printf("\nAll Resources Closed\n");
 }
