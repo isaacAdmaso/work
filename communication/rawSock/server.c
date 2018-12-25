@@ -185,7 +185,8 @@ void print_tcp_packet(unsigned char* Buffer, int Size)
     fprintf(stdout , "TCP Header\n");
     PrintData(Buffer+iphdrlen,tcph->doff*4);
          
-    fprintf(stdout , "Data Payload\n");    
+    fprintf(stdout , "Data Payload\n");  
+    printf("\nData:%s\n",Buffer + header_size);  
     PrintData(Buffer + header_size , Size - header_size );
                          
     fprintf(stdout , "\n###########################################################");
