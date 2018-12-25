@@ -10,6 +10,7 @@
 #include <signal.h>
 #include <stdint.h>
 #include <fcntl.h>
+#include <sys/time.h>/*for select*/
 #include "CS.h" 
 #include "errorHandle.h"
 #include "list_functions.h"
@@ -23,10 +24,11 @@
 int got_usr1 = 0;
 void sigusr1_handler(int sig);
 void SigInit(struct sigaction* sa);
-void ServerInit(int*  sockfd, struct sockaddr_in* servaddr,int argc,char* argv[]);
-void AddClient(List* list,int sockfd);
-void SendRecv(List* list, char* msg);
+void ServerInit(int*  sockfd, struct sockaddr_in* servaddr,int argc,char* argv[]); /**	struct !!! 	*/
+void AddClient(List* list,int sockfd,fd_set *rfds, int *maxFd);					   /** 	struct		*/
+void SendRecv(List* list, char* msg,fd_set *rfds,fd_set *tempfdSet,int *maxSocket,int act);/**	struct 		*/
 void ExitClean(List* list, int* sockfd);
+void AddToSet(fd_set *rfds, int *maxFd, int socket);
 
 
 
@@ -34,26 +36,35 @@ void ExitClean(List* list, int* sockfd);
 
 
 int main(int argc,char* argv[]) { 
-	int sockfd; 
+	int sockfd,maxFd,activity; 
 	char msg[MAXLINE] = "Hello from Server"; 
 	struct sockaddr_in servaddr; 
 	struct sigaction sa;
 	List* list = NULL;
+	fd_set rfds,tempfdSet;
 
+	FD_ZERO(&rfds);
 	list = List_Create();
-
 	SigInit(&sa);
-
 	ServerInit(&sockfd,&servaddr,argc,argv);
+	FD_SET(sockfd,&rfds);
+	maxFd = sockfd;
 
 	while(!got_usr1){
-		AddClient(list,sockfd);
-		SendRecv(list,msg);
+		tempfdSet = rfds;
+		activity = select(maxFd + 1, &tempfdSet, NULL, NULL, NULL);
+		if(HANDLE_ERR_NO_EXIT(((activity  < 0) && (errno != EINTR)),activity,"select")){
+			
+		}
+		if(FD_ISSET(sockfd,&tempfdSet)){
+ 			AddClient(list,sockfd,&rfds,&maxFd);
+			--activity;
+		}
+		SendRecv(list,msg,&rfds,&tempfdSet,&maxFd,activity);
 	}
 	ExitClean(list, &sockfd);
 	return 0; 
 } 
-
 
 
 
@@ -115,11 +126,16 @@ void ServerInit(int*  sockfd, struct sockaddr_in* servaddr,int argc,char* argv[]
 } 
 
 
+void AddToSet(fd_set *rfds, int *maxFd, int socket){
+	FD_SET(socket,rfds);
+	if (*maxFd < socket)
+		*maxFd = socket;
+}
 
-void AddClient(List* list,int sockfd){
+
+void AddClient(List* list,int sockfd,fd_set *rfds, int *maxFd){
 	unsigned int len;
 	int tempSocket, rtBool, rtVal;
-	Block_t nBlock = NO_BLOCK;
 	struct sockaddr_in cliaddr;
 
 	len = sizeof(struct sockaddr_in);
@@ -130,19 +146,15 @@ void AddClient(List* list,int sockfd){
 		HANDLE_ERR_EXIT(rtBool,tempSocket,"accept");
 
 		if(tempSocket > 0){
-			rtVal = SetSockBlock(tempSocket,nBlock);
-			HANDLE_ERR_EXIT(!rtVal,tempSocket,"SetSockBlock");
-/*
 			printf("accept connection to ip: %s\tport: %d\n",inet_ntoa(cliaddr.sin_addr),ntohs(cliaddr.sin_port));
-*/
 			rtVal = List_PushTail(list, (void*)(intptr_t)tempSocket);
 			HANDLE_ERR_EXIT(rtVal != 0,rtVal,"list push");
+			AddToSet(rfds,maxFd,tempSocket);
 		}
 	}
 }
 
-
-void SendRecv(List* list, char* msg){
+void SendRecv(List* list, char* msg, fd_set *rfds,fd_set *tempfdSet,int *maxSocket, int activity){
 	ListItr bItr,eItr,tempItr;
 	CS_t cs = SERVER;
 	int rtBool,rtVal,tempSocket;
@@ -151,23 +163,25 @@ void SendRecv(List* list, char* msg){
 	tempItr = bItr;
 	eItr = ListItr_End(list);
 
-	while(!ListItr_Equals(tempItr,eItr)){
+	while(!ListItr_Equals(tempItr,eItr) && activity){
 
 		tempSocket = (intptr_t)ListItr_Get(tempItr);
 		bItr = ListItr_Next(bItr);
+		if(FD_ISSET(tempSocket ,tempfdSet)){
 
-		rtVal = Rec(tempSocket,cs);
-		rtBool = ((rtVal < 0) && (errno != EAGAIN) && (errno != EWOULDBLOCK));
-		HANDLE_ERR_EXIT(rtBool,rtVal,"receive ");
-		if( rtVal > 0 ){
-			rtVal = Send(tempSocket,msg,strlen(msg),cs);
+			rtVal = Rec(tempSocket,cs);
 			rtBool = ((rtVal < 0) && (errno != EAGAIN) && (errno != EWOULDBLOCK));
-			HANDLE_ERR_EXIT(rtBool,rtVal,"send");
-
-		}else if (rtVal == 0){
-			shutdown(tempSocket,0);
-			close(tempSocket);
-			ListItr_Remove(tempItr);
+			HANDLE_ERR_EXIT(rtBool,rtVal,"receive ");
+			if( rtVal > 0 ){
+				rtVal = Send(tempSocket,msg,strlen(msg),cs);
+				rtBool = ((rtVal < 0) && (errno != EAGAIN) && (errno != EWOULDBLOCK));
+				HANDLE_ERR_EXIT(rtBool,rtVal,"send");
+			}else if (rtVal == 0){
+				shutdown(tempSocket,0);
+				close(tempSocket);
+				ListItr_Remove(tempItr);
+				FD_CLR(tempSocket,rfds);
+			}
 		}
 		tempItr = bItr;
 	}
