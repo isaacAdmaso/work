@@ -170,12 +170,12 @@ void SendRecv(List* list, char* msg, fd_set *rfds,fd_set *tempfdSet,int *maxSock
 
 			rtVal = Rec(tempSocket,cs);
 			rtBool = ((rtVal < 0) && (errno != EAGAIN) && (errno != EWOULDBLOCK));
-			HANDLE_ERR_EXIT(rtBool,rtVal,"receive ");
+			HANDLE_ERR_NO_EXIT(rtBool,rtVal,"receive ");
 			if( rtVal > 0 ){
 				rtVal = Send(tempSocket,msg,strlen(msg),cs);
 				rtBool = ((rtVal < 0) && (errno != EAGAIN) && (errno != EWOULDBLOCK));
 				HANDLE_ERR_EXIT(rtBool,rtVal,"send");
-			}else if (rtVal == 0){
+			}else if (rtVal <= 0){
 				shutdown(tempSocket,0);
 				close(tempSocket);
 				ListItr_Remove(tempItr);
