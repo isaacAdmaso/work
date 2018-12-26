@@ -3,7 +3,7 @@ TARGET=q++
 
 # General compilation flags
 CC=g++
-CPPFLAGS= -pedantic -Wall -Werror  -g -ansi
+CPPFLAGS= -pedantic -Wall -Werror  -g -ansi -Wconversion -std=c++03
 
 # Include directory
 INC_DIR=../../include

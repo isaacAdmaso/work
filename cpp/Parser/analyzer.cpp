@@ -40,7 +40,7 @@ void Analyzer::AnalyzerClean(){
 void Analyzer::Analyze(vector<pair <int ,string> >& _tok)
 {
     pair <int ,string> temp;
-    int len = _tok.size();
+    int len = (int)_tok.size();
     iter_t itr;
     
     for(int i = 0; i < len; ++i)
