@@ -8,14 +8,10 @@
  * @copyright Copyright (c) 2018
  * 
  */
-#include <iostream>
 #include "FreqProcessor.h"
+#include <string>
 
 
-void FreqProcessor::Process(string &_s){
-    iter_t itr;
-
-    itr = myMap.find(_s);
-    (itr != myMap.end()) ? (++myMap[_s]) : ( myMap[_s] = 1);  
-    cout<< _s<<endl;  
+void FreqProcessor::Process(std::string &_s){
+    ++myMap[_s];
 }

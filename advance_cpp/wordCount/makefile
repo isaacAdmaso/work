@@ -6,9 +6,9 @@ CC=g++
 CPPFLAGS= -pedantic -Wall -Werror  -g -ansi -Wconversion -std=c++03
 
 # Include directory
-INC_DIR=../../include
+INC_DIR=../common
 
-CPPFLAGS += -I$(INC_DIR)
+CPPFLAGS += -I$(INC_DIR) 
 
 # all .c files in this directory are my sources
 SOURCES=$(wildcard *.cpp)
@@ -24,7 +24,7 @@ $(TARGET): $(OBJECTS)
 include depends
 
 depends:
-	$(CC) -MM -I$(INC_DIR) $(SOURCES) > depends
+	$(CC) -MM -I$(INC_DIR)  $(SOURCES) > depends
 
 clean:
 	-rm -f $(TARGET) *.o depends 

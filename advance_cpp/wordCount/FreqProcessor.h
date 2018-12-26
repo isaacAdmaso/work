@@ -14,19 +14,18 @@
 #include <map>
 #include <string>
 
-using namespace std;
 
 
 class FreqProcessor{
 private:
-    map<string,int> myMap;
-    typedef map<string,int>::iterator iter_t;
+    std::map<std::string,int> myMap;
+    typedef std::map<std::string,int>::iterator iter_t;
 
     
 public:
     FreqProcessor(){}
     ~FreqProcessor(){myMap.clear();}
-    void Process(string &_s);
+    void Process(std::string &_s);
 };
 
 

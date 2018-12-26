@@ -11,21 +11,20 @@
 #ifndef __STREAM_WH__
 #define __STREAM_WH__
 
-#include <iostream>
+#include <istream>
 #include "FreqProcessor.h"
+#include "uncopy.h"
 
 
-
-
-class Stream{
-private:
-    istream& m_input;
-    FreqProcessor p;
-
+class Stream : private Uncopy
+{
 public:
-    ~Stream(){}
-    Stream(istream& _source,const FreqProcessor& _p):m_input(_source),p(_p){}
+    Stream(std::istream& _source,FreqProcessor& _p):m_input(_source),p(_p){}
     void Load();
+
+private:
+    std::istream& m_input;
+    FreqProcessor& p;
 };
 
 
