@@ -13,19 +13,27 @@
 
 #include <map>
 #include <string>
+#include <algorithm>
+#include <vector>
+#include <iostream>
+#include "Tokenizer.h"
 
 
 
 class FreqProcessor{
-private:
-    std::map<std::string,int> myMap;
-    typedef std::map<std::string,int>::iterator iter_t;
-
-    
 public:
-    FreqProcessor(){}
+    explicit FreqProcessor(Tokenizer& _t):t(_t){}
     ~FreqProcessor(){myMap.clear();}
     void Process(std::string &_s);
+    void PrintN(int n);
+    typedef std::map<std::string,int>::iterator iter_t;
+    typedef std::vector<std::pair<std::string,int> >::iterator iter_v;
+    
+private:
+    std::vector<std::pair<std::string,int> > sortHelp;
+    std::map<std::string,int> myMap;
+    Tokenizer& t;
+    //void Sort();
 };
 
 

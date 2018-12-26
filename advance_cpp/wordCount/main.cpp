@@ -8,19 +8,24 @@
  * @copyright Copyright (c) 2018
  * 
  */
+#include <string>
 #include <iostream>
 #include <fstream>
+#include "Tokenizer.h"
 #include "FreqProcessor.h"
 #include "Stream.h"
 
-
+const std::string deli = "=()";
 
 int main(int argc, char const *argv[]){
-    if(argc < 2)
+    if(argc < 3)
         return 1;
+    const int i = atoi(argv[2]);
     std::ifstream f(argv[1],std::ifstream::in);
-    FreqProcessor p;
+    Tokenizer t(deli);
+    FreqProcessor p(t);
     Stream s(f,p);
     s.Load();
+    s.Print((int)i);
     return 0;
 }

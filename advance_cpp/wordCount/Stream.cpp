@@ -22,3 +22,6 @@ void Stream::Load(){
         p.Process(word);
     }
 }
+void Stream::Print(int n){
+    p.PrintN(n);
+}

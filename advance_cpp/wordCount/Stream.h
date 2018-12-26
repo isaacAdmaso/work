@@ -21,6 +21,7 @@ class Stream : private Uncopy
 public:
     Stream(std::istream& _source,FreqProcessor& _p):m_input(_source),p(_p){}
     void Load();
+    void Print(int n);
 
 private:
     std::istream& m_input;

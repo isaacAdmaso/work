@@ -15,10 +15,10 @@
 
 class Tokenizer
 {
-
 public:
     Tokenizer(const std::string _delim):m_delim(_delim){}
-    std::string Tokenize(const std::string _word);
+    std::string Tokenize(std::string _word);
+
 private:
     std::string m_delim;
 };

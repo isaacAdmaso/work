@@ -8,12 +8,19 @@
  * @copyright Copyright (c) 2018
  * 
  */
-#include "Tokenizer.h"
 #include <string>
+#include <algorithm>    // std::find_first_of
+#include "Tokenizer.h"
 
-std::string Tokenizer::Tokenize(const std::string _word){
-    std::string temp = _word;
-    if(temp.find_first_of(m_delim) != std::string::npos){
-        
+
+std::string Tokenizer::Tokenize( std::string _word){
+using namespace std;
+    string::iterator iter;
+
+    iter = find_first_of(_word.begin(), _word.end(),m_delim.begin(),m_delim.end());
+    if( iter != _word.end()) 
+    {
+        _word.erase(iter);
     }
+    return _word;
 }
