@@ -11,11 +11,9 @@
 #include "Stream.h"
 #include <string>
 
-using namespace std;
-
 
 void Stream::Load(){
-    string word;
+    std::string word;
 
     while ((m_input >> word) && m_input.good()) {
         if (word.empty() || (word.length() == 1 && isspace(word[0]))) {
