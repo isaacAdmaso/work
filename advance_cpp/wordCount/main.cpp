@@ -19,7 +19,7 @@ int main(int argc, char const *argv[]){
         return 1;
     ifstream f(argv[1]);
     FreqProcessor p;
-    Stream(f,p);
-
+    Stream s(f,p);
+    s.load();
     return 0;
 }
