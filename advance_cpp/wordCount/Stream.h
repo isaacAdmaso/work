@@ -23,7 +23,7 @@ private:
     FreqProcessor p;
 
 public:
-    ~Stream();
+    ~Stream(){}
     Stream(istream& _source,const FreqProcessor& _p):m_input(_source),p(_p){}
     void Load();
 };

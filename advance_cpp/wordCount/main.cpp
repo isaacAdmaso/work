@@ -9,17 +9,19 @@
  * 
  */
 #include <iostream>
+#include <fstream>
 #include "FreqProcessor.h"
 #include "Stream.h"
 
+using namespace std;
 
 
 int main(int argc, char const *argv[]){
     if(argc < 2)
         return 1;
-    ifstream f(argv[1]);
+    ifstream f(argv[1],ifstream::in);
     FreqProcessor p;
     Stream s(f,p);
-    s.load();
+    s.Load();
     return 0;
 }
