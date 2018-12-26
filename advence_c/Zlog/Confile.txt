@@ -1,2 +1,0 @@
-level = T
-FILE = log.txt

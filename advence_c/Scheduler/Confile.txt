@@ -1,2 +1,0 @@
-level = C
-FILE = log.txt
