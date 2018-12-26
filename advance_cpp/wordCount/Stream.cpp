@@ -8,8 +8,8 @@
  * @copyright Copyright (c) 2018
  * 
  */
-#include "Stream.h"
 #include <string>
+#include "Stream.h"
 
 
 void Stream::Load(){
