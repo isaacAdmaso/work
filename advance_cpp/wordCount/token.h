@@ -28,8 +28,7 @@ private:
 
     
 public:
-    Token(const std::string delim):delimiter(delim){}
-    ~Token(){}
+    Token(const std::string& delim):delimiter(delim){}
     vector<std::string>& Tok(vector<std::string>& v,string& word);
 };
 
