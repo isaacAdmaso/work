@@ -10,17 +10,18 @@
  */
 #ifndef __FILEIN_H__
 #define __FILEIN_H__
-#include "Isource.h"
-#include "uncopy.h"
 #include <string>
 #include <fstream>
+#include "Isource.h"
+#include "uncopy.h"
 
 class FileIn: public Isource,private Uncopy
 {
 private:
     std::ifstream m_file; 
+    void ErrMsg(const std::string& _errMsg);
 public:
-    FileIn();
+    FileIn(const std::string& _fileN);
     virtual ~FileIn();
     virtual std::string GetString();
 };
