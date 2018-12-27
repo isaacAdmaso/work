@@ -11,16 +11,20 @@
 #include <string>
 #include <algorithm>    // std::find_first_of
 #include "Tokenizer.h"
+#include <iostream>
 
 
 std::string Tokenizer::Tokenize( std::string _word){
 using namespace std;
-    string::iterator iter;
+    size_t found = -1;
 
-    iter = find_first_of(_word.begin(), _word.end(),m_delim.begin(),m_delim.end());
-    if( iter != _word.end()) 
+    found = _word.find_first_of(m_delim.c_str());
+
+    while (found != std::string::npos)
     {
-        _word.erase(iter);
+        string::iterator iter = _word.begin();
+        _word.erase(iter + found);
+        found = _word.find_first_of(m_delim.c_str(),found+1);
     }
     return _word;
 }

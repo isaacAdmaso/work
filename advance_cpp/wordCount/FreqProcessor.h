@@ -16,13 +16,13 @@
 #include <algorithm>
 #include <vector>
 #include <iostream>
-#include "Tokenizer.h"
+#include "token.h"
 
 
 
 class FreqProcessor{
 public:
-    explicit FreqProcessor(Tokenizer& _t):t(_t){}
+    explicit FreqProcessor(Token& _t):t(_t){}
     ~FreqProcessor(){myMap.clear();}
     void Process(std::string &_s);
     void PrintN(int n);
@@ -30,10 +30,11 @@ public:
     typedef std::vector<std::pair<std::string,int> >::iterator iter_v;
     
 private:
+    static bool cmp(const std::pair<std::string,int>  &p1, const std::pair<std::string,int> &p2);
     std::vector<std::pair<std::string,int> > sortHelp;
     std::map<std::string,int> myMap;
-    Tokenizer& t;
-    //void Sort();
+    Token& t;
+    void Sort();
 };
 
 

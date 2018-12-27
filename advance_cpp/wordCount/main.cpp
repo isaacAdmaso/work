@@ -11,21 +11,33 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "Tokenizer.h"
+#include "token.h"
 #include "FreqProcessor.h"
 #include "Stream.h"
 
-const std::string deli = "=()";
+const std::string deli = "/";
 
-int main(int argc, char const *argv[]){
+int main ( int argc, char const *argv[]){
     if(argc < 3)
         return 1;
     const int i = atoi(argv[2]);
     std::ifstream f(argv[1],std::ifstream::in);
-    Tokenizer t(deli);
+    Token t(deli);
     FreqProcessor p(t);
     Stream s(f,p);
     s.Load();
     s.Print((int)i);
     return 0;
 }
+//hello
+//hello
+//hello
+//hello
+//hello
+//hello
+//hello
+//hello
+//hello
+//hello
+//hello
+//hello
