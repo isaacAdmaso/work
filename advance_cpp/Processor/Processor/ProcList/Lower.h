@@ -1,5 +1,5 @@
 /**
- * @file Upper.h
+ * @file Lower.h
  * @author your name (you@domain.com)
  * @brief 
  * @version 0.1
@@ -8,12 +8,12 @@
  * @copyright Copyright (c) 2018
  * 
  */
-#ifndef __UPPER_H__
-#define __UPPER_H__
+#ifndef __LOWER_H__
+#define __LOWER_H__
 #include "ITx.h"
 #include <string>
 
-class Upper: public ITx
+class Lower: public ITx
 {
 public:
     typedef std::string::iterator iter_t;
@@ -21,4 +21,4 @@ public:
     virtual std::string Processor(const std::string& _str);
 };
 
-#endif //__UPPER_H__
+#endif //__LOWER_H__

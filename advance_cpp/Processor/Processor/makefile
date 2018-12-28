@@ -14,10 +14,13 @@ CPPFLAGS += -I$(INC_DIR)
 CPPFLAGS += -I$(INC_DIR2)
 CPPFLAGS += -I$(INC_DIR3)
 # all .c files in this directory are my sources
-SOURCES=$(wildcard *.cpp)
+SOURCES=   muTest.cpp
 SOURCES+= ./factory/Cfactory.cpp
 SOURCES+= ./ProcList/ITx.cpp 
-SOURCES+= ./ProcList/ProcLi.cpp 
+SOURCES+= ./ProcList/Erase.cpp
+SOURCES+= ./ProcList/Container.cpp
+SOURCES+= ./ProcList/Lower.cpp
+SOURCES+= ./ProcList/Upper.cpp
 # all .o files in this directory are my objects
 OBJECTS=$(SOURCES:.cpp=.o)
 
