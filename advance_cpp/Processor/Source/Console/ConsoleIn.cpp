@@ -1,5 +1,5 @@
 /**
- * @file ConsleIn.cpp
+ * @file ConsoleIn.cpp
  * @author your name (you@domain.com)
  * @brief 
  * @version 0.1
@@ -9,15 +9,15 @@
  * 
  */
 #include <istream>
-#include "ConsleIn.h"
+#include "ConsoleIn.h"
 
-ConsleIn::ConsleIn(std::istream& _cin)
+ConsoleIn::ConsoleIn(std::istream& _cin)
 :m_console(_cin)
 {
 
 }
 
-std::string ConsleIn::GetString()
+std::string ConsoleIn::GetString()
 {
     std::string tempLine;
     std::getline (m_console,tempLine);

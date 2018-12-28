@@ -1,5 +1,5 @@
 /**
- * @file ConsleIn.h
+ * @file ConsoleIn.h
  * @author your name (you@domain.com)
  * @brief 
  * @version 0.1
@@ -17,13 +17,13 @@
 #include "Isource.h"
 
 
-class ConsleIn: public Isource,private Uncopy
+class ConsoleIn: public Isource,private Uncopy
 {
 private:
     std::istream& m_console;
 
 public:
-    ConsleIn(std::istream& _cin);
+    ConsoleIn(std::istream& _cin);
     virtual std::string GetString();
 };
 

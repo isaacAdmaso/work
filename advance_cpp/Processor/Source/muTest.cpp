@@ -1,6 +1,6 @@
 #include <iostream>
 #include "FileIn.h"
-#include "ConsleIn.h"
+#include "ConsoleIn.h"
 #include "Sfactory.h"
 #include "mu_test.h"
 
@@ -19,7 +19,7 @@ END_UNIT
 
 UNIT(console)
 using namespace std;
-    ConsleIn cIn(cin);
+    ConsoleIn cIn(cin);
     cout << "read from console test"<<endl;
     string temp = cIn.GetString();
     while(temp != "break" )
@@ -39,7 +39,7 @@ using namespace std;
         std::cout << tempF <<std::endl;
         tempF = fP->GetString();
     }
-    Isource* cP = new ConsleIn(cin);
+    Isource* cP = new ConsoleIn(cin);
     cout << "read from console (as base *) test"<<endl;
     string tempC = cP->GetString();
     while(tempC != "break" )

@@ -11,7 +11,7 @@
 #ifndef __SFACTORY_H__
 #define __SFACTORY_H__
 
-#include "ConsleIn.h"
+#include "ConsoleIn.h"
 #include "FileIn.h"
 #include "Isource.h"
 
@@ -22,7 +22,7 @@ private:
 
 public:
     FileIn*     GetFile(const std::string& _FileN);
-    ConsleIn*   GetConsole();
+    ConsoleIn*   GetConsole();
     //SocketIn*
     
 };
