@@ -19,10 +19,10 @@ CPPFLAGS += -I$(INC_DIR4)
 CPPFLAGS += -I$(INC_DIR5)
 # all .c files in this directory are my sources
 SOURCES=$(wildcard *.cpp)
+SOURCES+= ./Interface/Idest.cpp
 SOURCES+= ./Console/Console.cpp 
 SOURCES+= ./factory/Dfactory.cpp
 SOURCES+= ./File/FileOut.cpp
-SOURCES+= ./Interface/Idest.cpp
 # all .o files in this directory are my objects
 OBJECTS=$(SOURCES:.cpp=.o)
 

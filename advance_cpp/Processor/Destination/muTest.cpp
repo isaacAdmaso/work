@@ -2,6 +2,7 @@
 #include "mu_test.h"
 #include "Idest.h"
 #include "FileOut.h"
+#include "Console.h"
 
 
 
@@ -13,7 +14,15 @@ using namespace std;
 END_UNIT
 
 
+UNIT(screen)
+using namespace std;
+    Console fs(cout);
+    fs.PutString("in test");
+
+END_UNIT
+
 TEST_SUITE(destination)
     TEST(file)
+    TEST(screen)
 
 END_SUITE
