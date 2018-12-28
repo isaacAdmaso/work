@@ -8,6 +8,7 @@
 #include "Container.h"
 #include "Lower.h"
 #include "Upper.h"
+#include "Cfactory.h"
 
 UNIT(plist)
 using namespace std;
@@ -33,11 +34,39 @@ using namespace std;
     test = cP->Processor(test);
     cout << test<<endl;
 
-    
 END_UNIT
 
+UNIT(factory)
+using namespace std;
+    
+    Cfactory cF;
+    string test = "YITSHAK";
+
+
+    ITx* eP = cF.GetErase("AIEOU");
+    test = eP->Processor(test);
+    
+    ITx* lP = cF.GetLower();
+    test = lP->Processor(test);
+    cout << test<<endl;
+    
+    ITx* uP = cF.GetUpper();
+    test = uP->Processor(test);
+    cout << test<<endl;
+    
+    std::vector<ITx*> pVec;
+    pVec.push_back(uP);
+    pVec.push_back(lP);
+    pVec.push_back(eP);
+    ITx* cP = cF.GetContainer(pVec);
+    test = "abAcEdIAOBUCADEaIAAbEBOcUCdUD";
+    test = cP->Processor(test);
+    cout << test<<endl;
+
+END_UNIT
 
 TEST_SUITE(processor)
     TEST(plist)
+    TEST(factory)
     
 END_SUITE
