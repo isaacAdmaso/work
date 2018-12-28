@@ -7,22 +7,17 @@ CPPFLAGS= -pedantic -Wall -Werror  -g -ansi -Wconversion -std=c++03
 
 # Include directory
 INC_DIR=../../common
-INC_DIR2=./Console
+INC_DIR2=./ProcList
 INC_DIR3=./factory
-INC_DIR4=./File
-INC_DIR5=./Interface
 
 CPPFLAGS += -I$(INC_DIR)    
 CPPFLAGS += -I$(INC_DIR2)
 CPPFLAGS += -I$(INC_DIR3)
-CPPFLAGS += -I$(INC_DIR4)
-CPPFLAGS += -I$(INC_DIR5)
 # all .c files in this directory are my sources
 SOURCES=$(wildcard *.cpp)
-SOURCES+= ./Interface/Idest.cpp
-SOURCES+= ./Console/Console.cpp 
-SOURCES+= ./factory/Dfactory.cpp
-SOURCES+= ./File/FileOut.cpp
+SOURCES+= ./factory/Cfactory.cpp
+SOURCES+= ./ProcList/ITx.cpp 
+SOURCES+= ./ProcList/ProcLi.cpp 
 # all .o files in this directory are my objects
 OBJECTS=$(SOURCES:.cpp=.o)
 
@@ -35,7 +30,7 @@ $(TARGET): $(OBJECTS)
 include depends
 
 depends:
-	$(CC) -MM -I$(INC_DIR) -I$(INC_DIR2) -I$(INC_DIR3) -I$(INC_DIR4) -I$(INC_DIR5)  $(SOURCES) > depends
+	$(CC) -MM -I$(INC_DIR) -I$(INC_DIR2) -I$(INC_DIR3)   $(SOURCES) > depends
 
 clean:
 	-rm -f $(TARGET) *.o depends testFile

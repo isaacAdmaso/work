@@ -18,7 +18,7 @@ class ITx
 private:
 
 public:
-    virtual ~ITx() = 0;
+    virtual ~ITx();
     virtual std::string Processor(const std::string& _str) const  = 0;
 };
 
