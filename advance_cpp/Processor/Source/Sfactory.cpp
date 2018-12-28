@@ -13,7 +13,9 @@
 
 FileIn*     Sfactory::GetFile(const std::string& _FileN)
 {
-    return new  FileIn(_FileN);
+    FileIn* rtVal = new  FileIn(_FileN);
+    //if (rtVal.is_open()) {
+        return rtVal;
 }
 ConsleIn*   Sfactory::GetConsole()
 {

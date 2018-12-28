@@ -18,7 +18,7 @@ class Idest
 private:
 public:
     virtual ~Idest() = 0;
-    virtual void PutString(const std::string _str);
+    virtual void PutString(const std::string& _str) = 0;
 };
 
 
