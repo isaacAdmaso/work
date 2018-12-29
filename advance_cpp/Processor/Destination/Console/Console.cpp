@@ -20,4 +20,6 @@ Console::Console(std::ostream& _cout)
 void Console::PutString(const std::string& _str)
 {
     m_console << _str;
+    m_console.flush();
+
 }
