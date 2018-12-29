@@ -24,6 +24,9 @@
 
 #define FILE_IN     "./testFileIn"
 #define FILE_OUT    "./testFile"
+#define FILE_OUT2    "./testFile2"
+#define FILE_OUT3    "./testFile3"
+#define FILE_OUT4    "./testFile4"
 
 
 UNIT(fileIn)
@@ -116,7 +119,7 @@ END_UNIT
 
 UNIT(baseD)
 using namespace std;
-    Idest* fP = new FileOut(FILE_OUT);
+    Idest* fP = new FileOut(FILE_OUT2);
     string test = "***********out test********\n";
     fP->PutString(test);
     delete fP;
@@ -130,7 +133,7 @@ END_UNIT
 UNIT(dest_factory)
 using namespace std;
     Dfactory factory;
-    Idest* fP = factory.GetFile(FILE_OUT);
+    Idest* fP = factory.GetFile(FILE_OUT3);
     string test = "***********out test********\n";
     fP->PutString(test);    
     delete fP;
@@ -204,7 +207,7 @@ using namespace std;
 
     Isource* fIn = sourceF.GetFile(FILE_IN);
     Isource* cIn = sourceF.GetConsole();
-    Idest*  fOut = destF.GetFile(FILE_OUT);
+    Idest*  fOut = destF.GetFile(FILE_OUT4);
     Idest*  cOut = destF.GetConsole();
     ITx*    eProc =  procF.GetErase("AIEOU");
     ITx*    lProc =  procF.GetLower();
@@ -241,16 +244,16 @@ using namespace std;
 END_UNIT
 
 TEST_SUITE(all)
-	TEST(fileIn)
-	TEST(consoleIn)
-	TEST(baseIn)
-	TEST(source_factory)
-    TEST(fileOut)
-    TEST(screen)
-    TEST(baseD)
-    TEST(dest_factory)
-    TEST(plist)
-    TEST(proc_factory)
+	//TEST(fileIn)
+	//TEST(consoleIn)
+	//TEST(baseIn)
+	//TEST(source_factory)
+    //TEST(fileOut)
+    //TEST(screen)
+    //TEST(baseD)
+    //TEST(dest_factory)
+    //TEST(plist)
+    //TEST(proc_factory)
     TEST(app)
 END_SUITE
 

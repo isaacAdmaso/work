@@ -62,6 +62,9 @@ clean:
 	find . -type f -name 'depends' -delete
 	find . -type f -name 'log.txt' -delete
 	find . -type f -name 'testFile' -delete
+	find . -type f -name 'testFile2' -delete
+	find . -type f -name 'testFile3' -delete
+	find . -type f -name 'testFile4' -delete
 
 cleanlib:clean
 	rm $(LIB_PATH)/*.a
