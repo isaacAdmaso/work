@@ -1,19 +1,34 @@
 #include <iostream>
 #include "mu_test.h"
 
+//sources
 #include "FileIn.h"
 #include "ConsoleIn.h"
 #include "Sfactory.h"
 
+//Destination
 #include "FileOut.h"
 #include "Console.h"
 #include "Dfactory.h"
 
+//Process
+#include <vector>
+#include <string>
+#include "ITx.h"
+#include "Erase.h"
+#include "Container.h"
+#include "Lower.h"
+#include "Upper.h"
+#include "Cfactory.h"
+
+
+#define FILE_IN     "./testFileIn"
+#define FILE_OUT    "./testFile"
 
 
 UNIT(fileIn)
 using namespace std;
-    FileIn fObj("./testFileIn");
+    FileIn fObj(FILE_IN);
     //FileIn f2Obj(FileIn(fObj)); <- ask teacher  
     string temp = fObj.GetString();
     while(temp.length())
@@ -38,7 +53,7 @@ END_UNIT
 
 UNIT(baseIn)
 using namespace std;
-    Isource* fP = new FileIn("./testFileIn");
+    Isource* fP = new FileIn(FILE_IN);
     string tempF = fP->GetString();
     while(tempF.length())
     {
@@ -61,7 +76,7 @@ END_UNIT
 UNIT(source_factory)
 using namespace std;
     Sfactory factory;
-    Isource* fP = factory.GetFile("./testFileIn");
+    Isource* fP = factory.GetFile(FILE_IN);
     string tempF = fP->GetString();
     while(tempF.length())
     {
@@ -85,7 +100,7 @@ END_UNIT
 
 UNIT(fileOut)
 using namespace std;
-    FileOut fs("testFile");
+    FileOut fs(FILE_OUT);
     fs.PutString("in test\n");
 
 END_UNIT
@@ -101,7 +116,7 @@ END_UNIT
 
 UNIT(baseD)
 using namespace std;
-    Idest* fP = new FileOut("testFile");
+    Idest* fP = new FileOut(FILE_OUT);
     string test = "***********out test********\n";
     fP->PutString(test);
     delete fP;
@@ -115,7 +130,7 @@ END_UNIT
 UNIT(dest_factory)
 using namespace std;
     Dfactory factory;
-    Idest* fP = factory.GetFile("testFile");
+    Idest* fP = factory.GetFile(FILE_OUT);
     string test = "***********out test********\n";
     fP->PutString(test);    
     delete fP;
@@ -126,19 +141,85 @@ using namespace std;
     
 END_UNIT
 
+UNIT(plist)
+using namespace std;
+    string test = "YITSHAK";
+
+    ITx* eP = new Erase("AIEOU");
+    test = eP->Processor(test);
+    
+    ITx* lP = new Lower();
+    test = lP->Processor(test);
+    cout << test<<endl;
+    
+    ITx* uP = new Upper();
+    test = uP->Processor(test);
+    cout << test<<endl;
+    
+    std::vector<ITx*> pVec;
+    pVec.push_back(uP);
+    pVec.push_back(lP);
+    pVec.push_back(eP);
+    ITx* cP = new Container(pVec);
+    test = "abAcEdIAOBUCADEaIAAbEBOcUCdUD";
+    test = cP->Processor(test);
+    cout << test<<endl;
+
+END_UNIT
+
+UNIT(proc_factory)
+using namespace std;
+    
+    Cfactory cF;
+    string test = "YITSHAK";
+
+
+    ITx* eP = cF.GetErase("AIEOU");
+    test = eP->Processor(test);
+    
+    ITx* lP = cF.GetLower();
+    test = lP->Processor(test);
+    cout << test<<endl;
+    
+    ITx* uP = cF.GetUpper();
+    test = uP->Processor(test);
+    cout << test<<endl;
+    
+    std::vector<ITx*> pVec;
+    pVec.push_back(uP);
+    pVec.push_back(lP);
+    pVec.push_back(eP);
+    ITx* cP = cF.GetContainer(pVec);
+    test = "abAcEdIAOBUCADEaIAAbEBOcUCdUD";
+    test = cP->Processor(test);
+    cout << test<<endl;
+
+END_UNIT
 
 UNIT(app)
 using namespace std;
     Sfactory sourceF;
     Dfactory destF;
-    Isource* fIn = sourceF.GetFile("./testFileIn");
+    Cfactory procF;
+
+    Isource* fIn = sourceF.GetFile(FILE_IN);
     Isource* cIn = sourceF.GetConsole();
-    Idest*  fOut = destF.GetFile("./testFile");
+    Idest*  fOut = destF.GetFile(FILE_OUT);
     Idest*  cOut = destF.GetConsole();
+    ITx*    eProc =  procF.GetErase("AIEOU");
+    ITx*    lProc =  procF.GetLower();
+    ITx*    uProc =  procF.GetUpper();
+    std::vector<ITx*> pVec;
+    pVec.push_back(eProc);
+    pVec.push_back(lProc);
+    pVec.push_back(uProc);
+    ITx*    cProc =  procF.GetContainer(pVec);
+
 
     string temp = fIn->GetString();
     while(temp.length())
     {
+        temp = cProc->Processor(temp);
         fOut->PutString(temp);
         cOut->PutString(temp);
         temp = fIn->GetString();
@@ -150,6 +231,7 @@ using namespace std;
     temp = cIn->GetString();
     while(temp != "break")
     {
+        temp = cProc->Processor(temp);
         fOut->PutString(temp);
         cOut->PutString(temp);
         cout << "enter \"break\" to stop"<<endl;
@@ -167,6 +249,8 @@ TEST_SUITE(all)
     TEST(screen)
     TEST(baseD)
     TEST(dest_factory)
+    TEST(plist)
+    TEST(proc_factory)
     TEST(app)
 END_SUITE
 

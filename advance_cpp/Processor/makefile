@@ -54,6 +54,8 @@ $(TARGET): $(OBJECTS) libs
 run: $(TARGET)
 	./$(TARGET)
 
+gdb: $(TARGET)
+	gdb -q ./$(TARGET) 
 clean:
 	find . -type f -name '*.o' -delete
 	find . -type f -name '*.out' -delete
