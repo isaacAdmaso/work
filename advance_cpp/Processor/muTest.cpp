@@ -126,6 +126,38 @@ using namespace std;
     
 END_UNIT
 
+
+UNIT(app)
+using namespace std;
+    Sfactory sourceF;
+    Dfactory destF;
+    Isource* fIn = sourceF.GetFile("./testFileIn");
+    Isource* cIn = sourceF.GetConsole();
+    Idest*  fOut = destF.GetFile("./testFile");
+    Idest*  cOut = destF.GetConsole();
+
+    string temp = fIn->GetString();
+    while(temp.length())
+    {
+        fOut->PutString(temp);
+        cOut->PutString(temp);
+        temp = fIn->GetString();
+    }
+    delete fIn;
+
+    cout << endl;
+    cout << "read from console(given by \"factory\") test"<<endl;
+    temp = cIn->GetString();
+    while(temp != "break")
+    {
+        fOut->PutString(temp);
+        cOut->PutString(temp);
+        cout << "enter \"break\" to stop"<<endl;
+        temp = cIn->GetString();
+    }
+    delete cIn;
+END_UNIT
+
 TEST_SUITE(all)
 	TEST(fileIn)
 	TEST(consoleIn)
@@ -135,7 +167,7 @@ TEST_SUITE(all)
     TEST(screen)
     TEST(baseD)
     TEST(dest_factory)
-
+    TEST(app)
 END_SUITE
 
 
