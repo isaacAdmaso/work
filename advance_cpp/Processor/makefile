@@ -59,7 +59,8 @@ clean:
 	find . -type f -name '*.out' -delete
 	find . -type f -name 'depends' -delete
 	find . -type f -name 'log.txt' -delete
+	find . -type f -name 'testFile' -delete
 
 cleanlib:clean
-	rm $(LIB_PATH)/*.so
 	rm $(LIB_PATH)/*.a
+	#rm $(LIB_PATH)/*.so

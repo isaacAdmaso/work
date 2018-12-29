@@ -7,7 +7,7 @@
 
 UNIT(fileIn)
 using namespace std;
-    FileIn fObj("./testFile");
+    FileIn fObj("./testFileIn");
     //FileIn f2Obj(FileIn(fObj)); <- ask teacher  
     string temp = fObj.GetString();
     while(temp.length())
@@ -32,7 +32,7 @@ END_UNIT
 
 UNIT(base)
 using namespace std;
-    Isource* fP = new FileIn("./testFile");
+    Isource* fP = new FileIn("./testFileIn");
     string tempF = fP->GetString();
     while(tempF.length())
     {
@@ -55,7 +55,7 @@ END_UNIT
 UNIT(source_factory)
 using namespace std;
     Sfactory factory;
-    Isource* fP = factory.GetFile("./testFile");
+    Isource* fP = factory.GetFile("./testFileIn");
     string tempF = fP->GetString();
     while(tempF.length())
     {
