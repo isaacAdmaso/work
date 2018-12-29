@@ -15,9 +15,9 @@ LOGSOURCES=Zlog/config.c\
 		Zlog/Ztime.c\
 		Zlog/zlog.c \
 		
-.PHONY:dynamicDS loggerDS staticDS schedulerDS clean
+.PHONY: staticDS dynamicDS loggerDS schedulerDS clean
 
-libs: staticDS dynamicDS loggerDS schedulerDS
+libs: 	staticDS dynamicDS loggerDS schedulerDS
 
 staticDS:
 	make -C Vector libs
