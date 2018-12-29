@@ -5,9 +5,9 @@
 #include "ConsoleIn.h"
 #include "Sfactory.h"
 
-#include "Idest.h"
 #include "FileOut.h"
 #include "Console.h"
+#include "Dfactory.h"
 
 
 
@@ -86,7 +86,7 @@ END_UNIT
 UNIT(fileOut)
 using namespace std;
     FileOut fs("testFile");
-    fs.PutString("in test");
+    fs.PutString("in test\n");
 
 END_UNIT
 
@@ -94,10 +94,37 @@ END_UNIT
 UNIT(screen)
 using namespace std;
     Console fs(cout);
-    fs.PutString("in test");
+    fs.PutString("in test\n");
 
 END_UNIT
 
+
+UNIT(baseD)
+using namespace std;
+    Idest* fP = new FileOut("testFile");
+    string test = "***********out test********\n";
+    fP->PutString(test);
+    delete fP;
+
+    Idest* cP = new Console(cout);
+    cP->PutString(test);
+    delete cP;
+
+END_UNIT
+
+UNIT(dest_factory)
+using namespace std;
+    Dfactory factory;
+    Idest* fP = factory.GetFile("testFile");
+    string test = "***********out test********\n";
+    fP->PutString(test);    
+    delete fP;
+
+    Idest* cP = factory.GetConsole();
+    cP->PutString(test);
+    delete cP;
+    
+END_UNIT
 
 TEST_SUITE(all)
 	TEST(fileIn)
@@ -106,6 +133,9 @@ TEST_SUITE(all)
 	TEST(source_factory)
     TEST(fileOut)
     TEST(screen)
+    TEST(baseD)
+    TEST(dest_factory)
+
 END_SUITE
 
 

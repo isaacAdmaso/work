@@ -1,8 +1,9 @@
 #include <iostream>
+#include "mu_test.h"
+
 #include "FileIn.h"
 #include "ConsoleIn.h"
 #include "Sfactory.h"
-#include "mu_test.h"
 
 
 UNIT(fileIn)
@@ -62,6 +63,8 @@ using namespace std;
         std::cout << tempF <<std::endl;
         tempF = fP->GetString();
     }
+    delete fP;
+    
     Isource* cP = factory.GetConsole();
     cout << "read from console(given by \"factory\") test"<<endl;
     string tempC = cP->GetString();
@@ -71,7 +74,6 @@ using namespace std;
         cout << "enter \"break\" to stop"<<endl;
         tempC = cP->GetString();
     }
-    delete fP;
     delete cP;
 
 END_UNIT

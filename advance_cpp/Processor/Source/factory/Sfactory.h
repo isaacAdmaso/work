@@ -13,13 +13,10 @@
 
 #include "ConsoleIn.h"
 #include "FileIn.h"
-#include "Isource.h"
 
 
 class Sfactory
 {
-private:
-
 public:
     FileIn*     GetFile(const std::string& _FileN);
     ConsoleIn*   GetConsole();
