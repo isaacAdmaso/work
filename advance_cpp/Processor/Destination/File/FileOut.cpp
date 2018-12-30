@@ -38,6 +38,6 @@ FileOut::~FileOut()
 
 void FileOut::PutString(const std::string& _str)
 {
-    m_file << _str.c_str();
+    m_file << _str.c_str()<< " ";
     m_file.flush();
 }
