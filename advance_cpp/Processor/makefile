@@ -28,6 +28,7 @@ PROClib=Processor/factory/Cfactory.cpp \
 	Processor/ProcList/Container.cpp \
 	Processor/ProcList/Lower.cpp \
 	Processor/ProcList/Upper.cpp \
+	Processor/ProcList/Shift.cpp \
 
 DESTlib=Destination/Interface/Idest.cpp \
  	Destination/Console/Console.cpp  \

@@ -1,1 +1,89 @@
 *********** in test *******
+//Process
+#include <vector>
+#include <string>
+#include "ITx.h"
+#include "Erase.h"
+#include "Container.h"
+#include "Lower.h"
+#include "Upper.h"
+#include "Cfactory.h"
+
+
+#define FILE_IN     "./testFileIn"
+#define FILE_OUT    "./testFile"
+#define FILE_OUT2    "./testFile2"
+#define FILE_OUT3    "./testFile3"
+#define FILE_OUT4    "./testFile4"
+
+
+UNIT(fileIn)
+using namespace std;
+    FileIn fObj(FILE_IN);
+    //FileIn f2Obj(FileIn(fObj)); <- ask teacher  
+    string temp = fObj.GetString();
+    while(temp.length())
+    {
+        std::cout << temp <<std::endl;
+        temp = fObj.GetString();
+    }
+END_UNIT
+
+UNIT(consoleIn)
+using namespace std;
+    ConsoleIn cIn(cin);
+    cout << "read from console test"<<endl;
+    string temp = cIn.GetString();
+    while(temp != "break" )
+    {
+        std::cout << temp <<std::endl;
+        cout << "enter \"break\" to stop"<<endl;
+        temp = cIn.GetString();
+    }
+END_UNIT
+
+UNIT(baseIn)
+using namespace std;
+    Isource* fP = new FileIn(FILE_IN);
+    string tempF = fP->GetString();
+    while(tempF.length())
+    {
+        std::cout << tempF <<std::endl;
+        tempF = fP->GetString();
+    }
+    Isource* cP = new ConsoleIn(cin);
+    cout << "read from console (as base *) test"<<endl;
+    string tempC = cP->GetString();
+    while(tempC != "break" )
+    {
+        std::cout << tempC <<std::endl;
+        cout << "enter \"break\" to stop"<<endl;
+        tempC = cP->GetString();
+    }
+    delete fP;
+    delete cP;
+END_UNIT
+
+UNIT(source_factory)
+using namespace std;
+    Sfactory factory;
+    Isource* fP = factory.GetFile(FILE_IN);
+    string tempF = fP->GetString();
+    while(tempF.length())
+    {
+        std::cout << tempF <<std::endl;
+        tempF = fP->GetString();
+    }
+    Isource* cP = factory.GetConsole();
+    cout << "read from console(given by \"factory\") test"<<endl;
+    string tempC = cP->GetString();
+    while(tempC != "break" )
+    {
+        std::cout << tempC <<std::endl;
+        cout << "enter \"break\" to stop"<<endl;
+        tempC = cP->GetString();
+    }
+    delete fP;
+    delete cP;
+
+END_UNIT

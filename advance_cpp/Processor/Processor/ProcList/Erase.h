@@ -22,7 +22,8 @@ private:
 public:
     Erase(const std::string strDel)
     :m_strDel(strDel)
-    {}
+    {
+    }
     virtual std::string Processor(const std::string& _str);
     static bool toErase(char ch);
 };

@@ -19,11 +19,11 @@
 #include "Container.h"
 #include "Lower.h"
 #include "Upper.h"
+#include "Shift.h"
 #include "Cfactory.h"
 
 
-//#define FILE_IN     "./testFileIn"
-#define FILE_IN     "./muTest.1.cpp"
+#define FILE_IN     "./testFileIn"
 #define FILE_OUT    "./testFile"
 #define FILE_OUT2    "./testFile2"
 #define FILE_OUT3    "./testFile3"
@@ -210,13 +210,15 @@ using namespace std;
     Isource* cIn = sourceF.GetConsole();
     Idest*  fOut = destF.GetFile(FILE_OUT4);
     Idest*  cOut = destF.GetConsole();
-    ITx*    eProc =  procF.GetErase("AIEOU");
+    ITx*    eProc =  procF.GetErase("aeiuo");
     ITx*    lProc =  procF.GetLower();
     ITx*    uProc =  procF.GetUpper();
+    ITx*    sProc =  procF.GetShift(1);
     std::vector<ITx*> pVec;
-    pVec.push_back(eProc);
     pVec.push_back(lProc);
+    pVec.push_back(eProc);
     pVec.push_back(uProc);
+    pVec.push_back(sProc);
     ITx*    cProc =  procF.GetContainer(pVec);
 
 

@@ -25,6 +25,7 @@ LIB_SRC+= ./ProcList/Erase.cpp
 LIB_SRC+= ./ProcList/Container.cpp
 LIB_SRC+= ./ProcList/Lower.cpp
 LIB_SRC+= ./ProcList/Upper.cpp
+LIB_SRC+= ./ProcList/Shift.cpp
 # all .o files in this directory are my objects
 OBJECTS = $(SOURCES:.cpp=.o)
 LIB_OBJ = $(LIB_SRC:.cpp=.o)

@@ -15,6 +15,7 @@
 #include "Erase.h"
 #include "Lower.h"
 #include "Upper.h"
+#include "Shift.h"
 
 class Cfactory 
 {
@@ -25,6 +26,7 @@ Container*  GetContainer(std::vector<ITx*>& _pVec);
 Erase*      GetErase(const std::string strDel);
 Lower*      GetLower();
 Upper*      GetUpper();
+Shift*      GetShift(const int _shift);
 };
 
 

@@ -59,9 +59,14 @@ using namespace std;
     pVec.push_back(lP);
     pVec.push_back(eP);
     ITx* cP = cF.GetContainer(pVec);
-    test = "abAcEdIAOBUCADEaIAAbEBOcUCdUD";
+    test = "abAcEdIAOBUCADEaIAAbEBOcUCdUDZ";
     test = cP->Processor(test);
     cout << test<<endl;
+
+    ITx* sP = cF.GetShift(1);
+    test = sP->Processor(test);
+    cout << test<<endl;
+
 
 END_UNIT
 

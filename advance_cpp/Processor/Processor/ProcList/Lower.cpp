@@ -8,9 +8,9 @@
  * @copyright Copyright (c) 2018
  * 
  */
-#include "Lower.h"
 #include <algorithm>
 #include <string>
+#include "Lower.h"
 
 
 std::string Lower::Processor(const std::string& _str)
