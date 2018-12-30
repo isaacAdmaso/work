@@ -10,14 +10,17 @@
  */
 #include <iostream>
 #include "Sfactory.h"
+#include "ConsoleIn.h"
+#include "FileIn.h"
 
-FileIn*     Sfactory::GetFile(const std::string& _FileN)
+
+Isource*     Sfactory::GetFile(const std::string& _FileN)
 {
     FileIn* rtVal = new  FileIn(_FileN);
     //if (rtVal.is_open()) {
         return rtVal;
 }
-ConsoleIn*   Sfactory::GetConsole()
+Isource*    Sfactory::GetConsole()
 {
     return new ConsoleIn(std::cin);
 }

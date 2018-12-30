@@ -10,14 +10,16 @@
  */
 #include <iostream>
 #include "Dfactory.h"
+#include "Console.h"
+#include "FileOut.h"
 
-FileOut*     Dfactory ::GetFile(const std::string& _FileN)
+Idest*  Dfactory ::GetFile(const std::string& _FileN)
 {
     FileOut* rtVal = new  FileOut(_FileN);
     //if (rtVal.is_open()) {
         return rtVal;
 }
-Console*   Dfactory ::GetConsole()
+Idest*  Dfactory ::GetConsole()
 {
     return new Console(std::cout);
 }

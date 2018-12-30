@@ -14,7 +14,6 @@
 ConsoleIn::ConsoleIn(std::istream& _cin)
 :m_console(_cin)
 {
-
 }
 
 std::string ConsoleIn::GetString()

@@ -10,23 +10,19 @@
  */
 #ifndef __CFACTORY_H__
 #define __CFACTORY_H__
+#include <vector>
 #include "ITx.h"
-#include "Container.h"
-#include "Erase.h"
-#include "Lower.h"
-#include "Upper.h"
-#include "Shift.h"
 
 class Cfactory 
 {
 private:
 public:
 
-Container*  GetContainer(std::vector<ITx*>& _pVec);
-Erase*      GetErase(const std::string strDel);
-Lower*      GetLower();
-Upper*      GetUpper();
-Shift*      GetShift(const int _shift);
+ITx*      GetContainer(std::vector<ITx*>& _pVec);
+ITx*      GetErase(const std::string strDel);
+ITx*      GetLower();
+ITx*      GetUpper();
+ITx*      GetShift(const int _shift);
 };
 
 

@@ -11,17 +11,16 @@
 #ifndef __SFACTORY_H__
 #define __SFACTORY_H__
 
-#include "ConsoleIn.h"
-#include "FileIn.h"
+#include "Isource.h"
 
 
 class Sfactory
 {
 public:
-    FileIn*     GetFile(const std::string& _FileN);
-    ConsoleIn*   GetConsole();
+
+    Isource*    GetFile(const std::string& _FileN);
+    Isource*    GetConsole();
     //SocketIn*
-    
 };
 
 

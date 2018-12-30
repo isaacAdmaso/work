@@ -9,29 +9,34 @@
  * 
  */
 #include "Cfactory.h"
+#include "Container.h"
+#include "Erase.h"
+#include "Lower.h"
+#include "Upper.h"
+#include "Shift.h"
 
 
-Container*  Cfactory::GetContainer(std::vector<ITx*>& _pVec)
+ITx*  Cfactory::GetContainer(std::vector<ITx*>& _pVec)
 {
     return new Container(_pVec);
 }
 
-Erase*      Cfactory::GetErase(const std::string strDel)
+ITx*      Cfactory::GetErase(const std::string strDel)
 {
     return new Erase(strDel);
 }
 
-Lower*      Cfactory::GetLower()
+ITx*      Cfactory::GetLower()
 {
     return new Lower();
 }
 
-Upper*      Cfactory::GetUpper()
+ITx*      Cfactory::GetUpper()
 {
     return new Upper();
 }
 
-Shift*      Cfactory::GetShift(const int _shift)
+ITx*      Cfactory::GetShift(const int _shift)
 {
     return new Shift(_shift);
 }

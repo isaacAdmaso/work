@@ -11,16 +11,15 @@
 #ifndef __DFACTORY_H__
 #define __DFACTORY_H__
 
-#include "Console.h"
-#include "FileOut.h"
+#include "Idest.h"
 
 
 
 class Dfactory
 {
 public:
-    FileOut*    GetFile(const std::string& _FileN);
-    Console*    GetConsole();
+    Idest*    GetFile(const std::string& _FileN);
+    Idest*    GetConsole();
 };
 
 #endif //__DFACTORY_H__
