@@ -238,6 +238,7 @@ using namespace std;
         //temp = cProc->Processor(temp);
         fOut->PutString(temp);
         cOut->PutString(temp);
+        cout << endl;
         cout << "enter \"break\" to stop"<<endl;
         temp = cIn->GetString();
     }
@@ -245,16 +246,16 @@ using namespace std;
 END_UNIT
 
 TEST_SUITE(all)
-	//TEST(fileIn)
-	//TEST(consoleIn)
-	//TEST(baseIn)
-	//TEST(source_factory)
-    //TEST(fileOut)
-    //TEST(screen)
-    //TEST(baseD)
-    //TEST(dest_factory)
-    //TEST(plist)
-    //TEST(proc_factory)
+	TEST(fileIn)
+	TEST(consoleIn)
+	TEST(baseIn)
+	TEST(source_factory)
+    TEST(fileOut)
+    TEST(screen)
+    TEST(baseD)
+    TEST(dest_factory)
+    TEST(plist)
+    TEST(proc_factory)
     TEST(app)
 END_SUITE
 
