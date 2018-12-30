@@ -22,8 +22,8 @@
 #include "Cfactory.h"
 
 
-#define FILE_IN     "./testFileIn"
-//#define FILE_IN     "./muTest.1.cpp"
+//#define FILE_IN     "./testFileIn"
+#define FILE_IN     "./muTest.1.cpp"
 #define FILE_OUT    "./testFile"
 #define FILE_OUT2    "./testFile2"
 #define FILE_OUT3    "./testFile3"
@@ -204,26 +204,26 @@ UNIT(app)
 using namespace std;
     Sfactory sourceF;
     Dfactory destF;
-    //Cfactory procF;
+    Cfactory procF;
 
     Isource* fIn = sourceF.GetFile(FILE_IN);
     Isource* cIn = sourceF.GetConsole();
     Idest*  fOut = destF.GetFile(FILE_OUT4);
     Idest*  cOut = destF.GetConsole();
-    //ITx*    eProc =  procF.GetErase("AIEOU");
-    //ITx*    lProc =  procF.GetLower();
-    //ITx*    uProc =  procF.GetUpper();
-    //std::vector<ITx*> pVec;
-    //pVec.push_back(eProc);
-    //pVec.push_back(lProc);
-    //pVec.push_back(uProc);
-    //ITx*    cProc =  procF.GetContainer(pVec);
+    ITx*    eProc =  procF.GetErase("AIEOU");
+    ITx*    lProc =  procF.GetLower();
+    ITx*    uProc =  procF.GetUpper();
+    std::vector<ITx*> pVec;
+    pVec.push_back(eProc);
+    pVec.push_back(lProc);
+    pVec.push_back(uProc);
+    ITx*    cProc =  procF.GetContainer(pVec);
 
 
     string temp = fIn->GetString();
     while(temp.length())
     {
-        //temp = cProc->Processor(temp);
+        temp = cProc->Processor(temp);
         fOut->PutString(temp);
         cOut->PutString(temp);
         temp = fIn->GetString();
@@ -235,7 +235,7 @@ using namespace std;
     temp = cIn->GetString();
     while(temp != "break")
     {
-        //temp = cProc->Processor(temp);
+        temp = cProc->Processor(temp);
         fOut->PutString(temp);
         cOut->PutString(temp);
         cout << endl;
