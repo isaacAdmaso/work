@@ -26,6 +26,8 @@
 #include "Shift.h"
 
 
+
+
 #define FILE_IN     "./testFileIn"
 #define FILE_OUT    "./testFile"
 #define FILE_OUT2    "./testFile2"
@@ -50,7 +52,7 @@ using namespace std;
     ConsoleIn cIn(cin);
     cout << "read from console test"<<endl;
     string temp = cIn.GetString();
-    while(temp != "break" )
+    while(temp.length())
     {
         std::cout << temp <<std::endl;
         cout << "enter \"break\" to stop"<<endl;
@@ -70,7 +72,7 @@ using namespace std;
     Isource* cP = new ConsoleIn(cin);
     cout << "read from console (as base *) test"<<endl;
     string tempC = cP->GetString();
-    while(tempC != "break" )
+    while(tempC.length() )
     {
         std::cout << tempC <<std::endl;
         cout << "enter \"break\" to stop"<<endl;
@@ -93,7 +95,7 @@ using namespace std;
     Isource* cP = factory.GetConsole();
     cout << "read from console(given by \"factory\") test"<<endl;
     string tempC = cP->GetString();
-    while(tempC != "break" )
+    while(tempC.length())
     {
         std::cout << tempC <<std::endl;
         cout <<endl << "enter \"break\" to stop"<<endl;
@@ -203,7 +205,7 @@ using namespace std;
 
 END_UNIT
 
-UNIT(app)
+UNIT(all_mod)
 using namespace std;
     Sfactory sourceF;
     Dfactory destF;
@@ -238,7 +240,7 @@ using namespace std;
     cout << endl;
     cout << "read from console(given by \"factory\") test"<<endl;
     temp = cIn->GetString();
-    while(temp != "break")
+    while(temp.length())
     {
         temp = cProc->Processor(temp);
         fOut->PutString(temp);
@@ -249,6 +251,7 @@ using namespace std;
     }
     delete cIn;
 END_UNIT
+
 
 TEST_SUITE(all)
 	TEST(fileIn)
@@ -261,6 +264,6 @@ TEST_SUITE(all)
     TEST(dest_factory)
     TEST(plist)
     TEST(proc_factory)
-    TEST(app)
+    TEST(all_mod)
 END_SUITE
 

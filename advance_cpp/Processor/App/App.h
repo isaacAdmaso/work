@@ -11,6 +11,7 @@
 #include "Idest.h"
 
 //Process
+#include <vector>
 #include <string>
 #include "ITx.h"
 
@@ -21,9 +22,17 @@ private:
     Isource*        m_source;
     Idest*          m_dest;
     ITx*            m_proc;
-    void            CreateFrom(const char* _com[]);      
+    void            CreateFrom(int _iCom, char* _cCom[]); 
+    void            CreateSource(const char* _s);     
+    void            CreateProc(const char* _s,std::vector<ITx*>& _vec);     
+    void            CreateDest(const char* _s);  
+    static const char*  DELIM;  
+    static const char*  ERASE; 
+    static const int    SHIFT; 
+    static const char*  USAGE;
+
 public:
-    App(const char* _com[]);
+    App(int _iCom, char* _cCom[]);
     ~App();
     void Run();
 };

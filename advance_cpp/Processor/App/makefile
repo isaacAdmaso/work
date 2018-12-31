@@ -45,7 +45,7 @@ staticPROC:
 	make -C ../Destination libs
 
 
-SOURCES= 	muTest.cpp#$(wildcard *.cpp)
+SOURCES= $(wildcard *.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
 
 $(TARGET): $(OBJECTS) libs

@@ -45,8 +45,8 @@ staticPROC:
 	make -C Destination libs
 
 
-#$(wildcard *.cpp)
-SOURCES= 	main.cpp
+#
+SOURCES= $(wildcard *.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
 
 $(TARGET): $(OBJECTS) libs
