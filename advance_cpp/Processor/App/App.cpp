@@ -8,14 +8,16 @@
  * @copyright Copyright (c) 2018
  * 
  */
+#include <unistd.h>
 #include <string>
+#include <algorithm>    
 #include "App.h"
 #include "Sfactory.h"
 #include "Dfactory.h"
 #include "Cfactory.h"
 
 
-App::App(const std::string& _com)
+App::App(const char*_com[])
 {
     CreateFrom(_com);
 }
@@ -38,7 +40,7 @@ void App::Run()
     }
 }
 
-void App::CreateFrom(const std::string& _com)
+void App::CreateFrom(const char*_com[])
 {
     
 } 

@@ -21,9 +21,9 @@ private:
     Isource*        m_source;
     Idest*          m_dest;
     ITx*            m_proc;
-    void            CreateFrom(const std::string& _com);      
+    void            CreateFrom(const char* _com[]);      
 public:
-    App(const std::string& _com);
+    App(const char* _com[]);
     ~App();
     void Run();
 };
