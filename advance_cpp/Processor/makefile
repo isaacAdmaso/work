@@ -45,7 +45,8 @@ staticPROC:
 	make -C Destination libs
 
 
-SOURCES= 	muTest.cpp#$(wildcard *.cpp)
+#$(wildcard *.cpp)
+SOURCES= 	main.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 
 $(TARGET): $(OBJECTS) libs
@@ -63,6 +64,7 @@ clean:
 	find . -type f -name 'depends' -delete
 	find . -type f -name 'log.txt' -delete
 	find . -type f -name 'testFile' -delete
+	find . -type f -name 'MainTestFile' -delete
 	find . -type f -name 'testFile2' -delete
 	find . -type f -name 'testFile3' -delete
 	find . -type f -name 'testFile4' -delete

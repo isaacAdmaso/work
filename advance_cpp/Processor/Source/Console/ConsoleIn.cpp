@@ -20,7 +20,7 @@ std::string ConsoleIn::GetString()
 {
     std::string tempLine;
     std::getline (m_console,tempLine);
-    while (tempLine.length()==0 ) 
-        std::getline(m_console, tempLine);  
+    if(tempLine == "break")
+        tempLine = "";  
     return tempLine;
 }

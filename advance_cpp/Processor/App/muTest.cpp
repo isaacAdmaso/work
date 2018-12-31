@@ -264,36 +264,3 @@ TEST_SUITE(all)
     TEST(app)
 END_SUITE
 
-
-//int main(int argc, char *argv[])
-//{
-//    extern char *optarg;
-//	extern int optind;
-//    int op = -1;
-//    const char 
-//
-//    while ((op = getopt(argc,argv, IN_FLAGS)) != -1)
-//    {
-//		switch (op) 
-//        {
-//        case 'p':
-//            pause = 1;
-//			break;
-//        case 'd':
-//            delete = 1;
-//			break;
-//        case 'v':
-//            verb = 1;
-//			break;
-//        case 'r':
-//            resume = 1;
-//            break;
-//        case '?':
-//            fprintf(stderr,FLAG_ERR_STR);
-//			return 1;
-//		}
-//    }
-//
-//    return 0;
-//}
-//
