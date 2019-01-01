@@ -12,8 +12,9 @@
 #define __FILEIN_H__
 #include <string>
 #include <fstream>
-#include "Isource.h"
 #include "uncopy.h"
+#include "Isource.h"
+#include "ISfactory.h"
 
 class FileIn: public Isource,private Uncopy
 {
@@ -24,6 +25,7 @@ public:
     FileIn(const std::string& _fileN);
     virtual ~FileIn();
     virtual std::string GetString();
+    virtual void accept(ISfactory  &dispatcher);
 };
 
  

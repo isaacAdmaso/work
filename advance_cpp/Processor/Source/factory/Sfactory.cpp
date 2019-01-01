@@ -13,7 +13,6 @@
 #include "ConsoleIn.h"
 #include "FileIn.h"
 
-
 Isource*     Sfactory::GetFile(const std::string& _FileN)
 {
     FileIn* rtVal = new  FileIn(_FileN);
@@ -25,3 +24,16 @@ Isource*    Sfactory::GetConsole()
     return new ConsoleIn(std::cin);
 }
     
+
+//Isource* Sfactory::dispatch(FileIn& _source)
+//{
+//    _source.accept(*this);
+//}
+//Isource* Sfactory::dispatch(ConsoleIn& _source)
+//{
+//
+//}
+//Isource* Sfactory::dispatch(Socket& _source)
+//{
+//
+//}

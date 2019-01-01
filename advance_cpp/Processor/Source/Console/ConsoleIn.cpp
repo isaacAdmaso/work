@@ -24,3 +24,8 @@ std::string ConsoleIn::GetString()
         tempLine = "";  
     return tempLine;
 }
+
+void ConsoleIn::accept(ISfactory  &dispatcher)
+{
+    dispatcher.dispatch(*this);
+}

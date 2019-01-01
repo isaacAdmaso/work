@@ -12,6 +12,7 @@
 #define __ISOURCE_H__
 #include <string>
 
+class ISfactory;
 
 class Isource
 {
@@ -19,6 +20,7 @@ private:
 public:
     virtual ~Isource() = 0;
     virtual std::string GetString() = 0;
+    virtual void accept(ISfactory  &dispatcher) = 0;
 };
 
 

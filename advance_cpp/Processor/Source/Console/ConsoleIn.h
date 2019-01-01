@@ -15,6 +15,7 @@
 #include <istream>
 #include "uncopy.h"
 #include "Isource.h"
+#include "ISfactory.h"
 
 
 class ConsoleIn: public Isource,private Uncopy
@@ -25,6 +26,7 @@ private:
 public:
     ConsoleIn(std::istream& _cin);
     virtual std::string GetString();
+    virtual void accept(ISfactory  &dispatcher);
 };
 
 

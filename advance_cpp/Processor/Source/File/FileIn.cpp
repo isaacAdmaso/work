@@ -53,3 +53,9 @@ std::string FileIn::GetString()
     }
     return tempLine;
 }
+
+
+void FileIn::accept(ISfactory  &dispatcher)
+{
+    dispatcher.dispatch(*this);
+}

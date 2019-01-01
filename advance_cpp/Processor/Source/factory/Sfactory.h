@@ -22,6 +22,13 @@ public:
     Isource*    GetConsole();
     //SocketIn*
 };
+// class Sfactory: public ISfactory
+// {
+// public:
+//     virtual Isource* dispatch(FileIn& _source);
+//     virtual Isource* dispatch(ConsoleIn& _source);
+//     virtual Isource* dispatch(Socket& _source);
+// };
 
 
 
