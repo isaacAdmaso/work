@@ -43,7 +43,7 @@ using namespace std;
     string test = "YITSHAK";
 
 
-    ITx* eP = cF.GetErase("AIEOU");
+    ITx* eP = cF.GetErase("aeiouAIEOU");
     test = eP->Processor(test);
     
     ITx* lP = cF.GetLower();

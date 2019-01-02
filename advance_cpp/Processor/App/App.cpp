@@ -8,6 +8,172 @@
  * @copyright Copyright (c) 2018
  * 
  */
+#include <stdlib.h>     /* atoi */
+#include "App.h"
+#include "Sfactory.h"
+#include "Dfactory.h"
+#include "Cfactory.h"
+
+const char*  App::ERASE = "aeiou";
+const int    App::SHIFT = 1;
+
+void App::CreateProcH(Cfactory& factory,std::string _s,std::vector<ITx*>& _proc, int *_e,int *_f)
+{
+    switch(_s[0])
+    {
+        case 'e':
+        case 'E':
+            *_e = 1;
+            break;
+        case 'l':
+        case 'L':
+            *_f = 1;
+            break;
+        case 'u':
+        case 'U':
+            _proc.push_back(factory.GetUpper());
+            break;
+        case 's':
+        case 'S':
+            _proc.push_back(factory.GetShift(SHIFT));
+            break;
+        default:
+            break;
+    }
+}
+
+void App::CreateProc(std::vector<std::string>& _com, iter_t curr)
+{
+    Cfactory factory;
+    std::vector<ITx*> vProc;
+    iter_t end = _com.end();
+    int Eflag = 0,Sflag = 0;
+
+    for(;curr != end; ++curr)
+    {
+        if(Eflag)
+        {
+            vProc.push_back(factory.GetErase(*curr));
+            Eflag = 0;
+        }
+        if(Sflag)
+        {
+            vProc.push_back(factory.GetShift(atoi((*curr).c_str())));
+            Sflag = 0;
+        }
+        CreateProcH(factory,*curr,vProc,&Eflag,&Sflag);
+    }
+    
+    m_proc = (1 == vProc.size())? vProc.back(): factory.GetContainer(vProc);
+
+}
+void App::CreateSource(std::string& _com)
+{
+    Sfactory sF;
+
+    if(!(_com.compare("c")) || !(_com.compare("console")))
+    {
+        m_source = sF.GetConsole();
+    }else
+    {
+        m_source = sF.GetFile(_com); 
+    }
+
+}
+
+void App::CreateDest(std::string& _com)
+{
+    Dfactory dF;
+
+    if(!(_com.compare("c")) || !(_com.compare("console")))
+    {
+        m_dest = dF.GetConsole();
+    }else
+    {
+        m_dest = dF.GetFile(_com); 
+    }
+
+}
+
+App::App(std::vector<std::string>& _com)
+{
+
+    iter_t curr = _com.begin();
+
+    CreateSource(*curr++);//<--((*curr)++) <-(*curr);curr++;
+    CreateDest(*curr++);
+    CreateProc(_com,curr);
+    
+}
+
+void App::Run()
+{
+    if(m_source)
+    {
+        std::string temp = m_source->GetString();
+        while(temp.length())
+        {
+            temp = m_proc->Processor(temp);
+            m_dest->PutString(temp);
+            temp = m_source->GetString();
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 #include <iostream> //for cerr
 #include <unistd.h>
@@ -16,12 +182,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include "App.h"
-#include "Sfactory.h"
-#include "Dfactory.h"
-#include "Cfactory.h"
 const char*  App::DELIM = "s:d:p:";
-const char*  App::ERASE = "eaiou";
-const int    App::SHIFT = 13;
 
 const char* App::USAGE = "Usage:  [-s] [console[c],file name] [-d] [console[c],file name][-p] [Erase, Shift, Lower, Upper, Container ]   \
                             [-c Erase Shift Lower Upper ]\n";
@@ -81,21 +242,6 @@ void App::CreateDest(const char* _s)
     }
 }
 
-void App::CreateProc(const char* _s, std::vector<ITx*>& _vec)
-{
-    Cfactory factory;
-    std::string e = "e",Erase = "Erase",l = "l",Lower = "Lower"\
-    ,u = "u",Upper = "Upper",Shift = "Shift",s = "s";
-
-    if(e.compare(_s) || Erase.compare(_s))
-        _vec.push_back(factory.GetErase(ERASE));
-    else if(l.compare(_s) || Lower.compare(_s))
-        _vec.push_back(factory.GetLower());
-    else if(u.compare(_s) || Upper.compare(_s))
-        _vec.push_back(factory.GetUpper());
-    else if(s.compare(_s) || Shift.compare(_s))
-        _vec.push_back(factory.GetShift(SHIFT));
-}
 
 void App::CreateFrom(int _iCom, char* _cCom[])
 {

@@ -17,7 +17,7 @@
 class Container: public ITx
 {
 private:
-    std::vector<ITx*>&  m_container; 
+    std::vector<ITx*>  m_container; 
     typedef std::vector<ITx*>::iterator iter_t;
 
 public:
