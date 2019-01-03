@@ -1,4 +1,4 @@
-TARGET=muTest.out
+TARGET=muTest
 LIB_PATH= ./lib
 CC=g++
 
@@ -13,6 +13,7 @@ CPPFLAGS+= -I./Destination/Interface
 CPPFLAGS+= -I./Destination/Console
 CPPFLAGS+= -I./Destination/factory
 CPPFLAGS+= -I./Destination/File
+CPPFLAGS+= -I./App
 
 
 
@@ -45,11 +46,12 @@ staticPROC:
 	make -C Destination libs
 
 
-#
-SOURCES= $(wildcard *.cpp)
+#$(wildcard *.cpp)
+SOURCES=	$(TARGET).cpp ./App/App.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 
 $(TARGET): $(OBJECTS) libs
+	@echo Compilimg $(TARGET)
 	$(CC) $(CPPFLAGS) $(OBJECTS) -o $(TARGET)  -L$(LIB_PATH)  -lPROC -lSOURCE -lDEST 
 
 
@@ -59,6 +61,7 @@ run: $(TARGET)
 gdb: $(TARGET)
 	gdb -q ./$(TARGET) 
 clean:
+	rm $(TARGET) 
 	find . -type f -name '*.o' -delete
 	find . -type f -name '*.out' -delete
 	find . -type f -name 'depends' -delete

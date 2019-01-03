@@ -26,7 +26,7 @@
 #include "Shift.h"
 
 
-
+#include "App.h"
 
 #define FILE_IN     "./testFileIn"
 #define FILE_OUT    "./testFile"
@@ -252,6 +252,15 @@ using namespace std;
     delete cIn;
 END_UNIT
 
+UNIT(app)
+using namespace std;
+char COMMAND[][6] = {"c","c","e","k","l","u","s","1"};
+
+    std::vector<std::string> com;
+    com.insert(com.begin(),COMMAND,COMMAND + (sizeof(COMMAND)/sizeof(COMMAND[0])));
+    App application(com);
+    application.Run();
+END_UNIT
 
 TEST_SUITE(all)
 	TEST(fileIn)
@@ -265,5 +274,6 @@ TEST_SUITE(all)
     TEST(plist)
     TEST(proc_factory)
     TEST(all_mod)
+    TEST(app)
 END_SUITE
 
