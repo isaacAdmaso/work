@@ -14,9 +14,6 @@
 #include "Dfactory.h"
 #include "Cfactory.h"
 
-const char*  App::ERASE = "aeiou";
-const int    App::SHIFT = 1;
-
 void App::CreateProcH(Cfactory& factory,std::string _s,std::vector<ITx*>& _proc, int *_e,int *_f)
 {
     switch(_s[0])

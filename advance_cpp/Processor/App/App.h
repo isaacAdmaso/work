@@ -25,8 +25,6 @@ public:
 
 private:
     typedef std::vector<std::string>::iterator iter_t;
-    static const char*  ERASE; 
-    static const int    SHIFT; 
 
 private:
     Isource*        m_source;
