@@ -1,6 +1,8 @@
-TARGET=muTest
+TARGET=main
 LIB_PATH= ./lib
 CC=g++
+
+all:$(TARGET)
 
 CPPFLAGS= -I../common -pedantic -Wall -Werror  -g -ansi -Wconversion -std=c++03
 CPPFLAGS+= -I./Source/Console

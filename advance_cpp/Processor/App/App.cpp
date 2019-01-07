@@ -27,7 +27,7 @@ void App::CreateProcH(Cfactory& factory,std::string _s,std::vector<ITx*>& _proc,
             break;
         case 'l':
         case 'L':
-            *_f = 1;
+            _proc.push_back(factory.GetLower());
             break;
         case 'u':
         case 'U':
@@ -35,7 +35,7 @@ void App::CreateProcH(Cfactory& factory,std::string _s,std::vector<ITx*>& _proc,
             break;
         case 's':
         case 'S':
-            _proc.push_back(factory.GetShift(SHIFT));
+            *_f = 1;
             break;
         default:
             break;
@@ -65,8 +65,8 @@ void App::CreateProc(std::vector<std::string>& _com, iter_t curr)
     }
     
     m_proc = (1 == vProc.size())? vProc.back(): factory.GetContainer(vProc);
-
 }
+
 void App::CreateSource(std::string& _com)
 {
     Sfactory sF;
