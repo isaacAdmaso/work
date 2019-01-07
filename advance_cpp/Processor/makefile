@@ -56,6 +56,10 @@ $(TARGET): $(OBJECTS) libs
 	@echo Compilimg $(TARGET)
 	$(CC) $(CPPFLAGS) $(OBJECTS) -o $(TARGET)  -L$(LIB_PATH)  -lPROC -lSOURCE -lDEST 
 
+include depends
+
+depends:
+	$(CC) -MM $(CPPFLAGS) $(SOURCES) $(SOURCElib) $(PROClib) $(DESTlib) > depends
 
 run: $(TARGET)
 	./$(TARGET)
