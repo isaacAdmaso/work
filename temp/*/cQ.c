@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 
-
+/*
 
 int fn(int x3, unsigned int factor){
     return x3 / factor;
@@ -68,5 +68,21 @@ int main(void)
     res4 = p-->a;
     
     printf("res=%d\n",res4);
+    return 0;
+}
+*/
+void PrintM(int(*arr)[2])
+{
+    for(int i = 0 ,j = 0;i<2;++i)
+    {
+        for(;j<2;++j)
+            printf("%d\n",*(*(arr+i)+j));
+        j = 0;
+    }
+}
+int main(int argc, char const *argv[])
+{
+    int arr[2][2] = {1,2,3,4};
+    PrintM(arr);
     return 0;
 }
