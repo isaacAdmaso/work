@@ -14,8 +14,7 @@ BitMap_t* createMap(const unsigned int NOF)
 	{
 		return NULL;
 	}
-										// for number bigger then 31 or  2^31 --->		
-	bitM->m_bit = (unsigned int*)calloc((NOF/(sizeof(unsigned int)*8)+1),sizeof(unsigned int));//TODO ask yossi
+	bitM->m_bit = (unsigned int*)calloc((NOF/(sizeof(unsigned int)*8)+1),sizeof(unsigned int));
 	if(NULL == bitM->m_bit)
 	{
 		free(bitM);
