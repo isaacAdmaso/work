@@ -1,49 +1,40 @@
-/**
- * @file IAgent.h
- * @author your name (you@domain.com)
- * @brief 
- * @version 0.1
- * @date 2019-01-08
- * 
- * @copyright Copyright (c) 2019
- * 
- */
 #ifndef __IAGENT_H__
 #define __IAGENT_H__
+
 #include <string>
-#include <vector>
-#include "EventKey.h"
+#include "IServer.h"
+#include "UncopyAble.h"
+class IServer;
 
 
-
-
-struct AgentConfig
-{
-    std::string   m_id;
-    std::string   m_room;
-    std::string   m_floor;
-    std::string   m_type;
-    std::string   m_configData;
-};
-
-
-class IAgent
+class IAgent: private UncopyAble
 {
 public:
-    static   IAgent*      Create();
-    virtual  void         Destroy() = 0;
-    virtual  bool         Init( const AgentConfig& _configData ) = 0;
-        // Run device, called when server turned on.
-    virtual  bool         Connect() = 0;
+struct AgentConfig
+{
+	IServer*	m_server;
+	std::string		m_id;
+	std::string		m_type;
+	std::string		m_log;
+	std::string		m_floor;
+	std::string		m_room;
+	std::string		m_configData;
+};
+typedef struct AgentConfig AgentConfig;
+public:
+	IAgent();
+	virtual ~IAgent();
+	virtual bool Init(const AgentConfig& _agentConfig) = 0;
+	//virtual bool Connect() = 0;
         // Send event to the agent from the server 
-    virtual  bool         GetEvent( const std::string& _eventType ) = 0;
-private:
-        AgentConfig                agentData;
-        std::vector<EventKey>      m_subcribeEvents;
-private:
-        IAgent();
-        virtual               ~IAgent() = 0;
+	//virtual bool TakeEvent(const std::string& _eventType) = 0;
+protected:
+	std::string m_id;
+	std::string m_type;
+	std::string m_log;
+	std::string m_floor;
+	std::string m_room;
+	IServer*	m_server;
 };
 
-
-#endif //__IAGENT_H__
+#endif
