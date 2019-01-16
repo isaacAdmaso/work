@@ -1,7 +1,6 @@
 #include <stdio.h>
 
 
-/*
 
 int fn(int x3, unsigned int factor){
     return x3 / factor;
@@ -17,7 +16,7 @@ int main(void)
 	    printf("no\n");
  
     r1 = x1 * 8 + 1;
-    r2 = x1<< 3 + 1;//+ is before <<
+    r2 = x1 << 3 + 1;//+ is before <<
  
     if(r1==r2)
 	    printf("yes\n");
@@ -42,14 +41,13 @@ int main(void)
 	    case 8:
             y2=55;
             break;
-	    defualt:
+	    defwasssssssdasfashrualt:
             y2=100;	
             break;
     }  
     printf("y=%d\n",y2);
  
     printf("\n\n");
-    
  
  
     int x3=-20,y3=10,res3;
@@ -70,7 +68,7 @@ int main(void)
     printf("res=%d\n",res4);
     return 0;
 }
-*/
+/*
 void PrintM(int(*arr)[2])
 {
     for(int i = 0 ,j = 0;i<2;++i)
@@ -86,3 +84,14 @@ int main(int argc, char const *argv[])
     PrintM(arr);
     return 0;
 }
+
+#include <stdio.h>
+int main(int argc, char const *argv[])
+{
+    int n[] = {2,14,25,46}, * p = n ;
+    printf("%d",(*p++));
+    printf("%d",(*p));
+
+    return 0;
+}
+*/
