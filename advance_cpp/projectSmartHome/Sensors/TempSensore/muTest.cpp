@@ -1,15 +1,23 @@
 #include <iostream>
 #include <stdio.h>
+#include <dlfcn.h>
 #include "mu_test.h"
 
 #include "IAgent.h"
-#include "TempSensor.h"
 
 
 UNIT(ISENSORETest)
+typedef IAgent* (*Create)(const IAgent::AgentConfig&);
+    
+    Create funPtr;
+    void* handle;
+    handle = dlopen("../../lib/libTEMP.so", RTLD_LAZY);
+    funPtr = (Create)dlsym(handle, "Create");
+
     IAgent::AgentConfig agent = {NULL,"ID","its too cold!!!","AC","1","23","config"} ;
-    TempSensor sensore(agent);
-    sensore.SendEvent();
+    IAgent* sensor = funPtr(agent);
+
+    sensor->Do();
 
 END_UNIT
 

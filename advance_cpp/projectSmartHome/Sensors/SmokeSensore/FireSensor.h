@@ -19,7 +19,7 @@ public:
 	FireSensor(const AgentConfig& _agentConfig);
 	virtual ~FireSensor();
     virtual bool Init();
-	bool SendEvent();
+	virtual bool Do();
 };
 
 #endif //__FIRESENSOR_H__

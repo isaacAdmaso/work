@@ -11,9 +11,6 @@ public:
 	HVAC(const AgentConfig& _agentConfig);
 	virtual ~HVAC();
 	virtual bool Init();
-	//virtual bool Connect();
-	// Send event to the agent from the server 
-	//virtual bool TakeEvent(const std::string& _eventType);
 private:
 	std::string m_config;
 	std::string m_lowTemp;

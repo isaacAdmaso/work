@@ -1,5 +1,6 @@
 # this is my target
 TARGET=muTest.out
+LIB_PATH= ../lib
 
 # General compilation flags
 CC=g++
@@ -24,30 +25,45 @@ CPPFLAGS += -I$(INC_DIR5)
 CPPFLAGS += -I$(INC_DIR6) 
 
 # all .c files in this directory are my sources
-SOURCES=$(wildcard *.cpp)
-SOURCES+=../IServer/IServer.cpp
-SOURCES+=../EventKey/EventKey.cpp
-SOURCES+=../Event/Event.cpp
-SOURCES+=../IAgent/IAgent.cpp
-SOURCES+=./SmokeSensore/FireSensor.cpp
-SOURCES+=./TempSensore/TempSensor.cpp
-# all .o files in this directory are my objects
+SOURCES=muTest.cpp
+#libSOURCES+=../IServer/IServer.cpp
+#libSOURCES+=../EventKey/EventKey.cpp
+#libSOURCES+=../Event/Event.cpp
+#libSOURCES+=../IAgent/IAgent.cpp
+#libSOURCESFire=$(libSOURCES)
+#libSOURCESFire+=./SmokeSensore/FireSensor.cpp
+#libSOURCESTemp=$(libSOURCES)
+#libSOURCESTemp+=./TempSensore/TempSensor.cpp
+## all .o files in this directory are my objects
 OBJECTS=$(SOURCES:.cpp=.o)
 
 all: $(TARGET)
 
-$(TARGET): $(OBJECTS)
-	$(CC) $(OBJECTS) -o $(TARGET)
+$(TARGET): $(OBJECTS) libs
+	$(CC) $(OBJECTS) -o $(TARGET) -Wl,-rpath=$(LIB_PATH) -L$(LIB_PATH) -lTEMP -lSMOKE   -ldl
 # built-in recipe for link
 
 include depends
 
 depends:
-	$(CC) -MM -I$(INC_DIR) -I$(INC_DIR1) -I$(INC_DIR2) -I$(INC_DIR3)  $(SOURCES) > depends
+	$(CC) -MM -I$(INC_DIR) -I$(INC_DIR1) -I$(INC_DIR2) -I$(INC_DIR3) -I$(INC_DIR4) -I$(INC_DIR5) -I$(INC_DIR6) $(SOURCES) > depends
+
+libs:
+	make -C SmokeSensore
+	make -C TempSensore
+
+#libs: mklib 
+#	$(CC) $(CPPFLAGS) -shared $(libSOURCESTemp) -fPIC -o $(LIB_PATH)/libTEMP.so
+#	$(CC) $(CPPFLAGS) -shared $(libSOURCESFire) -fPIC -o $(LIB_PATH)/libSMOKE.so
+
+
+#mklib:
+#	mkdir -p $(LIB_PATH)
 
 clean:
-	-rm -f $(TARGET) *.o $(INC_DIR1)/*.o $(INC_DIR2)/*.o $(INC_DIR3)/*.o $(INC_DIR4)/*.o $(INC_DIR5)/*.o $(INC_DIR6)/*.o depends 
-	-rm *.out
+	make -C SmokeSensore clean
+	make -C TempSensore clean
+	rm *.o *.out depends
 	
 run: $(TARGET)
 	./$(TARGET)

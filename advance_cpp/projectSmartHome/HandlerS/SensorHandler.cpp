@@ -16,7 +16,7 @@ void SensorHandler::Insert(IAgent* _agent, const EventKey& _key)
 	isUnique = m_sensorsContainer.insert(std::pair<EventKey,IAgent*>(_key, _agent));
 	if(isUnique.second == false)
 	{
-		std::cout << "Sensor is already axsist" << std::endl;
+		std::cout << "Sensor is already exist" << std::endl;
 	}
 }
 

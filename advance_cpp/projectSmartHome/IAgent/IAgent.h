@@ -36,7 +36,7 @@ public:
 	IAgent(const AgentConfig& _agentConfig);
 	virtual ~IAgent();
 	virtual bool Init() = 0;
-
+	virtual bool Do() = 0;
 protected:
 	AgentConfig m_agentData;
 	std::string m_config;

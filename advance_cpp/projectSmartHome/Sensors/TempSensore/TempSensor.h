@@ -20,7 +20,8 @@ public:
 	TempSensor(const AgentConfig& _agentConfig);
 	virtual ~TempSensor();
     virtual bool Init();
-	bool SendEvent();
+	virtual bool Do();
+
 
 private:
 	int m_lowTemp;

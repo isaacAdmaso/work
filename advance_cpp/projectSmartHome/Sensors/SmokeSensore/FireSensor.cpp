@@ -30,9 +30,16 @@ bool FireSensor::Init()
 }
 
 
-bool FireSensor::SendEvent()
+bool FireSensor::Do()
 {
 	Event event(m_agentData.m_type,m_agentData.m_floor,m_agentData.m_room);
     event.PrintEvent();
     return true;
+}
+
+extern "C" {
+	IAgent* Create(const IAgent::AgentConfig& _agentConfig)
+	{
+		return new FireSensor(_agentConfig);
+	}
 }

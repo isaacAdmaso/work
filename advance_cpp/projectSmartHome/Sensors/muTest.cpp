@@ -1,20 +1,29 @@
 #include <iostream>
 #include <stdio.h>
+#include <dlfcn.h>
 #include "mu_test.h"
 
 #include "IAgent.h"
-#include "TempSensor.h"
-#include "FireSensor.h"
+
 
 
 
 UNIT(ISENSORETest)
+typedef IAgent* (*Create)(const IAgent::AgentConfig&);
+
+    Create funPtr;
+    void* handle;
+    handle = dlopen("../lib/libTEMP.so", RTLD_LAZY);
+    funPtr = (Create)dlsym(handle, "Create");
+
     IAgent::AgentConfig agent1 = {NULL,"ID","fire!!!","fire","1","23","config"} ;
+    IAgent* sensore1 = funPtr(agent1);
+    handle = dlopen("../lib/libSMOKE.so", RTLD_LAZY);
+    funPtr = (Create)dlsym(handle, "Create");
     IAgent::AgentConfig agent2 = {NULL,"ID","its too cold!!!","AC","1","23","config"} ;
-    FireSensor sensore1(agent1);
-    TempSensor sensore2(agent2);
-    sensore1.SendEvent();
-    sensore2.SendEvent();
+    IAgent* sensore2 = funPtr(agent2);
+    sensore1->Do();
+    sensore2->Do();
 
 END_UNIT
 
