@@ -1,5 +1,5 @@
 /**
- * @file Sprinkler.cpp
+ * @file HVAC.cpp
  * @author your name (you@domain.com)
  * @brief 
  * @version 0.1
@@ -9,36 +9,36 @@
  * 
  */
 #include <iostream> //for debug
-#include "Sprinkler.h"
+#include "HVAC.h"
 #include "EventKey.h"
 
-Sprinkler::Sprinkler(const AgentConfig& _agentConfig)
+HVAC::HVAC(const AgentConfig& _agentConfig)
 :IAgent(_agentConfig)
 {
 }
-Sprinkler::~Sprinkler()
+
+HVAC::~HVAC()
 {
 }
 
-bool Sprinkler::Init()
+bool HVAC::Init()
 {
 	EventKey eventKey(m_agentData.m_type,m_agentData.m_floor,m_agentData.m_room);
 
 	m_agentData.m_server->SubscribeController(this, eventKey);
 
 	return true;
-	
 }
 
-bool Sprinkler::Do()
+bool HVAC::Do()
 {
-	std::cout<<"sprinkler sprinkle"<<std::endl;
+	std::cout<<"HVAC RUN "<<std::endl;
 	return true;
 }
 
 extern "C" {
 	IAgent* Create(const IAgent::AgentConfig& _agentConfig)
 	{
-		return new Sprinkler(_agentConfig);
+		return new HVAC(_agentConfig);
 	}
 }

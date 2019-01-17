@@ -1,3 +1,13 @@
+/**
+ * @file HVAC.h
+ * @author your name (you@domain.com)
+ * @brief 
+ * @version 0.1
+ * @date 2019-01-17
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
 #ifndef __HVAC_H__
 #define __HVAC_H__
 
@@ -11,12 +21,7 @@ public:
 	HVAC(const AgentConfig& _agentConfig);
 	virtual ~HVAC();
 	virtual bool Init();
-private:
-	std::string m_config;
-	std::string m_lowTemp;
-	std::string m_upperTemp;
-private:
-	void HandleConfigLine(const std::string& _config);
+	virtual bool Do();
 };
 
-#endif
+#endif //__HVAC_H__

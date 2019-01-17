@@ -7,15 +7,17 @@
 
 
 
+
 UNIT(IcontrolerTest)
 typedef IAgent* (*Create)(const IAgent::AgentConfig&);
 
     Create funPtr;
     void* handle;
-    handle = dlopen("../../lib/libSPRINKLER.so", RTLD_LAZY);
+    handle = dlopen("../../lib/libHVAC.so", RTLD_LAZY);
     funPtr = (Create)dlsym(handle, "Create");
     
-    IAgent::AgentConfig agent = {NULL,"ID","fire!!!","fire","1","23","config"} ;
+    IAgent::AgentConfig agent = {NULL,"ID","its too cold!!!","AC","1","23","config"} ;
+
     IAgent* sensor = funPtr(agent);
 
 

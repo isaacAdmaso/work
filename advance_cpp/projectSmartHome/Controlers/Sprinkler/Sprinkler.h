@@ -21,7 +21,8 @@ public:
 	Sprinkler(const AgentConfig& _agentConfig);
 	virtual ~Sprinkler();
 	virtual bool Init();
+	virtual bool Do();
 };
 
-#endif
+#endif //__SPRINKLER_H__
 
