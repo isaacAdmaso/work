@@ -1,6 +1,7 @@
 #include "Sprinkler.h"
 #include "EventKey.h"
-Sprinkler::Sprinkler()
+Sprinkler::Sprinkler(const AgentConfig& _agentConfig)
+:IAgent(_agentConfig)
 {
 
 }
@@ -8,35 +9,21 @@ Sprinkler::~Sprinkler()
 {
 }
 
-bool Sprinkler::Init(const AgentConfig& _agentConfig)
+bool Sprinkler::Init()
 {
-	m_id = _agentConfig.m_id;
-	m_type = _agentConfig.m_type;
-	m_log = _agentConfig.m_log;
-	m_floor = _agentConfig.m_floor;
-	m_room = _agentConfig.m_room;
-	m_server = _agentConfig.m_server;
-	
-	EventKey eventKey;
-	eventKey.m_eventType = "FIRE_DETECTED";
-	m_server->SubscribeController(this, eventKey);
-	
-	eventKey.m_floor = m_floor;
-	m_server->SubscribeController(this, eventKey);
-	
-	if(!(m_room == ""))
-	{
-		eventKey.m_room = m_room;
-		m_server->SubscribeController(this, eventKey);
-	}
+	EventKey eventKey("FIRE_DETECTED",m_agentData.m_floor,m_agentData.m_room);
+
+	m_agentData.m_server->SubscribeController(this, eventKey);
+
 	return true;
+	
 }
 
 extern "C" 
 {
-IAgent* Create()
+IAgent* Create(const IAgent::AgentConfig& _agentConfig)
 {
-	return new Sprinkler();
+	return new Sprinkler(_agentConfig);
 }
 
 }

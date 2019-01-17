@@ -1,40 +1,46 @@
+/**
+ * @file IAgent.h
+ * @author your name (you@domain.com)
+ * @brief 
+ * @version 0.1
+ * @date 2019-01-16
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
 #ifndef __IAGENT_H__
 #define __IAGENT_H__
 
 #include <string>
 #include "IServer.h"
-#include "UncopyAble.h"
+#include "uncopy.h"
+
 class IServer;
 
-
-class IAgent: private UncopyAble
+class IAgent: private Uncopy
 {
 public:
-struct AgentConfig
-{
-	IServer*	m_server;
-	std::string		m_id;
-	std::string		m_type;
-	std::string		m_log;
-	std::string		m_floor;
-	std::string		m_room;
-	std::string		m_configData;
-};
-typedef struct AgentConfig AgentConfig;
+	typedef struct AgentConfig
+	{
+		IServer*		m_server;
+		std::string		m_id;
+		std::string		m_type;
+		std::string		m_log;
+		std::string		m_floor;
+		std::string		m_room;
+		std::string		m_configData;
+	}AgentConfig;
+
 public:
 	IAgent();
+	IAgent(const AgentConfig& _agentConfig);
 	virtual ~IAgent();
-	virtual bool Init(const AgentConfig& _agentConfig) = 0;
-	//virtual bool Connect() = 0;
-        // Send event to the agent from the server 
-	//virtual bool TakeEvent(const std::string& _eventType) = 0;
+	virtual bool Init() = 0;
+
 protected:
-	std::string m_id;
-	std::string m_type;
-	std::string m_log;
-	std::string m_floor;
-	std::string m_room;
-	IServer*	m_server;
+	AgentConfig m_agentData;
+	std::string m_config;
+
 };
 
 #endif

@@ -16,10 +16,11 @@
 class Msgq
 {
 public:
-    Msgq(std::string _msqName);
+
+    Msgq(std::string _msqName,size_t _maxmsg,size_t _msgsize);
     ~Msgq();
     int Msq_Send(void* _toSend,size_t _sizeMsg);
-    ssize_t Msq_Receive(void* _toGet,size_t _sizeMsg);
+    int Msq_Receive(void* _toGet,size_t _sizeMsg);
 
 private:
     int m_mq;

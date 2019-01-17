@@ -1,8 +1,8 @@
 # this is my target
-TARGET=muTest.out
-LIBS = MSGQ
+TARGET1=test1.out
+TARGET2=test2.out
 
-.PHONY: run clean gdb mklib
+.PHONY: run clean gdb 
 
 
 # General compilation flags
@@ -10,33 +10,24 @@ CC=g++
 CPPFLAGS= -pedantic -Wall -Werror  -g -ansi -Wconversion -std=c++03
 INC_DIR= ../common
 
-LIB_PATH= ../lib
 
 # all .c files in this directory are my sources
-SOURCES= 	muTest.cpp#$(wildcard *.cpp)
-LIB_SRC= ./Msgq.cpp 
+SOURCES1=test1.cpp Msgq.cpp 
+SOURCES2=test2.cpp Msgq.cpp
 
 # all .o files in this directory are my objects
-OBJECTS = $(SOURCES:.cpp=.o)
-LIB_OBJ = $(LIB_SRC:.cpp=.o)
+OBJECTS1 = $(SOURCES1:.cpp=.o)
+OBJECTS2 = $(SOURCES2:.cpp=.o)
+
+all:$(TARGET1) $(TARGET2)
+
+$(TARGET1): $(OBJECTS1) 
+	$(CC) $(OBJECTS1) -o $(TARGET1) -lrt
+
+$(TARGET2): $(OBJECTS2) 
+	$(CC) $(OBJECTS2) -o $(TARGET2) -lrt
 
 
-$(TARGET): $(OBJECTS) libs
-	$(CC) $(OBJECTS) -o $(TARGET)  -L$(LIB_PATH) -l$(LIBS)   
-
-libMSGQ.a: $(LIB_OBJ) #let's link library files into a static library
-	ar rcs $(LIB_PATH)/libMSGQ.a $(LIB_OBJ)
-# built-in recipe for link
-
-include depends
-
-depends:
-	$(CC) -MM $(SOURCES) $(LIB_SRC)> depends
-
-libs: mklib lib$(LIBS).a
-
-mklib:
-	mkdir -p $(LIB_PATH)
 
 clean:
 	-rm -f $(TARGET) *.o depends 
@@ -45,12 +36,6 @@ clean:
 	find . -type f -name 'depends' -delete
 	-rm *.out
 
-cleanlib:clean
-	rm $(LIB_PATH)/*.a
-
-	
-run: $(TARGET)
-	./$(TARGET)
 
 gdb: $(TARGET)
 	gdb -q ./$(TARGET)
