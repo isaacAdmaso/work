@@ -3,13 +3,13 @@
  * 
  */
 #include "App.h"
-#define MIN 6
+#define MIN 64
 
 using namespace std;
 int main(int argc, char *argv[]){
 
     std::vector<std::string> com;
-    char COMMAND[][MIN] = {"c","c","e","abcde","l","u","s","1"};
+    char COMMAND[][MIN] = {"../projectSmartHome/Configuration/smtestconf.txt","c"};
 
     if(argc < MIN)
         com.insert(com.begin(),COMMAND,COMMAND + (sizeof(COMMAND)/sizeof(COMMAND[0])));

@@ -12,6 +12,7 @@
 #include "Dfactory.h"
 #include "Console.h"
 #include "FileOut.h"
+#include "Container.h"
 
 Idest*  Dfactory ::GetFile(const std::string& _FileN)
 {
@@ -19,7 +20,13 @@ Idest*  Dfactory ::GetFile(const std::string& _FileN)
     //if (rtVal.is_open()) {
         return rtVal;
 }
+
 Idest*  Dfactory ::GetConsole()
 {
     return new Console(std::cout);
+}
+
+Idest*    Dfactory::GetContainer()
+{
+    return  new Container(); 
 }

@@ -97,9 +97,11 @@ App::App(std::vector<std::string>& _com)
 
     iter_t curr = _com.begin();
 
+    m_proc = NULL;
     CreateSource(*curr++);//<--((*curr)++) <-(*curr);curr++;
     CreateDest(*curr++);
-    CreateProc(_com,curr);
+    if(curr != _com.end())
+        CreateProc(_com,curr);
     
 }
 
@@ -110,7 +112,8 @@ void App::Run()
         std::string temp = m_source->GetString();
         while(temp.length())
         {
-            temp = m_proc->Processor(temp);
+            if(m_proc)
+                temp = m_proc->Processor(temp);
             m_dest->PutString(temp);
             temp = m_source->GetString();
         }

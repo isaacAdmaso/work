@@ -34,6 +34,14 @@ LIB_OBJ = $(LIB_SRC:.cpp=.o)
 $(TARGET): $(OBJECTS) libs
 	$(CC) $(OBJECTS) -o $(TARGET)  -L$(LIB_PATH) -lPROC   
 
+
+$(TARGET): $(OBJECTS) libs
+	$(CC) $(OBJECTS) -o $(TARGET) -Wl,-rpath=$(LIB_PATH) -L$(LIB_PATH) -lPROC   -ldl
+
+libPROC.so:
+	$(CC) $(CPPFLAGS) -shared $(LIB_SRC) -fPIC -o $(LIB_PATH)/libPROC.so
+
+
 libPROC.a: $(LIB_OBJ) #let's link library files into a static library
 	ar rcs $(LIB_PATH)/libPROC.a $(LIB_OBJ)
 
@@ -44,8 +52,8 @@ include depends
 depends:
 	$(CC) -MM -I$(INC_DIR) -I$(INC_DIR2) -I$(INC_DIR3) $(SOURCES) $(LIB_SRC) > depends
 
-libs: mklib libPROC.a
-
+libs: mklib libPROC.a libPROC.so
+ 
 mklib:
 	mkdir -p $(LIB_PATH)
 

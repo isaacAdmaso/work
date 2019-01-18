@@ -36,18 +36,22 @@ LIB_OBJ = $(LIB_SRC:.cpp=.o)
 
 
 $(TARGET): $(OBJECTS) libs
-	$(CC) $(OBJECTS) -o $(TARGET)  -L$(LIB_PATH) -lSOURCE   
+	$(CC) $(OBJECTS) -o $(TARGET) -Wl,-rpath=$(LIB_PATH) -L$(LIB_PATH) -lSOURCE   -ldl
+
+libSOURCE.so:
+	$(CC) $(CPPFLAGS) -shared $(LIB_SRC) -fPIC -o $(LIB_PATH)/libSOURCE.so
 
 libSOURCE.a: $(LIB_OBJ) #let's link library files into a static library
 	ar rcs $(LIB_PATH)/libSOURCE.a $(LIB_OBJ)
 # built-in recipe for link
+
 
 include depends
 
 depends:
 	$(CC) -MM -I$(INC_DIR) -I$(INC_DIR2) -I$(INC_DIR3) -I$(INC_DIR4) -I$(INC_DIR5) -I$(INC_DIR6) $(SOURCES) $(LIB_SRC)> depends
 
-libs: mklib libSOURCE.a
+libs: mklib libSOURCE.a libSOURCE.so
 
 mklib:
 	mkdir -p $(LIB_PATH)

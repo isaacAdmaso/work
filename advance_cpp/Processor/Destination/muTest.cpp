@@ -4,6 +4,7 @@
 #include "FileOut.h"
 #include "Console.h"
 #include "Dfactory.h"
+#include "Container.h"
 
 
 
@@ -46,6 +47,14 @@ using namespace std;
     Idest* cP = factory.GetConsole();
     cP->PutString(test);
     delete cP;
+
+    Idest* Cp = factory.GetContainer();
+    Cp->PutString(test);
+    Container* Cpp = dynamic_cast<Container*>(Cp); 
+    if(Cpp != NULL){
+        std::cout<<"in Container"<<endl;
+        Cpp->PrintC();
+    } 
     
 END_UNIT
 

@@ -15,12 +15,13 @@
 
 class SmartHome
 {
-private:
-
 public:
-    SmartHome(){}
+    SmartHome(const std::string& _config);
     ~SmartHome(){}
     bool Init(std::string);
+
+private:
+    void CreateFrom(const std::string& _config);
 };
 
 

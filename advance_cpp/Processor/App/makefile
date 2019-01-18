@@ -13,33 +13,32 @@ CPPFLAGS+= -I../Destination/Interface
 CPPFLAGS+= -I../Destination/Console
 CPPFLAGS+= -I../Destination/factory
 CPPFLAGS+= -I../Destination/File
+#
+#
+#
+#
+#SOURCElib=../Source/Console/ConsoleIn.cpp \
+#		../Source/factory/Sfactory.cpp \
+# 		../Source/File/FileIn.cpp \
+# 		../Source/Interface/Isource.cpp \
+#
+#PROClib=../Processor/factory/Cfactory.cpp \
+#	../Processor/ProcList/ITx.cpp  \
+#	../Processor/ProcList/Erase.cpp \
+#	../Processor/ProcList/Container.cpp \
+#	../Processor/ProcList/Lower.cpp \
+#	../Processor/ProcList/Upper.cpp \
+#	../Processor/ProcList/Shift.cpp \
+#
+#DESTlib=../Destination/Interface/Idest.cpp \
+# 	../Destination/Console/Console.cpp  \
+# 	../Destination/factory/Dfactory.cpp \
+# 	../Destination/File/FileOut.cpp \
+#
+.PHONY:	 dynamicPROC 
+libs: 	 dynamicPROC
 
-
-
-
-SOURCElib=../Source/Console/ConsoleIn.cpp \
-		../Source/factory/Sfactory.cpp \
- 		../Source/File/FileIn.cpp \
- 		../Source/Interface/Isource.cpp \
-
-PROClib=../Processor/factory/Cfactory.cpp \
-	../Processor/ProcList/ITx.cpp  \
-	../Processor/ProcList/Erase.cpp \
-	../Processor/ProcList/Container.cpp \
-	../Processor/ProcList/Lower.cpp \
-	../Processor/ProcList/Upper.cpp \
-	../Processor/ProcList/Shift.cpp \
-
-DESTlib=../Destination/Interface/Idest.cpp \
- 	../Destination/Console/Console.cpp  \
- 	../Destination/factory/Dfactory.cpp \
- 	../Destination/File/FileOut.cpp \
-
-.PHONY:	staticPROC dynamicSOURCE dynamicDEST dynamicPROC 
-
-libs: 	staticPROC dynamicSOURCE dynamicDEST dynamicPROC
-
-staticPROC:
+dynamicPROC:
 	make -C ../Source libs
 	make -C ../Processor libs
 	make -C ../Destination libs
@@ -49,7 +48,7 @@ SOURCES= $(wildcard *.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
 
 $(TARGET): $(OBJECTS) libs
-	$(CC) $(CPPFLAGS) $(OBJECTS) -o $(TARGET)  -L$(LIB_PATH)  -lPROC -lSOURCE -lDEST 
+	$(CC) $(OBJECTS) -o $(TARGET) -Wl,-rpath=$(LIB_PATH) -L$(LIB_PATH)  -lPROC -lSOURCE -lDEST    -ldl
 
 
 run: $(TARGET)
@@ -69,4 +68,4 @@ clean:
 
 cleanlib:clean
 	rm $(LIB_PATH)/*.a
-	#rm $(LIB_PATH)/*.so
+	rm $(LIB_PATH)/*.so

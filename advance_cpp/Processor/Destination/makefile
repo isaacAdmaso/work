@@ -14,6 +14,7 @@ INC_DIR2=./Console
 INC_DIR3=./factory
 INC_DIR4=./File
 INC_DIR5=./Interface
+INC_DIR6=./Container
 LIB_PATH= ../lib
 
 CPPFLAGS += -I$(INC_DIR)    
@@ -21,19 +22,24 @@ CPPFLAGS += -I$(INC_DIR2)
 CPPFLAGS += -I$(INC_DIR3)
 CPPFLAGS += -I$(INC_DIR4)
 CPPFLAGS += -I$(INC_DIR5)
+CPPFLAGS += -I$(INC_DIR6)
 # all .c files in this directory are my sources
 SOURCES= 	muTest.cpp#$(wildcard *.cpp)
 LIB_SRC= ./Interface/Idest.cpp
 LIB_SRC+= ./Console/Console.cpp 
 LIB_SRC+= ./factory/Dfactory.cpp
 LIB_SRC+= ./File/FileOut.cpp
+LIB_SRC+= ./Container/Container.cpp
 # all .o files in this directory are my objects
 OBJECTS = $(SOURCES:.cpp=.o)
 LIB_OBJ = $(LIB_SRC:.cpp=.o)
 
 
 $(TARGET): $(OBJECTS) libs
-	$(CC) $(OBJECTS) -o $(TARGET)  -L$(LIB_PATH) -lDEST   
+	$(CC) $(OBJECTS) -o $(TARGET) -Wl,-rpath=$(LIB_PATH) -L$(LIB_PATH) -lDEST   -ldl
+
+libDEST.so:
+	$(CC) $(CPPFLAGS) -shared $(LIB_SRC) -fPIC -o $(LIB_PATH)/libDEST.so
 
 #let's link library files into a static library
 libDEST.a: $(LIB_OBJ) 
@@ -46,7 +52,7 @@ include depends
 depends:
 	$(CC) -MM -I$(INC_DIR) -I$(INC_DIR2) -I$(INC_DIR3) -I$(INC_DIR4) -I$(INC_DIR5)  $(SOURCES) $(LIB_SRC) > depends
 
-libs: mklib libDEST.a
+libs: mklib libDEST.a libDEST.so
 
 mklib:
 	mkdir -p $(LIB_PATH)

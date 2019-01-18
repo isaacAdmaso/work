@@ -20,6 +20,7 @@ class Dfactory
 public:
     Idest*    GetFile(const std::string& _FileN);
     Idest*    GetConsole();
+    Idest*    GetContainer();
 };
 
 #endif //__DFACTORY_H__
