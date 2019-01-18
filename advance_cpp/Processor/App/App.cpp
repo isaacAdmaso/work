@@ -85,7 +85,12 @@ void App::CreateDest(std::string& _com)
     if(!(_com.compare("c")) || !(_com.compare("console")))
     {
         m_dest = dF.GetConsole();
-    }else
+    }
+    else if(!(_com.compare("vector")))
+    {
+        m_dest = dF.GetContainer();
+    }
+    else
     {
         m_dest = dF.GetFile(_com); 
     }
@@ -105,7 +110,7 @@ App::App(std::vector<std::string>& _com)
     
 }
 
-void App::Run()
+Idest* App::Run()
 {
     if(m_source)
     {
@@ -118,8 +123,8 @@ void App::Run()
             temp = m_source->GetString();
         }
     }
+    return m_dest;
 }
-
 
 
 

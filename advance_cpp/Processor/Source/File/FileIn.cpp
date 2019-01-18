@@ -44,7 +44,7 @@ std::string FileIn::GetString()
         try 
         {
             std::getline (m_file, tempLine, ' ');
-            while (!tempLine.length())
+            while (!tempLine.length() || (tempLine.length() == 1 && isspace(tempLine[0])))
                 std::getline(m_file, tempLine, ' '); 
 
         } catch (std::ifstream::failure e) {

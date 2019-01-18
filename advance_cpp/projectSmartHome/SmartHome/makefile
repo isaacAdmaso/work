@@ -1,5 +1,5 @@
 TARGET=main
-LIB_PATH= ../../Processor/lib
+READER_LIB_PATH= ../../Processor/lib
 CC=g++
 
 all:$(TARGET)
@@ -15,6 +15,7 @@ CPPFLAGS+= -I../../Processor/Destination/Interface
 CPPFLAGS+= -I../../Processor/Destination/Console
 CPPFLAGS+= -I../../Processor/Destination/factory
 CPPFLAGS+= -I../../Processor/Destination/File
+CPPFLAGS+= -I../../Processor/Destination/Container
 CPPFLAGS+= -I../../Processor/App
 
 
@@ -34,7 +35,7 @@ OBJECTS = $(SOURCES:.cpp=.o)
 
 $(TARGET): $(OBJECTS) libs
 	@echo Compilimg $(TARGET)
-	$(CC) $(OBJECTS) -o $(TARGET).out -Wl,-rpath=$(LIB_PATH) -L$(LIB_PATH)  -lPROC -lSOURCE -lDEST  -ldl
+	$(CC) $(OBJECTS) -o $(TARGET).out -Wl,-rpath=$(READER_LIB_PATH) -L$(READER_LIB_PATH)  -lPROC -lSOURCE -lDEST  -ldl
 
 include depends
 
@@ -48,17 +49,10 @@ gdb: $(TARGET)
 	gdb -q ./$(TARGET) 
 
 clean:
-	rm $(TARGET).out 
-	find ../../Processor  -type f -name '*.o' -delete
-	find ../../Processor  -type f -name '*.out' -delete
-	find ../../Processor  -type f -name 'depends' -delete
-	find ../../Processor  -type f -name 'log.txt' -delete
-	find ../../Processor  -type f -name 'testFile' -delete
-	find ../../Processor  -type f -name 'MainTestFile' -delete
-	find ../../Processor  -type f -name 'testFile2' -delete
-	find ../../Processor  -type f -name 'testFile3' -delete
-	find ../../Processor  -type f -name 'testFile4' -delete
-	rm *.o depends 
+	-rm $(TARGET).out 
+	-rm *.o depends 
+	make -C ../../Processor clean
 
 cleanlib:clean
-	rm $(LIB_PATH)/*.so
+	make -C ../../Processor cleanlib
+	-rm $(READER_LIB_PATH)/*.so

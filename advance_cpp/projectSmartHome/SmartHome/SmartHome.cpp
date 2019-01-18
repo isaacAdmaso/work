@@ -10,6 +10,8 @@
  */
 #include "SmartHome.h"
 #include "App.h"
+#include "VContainer.h"
+
 
 
 SmartHome::SmartHome(const std::string& _config)
@@ -20,12 +22,13 @@ SmartHome::SmartHome(const std::string& _config)
 void SmartHome::CreateFrom(const std::string& _config)
 {
     std::vector<std::string> com;
-    std::string COMMAND[] = {_config,"c"};
+    std::string COMMAND[] = {_config,"vector"};
     int size = 2;
 
     com.insert(com.begin(),COMMAND,COMMAND + size);
 
 
     App application(com);
-    application.Run();
+    VContainer* Cpp = (VContainer*)application.Run();
+    Cpp->PrintC();
 }

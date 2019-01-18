@@ -21,7 +21,7 @@ class App
 {
 public:
     App(std::vector<std::string>& _com);
-    void Run();
+    Idest* Run();
 
 private:
     typedef std::vector<std::string>::iterator iter_t;

@@ -8,15 +8,15 @@
  * @copyright Copyright (c) 2019
  * 
  */
-#ifndef __CONTAINER_H__
-#define __CONTAINER_H__
+#ifndef __VEC_CONTAINER_H__
+#define __VEC_CONTAINER_H__
 #include <string>
 #include <vector>
 #include "uncopy.h"
 #include "Idest.h"
 
 
-class Container: public Idest,private Uncopy
+class VContainer: public Idest,private Uncopy
 {
 public:
     std::vector<std::string> my_Container;

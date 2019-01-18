@@ -12,7 +12,7 @@
 #include "Dfactory.h"
 #include "Console.h"
 #include "FileOut.h"
-#include "Container.h"
+#include "VContainer.h"
 
 Idest*  Dfactory ::GetFile(const std::string& _FileN)
 {
@@ -28,5 +28,5 @@ Idest*  Dfactory ::GetConsole()
 
 Idest*    Dfactory::GetContainer()
 {
-    return  new Container(); 
+    return  new VContainer(); 
 }

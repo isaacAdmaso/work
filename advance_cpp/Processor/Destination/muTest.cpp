@@ -4,7 +4,7 @@
 #include "FileOut.h"
 #include "Console.h"
 #include "Dfactory.h"
-#include "Container.h"
+#include "VContainer.h"
 
 
 
@@ -50,7 +50,7 @@ using namespace std;
 
     Idest* Cp = factory.GetContainer();
     Cp->PutString(test);
-    Container* Cpp = dynamic_cast<Container*>(Cp); 
+    VContainer* Cpp = dynamic_cast<VContainer*>(Cp); 
     if(Cpp != NULL){
         std::cout<<"in Container"<<endl;
         Cpp->PrintC();

@@ -9,18 +9,22 @@
  * 
  */
 #include <iostream>
-#include "Container.h"
+#include "VContainer.h"
 
-void Container::PutString(const std::string& _str)
+void VContainer::PutString(const std::string& _str)
 {
     my_Container.push_back(_str);
 }
 
 
-void Container::PrintC()
+void VContainer::PrintC()
 {
+    int line = 0;
     for (std::vector<std::string>::const_iterator i = my_Container.begin();\
     i != my_Container.end(); ++i)
+    {
+        std::cout<<std::endl <<"line: "<< line++ <<std::endl;
         std::cout << *i << ' ';
+    }
 }
 

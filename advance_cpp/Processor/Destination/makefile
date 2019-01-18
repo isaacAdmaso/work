@@ -29,7 +29,7 @@ LIB_SRC= ./Interface/Idest.cpp
 LIB_SRC+= ./Console/Console.cpp 
 LIB_SRC+= ./factory/Dfactory.cpp
 LIB_SRC+= ./File/FileOut.cpp
-LIB_SRC+= ./Container/Container.cpp
+LIB_SRC+= ./Container/VContainer.cpp
 # all .o files in this directory are my objects
 OBJECTS = $(SOURCES:.cpp=.o)
 LIB_OBJ = $(LIB_SRC:.cpp=.o)
@@ -50,7 +50,7 @@ libDEST.a: $(LIB_OBJ)
 include depends
 
 depends:
-	$(CC) -MM -I$(INC_DIR) -I$(INC_DIR2) -I$(INC_DIR3) -I$(INC_DIR4) -I$(INC_DIR5)  $(SOURCES) $(LIB_SRC) > depends
+	$(CC) -MM -I$(INC_DIR) -I$(INC_DIR2) -I$(INC_DIR3) -I$(INC_DIR4) -I$(INC_DIR5) -I$(INC_DIR6)  $(SOURCES) $(LIB_SRC) > depends
 
 libs: mklib libDEST.a libDEST.so
 
