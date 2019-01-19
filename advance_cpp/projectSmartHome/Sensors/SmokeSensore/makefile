@@ -39,7 +39,7 @@ $(TARGET): $(OBJECTS) libs
 include depends
 
 depends:
-	$(CC) -MM -I$(INC_DIR) -I$(INC_DIR1) -I$(INC_DIR2) -I$(INC_DIR3)  $(SOURCES) > depends
+	$(CC) -MM -I$(INC_DIR) -I$(INC_DIR1) -I$(INC_DIR2) -I$(INC_DIR3) -I$(INC_DIR4)  $(SOURCES) > depends
 
 libs: mklib 
 	$(CC) $(CPPFLAGS) -shared $(LibSOURCES) -fPIC -o $(LIB_PATH)/libSMOKE.so

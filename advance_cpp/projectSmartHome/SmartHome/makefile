@@ -8,6 +8,10 @@ all:$(TARGET)
 
 CPPFLAGS= -I../../common -pedantic -Wall -Werror  -g -ansi -Wconversion -std=c++03
 CPPFLAGS+= -I../Configuration
+CPPFLAGS+= -I../IAgent
+CPPFLAGS+= -I../IServer
+CPPFLAGS+= -I../EventKey
+
 
 
 
@@ -18,7 +22,7 @@ dynamicReader:
 
 libs: 	 dynamicReader
 
-SOURCES=	$(TARGET).cpp SmartHome.cpp
+SOURCES=	$(TARGET).cpp SmartHome.cpp ../IAgent/IAgent.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 
 $(TARGET): $(OBJECTS) libs
@@ -41,12 +45,13 @@ val: $(TARGET)
 	valgrind -q --leak-check=full -v ./$(TARGET).out
 	
 clean:
-	-rm $(TARGET).out 
 	-rm *.o depends 
-	make -C ../../Processor clean
-	make -C $(READER_PATH) clean
+	-rm $(TARGET).out 
 
 cleanlib:clean
+	make -C $(READER_PATH) clean
+	make -C ../../Processor clean
+	make -C ../Sensors clean
 	make -C ../../Processor cleanlib
 	make -C $(READER_PATH) cleanlib
 	-rm $(READER_PATH)/*.so

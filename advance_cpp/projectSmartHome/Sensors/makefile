@@ -10,8 +10,8 @@ CPPFLAGS= -pedantic -Wall -Werror  -g -ansi -Wconversion
 INC_DIR=../../common
 INC_DIR1=../EventKey
 INC_DIR2=../Event
-INC_DIR3=../IAgent
-INC_DIR4=../IServer
+INC_DIR3=../IServer
+INC_DIR4=../IAgent
 INC_DIR5=./SmokeSensore
 INC_DIR6=./TempSensore
 
@@ -63,7 +63,7 @@ libs:
 clean:
 	make -C SmokeSensore clean
 	make -C TempSensore clean
-	rm *.o *.out depends
+	-rm *.o *.out depends
 	
 run: $(TARGET)
 	./$(TARGET)

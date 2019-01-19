@@ -11,6 +11,7 @@
 #ifndef __IAGENT_H__
 #define __IAGENT_H__
 
+#include <iostream>
 #include <string>
 #include "IServer.h"
 #include "uncopy.h"
@@ -37,10 +38,13 @@ public:
 	virtual ~IAgent();
 	virtual bool Init() = 0;
 	virtual bool Do() = 0;
-protected:
+//protected:
 	AgentConfig m_agentData;
 	std::string m_config;
 
 };
+
+std::ostream&    operator << (std::ostream& _os,const IAgent::AgentConfig& _s);
+
 
 #endif
