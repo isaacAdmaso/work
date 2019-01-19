@@ -20,11 +20,10 @@
 class ControllerHandler: private Uncopy
 {
 public:
-	ControllerHandler();
-	~ControllerHandler();
 	void Insert(IAgent* _agent, const EventKey& _key);
+	void Print();
 
 private:
-	std::map<EventKey, std::vector<IAgent*>> m_controllerContainer;
+	std::map<EventKey, std::vector<IAgent*> > m_controllerContainer;
 };
 #endif

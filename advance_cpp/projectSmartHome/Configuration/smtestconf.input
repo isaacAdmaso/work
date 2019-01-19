@@ -1,42 +1,42 @@
-[smoke-detector-192001]
+SMOKE
 type=smokeDetector
 room=room_1_a
 floor=1
 log=fire_log
-config=iot:192.168.1.11;signal:smoke_detected;
+config=iot:192.168.1.11;signal:smoke_detected:sensor;
  
-[fire-alarm-983001]
+SPRINKLER
 type=fireAlarm
 room=room_1_a
 floor=1
 log=fire_log
 config=iot:192.168.0.11;trigger:smoke_detected,floor=1,room=room_1_a|smoke_detected,floor=1,room=room_1_b|smoke_detected,floor=1,room=room_1_c|overheat,floor=1,room=room_1_a|overheat,floor=1,room=room_1_b|overheat,floor=1,room=room_1_c|SIGUSER2,floor=0,room=0|;
  
-[fire-alarm-983002]
+SPRINKLER
 type=fireAlarm
 room=room_2_a
 floor=1
 log=fire_log
 config=iot:192.168.0.11;trigger:smoke_detected,floor=1,room=room_2_a|smoke_detected,floor=1,room=room_2_b|smoke_detected,floor=1,room=room_2_c|overheat,floor=1,room=room_2_a|overheat,floor=1,room=room_2_b|overheat,floor=1,room=room_2_c|SIGUSER2,floor=0,room=0|;
  
-[fire-alarm-983003]
+SPRINKLER
 type=fireAlarm
 room=room_3_a
 floor=1
 log=fire_log
 config=iot:192.168.0.11;trigger:smoke_detected,floor=1,room=room_3_a|smoke_detected,floor=1,room=room_3_b|smoke_detected,floor=1,room=room_3_c|overheat,floor=1,room=room_3_a|overheat,floor=1,room=room_3_b|overheat,floor=1,room=room_3_c|SIGUSER2,floor=0,room=0|;
  
-[smoke-detector-192002]
+SMOKE
 type=smokeDetector
 room=room_2_a
 floor=1
 log=fire_log
-config=iot:192.168.1.11;signal:smoke_detected;
+config=iot:192.168.1.11;signal:smoke_detected:sensor;
  
  
-[smoke-detector-192003]
+SMOKE
 type=smokeDetector
 room=room_3_a
 floor=1
 log=fire_log
-config=iot:192.168.1.11;signal:smoke_detected;
+config=iot:192.168.1.11;signal:smoke_detected:sensor;

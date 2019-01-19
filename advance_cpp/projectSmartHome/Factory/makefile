@@ -30,27 +30,20 @@ $(TARGET): $(OBJECTS) libs
 include depends
 
 depends:
-	$(CC) -MM -I$(INC_DIR) -I$(INC_DIR1) -I$(INC_DIR2) $(SOURCES) > depends
+	$(CC) -MM -I$(INC_DIR) -I$(INC_DIR1) -I$(INC_DIR2) -I$(INC_DIR3) $(SOURCES) > depends
 
 libs:
 	make -C	../Sensors/SmokeSensore
 	make -C	../Sensors/TempSensore
 	make -C ../Controlers/Sprinkler
 	make -C ../Controlers/HVAC
-#libs: mklib 
-#	$(CC) $(CPPFLAGS) -shared $(libSOURCESTemp) -fPIC -o $(LIB_PATH)/libTEMP.so
-#	$(CC) $(CPPFLAGS) -shared $(libSOURCESFire) -fPIC -o $(LIB_PATH)/libSMOKE.so
-
-
-#mklib:
-#	mkdir -p $(LIB_PATH)
 
 clean:
 	make -C ../Controlers/HVAC	clean
 	make -C ../Controlers/Sprinkler	clean
 	make -C	../Sensors/SmokeSensore	clean
 	make -C	../Sensors/TempSensore	clean
-	rm *.o *.out depends
+	-rm *.o *.out depends
 	
 run: $(TARGET)
 	./$(TARGET)

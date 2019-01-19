@@ -15,6 +15,7 @@
 #include "SmartHome.h"
 #include "Reader.h"
 #include "IAgent.h"
+#include "AgentHandler.h"
 
 void SmartHome::Print()
 {
@@ -81,4 +82,7 @@ SmartHome::SmartHome(const std::string& configPath)
     Reader sh1(configPath,configVec);
     BuildAgent(configVec);
     Print();
+    AgentHandler Ah(m_Agents);
+    std::cout<<std::endl<<std::endl<<"print agent Handler"<<std::endl;
+    Ah.Print();
 }

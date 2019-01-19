@@ -18,9 +18,9 @@
 class SensorHandler
 {
 public:
-	SensorHandler();
-	~SensorHandler();
 	void Insert(IAgent* _agent, const EventKey& _key);
+	//for debug
+	void Print();
 private:
 	std::map<EventKey, IAgent*> m_sensorsContainer;
 };

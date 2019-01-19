@@ -36,8 +36,7 @@ void EventKey::SetEvent(const std::string& eventType ,const std::string& floor ,
 
 void EventKey::PrintEvent()
 {
-using namespace std;
-	cout<< endl<<m_eventType<< endl<<m_floor<< endl<<m_room<<endl;
+	std::cout<< std::endl<<m_eventType<< std::endl<<m_floor<< std::endl<<m_room<<std::endl;
 
 }
 
