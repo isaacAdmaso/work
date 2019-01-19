@@ -65,4 +65,4 @@ cleanlib:clean
 	make -C $(AGENTMANAGER_PATH) cleanlib
 	make -C ../Factory/AgentFactory clean 
 	-rm $(LIB_PATH)/*.so
-	-rm $(READER_PATH)/*.so
+	-rm $(READER_LIB_PATH)/*.so
