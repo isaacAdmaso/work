@@ -13,13 +13,20 @@
 #include <vector>
 #include <IAgent.h>
 #include <string>
+#include "uncopy.h"
+#include "AgentHandler.h"
+#include "IServer.h"
 
-class MyServer
+
+class MyServer:private Uncopy, public IServer
 {
 public:
-    MyServer();
-    ~MyServer();
+    MyServer(std::vector<IAgent::AgentConfig>& _agents);
+    virtual void Run();
+    //for debug
+    virtual void Print();
 private:
+    AgentHandler m_agentManager;
 };
 
 #endif //__MYSERVER1_H__

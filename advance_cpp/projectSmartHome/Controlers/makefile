@@ -11,7 +11,7 @@ INC_DIR=../../common
 INC_DIR1=../EventKey
 INC_DIR2=../Event
 INC_DIR3=../IAgent
-INC_DIR4=../IServer
+INC_DIR4=../Server/IServer
 INC_DIR5=./HVAC
 INC_DIR6=./Sprinkler
 
@@ -35,7 +35,7 @@ SOURCES=muTest.cpp
 #libSOURCESTemp=$(libSOURCES)
 #libSOURCESTemp+=./TempSensore/TempSensor.cpp
 ## all .o files in this directory are my objects
-OBJECTS=$(SOURCES:.cpp=.o)
+OBJECTS= $(SOURCES:.cpp=.o)
 
 all: $(TARGET)
 

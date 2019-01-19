@@ -19,11 +19,11 @@ class IAgent;
 
 class IServer: private Uncopy
 {
-public :
-	IServer();
+public:
 	virtual ~IServer();
-	virtual void SubscribeController(IAgent* _agent, const EventKey& _eventkey) = 0;
-	virtual void SubscribeSensor(IAgent* _agent, const EventKey& _eventkey) = 0;
+    virtual void Run() = 0;
+	//for debug
+    virtual void Print() = 0;
 };
 #endif
 

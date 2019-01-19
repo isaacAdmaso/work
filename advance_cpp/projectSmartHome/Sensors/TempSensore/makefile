@@ -11,7 +11,7 @@ INC_DIR=../../../common
 INC_DIR1=../../EventKey
 INC_DIR2=../../Event
 INC_DIR3=../../IAgent
-INC_DIR4=../../IServer
+INC_DIR4=../../Server/IServer
 
 
 CPPFLAGS += -I$(INC_DIR4) 
@@ -22,7 +22,7 @@ CPPFLAGS += -I$(INC_DIR3)
 
 # all .c files in this directory are my sources
 SOURCES=muTest.cpp
-LibSOURCES=../../IServer/IServer.cpp
+LibSOURCES=../../Server/IServer/IServer.cpp
 LibSOURCES+=../../EventKey/EventKey.cpp
 LibSOURCES+=../../Event/Event.cpp
 LibSOURCES+=../../IAgent/IAgent.cpp

@@ -7,9 +7,9 @@ CPPFLAGS+= -I./HandlerC
 CPPFLAGS+= -I./HandlerS
 CPPFLAGS+= -I./AgentDispatcher
 CPPFLAGS+= -I../EventKey
-CPPFLAGS+= -I../Factory
+CPPFLAGS+= -I../Factory/AgentFactory
 CPPFLAGS+= -I../IAgent
-CPPFLAGS+= -I../IServer
+CPPFLAGS+= -I../Server/IServer
 all:libs
 
 
@@ -17,9 +17,9 @@ SOURCES=./HandlerC/ControllerHandler.cpp
 SOURCES+=./HandlerS/SensorHandler.cpp
 SOURCES+=./AgentDispatcher/AgentHandler.cpp
 SOURCES+=../EventKey/EventKey.cpp
-SOURCES+=../Factory/AgentFactory.cpp
+SOURCES+=../Factory/AgentFactory/AgentFactory.cpp
 SOURCES+=../IAgent/IAgent.cpp
-SOURCES+=../IServer/IServer.cpp
+SOURCES+=../Server/IServer/IServer.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 
 include depends

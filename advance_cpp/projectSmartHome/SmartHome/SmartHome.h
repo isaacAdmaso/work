@@ -20,6 +20,7 @@ class SmartHome:private Uncopy
 {
 public:
     SmartHome(const std::string& configPath);
+    ~SmartHome();
     bool BuildAgent(std::vector<std::string>& configVec);
     //for debug
     void Print();

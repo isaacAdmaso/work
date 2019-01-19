@@ -10,7 +10,7 @@ all:$(TARGET)
 CPPFLAGS= -I../../common -pedantic -Wall -Werror  -g -ansi -Wconversion -std=c++03
 CPPFLAGS+= -I../Configuration
 CPPFLAGS+= -I../IAgent
-CPPFLAGS+= -I../IServer
+CPPFLAGS+= -I../Server/IServer
 CPPFLAGS+= -I../EventKey
 CPPFLAGS+= -I../AgentHandler/AgentDispatcher
 CPPFLAGS+= -I../AgentHandler/HandlerC
@@ -27,11 +27,11 @@ dynamicReader:
 
 dynamicAGENTMANAGER:
 	make -C $(AGENTMANAGER_PATH) libs
-	make -C ../Factory libs
+	make -C ../Factory/AgentFactory libs
 
 libs: dynamicReader dynamicAGENTMANAGER
 
-SOURCES=	$(TARGET).cpp SmartHome.cpp ../IAgent/IAgent.cpp
+SOURCES=	$(TARGET).cpp SmartHome.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 
 $(TARGET): $(OBJECTS) libs
@@ -63,6 +63,6 @@ cleanlib:clean
 	make -C ../../Processor cleanlib
 	make -C $(READER_PATH) cleanlib
 	make -C $(AGENTMANAGER_PATH) cleanlib
-	make -C ../Factory clean 
+	make -C ../Factory/AgentFactory clean 
 	-rm $(LIB_PATH)/*.so
 	-rm $(READER_PATH)/*.so

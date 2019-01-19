@@ -30,7 +30,7 @@ bool ISensore::Init()
 {
 	EventKey eventKey(m_agentData.m_type,m_agentData.m_floor,m_agentData.m_room);
 	
-	m_agentData.m_server->SubscribeSensor(this, eventKey);
+	//m_agentData.m_server->SubscribeSensor(this, eventKey);
 	return true;
 }
 

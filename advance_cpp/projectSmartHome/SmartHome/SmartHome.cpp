@@ -17,6 +17,36 @@
 #include "IAgent.h"
 #include "AgentHandler.h"
 
+SmartHome::SmartHome(const std::string& configPath)
+{
+    std::vector<std::string> configVec; 
+    Reader sh1(configPath,configVec);
+    BuildAgent(configVec);
+    Print();
+    AgentHandler Ah(m_Agents);
+    std::cout<<std::endl<<std::endl<<"print agent Handler"<<std::endl;
+    Ah.Print();
+    std::cout<<std::endl<<std::endl<<"agent Handler Run"<<std::endl;
+    Ah.Run();
+}
+
+
+SmartHome::~SmartHome()
+{
+}
+
+void SmartHome::Print()
+{
+    int line = 0;
+    for (std::vector<IAgent::AgentConfig>::const_iterator i = m_Agents.begin();\
+    i != m_Agents.end(); ++i)
+    {
+        std::cout<<std::endl <<"************agent: "<< line++<<"*************" <<std::endl;
+        std::cout << *i ;
+    }
+    std::cout<<std::endl;
+}
+
 void SmartHome::ParseLine(std::string& _line,std::string& _rtLine)
 {
     std::stringstream tokenInLIne(_line);
@@ -64,28 +94,3 @@ bool SmartHome::BuildAgent(std::vector<std::string>& configVec)
     return true;
 }
 
-
-SmartHome::SmartHome(const std::string& configPath)
-{
-    std::vector<std::string> configVec; 
-    Reader sh1(configPath,configVec);
-    BuildAgent(configVec);
-    Print();
-    AgentHandler Ah(m_Agents);
-    std::cout<<std::endl<<std::endl<<"print agent Handler"<<std::endl;
-    Ah.Print();
-    std::cout<<std::endl<<std::endl<<"agent Handler Run"<<std::endl;
-    Ah.Run();
-}
-
-void SmartHome::Print()
-{
-    int line = 0;
-    for (std::vector<IAgent::AgentConfig>::const_iterator i = m_Agents.begin();\
-    i != m_Agents.end(); ++i)
-    {
-        std::cout<<std::endl <<"************agent: "<< line++<<"*************" <<std::endl;
-        std::cout << *i ;
-    }
-    std::cout<<std::endl;
-}

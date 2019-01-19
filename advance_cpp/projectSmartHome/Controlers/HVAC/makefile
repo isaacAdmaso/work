@@ -10,7 +10,7 @@ CPPFLAGS= -pedantic -Wall -Werror  -g -ansi -Wconversion
 INC_DIR=../../../common
 INC_DIR1=../../EventKey
 INC_DIR2=../../IAgent
-INC_DIR3=../../IServer
+INC_DIR3=../../Server/IServer
 
 
 CPPFLAGS += -I$(INC_DIR) 
@@ -20,7 +20,7 @@ CPPFLAGS += -I$(INC_DIR3)
 
 # all .c files in this directory are my sources
 SOURCES=muTest.cpp
-LibSOURCES=../../IServer/IServer.cpp
+LibSOURCES=../../Server/IServer/IServer.cpp
 LibSOURCES+=../../EventKey/EventKey.cpp
 LibSOURCES+=../../IAgent/IAgent.cpp
 LibSOURCES+=./HVAC.cpp

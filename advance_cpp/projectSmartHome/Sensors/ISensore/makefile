@@ -10,7 +10,7 @@ INC_DIR=../../../common
 INC_DIR1=../../EventKey
 INC_DIR2=../../Event
 INC_DIR3=../../IAgent
-INC_DIR4=../../IServer
+INC_DIR4=../../Server/IServer
 
 
 CPPFLAGS += -I$(INC_DIR4) 
@@ -21,7 +21,7 @@ CPPFLAGS += -I$(INC_DIR3)
 
 # all .c files in this directory are my sources
 SOURCES=$(wildcard *.cpp)
-SOURCES+=../../IServer/IServer.cpp
+SOURCES+=../../Server/IServer/IServer.cpp
 SOURCES+=../../EventKey/EventKey.cpp
 SOURCES+=../../Event/Event.cpp
 SOURCES+=../../IAgent/IAgent.cpp
