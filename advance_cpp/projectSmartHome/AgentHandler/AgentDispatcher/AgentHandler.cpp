@@ -36,6 +36,12 @@ AgentHandler::AgentHandler(std::vector<IAgent::AgentConfig>& _agentsInput)
 
 }
 
+void AgentHandler::Run()
+{
+    m_sensorHandler.Run();
+    m_controllerHandler.Run();
+}
+
 void AgentHandler::Print()
 {
     std::cout << "*******SENSORS******"<<std::endl;

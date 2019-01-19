@@ -21,8 +21,9 @@ class ControllerHandler: private Uncopy
 {
 public:
 	void Insert(IAgent* _agent, const EventKey& _key);
+	void Run();
+	//for debug
 	void Print();
-
 private:
 	std::map<EventKey, std::vector<IAgent*> > m_controllerContainer;
 };

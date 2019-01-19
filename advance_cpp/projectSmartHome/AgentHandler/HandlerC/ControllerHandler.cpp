@@ -31,3 +31,13 @@ void ControllerHandler::Insert(IAgent* _agent, const EventKey& _eventkey)
 	m_controllerContainer[_eventkey].push_back(_agent);
 }
 
+void ControllerHandler::Run()
+{
+	for (std::map<EventKey, std::vector<IAgent*> >::iterator it=m_controllerContainer.begin(); it!=m_controllerContainer.end(); ++it)
+    {
+    	for (std::vector<IAgent*>::iterator itVec=(it->second).begin(); itVec!=(it->second).end(); ++itVec)
+		{
+			(*itVec)->Do();
+		}
+	}
+}

@@ -18,6 +18,7 @@ class Event
 {
 public:
 	Event();
+	Event(Event& _e);
 	Event(const std::string& eventType,const std::string& floor,const std::string& room);
 	~Event();
 	void SetEvent(const std::string& eventType ,const std::string& floor = "1",const std::string& room = "1");

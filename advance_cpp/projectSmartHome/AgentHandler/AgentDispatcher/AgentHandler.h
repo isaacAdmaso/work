@@ -21,6 +21,7 @@ class AgentHandler:private Uncopy
 {
 public:
     AgentHandler(std::vector<IAgent::AgentConfig>& _agentsInput);
+    void Run();
     void Print();
 private:
 	ControllerHandler m_controllerHandler;

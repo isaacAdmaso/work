@@ -33,3 +33,10 @@ void SensorHandler::Insert(IAgent* _agent, const EventKey& _key)
 	}
 }
 
+void SensorHandler::Run()
+{
+    for (std::map<EventKey, IAgent*>::iterator it=m_sensorsContainer.begin(); it!=m_sensorsContainer.end(); ++it)
+    {
+		(it->second)->Do();
+	}
+}

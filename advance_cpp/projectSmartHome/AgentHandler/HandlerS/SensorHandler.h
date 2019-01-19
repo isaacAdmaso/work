@@ -19,6 +19,7 @@ class SensorHandler
 {
 public:
 	void Insert(IAgent* _agent, const EventKey& _key);
+	void Run();
 	//for debug
 	void Print();
 private:

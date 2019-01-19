@@ -22,6 +22,12 @@ Event::Event()
 }
 
 
+Event::Event(Event& _e)
+:m_key(_e.m_key)
+{
+    GeTime();
+}
+
 void Event::GeTime()
 {
     struct timeval tv;
