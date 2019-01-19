@@ -30,7 +30,7 @@ dynamicPROC:
 
 
 #$(wildcard *.cpp)
-SOURCES=	$(TARGET).cpp  ../../Processor/App/App.cpp SmartHome.cpp
+SOURCES=	$(TARGET).cpp  ../../Processor/App/App.cpp Reader.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 
 $(TARGET): $(OBJECTS) libs

@@ -11,7 +11,7 @@ int main(int argc, char *argv[]){
 
     VContainer* Cpp;
     std::vector<std::string> com;
-    char COMMAND[][MIN] = {"../projectSmartHome/Configuration/smtestconf.txt","vector"};
+    char COMMAND[][MIN] = {"../projectSmartHome/Configuration/smtestconf.input","vector"};
 
     if(argc < MIN)
         com.insert(com.begin(),COMMAND,COMMAND + (sizeof(COMMAND)/sizeof(COMMAND[0])));

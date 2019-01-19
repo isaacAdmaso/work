@@ -1,4 +1,4 @@
-TARGET=muTest
+TARGET=main
 LIB_PATH= ./lib
 CC=g++
 

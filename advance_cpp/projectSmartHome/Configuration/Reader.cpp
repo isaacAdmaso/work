@@ -1,5 +1,5 @@
 /**
- * @file SmartHome.cpp
+ * @file Reader.cpp
  * @author your name (you@domain.com)
  * @brief 
  * @version 0.1
@@ -8,18 +8,18 @@
  * @copyright Copyright (c) 2019
  * 
  */
-#include "SmartHome.h"
+#include "Reader.h"
 #include "App.h"
 #include "VContainer.h"
 
 
 
-SmartHome::SmartHome(const std::string& _config)
+Reader::Reader(const std::string& _config,std::vector<std::string>& _configVec)
 {
-    CreateFrom(_config);
+    CreateFrom(_config,_configVec);
 }
 
-void SmartHome::CreateFrom(const std::string& _config)
+void Reader::CreateFrom(const std::string& _config,std::vector<std::string>& _configVec)
 {
     std::vector<std::string> com;
     std::string COMMAND[] = {_config,"vector"};
@@ -30,5 +30,6 @@ void SmartHome::CreateFrom(const std::string& _config)
 
     App application(com);
     VContainer* Cpp = (VContainer*)application.Run();
-    Cpp->PrintC();
+    for (unsigned int i = 0; i < (Cpp->my_Container).size(); i++) 
+        _configVec.push_back((Cpp->my_Container)[i]); 
 }
