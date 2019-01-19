@@ -26,5 +26,6 @@ void VContainer::PrintC()
         std::cout<<std::endl <<"************agent: "<< line++<<"*************" <<std::endl;
         std::cout << *i << ' ';
     }
+    std::cout<<std::endl;
 }
 

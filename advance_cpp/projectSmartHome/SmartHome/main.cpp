@@ -8,7 +8,7 @@
  
 int main(int argc, char *argv[]){
 
-    std::string configPath = "../Configuration/smtestconf.txt";
+    std::string configPath = "../Configuration/smtestconf.input";
     SmartHome sh1(configPath);
 
     return 0;
