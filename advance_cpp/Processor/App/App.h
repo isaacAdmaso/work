@@ -13,14 +13,16 @@
 //Process
 #include <vector>
 #include <string>
+#include "uncopy.h"
 #include "ITx.h"
 #include "Cfactory.h"
 
 
-class App
+class App:private Uncopy
 {
 public:
     App(std::vector<std::string>& _com);
+    ~App();
     Idest* Run();
 
 private:

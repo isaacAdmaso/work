@@ -45,9 +45,16 @@ std::string FileIn::GetString()
         {
             std::getline (m_file, tempLine, ' ');
             while (!tempLine.length() || (tempLine.length() == 1 && isspace(tempLine[0])))
-                std::getline(m_file, tempLine, ' '); 
+                std::getline(m_file, tempLine, ' ');
 
-        } catch (std::ifstream::failure e) {
+            if(isspace(*(tempLine.end()-1))) 
+                tempLine.erase(tempLine.end()-1);
+
+            if(isspace(*(tempLine.begin()))) 
+                tempLine.erase(tempLine.begin());
+
+        } 
+        catch (std::ifstream::failure e) {
             ErrMsg("GetString");
         }
     }

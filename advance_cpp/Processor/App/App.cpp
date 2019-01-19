@@ -39,6 +39,12 @@ void App::CreateProcH(Cfactory& factory,std::string _s,std::vector<ITx*>& _proc,
     }
 }
 
+App::~App()
+{
+    delete m_source;
+    delete m_proc;
+    delete m_dest;
+}
 void App::CreateProc(std::vector<std::string>& _com, iter_t curr)
 {
     Cfactory factory;

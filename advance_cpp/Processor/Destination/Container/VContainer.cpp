@@ -23,7 +23,7 @@ void VContainer::PrintC()
     for (std::vector<std::string>::const_iterator i = my_Container.begin();\
     i != my_Container.end(); ++i)
     {
-        std::cout<<std::endl <<"line: "<< line++ <<std::endl;
+        std::cout<<std::endl <<"************agent: "<< line++<<"*************" <<std::endl;
         std::cout << *i << ' ';
     }
 }
