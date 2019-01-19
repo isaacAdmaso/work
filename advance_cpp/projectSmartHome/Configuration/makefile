@@ -1,5 +1,7 @@
 TARGET=main
 READER_LIB_PATH= ../../Processor/lib
+LIB_PATH= ../lib
+
 CC=g++
 
 all:$(TARGET)
@@ -20,27 +22,37 @@ CPPFLAGS+= -I../../Processor/App
 
 
 
-.PHONY:	 dynamicPROC 
-libs: 	 dynamicPROC
+.PHONY:	 dynamicReader 
 
 dynamicPROC:
 	make -C ../../Processor/Source libs
 	make -C ../../Processor/Processor libs
 	make -C ../../Processor/Destination libs
 
+dynamicReader:dynamicPROC
+
+
 
 #$(wildcard *.cpp)
-SOURCES=	$(TARGET).cpp  ../../Processor/App/App.cpp Reader.cpp
+SOURCES=	$(TARGET).cpp
+LibSOURCES= ../../Processor/App/App.cpp Reader.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 
 $(TARGET): $(OBJECTS) libs
 	@echo Compilimg $(TARGET)
-	$(CC) $(OBJECTS) -o $(TARGET).out -Wl,-rpath=$(READER_LIB_PATH) -L$(READER_LIB_PATH)  -lPROC -lSOURCE -lDEST  -ldl
+	$(CC) $(OBJECTS) -o $(TARGET).out -Wl,-rpath=$(LIB_PATH) -L$(LIB_PATH)  -lREADER -Wl,-rpath=$(READER_LIB_PATH) -L$(READER_LIB_PATH)  -lPROC -lSOURCE -lDEST  -ldl
 
 include depends
 
 depends:
 	$(CC) -MM $(CPPFLAGS) $(SOURCES) > depends
+
+
+libs: mklib dynamicReader
+	$(CC) $(CPPFLAGS) -shared $(LibSOURCES) -fPIC -o $(LIB_PATH)/libREADER.so
+
+mklib:
+	mkdir -p $(LIB_PATH)
 
 run: $(TARGET)
 	./$(TARGET).out
