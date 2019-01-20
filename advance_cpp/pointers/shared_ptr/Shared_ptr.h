@@ -10,6 +10,7 @@
  */
 #ifndef __SHAREDPTR_H__
 #define __SHAREDPTR_H__
+#include <iostream>
 
 template<class T>
 class RefCounter
@@ -18,8 +19,9 @@ public:
     RefCounter(T* _ptr);
     ~RefCounter();
     int  Increment(){count++; return count;}
-    int  Decrement(){count--; return count;}
+    int  Decrement(){Destroy(); return count;}
     T& operator*();
+    RefCounter& operator=(RefCounter& _rc );
     const T& operator*() const;
     T* operator->();
     const T* operator->() const;
@@ -29,6 +31,11 @@ private:
     T* m_ptr;
     int count;
 };
+
+void print(int _count)
+{
+    //std::cout<< std::endl<<_count<<std::endl;
+}
 
 template<class T>
 RefCounter<T>::RefCounter(T* _ptr)
@@ -43,17 +50,19 @@ RefCounter<T>::RefCounter(T* _ptr)
         count = 0;
         m_ptr = nullptr;
     }
+    print(count);
 };
 
 template<class T>
 void RefCounter<T>::Destroy()
 {
-    --count;
-    if(0 >= count)
+    count -= 1;
+    if((0 >= count) && (m_ptr))
     {
         delete m_ptr;
         m_ptr = nullptr;
     }
+    print(count);
 };
 
 template<class T>
@@ -71,13 +80,15 @@ T& RefCounter<T>::operator*()
         temp = new T;
         *temp = *m_ptr;
     }
+    print(count);
     return *temp; 
 };
 
 template<class T>
 const T& RefCounter<T>::operator*()const
 {
-    return *m_ptr;
+    print(count);
+    return m_ptr;
 };
 
 template<class T>
@@ -89,18 +100,32 @@ T* RefCounter<T>::operator->()
         temp = new T;
         *temp = *m_ptr;
     }
+    print(count);
     return temp; 
 };
 
 template<class T>
+RefCounter<T>& RefCounter<T>::operator=(RefCounter<T>& _rc )
+{
+    Destroy();
+    m_ptr = _rc.m_ptr;
+    count = _rc.count;
+    count++;  
+    return this;  
+}
+
+
+template<class T>
 const T* RefCounter<T>::operator->() const
 {
+    print(count);
     return m_ptr;
 };
 
 template<class T>
 RefCounter<T>::operator const void*() const
 {
+    print(count);
     return (const void*)m_ptr ;
 };
 
@@ -118,9 +143,19 @@ public:
     T* operator->();
     const T* operator->() const;
     operator const void*() const;
+    void swap(Shared_ptr& _pointer);
 private:
     RefCounter<T>* _rC;
 };
+
+template<class T>
+void Shared_ptr<T>::swap(Shared_ptr<T>& _pointer)
+{
+    RefCounter<T>* temp = _rC;
+    _rC = _pointer._rC;
+    _pointer._rC = temp;
+
+} 
 
 
 template <class T>
@@ -138,14 +173,14 @@ Shared_ptr<T>::~Shared_ptr()
 template <class T>
 Shared_ptr<T>::Shared_ptr(const Shared_ptr& _pointer )
 {
+    _rC = _pointer._rC;
     _rC->Increment();
 };
 
 template <class T>
 Shared_ptr<T>& Shared_ptr<T>::operator=(Shared_ptr& _pointer )
 {
-    if(!(_rC->Decrement()))
-        delete _rC;
+    _rC->Decrement();
     _rC = _pointer._rC;
     return *this;
 };
