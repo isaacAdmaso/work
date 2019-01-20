@@ -11,6 +11,7 @@
 #ifndef __AGENTFACTORY__
 #define __AGENTFACTORY__
 #include <string>
+#include <vector>
 #include "IAgent.h"
 #include "IServer.h"
 #include "uncopy.h"

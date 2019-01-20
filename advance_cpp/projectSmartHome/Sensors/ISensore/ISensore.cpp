@@ -35,13 +35,17 @@ bool ISensore::Init()
 }
 
 
-
+bool ISensore::Do()
+{
+	SendEvent();	
+    return true;
+}
 
 bool ISensore::SendEvent()
 {
 	std::string time,date;
     
-	Event event(m_agentData.m_type,m_agentData.m_floor,m_agentData.m_room,time,date);
+	Event event(m_agentData.m_type,m_agentData.m_floor,m_agentData.m_room);
     event.PrintEvent();
     return true;
 }

@@ -11,6 +11,7 @@
 #ifndef __ISERVER__
 #define __ISERVER__
 
+#include <vector>
 #include "uncopy.h"
 #include "IAgent.h"
 #include "EventKey.h"
@@ -20,6 +21,7 @@ class IAgent;
 class IServer: private Uncopy
 {
 public:
+    IServer();
 	virtual ~IServer();
     virtual void Run() = 0;
 	//for debug

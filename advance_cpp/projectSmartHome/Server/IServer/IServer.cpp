@@ -13,3 +13,7 @@
 IServer::~IServer()
 {
 }
+
+IServer::IServer()
+{
+}

@@ -9,7 +9,7 @@
 UNIT(ISENSORETest)
     IAgent::AgentConfig agent = {NULL,"ID","ISENSORE","Isens","1","23","config"} ;
     ISensore sensore(agent);
-    sensore.SendEvent();
+    sensore.Do();
 
 END_UNIT
 

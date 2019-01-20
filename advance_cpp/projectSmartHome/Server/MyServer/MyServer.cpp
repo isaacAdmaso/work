@@ -24,3 +24,11 @@ void MyServer::Run()
 {
     m_agentManager.Run();
 }
+
+
+extern "C" {
+	IServer* Create(std::vector<IAgent::AgentConfig>& _agents)
+	{
+		return new MyServer(_agents);
+	}
+}

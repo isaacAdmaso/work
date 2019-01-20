@@ -51,7 +51,7 @@ gdb: $(TARGET)
 	gdb -q ./$(TARGET).out
 
 val: $(TARGET)
-	valgrind -q --leak-check=full -v ./$(TARGET).out
+	valgrind -q --leak-check=full --show-leak-kinds=all -v ./$(TARGET).out
 	
 clean:
 	-rm *.o depends 

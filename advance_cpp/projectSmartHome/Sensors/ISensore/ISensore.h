@@ -20,9 +20,10 @@ public:
     ISensore(const AgentConfig& _agentConfig);
     virtual ~ISensore();
     virtual bool Init();
-	bool SendEvent();
+    virtual bool Do();
 
 protected:
+	bool SendEvent();
 	std::string m_config;
 };
 
