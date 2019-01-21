@@ -17,8 +17,11 @@
 class Fruit:public Item
 {
 public:
-    virtual void accept(Visitor& _visit);
+    Fruit(const std::string& _name, int _price,int weight);
     virtual int GetPrice();
+    virtual int accept(IVisitor& _visit);
+private:
+    int m_weight;
 };
 
 #endif //__FRUIT_H__

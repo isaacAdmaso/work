@@ -12,14 +12,15 @@
 #define __ITEM_H__
 #include <string>
 
-class Visitor;
+class IVisitor;
 
 
 class Item
 {
 public:
+    virtual ~Item();
     Item(const std::string& _name, int _price);
-    virtual void accept(Visitor& _visit) = 0;
+    virtual int accept(IVisitor& _visit) = 0;
     virtual int GetPrice() = 0;
 protected:
     std::string m_name;

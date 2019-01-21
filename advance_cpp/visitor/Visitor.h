@@ -14,11 +14,11 @@
 #include "Books.h"
 
 
-class Visitor
+class IVisitor
 {
 public:
-    void visit(Books& _b);
-    void visit(Fruit& _f);
+    virtual int visit(Books& _b) = 0;
+    virtual int visit(Fruit& _f) = 0;
 };
 
 

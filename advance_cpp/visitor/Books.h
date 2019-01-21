@@ -17,7 +17,8 @@
 class Books:public Item
 {
 public:
-    virtual void accept(Visitor& _visit);
+    Books(const std::string& _name, int _price);
+    virtual int accept(IVisitor& _visit);
     virtual int GetPrice();
 };
 
