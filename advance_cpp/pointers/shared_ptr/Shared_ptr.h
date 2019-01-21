@@ -5,6 +5,8 @@
  * @version 0.1
  * @date 2019-01-20
  * 
+ * 
+ * 
  * @copyright Copyright (c) 2019
  * 
  */
@@ -34,7 +36,7 @@ private:
 
 void print(int _count)
 {
-    //std::cout<< std::endl<<_count<<std::endl;
+    std::cout<< std::endl<<_count<<std::endl;
 }
 
 template<class T>
@@ -193,7 +195,7 @@ Shared_ptr<T>& Shared_ptr<T>::operator=(Shared_ptr& _pointer )
     }
     return *this;
 };
-
+/**TODO to wort on it */
 template <class T>
 T& Shared_ptr<T>::operator*()
 {
