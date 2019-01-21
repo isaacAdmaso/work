@@ -107,11 +107,14 @@ T* RefCounter<T>::operator->()
 template<class T>
 RefCounter<T>& RefCounter<T>::operator=(RefCounter<T>& _rc )
 {
-    Destroy();
-    m_ptr = _rc.m_ptr;
-    count = _rc.count;
-    count++;  
-    return this;  
+    if(m_ptr != _rc.m_ptr)
+    {
+        Destroy();
+        m_ptr = _rc.m_ptr;
+        count = _rc.count;
+        count++;  
+    }
+    return *this;  
 }
 
 
@@ -167,7 +170,10 @@ Shared_ptr<T>::Shared_ptr(T* _pointer)
 template <class T>
 Shared_ptr<T>::~Shared_ptr()
 {
-    _rC->Decrement();
+    if(!(_rC->Decrement()))
+    {
+
+    }
 };
 
 template <class T>
@@ -180,8 +186,11 @@ Shared_ptr<T>::Shared_ptr(const Shared_ptr& _pointer )
 template <class T>
 Shared_ptr<T>& Shared_ptr<T>::operator=(Shared_ptr& _pointer )
 {
-    _rC->Decrement();
-    _rC = _pointer._rC;
+    if(_rC != _pointer._rC)
+    {
+        _rC->Decrement();
+        _rC = _pointer._rC;
+    }
     return *this;
 };
 
