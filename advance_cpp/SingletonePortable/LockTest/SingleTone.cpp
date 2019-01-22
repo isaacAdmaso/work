@@ -33,5 +33,9 @@ int main(int argc, char const *argv[])
 		}
 	}
 		
+    for(int i = 0; i < NUM; ++i)
+	{
+		pthread_join(counters[i],nullptr);
+	}	
     return 0;
 }

@@ -2,7 +2,7 @@
 #include "Shared_ptr.h"
 
 
-void swap(Shared_ptr <int> _a, Shared_ptr <int> _b)
+void swap(Shared_ptr <int>& _a, Shared_ptr <int>& _b)
 {
     int temp = *_a;
     *_a = *_b;
@@ -29,6 +29,10 @@ using namespace std;
     Shared_ptr <int> p3 = new int(5);
     Shared_ptr <int> p4 = p3;
     Shared_ptr <int> p5 = new int(3);
+
+    //check operator *()const!!(on gdb)
+    p4 =\
+     p3;    
 
     cout<<"p3 old: "<<*p3<<endl;
     cout<<"p4 old: "<<*p4<<endl;

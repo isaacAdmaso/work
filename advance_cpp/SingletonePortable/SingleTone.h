@@ -5,6 +5,7 @@
 #ifndef __SINGLETON_H__
 #define __SINGLETON_H__
 #include <stdint.h>
+//#include "../pointers/shared_ptr/Shared_ptr.h"
 #include "Lock.h"
 
 
