@@ -26,13 +26,13 @@ public:
     }
     ~Complex(){}
     std::ostream& print(std::ostream& _os)const{_os<<"imaginary: "<<m_imag<<std::endl<<"real: "<<m_real<<std::endl;return _os;}
-    Complex<T>& operator=(Complex<T>& _other){m_real = _other.m_real;m_imag = _other.m_imag;return *this;}
-    friend Complex<T>& operator++(Complex<T>& _z){return _z.m_real++,_z;} 
-    friend Complex<T>& operator--(Complex<T>& _z){return _z.m_real--,_z;}
-    friend Complex<T>& operator+(Complex<T> _a,const Complex<T>& _b){return _a += _b;} 
-    friend Complex<T>& operator-(Complex<T> _a,const Complex<T>& _b){return _a -= _b;} 
-    Complex<T> operator++(int){Complex<T> temp = *this;m_real++;return temp;} 
-    Complex<T> operator--(int){m_real--;return *this;}
+    Complex<T>& operator=(const Complex<T>& _other){m_real = _other.m_real;m_imag = _other.m_imag;return *this;}
+    friend Complex<T> operator++(Complex<T>& _z){return _z.m_real++,_z;} 
+    friend Complex<T> operator--(Complex<T>& _z){return _z.m_real--,_z;}
+    friend Complex<T> operator+(Complex<T> _a,const Complex<T>& _b){return _a += _b;} 
+    friend Complex<T> operator-(Complex<T> _a,const Complex<T>& _b){return _a -= _b;} 
+    friend Complex<T> operator++(Complex<T>& _z,int){Complex<T> temp = _z;_z.m_real++;return temp;} 
+    friend Complex<T> operator--(Complex<T>& _z,int){Complex<T> temp = _z;_z.m_real++;return temp;}
     Complex<T>& operator+=(const Complex<T>& _other){m_real += _other.m_real;m_imag += _other.m_imag;return *this;} 
     Complex<T>& operator-=(const Complex<T>& _other){m_real -= _other.m_real;m_imag -= _other.m_imag;return *this;} 
 private:
