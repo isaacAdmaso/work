@@ -15,19 +15,23 @@
 #include "SmartHome.h"
 #include "Reader.h"
 #include "IAgent.h"
-#include "AgentHandler.h"
+#include "ServerFactory.h"
 
 SmartHome::SmartHome(const std::string& configPath)
 {
+    ServerFactory sf;
+    std::vector<IAgent::AgentConfig> _Agents;
     std::vector<std::string> configVec; 
+
     Reader sh1(configPath,configVec);
-    BuildAgent(configVec);
-    Print();
-    AgentHandler Ah(m_Agents);
-    std::cout<<std::endl<<std::endl<<"print agent Handler"<<std::endl;
-    Ah.Print();
-    std::cout<<std::endl<<std::endl<<"agent Handler Run"<<std::endl;
-    Ah.Run();
+    BuildAgent(configVec,_Agents);
+    m_server = sf.MakeServer("../lib/libSERVER.so",_Agents);
+    Print(_Agents);
+}
+
+void SmartHome::Run()
+{
+    m_server->Run();
 }
 
 
@@ -35,11 +39,11 @@ SmartHome::~SmartHome()
 {
 }
 
-void SmartHome::Print()
+void SmartHome::Print(std::vector<IAgent::AgentConfig>& _Agents)
 {
     int line = 0;
-    for (std::vector<IAgent::AgentConfig>::const_iterator i = m_Agents.begin();\
-    i != m_Agents.end(); ++i)
+    for (std::vector<IAgent::AgentConfig>::const_iterator i = _Agents.begin();\
+    i != _Agents.end(); ++i)
     {
         std::cout<<std::endl <<"************agent: "<< line++<<"*************" <<std::endl;
         std::cout << *i ;
@@ -55,7 +59,7 @@ void SmartHome::ParseLine(std::string& _line,std::string& _rtLine)
 
 }
 
-bool SmartHome::BuildAgent(std::vector<std::string>& configVec)
+bool SmartHome::BuildAgent(std::vector<std::string>& configVec,std::vector<IAgent::AgentConfig>& _Agents)
 {
     IAgent::AgentConfig agentData;
 
@@ -89,7 +93,7 @@ bool SmartHome::BuildAgent(std::vector<std::string>& configVec)
         ParseLine(line,inLine);
         agentData.m_configData = inLine;
 
-        m_Agents.push_back(agentData);   
+        _Agents.push_back(agentData);   
     } 
     return true;
 }

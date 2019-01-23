@@ -14,6 +14,7 @@
 #include <vector>
 #include "uncopy.h"
 #include "IAgent.h"
+#include "IServer.h"
 
 
 class SmartHome:private Uncopy
@@ -21,12 +22,13 @@ class SmartHome:private Uncopy
 public:
     SmartHome(const std::string& configPath);
     ~SmartHome();
-    bool BuildAgent(std::vector<std::string>& configVec);
-    //for debug
-    void Print();
+    void Run();
+    void Print(std::vector<IAgent::AgentConfig>& _Agents);
 private:
-    std::vector<IAgent::AgentConfig> m_Agents;
+    bool BuildAgent(std::vector<std::string>& configVec,std::vector<IAgent::AgentConfig>& _Agents);
     void ParseLine(std::string& _line,std::string& _rtLine);
+private:
+    IServer* m_server;
 };
 
 #endif //__SMARTHOME_H__

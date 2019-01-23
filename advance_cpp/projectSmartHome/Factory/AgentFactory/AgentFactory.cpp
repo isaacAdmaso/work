@@ -12,7 +12,7 @@
 #include <dlfcn.h>
 #include <string>
 
-const std::string AgentFactory::libPrefix = "../../lib/lib";
+const std::string AgentFactory::libPrefix = "../lib/lib";
 const std::string AgentFactory::libSuffix = ".so";
 
 AgentFactory::AgentFactory(IServer* _server)
