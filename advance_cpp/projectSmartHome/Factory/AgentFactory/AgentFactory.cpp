@@ -12,17 +12,26 @@
 #include <dlfcn.h>
 #include <string>
 
-const std::string AgentFactory::libPrefix = "../lib/lib";
+const std::string AgentFactory::libPrefix = "../../lib/lib";
 const std::string AgentFactory::libSuffix = ".so";
+
+AgentFactory::AgentFactory(IServer* _server)
+:m_server(_server)
+{
+}
+
 
 AgentFactory::~AgentFactory()
 {
+	m_server = 0;
 }
-IAgent* AgentFactory::MakeAgent(const IAgent::AgentConfig& _agentConfig)
+
+
+IAgent* AgentFactory::MakeAgent(IAgent::AgentConfig& _agentConfig)
 {
 	Create createAgent;
 	std::string libPath = libPrefix + _agentConfig.m_id + libSuffix;
-
+	_agentConfig.m_server = m_server;
 	void* handle = dlopen(libPath.c_str(), RTLD_LAZY);
 	createAgent = (Create)dlsym(handle, "Create");
 	IAgent* agent = createAgent(_agentConfig);

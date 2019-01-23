@@ -23,7 +23,7 @@ public:
 	IServer* MakeServer(const std::string& _lib ,std::vector<IAgent::AgentConfig>& _agents);
 
 private:
-	typedef IServer* (*Create)(std::vector<IAgent::AgentConfig>& _agents);
+	typedef IServer* (*CreateServer)(void* _agents);
 };
 
 #endif //__SERVERFACTORY__

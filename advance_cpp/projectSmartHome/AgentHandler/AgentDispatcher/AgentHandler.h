@@ -20,7 +20,7 @@
 class AgentHandler:private Uncopy
 {
 public:
-    AgentHandler(std::vector<IAgent::AgentConfig>& _agentsInput);
+    AgentHandler(std::vector<IAgent::AgentConfig>& _agentsInput,IServer* _server);
     void Run();
     void Print();
 private:

@@ -11,7 +11,7 @@
 #include "MyServer.h"
 
 MyServer::MyServer(std::vector<IAgent::AgentConfig>& _agents)
-:m_agentManager(_agents)
+:m_agentManager(_agents,this)
 {
 }
 
@@ -27,8 +27,9 @@ void MyServer::Run()
 
 
 extern "C" {
-	IServer* Create(std::vector<IAgent::AgentConfig>& _agents)
+	IServer* CreateServer(void* _agents)
 	{
-		return new MyServer(_agents);
+		std::vector<IAgent::AgentConfig>* agents = (std::vector<IAgent::AgentConfig>*) _agents; 
+		return new MyServer(*agents);
 	}
 }

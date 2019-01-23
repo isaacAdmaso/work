@@ -21,7 +21,6 @@ class IAgent;
 class IServer: private Uncopy
 {
 public:
-    IServer();
 	virtual ~IServer();
     virtual void Run() = 0;
 	//for debug

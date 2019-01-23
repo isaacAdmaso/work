@@ -11,14 +11,14 @@
 #ifndef __MYSERVER1_H__
 #define __MYSERVER1_H__
 #include <vector>
-#include <IAgent.h>
 #include <string>
 #include "uncopy.h"
-#include "AgentHandler.h"
+#include "IAgent.h"
 #include "IServer.h"
+#include "AgentHandler.h"
 
 
-class MyServer:private Uncopy, public IServer
+class MyServer:public IServer
 {
 public:
     MyServer(std::vector<IAgent::AgentConfig>& _agents);

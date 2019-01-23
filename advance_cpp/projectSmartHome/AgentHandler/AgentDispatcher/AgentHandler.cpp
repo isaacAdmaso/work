@@ -14,12 +14,12 @@
 #include "EventKey.h"
 
 
-AgentHandler::AgentHandler(std::vector<IAgent::AgentConfig>& _agentsInput)
+AgentHandler::AgentHandler(std::vector<IAgent::AgentConfig>& _agentsInput, IServer* _server)
 {
-    AgentFactory af;
+    AgentFactory af(_server);
     std::string sensor = "sensor";
 
-    for (std::vector<IAgent::AgentConfig>::const_iterator i = _agentsInput.begin();\
+    for (std::vector<IAgent::AgentConfig>::iterator i = _agentsInput.begin();\
     i != _agentsInput.end(); ++i)
     {
         EventKey key(i->m_type,i->m_floor,i->m_room);

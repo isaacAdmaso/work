@@ -21,7 +21,8 @@ typedef struct AgentConfig
 UNIT(FACTORY)
 using namespace std;
 
-    AgentFactory af;
+    IServer* Server = 0;
+    AgentFactory af(Server);
 
     IAgent::AgentConfig agent1 = {NULL,"HVAC","AC","AC","1","23","config"};
     IAgent::AgentConfig agent2 = {NULL,"SMOKE","FIRE","AC","1","23","config"};

@@ -1,5 +1,5 @@
 /**
- * @file AgentFactory.cpp
+ * @file ServerFactory.cpp
  * @author your name (you@domain.com)
  * @brief 
  * @version 0.1
@@ -16,14 +16,14 @@
 ServerFactory::~ServerFactory()
 {
 }
-IAgent* AgentFactory::MakeAgent(const IAgent::AgentConfig& _agentConfig)
-{
-	Create createAgent;
-	std::string libPath = libPrefix + _agentConfig.m_id + libSuffix;
 
-	void* handle = dlopen(libPath.c_str(), RTLD_LAZY);
-	createAgent = (Create)dlsym(handle, "Create");
-	IAgent* agent = createAgent(_agentConfig);
-	//agent->Init();
-	return agent;
+IServer* ServerFactory::MakeServer(const std::string& _lib ,std::vector<IAgent::AgentConfig>& _agents)
+{
+	CreateServer createServer;
+
+	void* handle = dlopen(_lib.c_str(), RTLD_LAZY);
+	std::cout<<dlerror()<<std::endl;
+	createServer = (CreateServer)dlsym(handle, "CreateServer");
+	IServer* Server = createServer((void*)&_agents);
+	return Server;
 }

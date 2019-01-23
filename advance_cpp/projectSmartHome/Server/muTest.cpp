@@ -3,13 +3,12 @@
 #include <vector>
 #include "mu_test.h"
 
-#include "ServerFactory.h"
+#include "MyServer.h"
 
 
 UNIT(server)
 using namespace std;
 
-    ServerFactory sf;
 
     IAgent::AgentConfig agent1 = {NULL,"HVAC","AC","AC","1","23","config"};
     IAgent::AgentConfig agent2 = {NULL,"SMOKE","FIRE","AC","1","23","sensor"};
@@ -23,11 +22,11 @@ using namespace std;
     agents.push_back(agent3);
     agents.push_back(agent4);
 
-    IServer* server = sf.MakeServer("../../lib/libSERVER.so",agents);
+    MyServer server(agents);
     cout<<endl<<"*****************SERVER RUN************"<<endl;
-    server->Run();
+    server.Run();
     cout<<endl<<"*****************SERVER PRINT************"<<endl;
-    server->Print();
+    server.Print();
 
 END_UNIT
 

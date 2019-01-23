@@ -20,14 +20,15 @@
 class AgentFactory: private Uncopy
 {
 public:
+	AgentFactory(IServer* _server);
 	~AgentFactory();
-	IAgent* MakeAgent(const IAgent::AgentConfig& _agentConfig);
+	IAgent* MakeAgent(IAgent::AgentConfig& _agentConfig);
 
 private:
 	typedef IAgent* (*Create)(const IAgent::AgentConfig&);
 	static const std::string libPrefix;
 	static const std::string libSuffix;
-	//IServer* m_server;
+	IServer* m_server;
 };
 
 #endif //__AGENTFACTORY__

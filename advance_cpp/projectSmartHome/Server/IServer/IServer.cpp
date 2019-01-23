@@ -14,6 +14,3 @@ IServer::~IServer()
 {
 }
 
-IServer::IServer()
-{
-}
