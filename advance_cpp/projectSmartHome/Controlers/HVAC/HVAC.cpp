@@ -32,7 +32,8 @@ bool HVAC::Init()
 
 bool HVAC::Do()
 {
-	std::cout<<"HVAC RUN "<<std::endl;
+	EventKey eventKey(m_agentData.m_type,m_agentData.m_floor,m_agentData.m_room);
+	eventKey.PrintEvent();
 	return true;
 }
 

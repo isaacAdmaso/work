@@ -16,6 +16,7 @@ CPPFLAGS+= -I../AgentHandler/AgentDispatcher
 CPPFLAGS+= -I../AgentHandler/HandlerC
 CPPFLAGS+= -I../AgentHandler/HandlerS
 CPPFLAGS+= -I../Factory/ServerFactory
+CPPFLAGS+= -I../MSGQ
 
 
 
@@ -66,6 +67,6 @@ cleanlib:clean
 	make -C $(READER_PATH) cleanlib
 	make -C $(AGENTMANAGER_PATH) cleanlib
 	make -C ../Factory/AgentFactory clean 
-	make -C ../Server 
+	make -C ../Server clean
 	-rm $(LIB_PATH)/*.so
 	-rm $(READER_LIB_PATH)/*.so

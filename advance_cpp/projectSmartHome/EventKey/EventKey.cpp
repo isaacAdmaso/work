@@ -10,6 +10,7 @@
  */
 #include "EventKey.h"
 #include <iostream> //for debug
+#include <stdio.h>
 
 EventKey::EventKey(const std::string& eventType, const std::string& floor,const std::string& room)
 :m_eventType(eventType),
@@ -36,8 +37,9 @@ void EventKey::SetEvent(const std::string& eventType ,const std::string& floor ,
 
 void EventKey::PrintEvent()
 {
-	std::cout<< std::endl<<m_eventType<< std::endl<<m_floor<< std::endl<<m_room<<std::endl;
-
+	printf("\n%s\n%s\n%s\n",m_eventType.c_str(),m_floor.c_str(),m_room.c_str());
+    fflush(stdout);
+	//std::cout<< std::endl<<m_eventType<< std::endl<<m_floor<< std::endl<<m_room<<std::endl;
 }
 
 bool EventKey::operator<(const EventKey& _secondEventKey)const

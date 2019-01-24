@@ -26,6 +26,7 @@ CPPFLAGS += -I$(INC_DIR6)
 CPPFLAGS += -I$(INC_DIR7) 
 CPPFLAGS += -I$(INC_DIR8) 
 CPPFLAGS += -I$(INC_DIR9) 
+CPPFLAGS+= -I../MSGQ
 
 # all .c files in this directory are my sources
 SOURCES=muTest.cpp
@@ -37,6 +38,7 @@ LibSOURCES+=$(INC_DIR5)/EventKey.cpp
 LibSOURCES+=$(INC_DIR6)/SensorHandler.cpp
 LibSOURCES+=$(INC_DIR7)/ControllerHandler.cpp
 LibSOURCES+=$(INC_DIR8)/AgentFactory.cpp
+LibSOURCES+=../MSGQ/Msgq.cpp
 
 # all .o files in this directory are my objects
 OBJECTS=$(SOURCES:.cpp=.o)
@@ -53,7 +55,7 @@ depends:
 	$(CC) -MM -I$(INC_DIR) -I$(INC_DIR1) -I$(INC_DIR2) -I$(INC_DIR3) -I$(INC_DIR4) -I$(INC_DIR5) $(SOURCES) > depends
 
 libs: mklib 
-	$(CC) $(CPPFLAGS) -shared $(LibSOURCES) -ldl -fPIC -o $(LIB_PATH)/libSERVER.so
+	$(CC) $(CPPFLAGS) -shared $(LibSOURCES) -ldl -lrt -fPIC -o $(LIB_PATH)/libSERVER.so
 	make -C ../AgentHandler
 
 mklib:

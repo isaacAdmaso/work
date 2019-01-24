@@ -8,12 +8,11 @@
  * @copyright Copyright (c) 2019
  * 
  */
-#include <time.h>		//for time and date
+#include <time.h>		    //for time and date
 #include <sys/time.h>		//for time and date
-#include <stdio.h>         //for sprintf
-#include <iostream> //for debug
-
-
+#include <stdio.h>          //for sprintf
+#include <iostream>         //for debug
+#include <unistd.h>
 #include "Event.h"
 
 
@@ -44,9 +43,10 @@ void Event::GeTime()
     strftime(date, sizeof date, "%Y-%m-%d", nowtm);
     strftime(time, sizeof time, "%H:%M:%S", nowtm);
     sprintf(eTime, "%s.%.3ld", time, tv.tv_usec/1000);
-
-	m_time = eTime;
-	m_date = date;	
+    Event* ptr =  const_cast<Event*> (this);
+	ptr->m_time = eTime;
+	ptr->m_date = date;	
+    sleep(1);
 }
 
 Event::Event(const std::string& eventType,const std::string& floor,const std::string& room)
@@ -73,5 +73,8 @@ bool Event::operator<(const Event& _secondEvent)const
 void Event::PrintEvent()
 {
     m_key.PrintEvent();
-    std::cout<<m_time<<std::endl<<m_date<<std::endl;
+    printf("%s\n%s\n",m_time.c_str(),m_date.c_str());
+    fflush(stdout);
+    //std::cout<<m_time<<std::endl<<m_date<<std::endl<<std::flush;
+
 }

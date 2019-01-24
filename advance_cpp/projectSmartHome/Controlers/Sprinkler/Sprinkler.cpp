@@ -32,7 +32,8 @@ bool Sprinkler::Init()
 
 bool Sprinkler::Do()
 {
-	std::cout<<"sprinkler sprinkle"<<std::endl;
+	EventKey eventKey(m_agentData.m_type,m_agentData.m_floor,m_agentData.m_room);
+	eventKey.PrintEvent();
 	return true;
 }
 

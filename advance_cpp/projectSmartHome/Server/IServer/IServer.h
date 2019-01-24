@@ -23,6 +23,7 @@ class IServer: private Uncopy
 public:
 	virtual ~IServer();
     virtual void Run() = 0;
+    virtual void PublishEvent() = 0;
 	//for debug
     virtual void Print() = 0;
 };
