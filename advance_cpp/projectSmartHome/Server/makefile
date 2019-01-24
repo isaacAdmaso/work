@@ -16,6 +16,8 @@ INC_DIR6=../AgentHandler/HandlerS
 INC_DIR7=../AgentHandler/HandlerC
 INC_DIR8=../Factory/AgentFactory
 INC_DIR9=./MyServer
+INC_DIR10=../MSGQ
+
 
 CPPFLAGS += -I$(INC_DIR) 
 CPPFLAGS += -I$(INC_DIR2) 
@@ -26,8 +28,7 @@ CPPFLAGS += -I$(INC_DIR6)
 CPPFLAGS += -I$(INC_DIR7) 
 CPPFLAGS += -I$(INC_DIR8) 
 CPPFLAGS += -I$(INC_DIR9) 
-CPPFLAGS+= -I../MSGQ
-
+CPPFLAGS += -I$(INC_DIR10)
 # all .c files in this directory are my sources
 SOURCES=muTest.cpp
 LibSOURCES=$(INC_DIR9)/MyServer.cpp
@@ -38,7 +39,7 @@ LibSOURCES+=$(INC_DIR5)/EventKey.cpp
 LibSOURCES+=$(INC_DIR6)/SensorHandler.cpp
 LibSOURCES+=$(INC_DIR7)/ControllerHandler.cpp
 LibSOURCES+=$(INC_DIR8)/AgentFactory.cpp
-LibSOURCES+=../MSGQ/Msgq.cpp
+LibSOURCES+=$(INC_DIR10)/Msgq.cpp
 
 # all .o files in this directory are my objects
 OBJECTS=$(SOURCES:.cpp=.o)
@@ -52,7 +53,7 @@ $(TARGET): $(OBJECTS) libs
 include depends
 
 depends:
-	$(CC) -MM -I$(INC_DIR) -I$(INC_DIR1) -I$(INC_DIR2) -I$(INC_DIR3) -I$(INC_DIR4) -I$(INC_DIR5) $(SOURCES) > depends
+	$(CC) -MM -I$(INC_DIR) -I$(INC_DIR2) -I$(INC_DIR3) -I$(INC_DIR4) -I$(INC_DIR5) -I$(INC_DIR6)  -I$(INC_DIR7) -I$(INC_DIR8) -I$(INC_DIR9) -I$(INC_DIR10) $(SOURCES) > depends
 
 libs: mklib 
 	$(CC) $(CPPFLAGS) -shared $(LibSOURCES) -ldl -lrt -fPIC -o $(LIB_PATH)/libSERVER.so
