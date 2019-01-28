@@ -19,7 +19,7 @@
 #define S(T)           	(sizeof(T)*CHAR_BIT)
 #define NELEMENT(x,y) 	(((x)%(y))?((x / y) + 1):(x / y))
 #define MASK(T)			~T(0)
-//#define OP(op)		   m_Bit[_index / S(T)] op T(1 << (_index % S(T)))	
+#define OP(op)		   m_Bit[_index / S(T)] op T(1 << (_index % S(T)))	
 
 namespace Advance_Cpp
 {

@@ -196,14 +196,16 @@ std::ostream& operator<<(std::ostream& _os, const BitSet<N,T>& _bs)
 template<size_t N,typename T>
 bool BitSet<N,T>::Get(size_t _index) const
 {
-  return (m_Bit[_index / S(T)] & (T(1) << (_index % S(T))));
+	return OP(&);
+  //return (m_Bit[_index / S(T)] & (T(1) << (_index % S(T))));
 }
 
 
 template<size_t N,typename T>
 void BitSet<N,T>::Set(size_t _index)
 {
-  m_Bit[_index/S(T)] |= T(1 << (_index%S(T)));
+	OP(|=);
+  	//m_Bit[_index/S(T)] |= T(1 << (_index%S(T)));
 }
 
 template<size_t N,typename T>
@@ -216,7 +218,8 @@ void BitSet<N,T>::Clear(size_t _index)
 template<size_t N,typename T>
 void BitSet<N,T>::Flip(size_t _index) 
 {
-  	m_Bit[_index/S(T)] ^= T(1 <<(_index%S(T)));
+	OP(^=);
+  	//m_Bit[_index/S(T)] ^= T(1 <<(_index%S(T)));
 }
 
 template<size_t N,typename T>
