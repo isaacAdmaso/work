@@ -47,7 +47,9 @@ public:
 
 	bool all() const;
 	bool any() const;
-	bool none() const; 
+	bool none() const;
+//for debug	 
+	bool operator==(const BitSet& _bs);
 private:
     T m_Bit[ NELEMENT(N,S(T))];
 	T* begin();

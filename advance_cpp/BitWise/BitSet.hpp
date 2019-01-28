@@ -119,6 +119,18 @@ struct And
 };
 
 
+
+template<typename T>
+struct Put
+{
+    T operator()(const T& m_bit,const T& _otherBs)
+    {
+        return m_bit = _otherBs;
+    }
+
+};
+
+
 template<typename T>
 struct Counter
 {
@@ -176,6 +188,15 @@ BitSet<N,T>& BitSet<N,T>::operator&= (const BitSet& _bs)
   	std::transform (begin(), end(), _bs.begin(),begin(), BitSet_imp::And<T>());
   	return *this;
 }
+
+
+template<size_t N,typename T>
+BitSet<N,T>& BitSet<N,T>::operator<<=(size_t _nos)
+{
+	std::transform (begin(), end(), begin() + (_nos/S(T)) ,begin(), BitSet_imp::Put<T>());
+  	return *this;
+}
+
 
 
 template<size_t N,typename T>
@@ -243,7 +264,14 @@ bool BitSet<N,T>::none() const
 	return !(c.m_count);
 }
 
-
+template<size_t N,typename T>
+bool BitSet<N,T>::operator==(const BitSet& _bs)
+{
+	for(unsigned int i = 0; i < NELEMENT(N,S(T)); i++)
+		if(m_Bit[i] != _bs.m_Bit[i])
+			return false;
+	return true;
+}
 
 
 }
