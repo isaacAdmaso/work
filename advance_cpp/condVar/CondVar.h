@@ -10,14 +10,17 @@
  */
 #ifndef __CONDVAR_H__
 #define __CONDVAR_H__
+#include <pthread.h>
+#include "Mutex.h"
 
 class CondVar
 {
 public:
-    CondVar();
+    CondVar(Mutex& _mutex);
     ~CondVar();
 private:
-
+    pthread_cond_t m_condVar;
+    Mutex&          m_mutex;
 };
 
 

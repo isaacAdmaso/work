@@ -8,7 +8,6 @@
  * @copyright Copyright (c) 2019
  * 
  */
-#include <iostream>
 #include <errno.h>
 #include "Mutex.h"
 
@@ -26,9 +25,11 @@ Mutex::~Mutex()
     int rtVal = 0;
     
     if(rtVal = pthread_mutex_destroy(&m_mutex))
-        throw rtVal; 
+     {
+        if(errno == EBUSY)
+            throw errno;
+    }
 }
-
 void Mutex::lock()
 {
     int rtVal = 0;
