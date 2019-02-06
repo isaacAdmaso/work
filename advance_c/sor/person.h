@@ -9,13 +9,15 @@ typedef struct
 	char animal[32];
 } Person;
 
-int cmp(Person* _a,Person* _b)
+int cmp(const void* a, const void* b)
 {
+	Person* _a = (Person*)a;
+	Person* _b = (Person*)b;
     return _a->random > _b->random;
 }
 
 
-Person people[] = {
+Person people[100] = {
 	{1, 708465, "Manatee"},
 	{2, 804738, "Cormorant, flightless"},
 	{3, 432634, "Giant anteater"},
