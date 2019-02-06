@@ -38,10 +38,12 @@ int cmp2(const void* a, const void* b)
     return *_a > *_b;
 }
 
+void sort(int* arr , int n)	;
+
 
 int main()
 {
-    int i,a[] ={1,2,3,4,5,4,3,2,1,1,2,3,4,5,5};
+    int i,a[15] ={1,2,3,4,5,4,3,2,1,1,2,3,4,5,5};
     
 	Sort(people,sizeof(people)/sizeof(people[0]),sizeof(people[0]),cmp);
 
@@ -50,8 +52,10 @@ int main()
         printf("%d,",people[i].random);
 	}
 	printf("\n");
+/*
     Sort(a,sizeof(a)/sizeof(a[0]),sizeof(a[0]),cmp2);
-
+*/
+	sort(a,15);
     for( i = 0;i < sizeof(a)/sizeof(a[0]);++i)
 	{
 		printf("%d,",a[i]);
@@ -63,3 +67,18 @@ int main()
 
 
 
+void sort(int* arr , int n)	
+{
+	int i;
+	for( i = 1 ; i < n ; ++i )
+	{
+		int j = i-1;
+		int temp = arr[i];
+		while((j >= 0) && (temp < arr[j]))
+		{
+			arr[j+1] = arr[j];
+			--j;
+		}
+		arr[j + 1] = temp;
+	}
+}	

@@ -5,6 +5,8 @@
 *.bz2
 *.rar
 *.o
+*.s
+*.i
 *.bak
 *.a
 *.so

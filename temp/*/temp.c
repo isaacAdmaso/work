@@ -1,7 +1,23 @@
+/**
+ 
+ solution -simple "print what i want" 
+ 
+ my_size spin on  sizeof() operator
+ 
+ and how to change CONST int 
+ 
+ * 
+ */
+
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdio.h>
 
+
+#define NUM 30
+#define my_size(type) ((char*)(&(type) + 1) -(char*)(&(type)))
+
+/** tandem first q */
 void solution(int N) 
 {
     for(int i = 1; i <= N; ++i)
@@ -22,67 +38,32 @@ void solution(int N)
             printf("%d",i);
         }
         printf("%c",'\n');
-        //int temp = i % 30;
-        //switch (temp)
-        //{
-        //    case 1:
-        //    case 7:
-        //    case 11:
-        //    case 13:
-        //    case 17:
-        //    case 19:
-        //    case 23:
-        //    case 29:
-        //        printf("%d",temp);
-        //        break;
-        //    case 2:
-        //    case 4:
-        //    case 8:
-        //    case 14:
-        //    case 16:
-        //    case 22:
-        //    case 26:
-        //    case 28:
-        //        printf("%s","a");
-        //        break;
-        //    case 3:
-        //    case 9:
-        //    case 21:
-        //    case 27:
-        //        printf("%s","b");
-        //        break;
-        //    case 5:
-        //    case 25:
-        //        printf("%s","c");
-        //        break;
-//
-        //    case 6:
-        //    case 12:
-        //    case 18:
-        //    case 24:
-        //        printf("%s","ab");
-        //        break;
-//
-        //    case 10:
-        //    case 20:
-        //        printf("%s","ac");
-        //        break;
-//
-        //    case 15:
-        //        printf("%s","bc");
-        //        break;
-//
-        //    case 30:
-        //        printf("%s","abc");
-        //        break;
-        //}
-        //printf("%s","\n");
-    
     }
 }
 
 int main(int argc,char* argv[])
 {
-    solution(atoi(argv[1]));
+    if(argc > 2)
+        solution(atoi(argv[1]));
+    else
+        solution(NUM);
+    const int i = 7;
+    typedef struct P
+    {
+        int m_first;
+        int m_second;
+    }P;
+    P k = {3,4};
+    printf("const int size:%ld\n",my_size(i));
+    printf("struct size:%ld\n",my_size(k));
+
+    int *ptr = (int*)&i;
+    *ptr = 1;
+    printf("const:%d\n",i);
+    printf("ptr:%d\n",*ptr);
+
+    printf("const:%p\n",&i);
+    printf("ptr:%p\n",ptr);
+
     return 0;
 }

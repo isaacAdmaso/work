@@ -4,9 +4,9 @@ using namespace std;
 
 class Test{
 public:
-    static int x;
     int* ptr;
-    int y;
+    size_t y;
+    static int x;
 };
 
 int main()
