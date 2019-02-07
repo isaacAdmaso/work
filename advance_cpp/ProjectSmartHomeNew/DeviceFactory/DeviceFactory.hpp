@@ -7,32 +7,29 @@
  * 
  * @copyright Copyright (c) 2019
  * 
- 
-template<class T,class U>
-class DeviceFactory
-{
-public:
-    DeviceFactory();
-    DeviceFactory(const std::stirng& _path);
-    void SetPath(const std::stirng& _path);
-    U GetDevice(const std::stirng& _funcName);
-    ~DeviceFactory();
-
-private:
-    IDynamicLoader<T>* m_Loader;
-    std::string     m_Path;
-};
-
  */
+#ifdef __DEVICEFACTORY_H__
 
 template<class T,class U>
-DeviceFactory<T,U>::DeviceFactory()
-:m_Loader(nullptr)
+DeviceFactory<T,U>::DeviceFactory(IDynamicLoader<U>* _loader)
+:m_Loader(_loader)
 {
 }
 
 template<class T,class U>
-DeviceFactory<T,U>::DeviceFactory(const std::string& _path)
-:m_Path(_path)
+DeviceFactory<T,U>::~DeviceFactory()
 {
+   delete m_Loader;
 }
+
+template<class T,class U>
+T DeviceFactory<T,U>::GetDevice(const std::string& _path,const std::string& _funcName)
+{
+   U func = m_Loader->GetCTor(_path, _funcName);
+   //test//
+   int k = 3,j = 4;
+
+   return (T)func(&k,&j);
+}
+
+#endif //__DEVICEFACTORY_H__

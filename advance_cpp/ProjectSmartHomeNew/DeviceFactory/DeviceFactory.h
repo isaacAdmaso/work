@@ -14,19 +14,20 @@
 
 #include "IDynamicLoader.h"
 
-template<class T>
+
+template<class T,class U>
 class DeviceFactory
 {
 public:
-    DeviceFactory(IDynamicLoader<func>& _loader);
+    DeviceFactory(IDynamicLoader<U>* _loader);
     T GetDevice(const std::string& _path,const std::string& _funcName);
     ~DeviceFactory();
 
 private:
-    typedef int(*func)(int* ,int*);
-    IDynamicLoader<func>& m_Loader;
+    IDynamicLoader<U>* m_Loader;
 };
 
-//#include "DeviceFactory.hpp"
+
+#include "DeviceFactory.hpp"
 
 #endif //__DEVICEFACTORY_H__

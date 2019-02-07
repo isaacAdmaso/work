@@ -8,8 +8,11 @@
  * @copyright Copyright (c) 2019
  * 
  */
+#ifdef __DYNLOADER_H__
 
 template<class T>
 IDynamicLoader<T>::~IDynamicLoader()
 {} 
+
+#endif //__DYNLOADER_H__
 
