@@ -16,7 +16,7 @@ template<class T>
 class IDynamicLoader
 {
 public:
-    virtual~IDynamicLoader() = 0;
+    virtual~IDynamicLoader();
     virtual T GetCTor(const std::string& _path,const std::string& _funcName) = 0;
 };
 
