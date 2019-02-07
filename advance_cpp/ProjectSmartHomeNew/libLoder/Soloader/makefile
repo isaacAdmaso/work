@@ -6,10 +6,12 @@ CC=g++
 CPPFLAGS= -pedantic -Wall -Werror  -g -ansi -Wconversion 
 
 # Include directory
-INC_DIR=../../common
+INC_DIR=../../../common
+INC_DIR2=../
 
 
 CPPFLAGS += -I$(INC_DIR) 
+CPPFLAGS += -I$(INC_DIR2) 
 
 # all .c files in this directory are my sources
 SOURCES= muTest.cpp 
@@ -24,7 +26,7 @@ $(TARGET): $(OBJECTS)
 include depends
 
 depends:
-	$(CC) -MM -I$(INC_DIR) $(SOURCES) > depends
+	$(CC) -MM -I$(INC_DIR) -I$(INC_DIR2) $(SOURCES) > depends
 
 clean:
 	-rm *.o *.out depends

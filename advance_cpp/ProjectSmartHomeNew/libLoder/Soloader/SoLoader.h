@@ -17,8 +17,6 @@ template<class T>
 class SoLoader:public IDynamicLoader<T>
 {
 public:
-    //SoLoader(){}
-    //~SoLoader(){}
     T GetCTor(const std::string& _path,const std::string& _funcName);
 };
 
