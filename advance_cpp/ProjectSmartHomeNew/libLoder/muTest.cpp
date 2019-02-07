@@ -22,19 +22,23 @@ r = f(&k,&j);
 ASSERT_THAT(0 == r);
 
 
-f =  loader->GetCTor("../../../O.S+temp/lib/libCulc.so","Mult_F");
-k = 3,j = 4;
-r = f(&k,&j);
-ASSERT_THAT(12 == r);
-
-
 f =  loader->GetCTor("../../../O.S+temp/lib/libCulc.so","Sub_F");
 k = 3,j = 4;
 r = f(&k,&j);
 ASSERT_THAT(-1 == r);
 
+
+
+f =  loader->GetCTor("../../../O.S+temp/lib/libCulc.so","Mult_F");
+k = 3,j = 4;
+r = f(&k,&j);
+ASSERT_THAT(12 == r);
+
 delete loader;
 
+k = 3,j = 10;
+r = f(&k,&j);
+ASSERT_THAT(30 == r);
 
 END_UNIT
 
