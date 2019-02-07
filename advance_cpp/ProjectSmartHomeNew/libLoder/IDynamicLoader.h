@@ -17,8 +17,10 @@ class IDynamicLoader
 {
 public:
     virtual~IDynamicLoader() = 0;
-    T GetCTor(const std::string& _path,const std::string& _funcName) = 0;
+    virtual T GetCTor(const std::string& _path,const std::string& _funcName) = 0;
 };
 
+
+#include "IDynamicLoader.hpp"
 
 #endif //__DYNLOADER_H__

@@ -9,8 +9,32 @@ UNIT(DyLib)
 using namespace std;
 typedef int(*func)(int* ,int*);
 
-
 IDynamicLoader<func>* loader = new  SoLoader<func>;
+
+func f =  loader->GetCTor("../../../O.S+temp/lib/libCulc.so","Add_F");
+int k = 3,j = 4;
+int r = f(&k,&j);
+ASSERT_THAT(7 == r);
+
+f =  loader->GetCTor("../../../O.S+temp/lib/libCulc.so","Div_F");
+k = 3,j = 4;
+r = f(&k,&j);
+ASSERT_THAT(0 == r);
+
+
+f =  loader->GetCTor("../../../O.S+temp/lib/libCulc.so","Mult_F");
+k = 3,j = 4;
+r = f(&k,&j);
+ASSERT_THAT(12 == r);
+
+
+f =  loader->GetCTor("../../../O.S+temp/lib/libCulc.so","Sub_F");
+k = 3,j = 4;
+r = f(&k,&j);
+ASSERT_THAT(-1 == r);
+
+delete loader;
+
 
 END_UNIT
 
