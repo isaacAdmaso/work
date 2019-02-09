@@ -21,7 +21,7 @@ DeviceFactory<T,U>::~DeviceFactory()
 {
    delete m_Loader;
 }
-
+#ifdef TEST_DEVICE
 template<class T,class U>
 T DeviceFactory<T,U>::GetDevice(const std::string& _path,const std::string& _funcName)
 {
@@ -31,5 +31,13 @@ T DeviceFactory<T,U>::GetDevice(const std::string& _path,const std::string& _fun
 
    return (T)func(&k,&j);
 }
+#else
+template<class T,class U>
+T DeviceFactory<T,U>::GetDevice(const std::string& _path,const std::string& _funcName)
+{
+   U func = m_Loader->GetCTor(_path, _funcName);
+   return (T)func();
+}
+#endif
 
 #endif //__DEVICEFACTORY_H__

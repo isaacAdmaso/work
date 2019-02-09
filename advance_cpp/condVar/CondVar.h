@@ -10,19 +10,30 @@
  */
 #ifndef __CONDVAR_H__
 #define __CONDVAR_H__
+
 #include <pthread.h>
+#include "uncopy.h"
 #include "Mutex.h"
 
-class CondVar
+
+
+class CondVar:private Uncopy
 {
 public:
     CondVar(Mutex& _mutex);
     ~CondVar();
+   
+    template <typename Predicate>
+	void Wait(Predicate p);
+	void NotifyOne();
+	void NotifyAll();
 private:
     pthread_cond_t m_condVar;
     Mutex&          m_mutex;
 };
 
+#include "CondVarException.hpp"
+#include "CondVarPredicate.hpp"
 
 
 #endif //__CONDVAR_H__

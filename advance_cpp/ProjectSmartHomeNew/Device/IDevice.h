@@ -10,6 +10,8 @@
  */
 #ifndef __IDEVICE_H__
 #define __IDEVICE_H__
+class Event_Publisher;
+class Event_Listener;
 
 class IDevice
 {
@@ -17,6 +19,8 @@ public:
     virtual ~IDevice();
     virtual void Close();
     virtual void Init();
+private:
+    
 };
 
 

@@ -8,40 +8,37 @@
  * @copyright Copyright (c) 2019
  * 
  */
-#include <errno.h>
+#include <cerrno>
 #include "Mutex.h"
 
 
 Mutex::Mutex()
 {
-    int rtVal = 0;
-    
-    if(rtVal = pthread_mutex_init(&m_mutex,nullptr))
-        throw rtVal; 
+    if(pthread_mutex_init(&m_mutex,nullptr))
+		throw MutexInitException();
 }
 
 Mutex::~Mutex()
 {
-    int rtVal = 0;
-    
-    if(rtVal = pthread_mutex_destroy(&m_mutex))
+    if(pthread_mutex_destroy(&m_mutex))
      {
         if(errno == EBUSY)
-            throw errno;
+            throw MutexDestroyException();
     }
 }
 void Mutex::lock()
 {
-    int rtVal = 0;
-    
-    if(rtVal = pthread_mutex_lock(&m_mutex))
-        throw rtVal; 
+    if(pthread_mutex_lock(&m_mutex))
+		throw MutexLockException();
 }
 
 void Mutex::unlock()
 {
-    int rtVal = 0;
-    
-    if(rtVal = pthread_mutex_unlock(&m_mutex))
-        throw rtVal; 
+    if(pthread_mutex_unlock(&m_mutex))
+		throw MutexUnlockException();		
+}
+
+pthread_mutex_t* Mutex::Get()
+{
+    return &m_mutex;
 }

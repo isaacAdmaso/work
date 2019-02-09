@@ -10,12 +10,15 @@
  */
 #ifndef __MLOCK_H__
 #define __MLOCK_H__
-#include <unistd.h>
 #include <pthread.h>
+#include "uncopy.h"
 
 
-class Mutex
+
+class Mutex:private Uncopy
 {
+	friend class CondVar;
+
 public:
     Mutex();
     ~Mutex();
@@ -23,8 +26,13 @@ public:
     void unlock();
 
 private:
+    pthread_mutex_t* Get();
+
+private:
     pthread_mutex_t m_mutex;
 };
+
+#include "MutexException.hpp"
 
 
 #endif //__MLOCK_H__

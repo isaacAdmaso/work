@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "mu_test.h"
 
+#define TEST_DEVICE
 #include "SoLoader.h"
 #include "DeviceFactory.h"
 

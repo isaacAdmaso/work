@@ -8,20 +8,38 @@
  * @copyright Copyright (c) 2019
  * 
  */
+#include <cerrno>
 #include "CondVar.h"
-#include <errno.h>
 
 CondVar::CondVar(Mutex& _mutex)
 :m_mutex(_mutex)
 {
     if(int rtVal = pthread_cond_init(&m_condVar,nullptr))
-        throw rtVal;
+		throw CondVarInitException();
 }
+
 CondVar::~CondVar()
 {
     if(pthread_cond_destroy(&m_condVar))
     {
         if(errno == EBUSY)
-            throw errno;
+            throw CondVarDestroyException();
     }
+}
+
+
+void CondVar::NotifyOne()
+{
+	if (pthread_cond_signal(&m_condVar))
+	{
+		throw CondVarNotifyOneException();
+	}
+}
+
+void CondVar::NotifyAll()
+{
+	if (pthread_cond_broadcast(&m_condVar))
+	{
+		throw CondVarNotifyAllException();
+	}
 }
