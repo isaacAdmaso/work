@@ -15,16 +15,18 @@
 void* Thread::Work(void* _run)
 {
 	Runable* run = reinterpret_cast<Runable*>(_run);
+    void *rtVal = nullptr;
+
     try
 	{
-		run->Run();
+		rtVal = run->Run();
 	}
 	catch (...)
 	{
 		throw;
 	}
 	
-	return NULL;
+	return rtVal;
 }
 
 Thread::Thread(Runable& _run, bool _detach)
