@@ -17,8 +17,7 @@ class IEventListener
 {
 public:
     virtual ~IEventListener();
-    virtual void Notify();
-    
+    virtual void Notify(const EventKey& _eKey) = 0;
 };
 
 

@@ -17,11 +17,8 @@ class IDevice
 {
 public:
     virtual ~IDevice();
-    virtual void Close();
-    virtual void Init();
-private:
-    
+    virtual void Close() = 0;
+    virtual void Init(Event_Publisher* _Ep,Event_Listener* _El) = 0;
 };
-
 
 #endif //__IDEVICE_H__
