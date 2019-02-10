@@ -11,13 +11,13 @@
 #ifndef __EVENTLISTENER_H__
 #define __EVENTLISTENER_H__
 
-#include "EventKey.h"
+#include "Event.h"
 
 class IEventListener
 {
 public:
     virtual ~IEventListener();
-    virtual void Notify(const EventKey& _eKey) = 0;
+    virtual void Notify(const Event& _event) = 0;
 };
 
 

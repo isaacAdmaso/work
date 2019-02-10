@@ -8,3 +8,9 @@
  * @copyright Copyright (c) 2019
  * 
  */
+#ifndef _FIRE_DETECTOR_H__
+#define _FIRE_DETECTOR_H__
+
+
+
+#endif //_FIRE_DETECTOR_H__
