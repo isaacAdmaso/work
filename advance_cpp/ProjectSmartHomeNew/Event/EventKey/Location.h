@@ -15,9 +15,11 @@
 
 struct Location
 {
-	Location();
+	Location()
+    {}
 	Location(int floor,int room)
-    :m_floor(floor),m_room(room)
+    :m_floor(floor),
+    m_room(room)
     {}
 	void Set(int floor = 1,int room = 1)
     {
@@ -25,7 +27,7 @@ struct Location
         m_room = room; 
     }
 
-    bool operator==(const Location& _loc)
+    bool operator==(const Location& _loc)const
     {
         return((m_floor == _loc.m_floor)&&(m_room == _loc.m_room));
     }

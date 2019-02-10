@@ -18,8 +18,8 @@ class EventKey
 {
 public:
 	EventKey();
-	EventKey(const std::string& eventType,const Location& _loc);
 	~EventKey();
+	EventKey(const std::string& eventType,const Location& _loc);
 	bool operator<(const EventKey& _secondEventKey)const;
 	bool operator==(const EventKey& _secondEventKey)const;
 	void SetEvent(const std::string& eventType,const Location& _loc);

@@ -6,7 +6,7 @@ CC=g++
 CPPFLAGS= -pedantic -Wall -Werror  -g -ansi -Wconversion 
 
 # Include directory
-INC_DIR=../EventKey
+INC_DIR=./EventKey
 INC_DIR2=../../common
 
 CPPFLAGS += -I$(INC_DIR) 
@@ -14,7 +14,7 @@ CPPFLAGS += -I$(INC_DIR2)
 
 # all .c files in this directory are my sources
 SOURCES=$(wildcard *.cpp)
-SOURCES+=../EventKey/EventKey.cpp
+SOURCES+=./EventKey/EventKey.cpp
 # all .o files in this directory are my objects
 OBJECTS=$(SOURCES:.cpp=.o)
 

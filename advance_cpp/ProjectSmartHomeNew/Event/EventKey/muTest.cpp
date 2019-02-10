@@ -6,10 +6,10 @@
 
 
 UNIT(EkeyTest)
-    EventKey smoke,fire("fire","6","1");
+    EventKey smoke,fire("fire",Location(6,1));
     
     fire.PrintEvent();
-    smoke.SetEvent("smoke");
+    smoke.SetEvent("smoke",Location(3,2));
     smoke.PrintEvent();
     std::cout <<std::endl<< (fire < smoke )<<std::endl;
 

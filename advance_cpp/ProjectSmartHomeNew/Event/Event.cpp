@@ -46,11 +46,10 @@ void Event::GeTime()
     Event* ptr =  const_cast<Event*> (this);
 	ptr->m_time = eTime;
 	ptr->m_date = date;	
-    sleep(1);
 }
 
-Event::Event(const std::string& eventType,const std::string& floor,const std::string& room)
-:m_key(eventType,floor,room)
+Event::Event(const std::string& eventType,const Location& _loc)
+:m_key(eventType,_loc)
 {
     GeTime();
 }
@@ -59,9 +58,9 @@ Event::~Event()
 {
 }
 
-void Event::SetEvent(const std::string& eventType ,const std::string& floor,const std::string& room)
+void Event::SetEvent(const std::string& eventType ,const Location& _loc)
 {
-    m_key.SetEvent(eventType,floor,room);
+    m_key.SetEvent(eventType,_loc);
     GeTime();
 }
 bool Event::operator<(const Event& _secondEvent)const
@@ -73,8 +72,6 @@ bool Event::operator<(const Event& _secondEvent)const
 void Event::PrintEvent()
 {
     m_key.PrintEvent();
-    printf("%s\n%s\n",m_time.c_str(),m_date.c_str());
-    fflush(stdout);
-    //std::cout<<m_time<<std::endl<<m_date<<std::endl<<std::flush;
+    std::cout<<m_time<<std::endl<<m_date<<std::endl<<std::flush;
 
 }

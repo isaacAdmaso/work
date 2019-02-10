@@ -6,7 +6,7 @@ CC=g++
 CPPFLAGS= -pedantic -Wall -Werror  -g -ansi -Wconversion 
 
 # Include directory
-INC_DIR=../../common
+INC_DIR=../../../common
 
 CPPFLAGS += -I$(INC_DIR) 
 

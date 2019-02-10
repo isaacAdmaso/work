@@ -39,7 +39,7 @@ void EventKey::PrintEvent()
 
 bool EventKey::operator<(const EventKey& _secondEventKey)const
 {
-	if (m_eventType == _secondEventKey.m_eventType)
+	if ( !m_eventType.compare(_secondEventKey.m_eventType))
 	{
 		return m_loc <  _secondEventKey.m_loc;
 	}
@@ -47,3 +47,7 @@ bool EventKey::operator<(const EventKey& _secondEventKey)const
 	return m_eventType.compare(_secondEventKey.m_eventType);
 }
 
+bool EventKey::operator==(const EventKey& _secondEventKey)const
+{
+	return (!m_eventType.compare(_secondEventKey.m_eventType) && (m_loc == _secondEventKey.m_loc)); 
+}

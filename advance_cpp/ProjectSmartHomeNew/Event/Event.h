@@ -19,9 +19,9 @@ class Event
 public:
 	Event();
 	Event(Event& _e);
-	Event(const std::string& eventType,const std::string& floor,const std::string& room);
+	Event(const std::string& eventType,const Location& _loc);
 	~Event();
-	void SetEvent(const std::string& eventType ,const std::string& floor = "1",const std::string& room = "1");
+	void SetEvent(const std::string& eventType ,const Location& _loc);
 	bool operator<(const Event& _secondEvent)const;
 	/**for debug */
 	void PrintEvent();
