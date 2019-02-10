@@ -16,8 +16,7 @@ void CondVar::Wait(Predicate p)
 {
 	while (!p())
 	{
-		int retVal = pthread_cond_wait(&m_condVar, m_mutex.Get());
-		if (retVal)
+		if (pthread_cond_wait(&m_condVar, m_mutex.Get()))
 		{
 			throw CondVarWaitException();
 		}

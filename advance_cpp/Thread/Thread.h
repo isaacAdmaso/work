@@ -10,6 +10,7 @@
  */
 #ifndef __THREAD_H__
 #define __THREAD_H__
+
 #include <pthread.h>
 #include "Runable.h"
 
@@ -17,13 +18,13 @@
 class Thread
 {
 public:
-    Thread(Runable& _run);
+    Thread(Runable& _run, bool _detach = true);
     ~Thread();
     void** Join();
     void Detach();
-    static void* Work(void* _p);
 
 private:
+	static void* Work(void* _this);
     bool  CheckIfJoin();
 
 private:
@@ -33,5 +34,6 @@ private:
 };
 
 
+#include "ThreadException.hpp"
 
 #endif //__THREAD_H__

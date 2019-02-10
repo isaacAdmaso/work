@@ -14,8 +14,8 @@
 class Runable
 {
 public:
-    virtual ~Runable(){}
-    virtual void** Run() = 0;
+    virtual ~Runable();
+    virtual void Run() = 0;
 };
 
 
