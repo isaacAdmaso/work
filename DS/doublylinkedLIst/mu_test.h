@@ -23,7 +23,7 @@
 
 
 #define __MERGE_(a,b)  	a##b
-#define __LABEL_(a) 		__MERGE_(x, a)
+#define __LABEL_(x,a) 		__MERGE_(x, a)
 #define __UNIQUE_NAME_(x) 	__LABEL_(x, __LINE__)
 
 
